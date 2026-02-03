@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Clases - Elemental Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        
+        /* ── improved focus & transitions ── */
+        input:focus, button:focus, select:focus {
+            outline: none;
+            border-color: #f97316 !important;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
+        }
+        
+        .card-hover {
+            transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+            border-color: #f97316 !important;
+        }
+        
+        button, a {
+            transition: all .3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(249, 115, 22, .4);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-zinc-950 via-black to-zinc-900 min-h-screen">
+    <!-- Header -->
+    <nav class="bg-black/90 backdrop-blur-xl border-b border-zinc-800/50 shadow-lg shadow-black/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white font-black text-xl">E</span>
+                    </div>
+                    <span class="text-xl font-black text-white">Elemental <span class="text-orange-500">Club</span></span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-zinc-400 hover:text-white transition-colors text-sm font-semibold">
+                        ← Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-black text-white mb-4">Reserva tu Clase</h1>
+            <p class="text-xl text-zinc-400 max-w-2xl mx-auto">
+                Busca tu membresía y reserva tu lugar. Obtén tu código QR para acceder.
+            </p>
+        </div>
+
+        <!-- Búsqueda de Miembro -->
+        <div class="bg-white rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-black text-black mb-6">🔍 Buscar Miembro</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="md:col-span-2">
+                    <input 
+                        type="text" 
+                        id="search-member" 
+                        placeholder="Nombre, teléfono o ID de miembro..."
+                        class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:border-orange-500 focus:outline-none"
+                    >
+                </div>
+                <button onclick="searchMember()" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
+                    Buscar
+                </button>
+            </div>
+
+            <!-- Resultado de Búsqueda -->
+            <div id="member-result" class="hidden mt-6">
+                <!-- Se llenará con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Clases Disponibles -->
+        <div id="classes-section" class="hidden">
+            <div class="bg-white rounded-2xl p-8 shadow-xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-black text-black">📅 Clases Disponibles</h2>
+                    <div class="flex gap-2">
+                        <button onclick="changeWeek(-1)" class="bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold px-4 py-2 rounded-xl transition-all">
+                            ← Anterior
+                        </button>
+                        <button onclick="changeWeek(1)" class="bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold px-4 py-2 rounded-xl transition-all">
+                            Siguiente →
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-zinc-600 mb-6" id="week-range"></p>
+
+                <!-- Filtros -->
+                <div class="mb-6 flex flex-wrap gap-3">
+                    <button onclick="filterClasses('all')" class="filter-btn active px-4 py-2 rounded-xl font-bold transition-all bg-orange-500 text-white">
+                        Todas
+                    </button>
+                    <button onclick="filterClasses('disponible')" class="filter-btn px-4 py-2 rounded-xl font-bold transition-all bg-zinc-100 text-zinc-900">
+                        Con Cupo
+                    </button>
+                </div>
+
+                <!-- Lista de Clases -->
+                <div id="classes-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Se llenará con JavaScript -->
+                </div>
+            </div>
+
+            <!-- Mis Reservaciones -->
+            <div class="bg-white rounded-2xl p-8 shadow-xl mt-8">
+                <h2 class="text-2xl font-black text-black mb-6">🎫 Mis Reservaciones</h2>
+                <div id="my-reservations" class="space-y-4">
+                    <!-- Se llenará con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="reservation-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-black">Confirmar Reserva</h2>
+                <button onclick="closeReservationModal()" class="text-zinc-500 hover:text-black">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="reservation-content">
+                <!-- Se llenará con JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de QR -->
+    <div id="qr-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-black text-black">Tu Código QR</h2>
+                <button onclick="closeQRModal()" class="text-zinc-500 hover:text-black">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="inline-block p-6 bg-white border-4 border-zinc-900 rounded-2xl">
+                    <canvas id="qrcode"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-200 rounded-xl p-4 mb-6">
+                <p class="text-orange-900 font-bold mb-2" id="qr-class-name">Clase</p>
+                <p class="text-orange-700 text-sm" id="qr-class-time">Horario</p>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="downloadQR()" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
+                    📥 Descargar QR
+                </button>
+                <button onclick="closeQRModal()" class="w-full bg-zinc-200 text-zinc-900 font-bold py-3 rounded-xl hover:bg-zinc-300 transition-all">
+                    Cerrar
+                </button>
+            </div>
+
+            <div class="mt-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                <p class="text-blue-900 text-sm font-semibold mb-2">ℹ️ Instrucciones</p>
+                <ul class="text-xs text-blue-800 text-left space-y-1">
+                    <li>• Llega 5 minutos antes de la clase</li>
+                    <li>• Muestra tu QR al instructor</li>
+                    <li>• Descarga o guarda captura de pantalla</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMember = null;
+        let currentWeekOffset = 0;
+        let classes = JSON.parse(localStorage.getItem('classes') || '[]');
+        const members = JSON.parse(localStorage.getItem('members') || '[]');
+
+        function searchMember() {
+            const search = document.getElementById('search-member').value.toLowerCase().trim();
+            
+            if (!search) {
+                alert('Por favor ingresa un nombre, teléfono o ID');
+                return;
+            }
+
+            const member = members.find(m => 
+                m.nombre.toLowerCase().includes(search) ||
+                m.telefono.includes(search) ||
+                m.id.toLowerCase().includes(search)
+            );
+
+            const resultDiv = document.getElementById('member-result');
+            
+            if (!member) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 text-center">
+                        <p class="text-4xl mb-2">❌</p>
+                        <p class="text-red-900 font-bold">Miembro no encontrado</p>
+                        <p class="text-red-700 text-sm mt-2">Verifica los datos o contacta a recepción</p>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+                document.getElementById('classes-section').classList.add('hidden');
+                return;
+            }
+
+            currentMember = member;
+
+            // Verificar tipo de membresía
+            const hasClassAccess = ['ilimitada', 'estudios', 'spinning'].includes(member.tipo?.toLowerCase());
+
+            resultDiv.innerHTML = `
+                <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <p class="text-2xl font-black text-black">${member.nombre}</p>
+                            <p class="text-zinc-600">${member.telefono}</p>
+                            <p class="text-sm font-mono text-zinc-500 mt-1">${member.id}</p>
+                        </div>
+                        <span class="bg-green-500 text-white px-4 py-2 rounded-xl font-bold text-sm">
+                            ✓ Activo
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-white rounded-lg p-3">
+                            <p class="text-xs text-zinc-500 mb-1">Plan</p>
+                            <p class="text-sm font-bold text-black capitalize">${member.tipo}</p>
+                        </div>
+                        <div class="bg-white rounded-lg p-3">
+                            <p class="text-xs text-zinc-500 mb-1">Vence</p>
+                            <p class="text-sm font-bold text-black">${new Date(member.fechaVencimiento).toLocaleDateString('es-MX')}</p>
+                        </div>
+                    </div>
+
+                    ${hasClassAccess ? `
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl p-4">
+                            <p class="font-bold mb-1">🎉 Tienes acceso a clases grupales</p>
+                            <p class="text-orange-100 text-sm">Puedes reservar cualquier clase disponible</p>
+                        </div>
+                    ` : `
+                        <div class="bg-zinc-800 text-white rounded-xl p-4">
+                            <p class="font-bold mb-1">⚠️ Plan Básico</p>
+                            <p class="text-zinc-300 text-sm">Tu plan no incluye clases grupales. Actualiza para acceder.</p>
+                        </div>
+                    `}
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+
+            if (hasClassAccess) {
+                document.getElementById('classes-section').classList.remove('hidden');
+                renderWeeklyClasses();
+                renderMyReservations();
+            } else {
+                document.getElementById('classes-section').classList.add('hidden');
+            }
+        }
+
+        function changeWeek(offset) {
+            currentWeekOffset += offset;
+            renderWeeklyClasses();
+        }
+
+        function renderWeeklyClasses() {
+            const today = new Date();
+            today.setDate(today.getDate() + (currentWeekOffset * 7));
+            
+            const weekStart = new Date(today);
+            const dayOffset = today.getDay() === 0 ? -6 : 1 - today.getDay();
+            weekStart.setDate(today.getDate() + dayOffset);
+            
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+
+            document.getElementById('week-range').textContent = 
+                `Semana del ${weekStart.toLocaleDateString('es-MX')} al ${weekEnd.toLocaleDateString('es-MX')}`;
+
+            // Filtrar clases de la semana
+            const weekClasses = classes.filter(c => {
+                const classDate = new Date(c.date);
+                return classDate >= weekStart && classDate <= weekEnd;
+            }).sort((a, b) => {
+                if (a.date !== b.date) return a.date.localeCompare(b.date);
+                return a.time.localeCompare(b.time);
+            });
+
+            const container = document.getElementById('classes-list');
+            
+            if (weekClasses.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-16 text-zinc-500">
+                        <p class="text-4xl mb-2">📅</p>
+                        <p class="font-bold">No hay clases programadas esta semana</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = weekClasses.map(classItem => {
+                const spotsLeft = classItem.capacity - (classItem.reservations?.length || 0);
+                const isFull = spotsLeft <= 0;
+                const isReserved = classItem.reservations?.some(r => r.memberId === currentMember.id);
+                const classDate = new Date(classItem.date);
+
+                return `
+                    <div class="bg-zinc-50 rounded-xl p-4 border-2 border-zinc-200 ${isFull ? 'opacity-60' : ''}">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <p class="text-lg font-black text-black">${getClassName(classItem.type)}</p>
+                                <p class="text-sm text-zinc-600">${classItem.instructor}</p>
+                            </div>
+                            ${isReserved ? `
+                                <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    Reservado
+                                </span>
+                            ` : isFull ? `
+                                <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    Lleno
+                                </span>
+                            ` : `
+                                <span class="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                    ${spotsLeft} lugares
+                                </span>
+                            `}
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-zinc-700">
+                                <span>📅</span>
+                                <span>${classDate.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-zinc-700">
+                                <span>🕐</span>
+                                <span>${classItem.time} (${classItem.duration} min)</span>
+                            </div>
+                        </div>
+
+                        ${isReserved ? `
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="viewQR('${classItem.id}')" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all text-sm">
+                                    Ver QR
+                                </button>
+                                <button onclick="cancelReservation('${classItem.id}')" class="bg-zinc-200 text-zinc-900 font-bold py-2 rounded-lg hover:bg-zinc-300 transition-all text-sm">
+                                    Cancelar
+                                </button>
+                            </div>
+                        ` : isFull ? `
+                            <button disabled class="w-full bg-zinc-300 text-zinc-600 font-bold py-2 rounded-lg cursor-not-allowed text-sm">
+                                Sin Cupo
+                            </button>
+                        ` : `
+                            <button onclick="showReservationModal('${classItem.id}')" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all text-sm">
+                                Reservar
+                            </button>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getClassName(type) {
+            const names = {
+                'strong&bike': '🚴 Strong & Bike',
+                'halterofilia': '🏋️ Halterofilia',
+                'yoga': '🧘 Yoga',
+                'artes-marciales': '🥋 Artes Marciales',
+                'multipower': '💪 Multipower',
+                'momentum': '⚡ Momentum',
+                'hyrox-competicion': '🏃 Hyrox Competición',
+                'crossfit': '🔥 CrossFit',
+                'combatfit': '🥊 CombatFit',
+                'spinning': '🚴 Spinning',
+                'hyrox-base': '🏃 Hyrox Base'
+            };
+            return names[type] || type;
+        }
+
+        function showReservationModal(classId) {
+            const classItem = classes.find(c => c.id === classId);
+            if (!classItem) return;
+
+            const classDate = new Date(classItem.date);
+
+            document.getElementById('reservation-content').innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-orange-50 rounded-xl p-4">
+                        <p class="text-2xl font-black text-black mb-2">${getClassName(classItem.type)}</p>
+                        <p class="text-zinc-600">${classItem.instructor}</p>
+                        <div class="mt-3 space-y-1 text-sm text-zinc-700">
+                            <p>📅 ${classDate.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+                            <p>🕐 ${classItem.time} (${classItem.duration} min)</p>
+                            <p>👥 ${classItem.capacity - (classItem.reservations?.length || 0)} lugares disponibles</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                        <p class="text-blue-900 font-bold text-sm mb-2">📋 Políticas de Reserva</p>
+                        <ul class="text-xs text-blue-800 space-y-1">
+                            <li>• Tolerancia: 5 minutos máximo</li>
+                            <li>• Cancela hasta 1 hora antes</li>
+                            <li>• 2 faltas sin cancelar = penalización de 2 días</li>
+                        </ul>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="closeReservationModal()" class="bg-zinc-200 text-zinc-900 font-bold py-3 rounded-xl hover:bg-zinc-300 transition-all">
+                            Cancelar
+                        </button>
+                        <button onclick="confirmReservation('${classId}')" class="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all shadow-lg shadow-green-500/30">
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('reservation-modal').classList.remove('hidden');
+        }
+
+        function closeReservationModal() {
+            document.getElementById('reservation-modal').classList.add('hidden');
+        }
+
+        function confirmReservation(classId) {
+            const classItem = classes.find(c => c.id === classId);
+            if (!classItem) return;
+
+            if (!classItem.reservations) classItem.reservations = [];
+
+            classItem.reservations.push({
+                memberId: currentMember.id,
+                memberName: currentMember.nombre,
+                reservedAt: new Date().toISOString()
+            });
+
+            localStorage.setItem('classes', JSON.stringify(classes));
+
+            closeReservationModal();
+            renderWeeklyClasses();
+            renderMyReservations();
+
+            // Mostrar QR inmediatamente
+            setTimeout(() => viewQR(classId), 300);
+        }
+
+        function cancelReservation(classId) {
+            if (!confirm('¿Estás seguro de cancelar esta reservación?')) return;
+
+            const classItem = classes.find(c => c.id === classId);
+            if (!classItem) return;
+
+            classItem.reservations = classItem.reservations.filter(r => r.memberId !== currentMember.id);
+            localStorage.setItem('classes', JSON.stringify(classes));
+
+            renderWeeklyClasses();
+            renderMyReservations();
+            alert('✓ Reservación cancelada');
+        }
+
+        function viewQR(classId) {
+            const classItem = classes.find(c => c.id === classId);
+            if (!classItem) return;
+
+            const classDate = new Date(classItem.date);
+
+            // Generar datos del QR
+            const qrData = JSON.stringify({
+                memberId: currentMember.id,
+                classId: classId,
+                className: getClassName(classItem.type),
+                date: classItem.date,
+                time: classItem.time,
+                memberName: currentMember.nombre
+            });
+
+            // Crear QR con QRious
+            const canvas = document.getElementById('qrcode');
+            const qr = new QRious({
+                element: canvas,
+                value: qrData,
+                size: 300,
+                level: 'H'
+            });
+
+            document.getElementById('qr-class-name').textContent = getClassName(classItem.type);
+            document.getElementById('qr-class-time').textContent = 
+                `${classDate.toLocaleDateString('es-MX')} - ${classItem.time}`;
+
+            document.getElementById('qr-modal').classList.remove('hidden');
+        }
+
+        function closeQRModal() {
+            document.getElementById('qr-modal').classList.add('hidden');
+        }
+
+        function downloadQR() {
+            const canvas = document.getElementById('qrcode');
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `QR-${currentMember.id}-${Date.now()}.png`;
+            link.href = url;
+            link.click();
+        }
+
+        function renderMyReservations() {
+            const container = document.getElementById('my-reservations');
+            
+            const myReservations = classes.filter(c => 
+                c.reservations?.some(r => r.memberId === currentMember.id)
+            ).sort((a, b) => {
+                if (a.date !== b.date) return a.date.localeCompare(b.date);
+                return a.time.localeCompare(b.time);
+            });
+
+            if (myReservations.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-zinc-500">
+                        <p class="text-4xl mb-2">📅</p>
+                        <p class="font-semibold">No tienes reservaciones activas</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = myReservations.map(classItem => {
+                const classDate = new Date(classItem.date);
+                return `
+                    <div class="bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-200 rounded-xl p-4 flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-black">${getClassName(classItem.type)}</p>
+                            <p class="text-sm text-zinc-600">${classDate.toLocaleDateString('es-MX')} - ${classItem.time}</p>
+                        </div>
+                        <button onclick="viewQR('${classItem.id}')" class="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-600 transition-all">
+                            Ver QR
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterClasses(filter) {
+            // Implementar filtros si es necesario
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-orange-500', 'text-white');
+                btn.classList.add('bg-zinc-100', 'text-zinc-900');
+            });
+            event.target.classList.remove('bg-zinc-100', 'text-zinc-900');
+            event.target.classList.add('bg-orange-500', 'text-white');
+        }
+    </script>
+</body>
+</html>

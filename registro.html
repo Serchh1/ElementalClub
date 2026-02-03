@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Registro - GYM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        
+        .title-font {
+            font-family: 'Oswald', 'Impact', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* ── improved focus ── */
+        input:focus, select:focus, textarea:focus, button:focus {
+            outline: none;
+            border-color: #f97316 !important;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
+        }
+        
+        button, a {
+            transition: all .3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(249, 115, 22, .4);
+        }
+        
+        @keyframes pulse-border {
+            0%, 100% { border-color: #f97316; }
+            50% { border-color: #ea580c; }
+        }
+        
+        .pulse-border {
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-bounce {
+            animation: bounce 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen p-4">
+    <div id="app" class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-6xl font-black title-font gradient-text mb-2">
+                NUEVO MIEMBRO
+            </h1>
+            <div class="h-1 w-48 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto mb-4"></div>
+            <p class="text-zinc-400 text-lg" id="step-description">Complete el registro en 2 pasos</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <div class="flex items-center gap-2" id="step1-indicator">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 bg-orange-500 border-orange-500 text-black">
+                        1
+                    </div>
+                    <span class="font-bold hidden sm:inline text-orange-500">Datos Personales</span>
+                </div>
+                <div class="h-0.5 w-16 bg-zinc-700" id="progress-line"></div>
+                <div class="flex items-center gap-2 text-zinc-600" id="step2-indicator">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-zinc-600">
+                        2
+                    </div>
+                    <span class="font-bold hidden sm:inline">Captura Facial</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Formulario -->
+        <div id="step1" class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl">
+            <form id="form-datos">
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Nombre -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                            👤 Nombre Completo *
+                        </label>
+                        <input type="text" id="nombre" placeholder="Juan Pérez García" required
+                            class="w-full bg-zinc-950 border-2 border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none transition-all">
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div>
+                        <label class="block text-sm font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                            📞 Teléfono *
+                        </label>
+                        <input type="tel" id="telefono" placeholder="+52 555 123 4567" required
+                            class="w-full bg-zinc-950 border-2 border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none transition-all">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                            ✉️ Email
+                        </label>
+                        <input type="email" id="email" placeholder="juan@email.com"
+                            class="w-full bg-zinc-950 border-2 border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none transition-all">
+                    </div>
+
+                    <!-- Fecha de Nacimiento -->
+                    <div>
+                        <label class="block text-sm font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                            📅 Fecha de Nacimiento
+                        </label>
+                        <input type="date" id="fechaNacimiento"
+                            class="w-full bg-zinc-950 border-2 border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none transition-all">
+                    </div>
+
+                    <!-- Método de Pago -->
+                    <div>
+                        <label class="block text-sm font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                            💳 Método de Pago
+                        </label>
+                        <select id="metodoPago"
+                            class="w-full bg-zinc-950 border-2 border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-orange-500 focus:outline-none transition-all">
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                            <option value="transferencia">Transferencia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Planes -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-black title-font text-orange-500 mb-4">SELECCIONA TU PLAN</h3>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="planes-container">
+                        <!-- Los planes se generarán con JavaScript -->
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg shadow-orange-500/30 text-lg">
+                    CONTINUAR A CAPTURA FACIAL →
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Captura Facial -->
+        <div id="step2" class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl hidden">
+            <div class="mb-6">
+                <h3 class="text-3xl font-black title-font text-orange-500 mb-2">CAPTURA FACIAL</h3>
+                <p class="text-zinc-400" id="foto-counter">
+                    Necesitamos tomar fotos de tu rostro para configurar el acceso biométrico
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-6 mb-6">
+                <!-- Vista de Cámara -->
+                <div class="relative">
+                    <div class="aspect-video rounded-xl overflow-hidden border-2 border-zinc-700 bg-zinc-950" id="camera-container">
+                        <div class="w-full h-full flex flex-col items-center justify-center" id="camera-placeholder">
+                            <div class="text-6xl mb-4">📷</div>
+                            <p class="text-zinc-600 font-bold">Cámara desactivada</p>
+                        </div>
+                        <video id="video" autoplay playsinline class="w-full h-full object-cover hidden"></video>
+                    </div>
+                    <canvas id="canvas" style="display: none;"></canvas>
+
+                    <div class="mt-4 flex gap-3">
+                        <button type="button" id="btn-start-camera"
+                            class="flex-1 bg-orange-500 text-black font-black py-3 rounded-xl hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
+                            📷 ACTIVAR CÁMARA
+                        </button>
+                        <button type="button" id="btn-capture" disabled
+                            class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black py-3 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/50 hidden">
+                            📸 CAPTURAR FOTO
+                        </button>
+                        <button type="button" id="btn-stop-camera"
+                            class="bg-zinc-800 text-white font-bold py-3 px-6 rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700 hidden">
+                            DETENER
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Galería de Fotos -->
+                <div>
+                    <h4 class="text-lg font-bold text-orange-500 mb-3 uppercase tracking-wide">
+                        Fotos Capturadas (<span id="photo-count">0</span>)
+                    </h4>
+                    <div class="grid grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-2" id="photo-gallery">
+                        <!-- Placeholder -->
+                        <div class="col-span-3 border-2 border-dashed border-zinc-700 rounded-xl p-8 text-center" id="gallery-placeholder">
+                            <div class="text-4xl mb-2">⚠️</div>
+                            <p class="text-zinc-500">No hay fotos capturadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instrucciones -->
+            <div class="bg-orange-500/10 border-l-4 border-orange-500 p-4 rounded mb-6">
+                <p class="text-orange-500 font-bold mb-2">📸 INSTRUCCIONES:</p>
+                <ul class="text-sm text-zinc-300 space-y-1">
+                    <li>• Mira directamente a la cámara</li>
+                    <li>• Captura desde diferentes ángulos (frente, 45° izquierda, 45° derecha)</li>
+                    <li>• Asegúrate de tener buena iluminación</li>
+                    <li>• Se recomienda capturar 5-10 fotos para mejor precisión</li>
+                </ul>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="flex gap-4">
+                <button type="button" id="btn-back"
+                    class="bg-zinc-800 text-white font-bold py-4 px-8 rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700">
+                    ← VOLVER
+                </button>
+                <button type="button" id="btn-submit" disabled
+                    class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-lg">
+                    ✓ COMPLETAR REGISTRO
+                </button>
+            </div>
+
+            <p class="text-center text-zinc-500 text-sm mt-4" id="min-photos-msg">
+                Mínimo 3 fotos requeridas para continuar
+            </p>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="success-screen" class="hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-gradient-to-br from-zinc-900 to-black border-2 border-orange-500 rounded-2xl p-8 shadow-2xl">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                            <span class="text-5xl">✓</span>
+                        </div>
+                        <h2 class="text-4xl font-black text-white mb-2 title-font">
+                            ¡REGISTRO COMPLETADO!
+                        </h2>
+                        <div class="h-1 w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
+                    </div>
+
+                    <div class="bg-zinc-950 rounded-xl p-6 border border-zinc-800 mb-6" id="member-info">
+                        <!-- Se llenará con JavaScript -->
+                    </div>
+
+                    <div class="bg-gradient-to-r from-orange-500/10 to-transparent border-l-4 border-orange-500 p-4 rounded mb-6">
+                        <p class="text-white font-medium">
+                            ✓ <span id="success-photo-count">0</span> fotos faciales capturadas
+                        </p>
+                        <p class="text-orange-400 font-bold mt-1">
+                            ¡Ya puede acceder al GYM!
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button type="button" id="btn-register-another"
+                            class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg shadow-orange-500/50">
+                            REGISTRAR OTRO
+                        </button>
+                        <button type="button"
+                            class="flex-1 bg-zinc-800 text-white font-bold py-4 rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700">
+                            IMPRIMIR CREDENCIAL
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado global
+        let currentStep = 1;
+        let capturedPhotos = [];
+        let stream = null;
+        let selectedPlan = 'mensual';
+        let formData = {};
+
+        // Planes disponibles
+        const planes = [
+            { id: 'mensual', nombre: 'Mensual', precio: 500, duracion: '1 mes' },
+            { id: 'trimestral', nombre: 'Trimestral', precio: 1350, duracion: '3 meses', ahorro: '10%' },
+            { id: 'semestral', nombre: 'Semestral', precio: 2550, duracion: '6 meses', ahorro: '15%' },
+            { id: 'anual', nombre: 'Anual', precio: 4800, duracion: '12 meses', ahorro: '20%' }
+        ];
+
+        // Generar tarjetas de planes
+        function renderPlanes() {
+            const container = document.getElementById('planes-container');
+            container.innerHTML = planes.map(plan => `
+                <div onclick="selectPlan('${plan.id}')" id="plan-${plan.id}"
+                    class="relative cursor-pointer rounded-xl p-5 border-2 transition-all transform hover:scale-105 ${
+                        selectedPlan === plan.id
+                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 shadow-lg shadow-orange-500/50'
+                            : 'bg-zinc-900 border-zinc-700 hover:border-orange-500'
+                    }">
+                    ${plan.ahorro ? `
+                        <div class="absolute -top-3 -right-3 bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full">
+                            AHORRA ${plan.ahorro}
+                        </div>
+                    ` : ''}
+                    <div class="text-center ${selectedPlan === plan.id ? 'text-black' : 'text-white'}">
+                        <p class="text-sm font-bold uppercase tracking-wide mb-1 opacity-80">${plan.duracion}</p>
+                        <p class="text-3xl font-black title-font mb-1">$${plan.precio}</p>
+                        <p class="text-lg font-bold">${plan.nombre}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectPlan(planId) {
+            selectedPlan = planId;
+            renderPlanes();
+        }
+
+        // Step 1: Formulario
+        document.getElementById('form-datos').addEventListener('submit', (e) => {
+            e.preventDefault();
+            formData = {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                plan: selectedPlan,
+                metodoPago: document.getElementById('metodoPago').value
+            };
+            goToStep(2);
+        });
+
+        function goToStep(step) {
+            currentStep = step;
+            document.getElementById('step1').classList.toggle('hidden', step !== 1);
+            document.getElementById('step2').classList.toggle('hidden', step !== 2);
+            
+            if (step === 2) {
+                document.getElementById('step1-indicator').innerHTML = `
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 bg-orange-500 border-orange-500 text-black">✓</div>
+                    <span class="font-bold hidden sm:inline text-orange-500">Datos Personales</span>
+                `;
+                document.getElementById('step2-indicator').classList.remove('text-zinc-600');
+                document.getElementById('step2-indicator').classList.add('text-orange-500');
+                document.getElementById('step2-indicator').querySelector('div').classList.remove('border-zinc-600');
+                document.getElementById('step2-indicator').querySelector('div').classList.add('bg-orange-500', 'border-orange-500', 'text-black');
+                document.getElementById('progress-line').classList.remove('bg-zinc-700');
+                document.getElementById('progress-line').classList.add('bg-orange-500');
+                document.getElementById('step-description').textContent = 'Complete el registro en 1 paso';
+            }
+        }
+
+        // Cámara
+        document.getElementById('btn-start-camera').addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.classList.remove('hidden');
+                document.getElementById('camera-placeholder').classList.add('hidden');
+                document.getElementById('camera-container').classList.add('border-orange-500', 'pulse-border');
+                document.getElementById('btn-start-camera').classList.add('hidden');
+                document.getElementById('btn-capture').classList.remove('hidden');
+                document.getElementById('btn-capture').disabled = false;
+                document.getElementById('btn-stop-camera').classList.remove('hidden');
+            } catch (err) {
+                alert('Error al acceder a la cámara: ' + err.message);
+            }
+        });
+
+        document.getElementById('btn-capture').addEventListener('click', () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            const photoData = canvas.toDataURL('image/jpeg', 0.95);
+            capturedPhotos.push(photoData);
+            updatePhotoGallery();
+        });
+
+        document.getElementById('btn-stop-camera').addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                document.getElementById('video').classList.add('hidden');
+                document.getElementById('camera-placeholder').classList.remove('hidden');
+                document.getElementById('camera-container').classList.remove('border-orange-500', 'pulse-border');
+                document.getElementById('btn-start-camera').classList.remove('hidden');
+                document.getElementById('btn-capture').classList.add('hidden');
+                document.getElementById('btn-stop-camera').classList.add('hidden');
+            }
+        });
+
+        function updatePhotoGallery() {
+            const gallery = document.getElementById('photo-gallery');
+            document.getElementById('photo-count').textContent = capturedPhotos.length;
+            document.getElementById('foto-counter').textContent = 
+                `${capturedPhotos.length} foto${capturedPhotos.length > 1 ? 's' : ''} capturada${capturedPhotos.length > 1 ? 's' : ''}. Se recomiendan 5-10 fotos desde diferentes ángulos.`;
+            
+            if (capturedPhotos.length === 0) {
+                gallery.innerHTML = `
+                    <div class="col-span-3 border-2 border-dashed border-zinc-700 rounded-xl p-8 text-center">
+                        <div class="text-4xl mb-2">⚠️</div>
+                        <p class="text-zinc-500">No hay fotos capturadas</p>
+                    </div>
+                `;
+            } else {
+                gallery.innerHTML = capturedPhotos.map((photo, index) => `
+                    <div class="relative group">
+                        <img src="${photo}" alt="Captura ${index + 1}"
+                            class="w-full aspect-square object-cover rounded-lg border-2 border-zinc-700">
+                        <button onclick="removePhoto(${index})"
+                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            ✕
+                        </button>
+                        <div class="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                            #${index + 1}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('btn-submit').disabled = capturedPhotos.length < 3;
+            document.getElementById('min-photos-msg').style.display = capturedPhotos.length < 3 ? 'block' : 'none';
+        }
+
+        function removePhoto(index) {
+            capturedPhotos.splice(index, 1);
+            updatePhotoGallery();
+        }
+
+        // Back button
+        document.getElementById('btn-back').addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            goToStep(1);
+        });
+
+        // Submit
+        document.getElementById('btn-submit').addEventListener('click', () => {
+            document.getElementById('btn-submit').innerHTML = '⏳ PROCESANDO...';
+            document.getElementById('btn-submit').disabled = true;
+            
+            setTimeout(() => {
+                showSuccess();
+            }, 2000);
+        });
+
+        function showSuccess() {
+            const planData = planes.find(p => p.id === formData.plan);
+            const vencimiento = new Date();
+            vencimiento.setDate(vencimiento.getDate() + 30);
+            
+            document.getElementById('member-info').innerHTML = `
+                <div class="grid grid-cols-2 gap-4 text-white">
+                    <div>
+                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Miembro</p>
+                        <p class="text-xl font-bold">${formData.nombre}</p>
+                    </div>
+                    <div>
+                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">ID</p>
+                        <p class="text-sm font-mono text-orange-400">uuid-${Math.random().toString(36).substr(2, 9)}</p>
+                    </div>
+                    <div>
+                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Plan</p>
+                        <p class="text-lg font-bold text-orange-500">${planData.nombre} - $${planData.precio}</p>
+                    </div>
+                    <div>
+                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Válido hasta</p>
+                        <p class="text-lg font-bold text-green-400">${vencimiento.toLocaleDateString('es-MX')}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('success-photo-count').textContent = capturedPhotos.length;
+            
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+            
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        document.getElementById('btn-register-another').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Inicializar
+        renderPlanes();
+    </script>
+</body>
+</html>
