@@ -1,63 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Clases - Elemental Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        html { scroll-behavior: smooth; }
-        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* ── tabs ── */
         .tab-btn {
             background: transparent;
             color: #71717a;
             transition: all .3s ease;
         }
+
         .tab-btn.active {
             background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
             color: white;
             box-shadow: 0 10px 20px rgba(249, 115, 22, 0.2);
         }
-        
+
         /* ── improved focus ── */
-        input:focus, select:focus, textarea:focus, button:focus {
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
             outline: none;
             border-color: #f97316 !important;
             box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
         }
-        
+
         .class-card {
             transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
         }
+
         .class-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
             border-color: #f97316 !important;
         }
-        
-        button, a {
+
+        button,
+        a {
             transition: all .3s ease;
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-zinc-950 via-black to-zinc-900 min-h-screen">
     <!-- Header -->
     <nav class="bg-black/90 backdrop-blur-xl border-b border-zinc-800/50 shadow-lg shadow-black/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="manager.html" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
                         <span class="text-white font-black text-xl">E</span>
                     </div>
-                    <span class="text-xl font-black text-white">Elemental <span class="text-orange-500">Club</span></span>
+                    <span class="text-xl font-black text-white">Elemental <span
+                            class="text-orange-500">Club</span></span>
                 </a>
-                
+
                 <div class="flex items-center gap-4">
                     <span class="text-zinc-400 text-sm hidden sm:inline" id="user-display">👤 Usuario</span>
-                    <a href="manager.html" class="bg-zinc-800 text-white px-4 py-2 rounded-xl font-bold hover:bg-zinc-700 transition-all text-sm">
+                    <a href="manager.html"
+                        class="bg-zinc-800 text-white px-4 py-2 rounded-xl font-bold hover:bg-zinc-700 transition-all text-sm">
                         ← Menú
                     </a>
                 </div>
@@ -72,20 +89,24 @@
                 <h1 class="text-4xl font-black text-white mb-2">Gestión de Clases</h1>
                 <p class="text-zinc-400 text-lg">Administra horarios, cupos y reservaciones</p>
             </div>
-            <button onclick="showAddClassModal()" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
+            <button onclick="showAddClassModal()"
+                class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
                 + Nueva Clase
             </button>
         </div>
 
         <!-- Tabs -->
         <div class="bg-white rounded-2xl p-2 mb-6 flex gap-2 shadow-xl">
-            <button onclick="changeTab('schedule')" id="tab-schedule" class="tab-btn active flex-1 py-3 rounded-xl font-bold transition-all">
+            <button onclick="changeTab('schedule')" id="tab-schedule"
+                class="tab-btn active flex-1 py-3 rounded-xl font-bold transition-all">
                 📅 Horario Semanal
             </button>
-            <button onclick="changeTab('reservations')" id="tab-reservations" class="tab-btn flex-1 py-3 rounded-xl font-bold transition-all">
+            <button onclick="changeTab('reservations')" id="tab-reservations"
+                class="tab-btn flex-1 py-3 rounded-xl font-bold transition-all">
                 👥 Reservaciones
             </button>
-            <button onclick="changeTab('templates')" id="tab-templates" class="tab-btn flex-1 py-3 rounded-xl font-bold transition-all">
+            <button onclick="changeTab('templates')" id="tab-templates"
+                class="tab-btn flex-1 py-3 rounded-xl font-bold transition-all">
                 ⚙️ Plantillas
             </button>
         </div>
@@ -134,7 +155,8 @@
             <div class="bg-white rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-black text-black">Reservaciones de Hoy</h2>
-                    <input type="date" id="reservation-date" class="bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-2 text-zinc-900">
+                    <input type="date" id="reservation-date"
+                        class="bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-2 text-zinc-900">
                 </div>
 
                 <div id="reservations-list" class="space-y-4">
@@ -152,23 +174,27 @@
     </div>
 
     <!-- Modal Add/Edit Class -->
-    <div id="class-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div id="class-modal"
+        class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-3xl font-black text-black" id="modal-title">Nueva Clase</h2>
                 <button onclick="closeClassModal()" class="text-zinc-500 hover:text-black">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
 
             <form id="class-form" class="space-y-6">
                 <input type="hidden" id="class-id">
-                
+
                 <div>
                     <label class="block text-sm font-bold text-zinc-700 mb-2">Tipo de Clase</label>
-                    <select id="class-type" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                    <select id="class-type"
+                        class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                        required>
                         <option value="">Seleccionar...</option>
                         <option value="strong&bike">🚴 Strong & Bike</option>
                         <option value="halterofilia">🏋️ Halterofilia</option>
@@ -187,46 +213,63 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-zinc-700 mb-2">Fecha</label>
-                        <input type="date" id="class-date" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                        <input type="date" id="class-date"
+                            class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                            required>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-zinc-700 mb-2">Hora</label>
-                        <input type="time" id="class-time" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                        <input type="time" id="class-time"
+                            class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                            required>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-zinc-700 mb-2">Duración (minutos)</label>
-                        <input type="number" id="class-duration" value="60" min="30" max="120" step="15" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                        <input type="number" id="class-duration" value="60" min="30" max="120" step="15"
+                            class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                            required>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-zinc-700 mb-2">Cupo Máximo</label>
-                        <input type="number" id="class-capacity" value="20" min="1" max="50" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                        <input type="number" id="class-capacity" value="20" min="1" max="50"
+                            class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                            required>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-zinc-700 mb-2">Instructor</label>
-                    <input type="text" id="class-instructor" placeholder="Nombre del instructor" class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none" required>
+                    <input type="text" id="class-instructor" placeholder="Nombre del instructor"
+                        class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"
+                        required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-zinc-700 mb-2">Descripción (opcional)</label>
-                    <textarea id="class-description" rows="3" placeholder="Detalles adicionales de la clase..." class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"></textarea>
+                    <textarea id="class-description" rows="3" placeholder="Detalles adicionales de la clase..."
+                        class="w-full bg-zinc-50 border-2 border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-orange-500 focus:outline-none"></textarea>
                 </div>
 
                 <div class="flex gap-4">
-                    <button type="button" onclick="closeClassModal()" class="flex-1 bg-zinc-200 text-zinc-900 py-3 rounded-xl font-bold hover:bg-zinc-300 transition-all">
+                    <button type="button" onclick="closeClassModal()"
+                        class="flex-1 bg-zinc-200 text-zinc-900 py-3 rounded-xl font-bold hover:bg-zinc-300 transition-all">
                         Cancelar
                     </button>
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
+                    <button type="submit"
+                        class="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
                         Guardar Clase
                     </button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Supabase Config -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
 
     <script>
         // Verificar autenticación
@@ -237,33 +280,20 @@
             document.getElementById('user-display').textContent = `👤 ${currentUser.name}`;
         }
 
-        // Inicializar clases desde localStorage
-        let classes = JSON.parse(localStorage.getItem('classes') || '[]');
+        // Estado Global
+        let classes = [];
 
-        // Si no hay clases, crear horario por defecto
-        if (classes.length === 0) {
-            initializeDefaultSchedule();
-        }
-
-        // Función para inicializar horario por defecto
-        function initializeDefaultSchedule() {
-            const today = new Date();
-            const nextWeek = new Date(today);
-            nextWeek.setDate(today.getDate() + 7);
-            
-            // Aquí puedes agregar las clases predeterminadas basadas en el Excel
-            // Por ahora lo dejamos vacío para que el admin las cree
-            
-            classes = [];
-            localStorage.setItem('classes', JSON.stringify(classes));
-        }
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWeeklySchedule();
+        });
 
         // Tabs
         function changeTab(tab) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
+
             // Show selected tab
             document.getElementById('content-' + tab).classList.remove('hidden');
             document.getElementById('tab-' + tab).classList.add('active');
@@ -274,54 +304,101 @@
             if (tab === 'templates') renderTemplates();
         }
 
-        // Render weekly schedule
-        function renderWeeklySchedule() {
+        // ════════════════════════════════════════════════════════════
+        // GESTIÓN DE HORARIO SEMANAL
+        // ════════════════════════════════════════════════════════════
+
+        async function renderWeeklySchedule() {
+            if (!window.supabase) return;
+
             const container = document.getElementById('weekly-schedule');
+            container.innerHTML = '<p class="col-span-7 text-center text-white py-10">Cargando horario...</p>';
+
             const today = new Date();
-            
-            // Set dates for the week
+            const dayOffset = today.getDay() === 0 ? -6 : 1 - today.getDay(); // Lunes como inicio
+
+            // Calcular rango de fechas de la semana
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + dayOffset);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+
+            // Actualizar encabezados de fecha
             const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-            const dayOffset = today.getDay() === 0 ? -6 : 1 - today.getDay(); // Monday start
-            
             days.forEach((day, index) => {
-                const date = new Date(today);
-                date.setDate(today.getDate() + dayOffset + index);
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + index);
                 const dateElement = document.getElementById(`date-${day}`);
                 if (dateElement) {
                     dateElement.textContent = `${date.getDate()}/${date.getMonth() + 1}`;
                 }
             });
 
-            // Render classes by day
-            container.innerHTML = days.map((day, index) => {
-                const date = new Date(today);
-                date.setDate(today.getDate() + dayOffset + index);
-                const dateStr = date.toISOString().split('T')[0];
-                
-                const dayClasses = classes.filter(c => c.date === dateStr).sort((a, b) => a.time.localeCompare(b.time));
-                
-                return `
-                    <div class="space-y-2">
-                        ${dayClasses.map(classItem => `
-                            <div class="bg-white rounded-xl p-3 border-2 border-zinc-200 hover:border-orange-400 transition-all cursor-pointer group" onclick="editClass('${classItem.id}')">
-                                <div class="flex items-center justify-between mb-2">
-                                    <p class="text-sm font-black text-orange-600">${classItem.time}</p>
-                                    <span class="text-xs bg-zinc-100 px-2 py-1 rounded-lg font-bold">
-                                        ${classItem.reservations ? classItem.reservations.length : 0}/${classItem.capacity}
-                                    </span>
+            // Fetch Clases de Supabase
+            try {
+                // 1. Obtener clases
+                const { data: dbClasses, error } = await supabase
+                    .from('classes')
+                    .select('*')
+                    .gte('date', monday.toISOString().split('T')[0])
+                    .lte('date', sunday.toISOString().split('T')[0])
+                    .order('time');
+
+                if (error) throw error;
+                classes = dbClasses; // Guardar en estado global
+
+                // 2. Obtener conteo de reservaciones para estas clases
+                // Nota: Idealmente usaríamos una vista o foreign key count, pero por ahora hacemos un segundo fetch simple
+                const { data: reservations, error: resError } = await supabase
+                    .from('class_reservations')
+                    .select('class_id, status')
+                    .in('class_id', classes.map(c => c.id))
+                    .eq('status', 'confirmed');
+
+                // Mapear conteo
+                const resCount = {};
+                if (reservations) {
+                    reservations.forEach(r => {
+                        resCount[r.class_id] = (resCount[r.class_id] || 0) + 1;
+                    });
+                }
+
+                // Renderizar
+                container.innerHTML = days.map((day, index) => {
+                    const date = new Date(monday);
+                    date.setDate(monday.getDate() + index);
+                    const dateStr = date.toISOString().split('T')[0];
+
+                    const dayClasses = classes.filter(c => c.date === dateStr);
+
+                    return `
+                        <div class="space-y-2">
+                            ${dayClasses.map(classItem => `
+                                <div class="bg-white rounded-xl p-3 border-2 border-zinc-200 hover:border-orange-400 transition-all cursor-pointer group" onclick="editClass(${classItem.id})">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="text-sm font-black text-orange-600">${classItem.time.slice(0, 5)}</p>
+                                        <span class="text-xs bg-zinc-100 px-2 py-1 rounded-lg font-bold">
+                                            ${resCount[classItem.id] || 0}/${classItem.capacity}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm font-bold text-zinc-900">${getClassName(classItem.class_type)}</p>
+                                    <p class="text-xs text-zinc-500">${classItem.instructor}</p>
+                                    <div class="mt-2 flex gap-1">
+                                        <button onclick="event.stopPropagation(); deleteClass(${classItem.id})" class="text-xs text-red-600 hover:text-red-800 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </div>
-                                <p class="text-sm font-bold text-zinc-900">${getClassName(classItem.type)}</p>
-                                <p class="text-xs text-zinc-500">${classItem.instructor}</p>
-                                <div class="mt-2 flex gap-1">
-                                    <button onclick="event.stopPropagation(); deleteClass('${classItem.id}')" class="text-xs text-red-600 hover:text-red-800 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        Cancelar
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('') || '<p class="text-zinc-500 text-xs text-center py-4">Sin clases</p>'}
-                    </div>
-                `;
-            }).join('');
+                            `).join('') || '<div class="h-10"></div>'} 
+                        </div>
+                    `;
+                    // Nota: el div vacío h-10 mantiene el grid alineado
+                }).join('');
+
+            } catch (err) {
+                console.error('Error cargando horario:', err);
+                container.innerHTML = '<p class="col-span-7 text-center text-red-400">Error al cargar datos.</p>';
+            }
         }
 
         function getClassName(type) {
@@ -341,17 +418,19 @@
             return names[type] || type;
         }
 
-        // Add/Edit class functions
+        // ════════════════════════════════════════════════════════════
+        // CREAR / EDITAR CLASES
+        // ════════════════════════════════════════════════════════════
+
         function showAddClassModal() {
             document.getElementById('modal-title').textContent = 'Nueva Clase';
             document.getElementById('class-form').reset();
             document.getElementById('class-id').value = '';
-            
-            // Set tomorrow as default date
+
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             document.getElementById('class-date').value = tomorrow.toISOString().split('T')[0];
-            
+
             document.getElementById('class-modal').classList.remove('hidden');
         }
 
@@ -365,7 +444,7 @@
 
             document.getElementById('modal-title').textContent = 'Editar Clase';
             document.getElementById('class-id').value = classItem.id;
-            document.getElementById('class-type').value = classItem.type;
+            document.getElementById('class-type').value = classItem.class_type; // Nota: campo es class_type
             document.getElementById('class-date').value = classItem.date;
             document.getElementById('class-time').value = classItem.time;
             document.getElementById('class-duration').value = classItem.duration;
@@ -376,100 +455,170 @@
             document.getElementById('class-modal').classList.remove('hidden');
         }
 
-        function deleteClass(id) {
-            if (!confirm('¿Estás seguro de cancelar esta clase? Las reservaciones serán eliminadas.')) return;
-            
-            classes = classes.filter(c => c.id !== id);
-            localStorage.setItem('classes', JSON.stringify(classes));
-            renderWeeklySchedule();
-            alert('✓ Clase cancelada');
+        async function deleteClass(id) {
+            if (!confirm('¿Estás seguro de cancelar esta clase?')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('classes')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+                renderWeeklySchedule();
+
+            } catch (err) {
+                alert('Error al eliminar: ' + err.message);
+            }
         }
 
-        // Save class
-        document.getElementById('class-form').addEventListener('submit', (e) => {
+        document.getElementById('class-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const id = document.getElementById('class-id').value || 'class-' + Date.now();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = 'Guardando...';
+
+            const id = document.getElementById('class-id').value;
+
             const classData = {
-                id: id,
-                type: document.getElementById('class-type').value,
+                class_type: document.getElementById('class-type').value,
                 date: document.getElementById('class-date').value,
                 time: document.getElementById('class-time').value,
                 duration: parseInt(document.getElementById('class-duration').value),
                 capacity: parseInt(document.getElementById('class-capacity').value),
                 instructor: document.getElementById('class-instructor').value,
                 description: document.getElementById('class-description').value,
-                reservations: []
+                status: 'scheduled'
             };
 
-            // If editing, preserve reservations
-            const existing = classes.find(c => c.id === id);
-            if (existing) {
-                classData.reservations = existing.reservations || [];
-                classes = classes.filter(c => c.id !== id);
-            }
+            try {
+                let error;
+                if (id) {
+                    // Update
+                    const { error: upError } = await supabase
+                        .from('classes')
+                        .update(classData)
+                        .eq('id', id);
+                    error = upError;
+                } else {
+                    // Insert
+                    const { error: inError } = await supabase
+                        .from('classes')
+                        .insert([classData]);
+                    error = inError;
+                }
 
-            classes.push(classData);
-            localStorage.setItem('classes', JSON.stringify(classes));
-            
-            closeClassModal();
-            renderWeeklySchedule();
-            alert('✓ Clase guardada exitosamente');
+                if (error) throw error;
+
+                closeClassModal();
+                renderWeeklySchedule();
+                alert('✓ Clase guardada exitosamente');
+
+            } catch (err) {
+                console.error(err);
+                alert('Error al guardar: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Guardar Clase';
+            }
         });
 
-        // Render reservations
-        function renderReservations() {
+        // ════════════════════════════════════════════════════════════
+        // RESERVACIONES (Lógica Simplificada)
+        // ════════════════════════════════════════════════════════════
+
+        async function renderReservations() {
+            if (!window.supabase) return;
+
             const container = document.getElementById('reservations-list');
             const selectedDate = document.getElementById('reservation-date').value || new Date().toISOString().split('T')[0];
-            
-            const todayClasses = classes.filter(c => c.date === selectedDate);
-            
-            if (todayClasses.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-16 text-zinc-500">
-                        <p class="text-4xl mb-2">📅</p>
-                        <p class="font-bold">No hay clases programadas para esta fecha</p>
-                    </div>
-                `;
-                return;
-            }
 
-            container.innerHTML = todayClasses.map(classItem => `
-                <div class="bg-zinc-50 rounded-xl p-6 border-2 border-zinc-200">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-xl font-black text-black">${getClassName(classItem.type)}</h3>
-                            <p class="text-zinc-600">${classItem.time} - ${classItem.instructor}</p>
+            container.innerHTML = '<p class="text-center py-10">Cargando...</p>';
+
+            try {
+                // 1. Obtener clases del día
+                const { data: dayClasses, error } = await supabase
+                    .from('classes')
+                    .select('*')
+                    .eq('date', selectedDate)
+                    .order('time');
+
+                if (!dayClasses || dayClasses.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-16 text-zinc-500">
+                            <p class="text-4xl mb-2">📅</p>
+                            <p class="font-bold">No hay clases programadas para esta fecha</p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-2xl font-black text-orange-600">${classItem.reservations?.length || 0}/${classItem.capacity}</p>
-                            <p class="text-xs text-zinc-500">Reservados</p>
+                    `;
+                    return;
+                }
+
+                // 2. Obtener reservaciones detalladas (JOIN con clients)
+                // Usamos la relación fk para traer datos del cliente
+                const { data: reservations, error: resError } = await supabase
+                    .from('class_reservations')
+                    .select(`
+                        id,
+                        status,
+                        class_id,
+                        clients ( id, first_name, last_name1 )
+                    `)
+                    .in('class_id', dayClasses.map(c => c.id))
+                    .eq('status', 'confirmed');
+
+                // Agrupar reservaciones por clase
+                const resByClass = {};
+                reservations?.forEach(r => {
+                    if (!resByClass[r.class_id]) resByClass[r.class_id] = [];
+                    resByClass[r.class_id].push(r);
+                });
+
+                // Renderizar
+                container.innerHTML = dayClasses.map(classItem => `
+                    <div class="bg-zinc-50 rounded-xl p-6 border-2 border-zinc-200">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-black text-black">${getClassName(classItem.class_type)}</h3>
+                                <p class="text-zinc-600">${classItem.time.slice(0, 5)} - ${classItem.instructor}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-black text-orange-600">${resByClass[classItem.id]?.length || 0}/${classItem.capacity}</p>
+                                <p class="text-xs text-zinc-500">Reservados</p>
+                            </div>
                         </div>
-                    </div>
-                    
-                    ${(classItem.reservations && classItem.reservations.length > 0) ? `
-                        <div class="space-y-2">
-                            ${classItem.reservations.map(res => `
-                                <div class="bg-white rounded-lg p-3 flex items-center justify-between">
-                                    <div>
-                                        <p class="font-bold text-zinc-900">${res.memberName}</p>
-                                        <p class="text-xs text-zinc-500">${res.memberId}</p>
+                        
+                        ${(resByClass[classItem.id] && resByClass[classItem.id].length > 0) ? `
+                            <div class="space-y-2">
+                                ${resByClass[classItem.id].map(res => `
+                                    <div class="bg-white rounded-lg p-3 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-bold text-zinc-900">
+                                                ${res.clients?.first_name} ${res.clients?.last_name1}
+                                            </p>
+                                            <p class="text-xs text-zinc-500">ID: ${res.clients?.id}</p>
+                                        </div>
+                                        <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">
+                                            Confirmado
+                                        </span>
                                     </div>
-                                    <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">
-                                        Confirmado
-                                    </span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : '<p class="text-zinc-400 text-sm">Sin reservaciones</p>'}
-                </div>
-            `).join('');
+                                `).join('')}
+                            </div>
+                        ` : '<p class="text-zinc-400 text-sm">Sin reservaciones</p>'}
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<p class="text-center text-red-500">Error cargando reservaciones.</p>';
+            }
         }
 
-        // Render templates
+        // ════════════════════════════════════════════════════════════
+        // PLANTILLAS
+        // ════════════════════════════════════════════════════════════
+
         function renderTemplates() {
             const container = document.getElementById('templates-list');
-            
             const templates = [
                 { name: 'Strong & Bike', type: 'strong&bike', icon: '🚴', default: '8:10 AM, 60 min, Cupo: 20' },
                 { name: 'Halterofilia', type: 'halterofilia', icon: '🏋️', default: '7:00 AM, 60 min, Cupo: 15' },
@@ -496,26 +645,7 @@
             document.getElementById('class-type').value = type;
         }
 
-        // Listen to date change in reservations
         document.getElementById('reservation-date').addEventListener('change', renderReservations);
-
-        // CSS for tabs
-        const style = document.createElement('style');
-        style.textContent = `
-            .tab-btn {
-                background: transparent;
-                color: #71717a;
-            }
-            .tab-btn.active {
-                background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-                color: white;
-                box-shadow: 0 10px 20px rgba(249, 115, 22, 0.2);
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialize
-        renderWeeklySchedule();
     </script>
 </body>
-</html>
+</html
