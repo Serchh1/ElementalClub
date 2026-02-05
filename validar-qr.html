@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validar QR - Elemental Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        html { scroll-behavior: smooth; }
-        #reader { width: 100%; max-width: 500px; margin: 0 auto; }
-        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
         /* ── improved focus & transitions ── */
         button:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
         }
-        
-        button, a {
+
+        button,
+        a {
             transition: all .3s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(249, 115, 22, .4);
         }
-        
+
         .history-card {
             transition: transform .25s ease, box-shadow .25s ease;
         }
+
         .history-card:hover {
             transform: translateX(4px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
     </style>
 </head>
+
 <body class="bg-gradient-to-br from-zinc-950 via-black to-zinc-900 min-h-screen">
     <!-- Header -->
     <nav class="bg-black/90 backdrop-blur-xl border-b border-zinc-800/50 shadow-lg shadow-black/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="manager.html" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
                         <span class="text-white font-black text-xl">E</span>
                     </div>
-                    <span class="text-xl font-black text-white">Elemental <span class="text-orange-500">Club</span></span>
+                    <span class="text-xl font-black text-white">Elemental <span
+                            class="text-orange-500">Club</span></span>
                 </a>
-                
+
                 <div class="flex items-center gap-4">
                     <span class="text-zinc-400 text-sm hidden sm:inline" id="user-display">👤 Usuario</span>
-                    <a href="manager.html" class="bg-zinc-800 text-white px-4 py-2 rounded-xl font-bold hover:bg-zinc-700 transition-all text-sm">
+                    <a href="manager.html"
+                        class="bg-zinc-800 text-white px-4 py-2 rounded-xl font-bold hover:bg-zinc-700 transition-all text-sm">
                         ← Menú
                     </a>
                 </div>
@@ -72,10 +90,12 @@
             </div>
 
             <div class="text-center">
-                <button id="start-scan-btn" onclick="startScanner()" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold px-8 py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30 text-lg">
+                <button id="start-scan-btn" onclick="startScanner()"
+                    class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold px-8 py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30 text-lg">
                     📷 Activar Escáner
                 </button>
-                <button id="stop-scan-btn" onclick="stopScanner()" class="hidden bg-red-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-red-600 transition-all text-lg">
+                <button id="stop-scan-btn" onclick="stopScanner()"
+                    class="hidden bg-red-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-red-600 transition-all text-lg">
                     ⏹️ Detener Escáner
                 </button>
             </div>
@@ -106,48 +126,59 @@
     </div>
 
     <!-- Modal de Éxito -->
-    <div id="success-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div id="success-modal"
+        class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center transform scale-95 transition-transform">
-            <div class="w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <div
+                class="w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
                 <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            
+
             <h2 class="text-3xl font-black text-black mb-2">¡Acceso Permitido!</h2>
             <p class="text-zinc-600 text-lg mb-6" id="success-member-name">Miembro</p>
-            
+
             <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-6">
                 <p class="text-green-900 font-bold" id="success-class-name">Clase</p>
                 <p class="text-green-700 text-sm" id="success-class-time">Horario</p>
             </div>
 
-            <button onclick="closeSuccessModal()" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
+            <button onclick="closeSuccessModal()"
+                class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30">
                 Continuar
             </button>
         </div>
     </div>
 
     <!-- Modal de Error -->
-    <div id="error-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div id="error-modal"
+        class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center transform scale-95 transition-transform">
-            <div class="w-24 h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <div
+                class="w-24 h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
                 <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12">
+                    </path>
                 </svg>
             </div>
-            
+
             <h2 class="text-3xl font-black text-black mb-2">Acceso Denegado</h2>
-            
+
             <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6">
                 <p class="text-red-900 font-bold" id="error-reason">Motivo</p>
             </div>
 
-            <button onclick="closeErrorModal()" class="w-full bg-zinc-200 text-zinc-900 font-bold py-4 rounded-xl hover:bg-zinc-300 transition-all">
+            <button onclick="closeErrorModal()"
+                class="w-full bg-zinc-200 text-zinc-900 font-bold py-4 rounded-xl hover:bg-zinc-300 transition-all">
                 Cerrar
             </button>
         </div>
     </div>
+
+    <!-- Supabase Config -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
 
     <script>
         // Verificar autenticación
@@ -159,13 +190,11 @@
         }
 
         let html5QrcodeScanner = null;
-        const classes = JSON.parse(localStorage.getItem('classes') || '[]');
-        const members = JSON.parse(localStorage.getItem('members') || '[]');
         let validationHistory = JSON.parse(localStorage.getItem('todayValidations') || '[]');
 
         // Limpiar historial si es un nuevo día
-        const today = new Date().toISOString().split('T')[0];
-        if (!validationHistory[0] || !validationHistory[0].date.startsWith(today)) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (!validationHistory[0] || !validationHistory[0].date.startsWith(todayStr)) {
             validationHistory = [];
             localStorage.setItem('todayValidations', JSON.stringify(validationHistory));
         }
@@ -193,84 +222,124 @@
         }
 
         function onScanSuccess(decodedText, decodedResult) {
-            // Detener el escáner
             stopScanner();
-
             try {
                 const qrData = JSON.parse(decodedText);
                 validateAccess(qrData);
             } catch (error) {
-                showError('Código QR inválido');
+                console.error(error);
+                showError('Código QR ilegible o formato incorrecto');
             }
         }
 
         function onScanError(error) {
-            // Ignorar errores de escaneo continuo
+            // Ignorar errores continuos
         }
 
-        function validateAccess(qrData) {
+        async function validateAccess(qrData) {
             const { memberId, classId, className, date, time, memberName } = qrData;
 
-            // Buscar la clase
-            const classItem = classes.find(c => c.id === classId);
-            if (!classItem) {
-                showError('Clase no encontrada');
+            if (!window.supabase) {
+                showError("Error: Supabase no conectado");
                 return;
             }
 
-            // Verificar que el miembro tiene reservación
-            const hasReservation = classItem.reservations?.some(r => r.memberId === memberId);
-            if (!hasReservation) {
-                showError('No tienes reservación para esta clase');
-                return;
+            try {
+                // 1. Validar Clases en DB
+                // Asumimos que classId viene del QR. Si no, habría que buscar por fecha/hora/tipo
+                const { data: classItem, error: classError } = await supabase
+                    .from('classes')
+                    .select('*')
+                    .eq('id', classId)
+                    .single();
+
+                if (classError || !classItem) {
+                    showError('Clase no encontrada en el sistema');
+                    return;
+                }
+
+                // 2. Validar Fecha
+                if (classItem.date !== date) {
+                    showError(`Fecha incorrecta. Clase programada para ${classItem.date}`);
+                    return;
+                }
+
+                // 3. Validar Reservación
+                const { data: reservation, error: resError } = await supabase
+                    .from('class_reservations')
+                    .select('status, clients(first_name, last_name1)')
+                    .eq('class_id', classId)
+                    .eq('client_id', memberId)
+                    .eq('status', 'confirmed')
+                    .single();
+
+                if (resError || !reservation) {
+                    showError('No se encontró reservación activa para este miembro');
+                    return;
+                }
+
+                // 4. Validar Hora (Tolerancia)
+                const now = new Date();
+                const classDateTime = new Date(`${classItem.date}T${classItem.time}`);
+                const diffMinutes = (now - classDateTime) / (1000 * 60);
+
+                if (diffMinutes < -15) {
+                    showError('Demasiado temprano. Ingreso permitido 15 min antes.');
+                    return;
+                }
+                if (diffMinutes > 15) { // Aumenté un poco la tolerancia a 15 min reales para evitar frustración
+                    showError('Clase ya iniciada (Tolerancia excedida)');
+                    return;
+                }
+
+                // 5. Verificar doble check-in local (opcional, para evitar spam)
+                const alreadyCheckedIn = validationHistory.some(v =>
+                    v.memberId === memberId && v.classId === classId
+                );
+                if (alreadyCheckedIn) {
+                    showError('Este código ya fue validado hoy');
+                    return;
+                }
+
+                // ✅ ÉXITO
+                const realMemberName = `${reservation.clients.first_name} ${reservation.clients.last_name1}`;
+
+                const validation = {
+                    memberId,
+                    memberName: realMemberName,
+                    classId,
+                    className: getClassName(classItem.class_type),
+                    date: now.toISOString(),
+                    status: 'success'
+                };
+
+                validationHistory.unshift(validation);
+                localStorage.setItem('todayValidations', JSON.stringify(validationHistory));
+
+                showSuccess(realMemberName, getClassName(classItem.class_type), classItem.time);
+                renderHistory();
+
+            } catch (err) {
+                console.error("Error validando:", err);
+                showError('Error de conexión al validar');
             }
+        }
 
-            // Verificar fecha
-            if (classItem.date !== date) {
-                showError('La clase es para otra fecha');
-                return;
-            }
-
-            // Verificar hora (tolerancia de 5 minutos)
-            const now = new Date();
-            const classDateTime = new Date(`${classItem.date}T${classItem.time}`);
-            const diffMinutes = (now - classDateTime) / (1000 * 60);
-
-            if (diffMinutes < -15) {
-                showError('Demasiado temprano. Llega máximo 15 minutos antes.');
-                return;
-            }
-
-            if (diffMinutes > 5) {
-                showError('Llegaste tarde. Máximo 5 minutos de tolerancia.');
-                return;
-            }
-
-            // Verificar que no haya validado ya
-            const alreadyCheckedIn = validationHistory.some(v => 
-                v.memberId === memberId && v.classId === classId
-            );
-
-            if (alreadyCheckedIn) {
-                showError('Ya validaste tu entrada para esta clase');
-                return;
-            }
-
-            // ✅ TODO CORRECTO - ACCESO PERMITIDO
-            const validation = {
-                memberId,
-                memberName,
-                classId,
-                className,
-                date: now.toISOString(),
-                status: 'success'
+        function getClassName(type) {
+            const names = {
+                'strong&bike': '🚴 Strong & Bike',
+                'halterofilia': '🏋️ Halterofilia',
+                'yoga': '🧘 Yoga',
+                'artes-marciales': '🥋 Artes Marciales',
+                'multipower': '💪 Multipower',
+                'momentum': '⚡ Momentum',
+                'hyrox-competicion': '🏃 Hyrox Competición',
+                'crossfit': '🔥 CrossFit',
+                'combatfit': '🥊 CombatFit',
+                'spinning': '🚴 Spinning',
+                'hyrox-base': '🏃 Hyrox Base'
             };
-
-            validationHistory.unshift(validation);
-            localStorage.setItem('todayValidations', JSON.stringify(validationHistory));
-
-            showSuccess(memberName, className, time);
-            renderHistory();
+            return names[type] || type;
         }
 
         function showSuccess(memberName, className, time) {
@@ -278,22 +347,20 @@
             document.getElementById('success-class-name').textContent = className;
             document.getElementById('success-class-time').textContent = time;
             document.getElementById('success-modal').classList.remove('hidden');
-            
-            // Auto cerrar después de 3 segundos
+
             setTimeout(() => {
                 closeSuccessModal();
-                startScanner(); // Reiniciar escáner
+                startScanner();
             }, 3000);
         }
 
         function showError(reason) {
             document.getElementById('error-reason').textContent = reason;
             document.getElementById('error-modal').classList.remove('hidden');
-            
-            // Auto cerrar después de 3 segundos
+
             setTimeout(() => {
                 closeErrorModal();
-                startScanner(); // Reiniciar escáner
+                startScanner();
             }, 3000);
         }
 
@@ -307,7 +374,7 @@
 
         function renderHistory() {
             const container = document.getElementById('validation-history');
-            
+
             if (validationHistory.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-8 text-zinc-500">
@@ -320,11 +387,15 @@
 
             container.innerHTML = validationHistory.map(v => {
                 const time = new Date(v.date).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                // Fallback nombres
+                const cName = v.className || 'Clase';
+                const mName = v.memberName || 'Miembro';
+
                 return `
                     <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 flex items-center justify-between">
                         <div>
-                            <p class="font-bold text-black">${v.memberName}</p>
-                            <p class="text-sm text-zinc-600">${v.className}</p>
+                            <p class="font-bold text-black">${mName}</p>
+                            <p class="text-sm text-zinc-600">${cName}</p>
                         </div>
                         <div class="text-right">
                             <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold">
@@ -336,8 +407,8 @@
             }).join('');
         }
 
-        // Inicializar
         renderHistory();
     </script>
 </body>
+
 </html>
