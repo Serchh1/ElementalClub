@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,49 +10,72 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        html { scroll-behavior: smooth; }
-        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         .title-font {
             font-family: 'Oswald', 'Impact', sans-serif;
             letter-spacing: 0.05em;
         }
-        
+
         .gradient-text {
             background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         /* ── improved focus ── */
-        input:focus, select:focus, textarea:focus, button:focus {
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
             outline: none;
             border-color: #f97316 !important;
             box-shadow: 0 0 0 3px rgba(249, 115, 22, .1);
         }
-        
-        button, a {
+
+        button,
+        a {
             transition: all .3s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(249, 115, 22, .4);
         }
-        
+
         @keyframes pulse-border {
-            0%, 100% { border-color: #f97316; }
-            50% { border-color: #ea580c; }
+
+            0%,
+            100% {
+                border-color: #f97316;
+            }
+
+            50% {
+                border-color: #ea580c;
+            }
         }
-        
+
         .pulse-border {
             animation: pulse-border 2s ease-in-out infinite;
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .animate-bounce {
@@ -59,6 +83,7 @@
         }
     </style>
 </head>
+
 <body class="bg-black text-white min-h-screen p-4">
     <div id="app" class="max-w-6xl mx-auto">
         <!-- Header -->
@@ -74,14 +99,16 @@
         <div class="mb-8">
             <div class="flex justify-center items-center gap-4 mb-4">
                 <div class="flex items-center gap-2" id="step1-indicator">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 bg-orange-500 border-orange-500 text-black">
+                    <div
+                        class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 bg-orange-500 border-orange-500 text-black">
                         1
                     </div>
                     <span class="font-bold hidden sm:inline text-orange-500">Datos Personales</span>
                 </div>
                 <div class="h-0.5 w-16 bg-zinc-700" id="progress-line"></div>
                 <div class="flex items-center gap-2 text-zinc-600" id="step2-indicator">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-zinc-600">
+                    <div
+                        class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-zinc-600">
                         2
                     </div>
                     <span class="font-bold hidden sm:inline">Captura Facial</span>
@@ -90,7 +117,8 @@
         </div>
 
         <!-- Step 1: Formulario -->
-        <div id="step1" class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl">
+        <div id="step1"
+            class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl">
             <form id="form-datos">
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
                     <!-- Nombre -->
@@ -159,7 +187,8 @@
         </div>
 
         <!-- Step 2: Captura Facial -->
-        <div id="step2" class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl hidden">
+        <div id="step2"
+            class="bg-gradient-to-br from-zinc-900 to-black border-2 border-zinc-800 rounded-2xl p-8 shadow-2xl hidden">
             <div class="mb-6">
                 <h3 class="text-3xl font-black title-font text-orange-500 mb-2">CAPTURA FACIAL</h3>
                 <p class="text-zinc-400" id="foto-counter">
@@ -170,7 +199,8 @@
             <div class="grid lg:grid-cols-2 gap-6 mb-6">
                 <!-- Vista de Cámara -->
                 <div class="relative">
-                    <div class="aspect-video rounded-xl overflow-hidden border-2 border-zinc-700 bg-zinc-950" id="camera-container">
+                    <div class="aspect-video rounded-xl overflow-hidden border-2 border-zinc-700 bg-zinc-950"
+                        id="camera-container">
                         <div class="w-full h-full flex flex-col items-center justify-center" id="camera-placeholder">
                             <div class="text-6xl mb-4">📷</div>
                             <p class="text-zinc-600 font-bold">Cámara desactivada</p>
@@ -202,7 +232,8 @@
                     </h4>
                     <div class="grid grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-2" id="photo-gallery">
                         <!-- Placeholder -->
-                        <div class="col-span-3 border-2 border-dashed border-zinc-700 rounded-xl p-8 text-center" id="gallery-placeholder">
+                        <div class="col-span-3 border-2 border-dashed border-zinc-700 rounded-xl p-8 text-center"
+                            id="gallery-placeholder">
                             <div class="text-4xl mb-2">⚠️</div>
                             <p class="text-zinc-500">No hay fotos capturadas</p>
                         </div>
@@ -241,22 +272,26 @@
         <!-- Success Screen -->
         <div id="success-screen" class="hidden">
             <div class="max-w-2xl mx-auto">
-                <div class="bg-gradient-to-br from-zinc-900 to-black border-2 border-orange-500 rounded-2xl p-8 shadow-2xl">
+                <div
+                    class="bg-gradient-to-br from-zinc-900 to-black border-2 border-orange-500 rounded-2xl p-8 shadow-2xl">
                     <div class="text-center mb-8">
-                        <div class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
                             <span class="text-5xl">✓</span>
                         </div>
                         <h2 class="text-4xl font-black text-white mb-2 title-font">
                             ¡REGISTRO COMPLETADO!
                         </h2>
-                        <div class="h-1 w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
+                        <div class="h-1 w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto">
+                        </div>
                     </div>
 
                     <div class="bg-zinc-950 rounded-xl p-6 border border-zinc-800 mb-6" id="member-info">
                         <!-- Se llenará con JavaScript -->
                     </div>
 
-                    <div class="bg-gradient-to-r from-orange-500/10 to-transparent border-l-4 border-orange-500 p-4 rounded mb-6">
+                    <div
+                        class="bg-gradient-to-r from-orange-500/10 to-transparent border-l-4 border-orange-500 p-4 rounded mb-6">
                         <p class="text-white font-medium">
                             ✓ <span id="success-photo-count">0</span> fotos faciales capturadas
                         </p>
@@ -280,20 +315,251 @@
         </div>
     </div>
 
+    <!-- Supabase Config -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
     <script>
-        // Estado global
+        // ════════════════════════════════════════════════════════════
+        // VERIFICACIÓN DE AUTENTICACIÓN
+        // ════════════════════════════════════════════════════════════
+        (function checkAuth() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                // No hay sesión activa, redirigir a manager.html
+                alert('⚠️ Acceso Restringido\n\nEsta página es solo para empleados.\nSerás redirigido al panel de empleados.');
+                window.location.href = 'manager.html';
+                return;
+            }
+
+            // Sesión válida, mostrar información del empleado
+            try {
+                const userData = JSON.parse(currentUser);
+                console.log('✓ Sesión activa:', userData.name);
+
+                // Actualizar header con nombre del empleado
+                const stepDescription = document.getElementById('step-description');
+                if (stepDescription) {
+                    stepDescription.innerHTML = `Complete el registro en 2 pasos · <span class="text-orange-500">Empleado: ${userData.name}</span>`;
+                }
+            } catch (e) {
+                console.error('Error al parsear sesión:', e);
+                localStorage.removeItem('currentUser');
+                window.location.href = 'manager.html';
+            }
+        })();
+
+        // ════════════════════════════════════════════════════════════
+        // ESTADO GLOBAL Y CONFIGURACIÓN
+        // ════════════════════════════════════════════════════════════
         let currentStep = 1;
         let capturedPhotos = [];
         let stream = null;
-        let selectedPlan = 'mensual';
+        let selectedPlan = 'basica-trimestral'; // Plan más popular por defecto
         let formData = {};
 
-        // Planes disponibles
+        // Planes disponibles con precios reales
         const planes = [
-            { id: 'mensual', nombre: 'Mensual', precio: 500, duracion: '1 mes' },
-            { id: 'trimestral', nombre: 'Trimestral', precio: 1350, duracion: '3 meses', ahorro: '10%' },
-            { id: 'semestral', nombre: 'Semestral', precio: 2550, duracion: '6 meses', ahorro: '15%' },
-            { id: 'anual', nombre: 'Anual', precio: 4800, duracion: '12 meses', ahorro: '20%' }
+            // ═══════════ BÁSICA ═══════════
+            {
+                id: 'basica-mensual',
+                nombre: 'Básica',
+                precio: 1000,
+                duracion: 'Mensual',
+                tipo: 'basica',
+                inscripcion: 500,
+                descripcion: 'Acceso a área de pesas y cardio'
+            },
+            {
+                id: 'basica-trimestral',
+                nombre: 'Básica',
+                precio: 2700,
+                duracion: 'Trimestral',
+                tipo: 'basica',
+                popular: true,
+                ahorro: '10%',
+                descripcion: 'Acceso a área de pesas y cardio'
+            },
+            {
+                id: 'basica-semestral',
+                nombre: 'Básica',
+                precio: 4800,
+                duracion: 'Semestral',
+                tipo: 'basica',
+                ahorro: '20%',
+                descripcion: 'Acceso a área de pesas y cardio'
+            },
+            {
+                id: 'basica-anual',
+                nombre: 'Básica',
+                precio: 8800,
+                duracion: 'Anual',
+                tipo: 'basica',
+                ahorro: '27%',
+                descripcion: 'Acceso a área de pesas y cardio'
+            },
+
+            // ═══════════ ILIMITADA ═══════════
+            {
+                id: 'ilimitada-mensual',
+                nombre: 'Ilimitada',
+                precio: 1800,
+                duracion: 'Mensual',
+                tipo: 'ilimitada',
+                inscripcion: 500,
+                descripcion: 'Acceso ilimitado a todas las áreas'
+            },
+            {
+                id: 'ilimitada-trimestral',
+                nombre: 'Ilimitada',
+                precio: 5000,
+                duracion: 'Trimestral',
+                tipo: 'ilimitada',
+                ahorro: '7%',
+                descripcion: 'Acceso ilimitado a todas las áreas'
+            },
+            {
+                id: 'ilimitada-semestral',
+                nombre: 'Ilimitada',
+                precio: 9000,
+                duracion: 'Semestral',
+                tipo: 'ilimitada',
+                ahorro: '17%',
+                descripcion: 'Acceso ilimitado a todas las áreas'
+            },
+            {
+                id: 'ilimitada-anual',
+                nombre: 'Ilimitada',
+                precio: 16200,
+                duracion: 'Anual',
+                tipo: 'ilimitada',
+                ahorro: '25%',
+                descripcion: 'Acceso ilimitado a todas las áreas'
+            },
+
+            // ═══════════ ESTUDIOS ═══════════
+            {
+                id: 'estudios-mensual',
+                nombre: 'Estudios',
+                precio: 1650,
+                duracion: 'Mensual',
+                tipo: 'estudios',
+                inscripcion: 500,
+                descripcion: 'Acceso a estudios especializados'
+            },
+            {
+                id: 'estudios-trimestral',
+                nombre: 'Estudios',
+                precio: 4500,
+                duracion: 'Trimestral',
+                tipo: 'estudios',
+                ahorro: '9%',
+                descripcion: 'Acceso a estudios especializados'
+            },
+            {
+                id: 'estudios-semestral',
+                nombre: 'Estudios',
+                precio: 8000,
+                duracion: 'Semestral',
+                tipo: 'estudios',
+                ahorro: '19%',
+                descripcion: 'Acceso a estudios especializados'
+            },
+            {
+                id: 'estudios-anual',
+                nombre: 'Estudios',
+                precio: 14400,
+                duracion: 'Anual',
+                tipo: 'estudios',
+                ahorro: '27%',
+                descripcion: 'Acceso a estudios especializados'
+            },
+
+            // ═══════════ CROSSFIT/HYROX ═══════════
+            {
+                id: 'crossfit-mensual',
+                nombre: 'CrossFit/Hyrox',
+                precio: 1400,
+                duracion: 'Mensual',
+                tipo: 'crossfit',
+                inscripcion: 500,
+                descripcion: 'Entrenamiento funcional de alto rendimiento'
+            },
+            {
+                id: 'crossfit-trimestral',
+                nombre: 'CrossFit/Hyrox',
+                precio: 3800,
+                duracion: 'Trimestral',
+                tipo: 'crossfit',
+                ahorro: '10%',
+                descripcion: 'Entrenamiento funcional de alto rendimiento'
+            },
+            {
+                id: 'crossfit-semestral',
+                nombre: 'CrossFit/Hyrox',
+                precio: 6800,
+                duracion: 'Semestral',
+                tipo: 'crossfit',
+                ahorro: '19%',
+                descripcion: 'Entrenamiento funcional de alto rendimiento'
+            },
+            {
+                id: 'crossfit-anual',
+                nombre: 'CrossFit/Hyrox',
+                precio: 12400,
+                duracion: 'Anual',
+                tipo: 'crossfit',
+                ahorro: '26%',
+                descripcion: 'Entrenamiento funcional de alto rendimiento'
+            },
+
+            // ═══════════ MOMENTUM ═══════════
+            {
+                id: 'momentum-mensual',
+                nombre: 'Momentum',
+                precio: 1400,
+                duracion: 'Mensual',
+                tipo: 'momentum',
+                inscripcion: 500,
+                descripcion: 'Programa de entrenamiento Momentum'
+            },
+            {
+                id: 'momentum-trimestral',
+                nombre: 'Momentum',
+                precio: 3800,
+                duracion: 'Trimestral',
+                tipo: 'momentum',
+                ahorro: '10%',
+                descripcion: 'Programa de entrenamiento Momentum'
+            },
+            {
+                id: 'momentum-semestral',
+                nombre: 'Momentum',
+                precio: 6800,
+                duracion: 'Semestral',
+                tipo: 'momentum',
+                ahorro: '19%',
+                descripcion: 'Programa de entrenamiento Momentum'
+            },
+            {
+                id: 'momentum-anual',
+                nombre: 'Momentum',
+                precio: 12400,
+                duracion: 'Anual',
+                tipo: 'momentum',
+                ahorro: '26%',
+                descripcion: 'Programa de entrenamiento Momentum'
+            },
+
+            // ═══════════ VISITA ═══════════
+            {
+                id: 'visita',
+                nombre: 'Visita',
+                precio: 150,
+                duracion: 'Diaria',
+                tipo: 'visita',
+                descripcion: 'Pase de un día'
+            }
         ];
 
         // Generar tarjetas de planes
@@ -301,20 +567,30 @@
             const container = document.getElementById('planes-container');
             container.innerHTML = planes.map(plan => `
                 <div onclick="selectPlan('${plan.id}')" id="plan-${plan.id}"
-                    class="relative cursor-pointer rounded-xl p-5 border-2 transition-all transform hover:scale-105 ${
-                        selectedPlan === plan.id
-                            ? 'bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 shadow-lg shadow-orange-500/50'
-                            : 'bg-zinc-900 border-zinc-700 hover:border-orange-500'
-                    }">
+                    class="relative cursor-pointer rounded-xl p-5 border-2 transition-all transform hover:scale-105 ${selectedPlan === plan.id
+                    ? 'bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 shadow-lg shadow-orange-500/50'
+                    : 'bg-zinc-900 border-zinc-700 hover:border-orange-500'
+                }">
+                    ${plan.popular ? `
+                        <div class="absolute -top-3 -right-3 bg-orange-500 text-white text-xs font-black px-3 py-1 rounded-full animate-pulse">
+                            ⭐ POPULAR
+                        </div>
+                    ` : ''}
                     ${plan.ahorro ? `
-                        <div class="absolute -top-3 -right-3 bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full">
+                        <div class="absolute -top-3 -left-3 bg-green-500 text-black text-xs font-black px-3 py-1 rounded-full">
                             AHORRA ${plan.ahorro}
                         </div>
                     ` : ''}
-                    <div class="text-center ${selectedPlan === plan.id ? 'text-black' : 'text-white'}">
-                        <p class="text-sm font-bold uppercase tracking-wide mb-1 opacity-80">${plan.duracion}</p>
-                        <p class="text-3xl font-black title-font mb-1">$${plan.precio}</p>
-                        <p class="text-lg font-bold">${plan.nombre}</p>
+                    ${plan.inscripcion ? `
+                        <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                            +$${plan.inscripcion} inscripción
+                        </div>
+                    ` : ''}
+                    <div class="text-center ${selectedPlan === plan.id ? 'text-black' : 'text-white'} ${plan.inscripcion ? 'mt-6' : ''}">
+                        <p class="text-xs font-bold uppercase tracking-wide mb-1 opacity-70">${plan.nombre}</p>
+                        <p class="text-3xl font-black title-font mb-1">$${plan.precio.toLocaleString()}</p>
+                        <p class="text-sm font-bold opacity-80">${plan.duracion}</p>
+                        ${plan.descripcion ? `<p class="text-xs mt-2 opacity-60">${plan.descripcion}</p>` : ''}
                     </div>
                 </div>
             `).join('');
@@ -343,7 +619,7 @@
             currentStep = step;
             document.getElementById('step1').classList.toggle('hidden', step !== 1);
             document.getElementById('step2').classList.toggle('hidden', step !== 2);
-            
+
             if (step === 2) {
                 document.getElementById('step1-indicator').innerHTML = `
                     <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 bg-orange-500 border-orange-500 text-black">✓</div>
@@ -405,9 +681,9 @@
         function updatePhotoGallery() {
             const gallery = document.getElementById('photo-gallery');
             document.getElementById('photo-count').textContent = capturedPhotos.length;
-            document.getElementById('foto-counter').textContent = 
+            document.getElementById('foto-counter').textContent =
                 `${capturedPhotos.length} foto${capturedPhotos.length > 1 ? 's' : ''} capturada${capturedPhotos.length > 1 ? 's' : ''}. Se recomiendan 5-10 fotos desde diferentes ángulos.`;
-            
+
             if (capturedPhotos.length === 0) {
                 gallery.innerHTML = `
                     <div class="col-span-3 border-2 border-dashed border-zinc-700 rounded-xl p-8 text-center">
@@ -430,7 +706,7 @@
                     </div>
                 `).join('');
             }
-            
+
             document.getElementById('btn-submit').disabled = capturedPhotos.length < 3;
             document.getElementById('min-photos-msg').style.display = capturedPhotos.length < 3 ? 'block' : 'none';
         }
@@ -449,29 +725,112 @@
         });
 
         // Submit
-        document.getElementById('btn-submit').addEventListener('click', () => {
-            document.getElementById('btn-submit').innerHTML = '⏳ PROCESANDO...';
-            document.getElementById('btn-submit').disabled = true;
-            
-            setTimeout(() => {
-                showSuccess();
-            }, 2000);
+        // Submit con Supabase
+        document.getElementById('btn-submit').addEventListener('click', async () => {
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.innerHTML = '⏳ GUARDANDO...';
+            btnSubmit.disabled = true;
+
+            try {
+                if (!window.supabase) throw new Error("Supabase no está configurado");
+
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const planData = planes.find(p => p.id === formData.plan);
+
+                // 1. Preparar fechas
+                const today = new Date();
+                const expires = new Date();
+
+                // Calcular vencimiento según plan
+                if (planData.duracion === 'Mensual') expires.setMonth(expires.getMonth() + 1);
+                if (planData.duracion === 'Trimestral') expires.setMonth(expires.getMonth() + 3);
+                if (planData.duracion === 'Semestral') expires.setMonth(expires.getMonth() + 6);
+                if (planData.duracion === 'Anual') expires.setFullYear(expires.getFullYear() + 1);
+                if (planData.duracion === 'Diaria') expires.setDate(expires.getDate() + 1);
+
+                // 2. Insertar Cliente
+                const { data: client, error: clientError } = await supabase
+                    .from('clients')
+                    .insert([{
+                        first_name: formData.nombre.split(' ')[0],
+                        last_name1: formData.nombre.split(' ').slice(1).join(' ') || '.',
+                        phone: formData.telefono,
+                        client_type: 'member',
+                        membership_type: planData.tipo,
+                        membership_status: 'active',
+                        membership_starts: today.toISOString(),
+                        membership_expires: expires.toISOString(),
+                        source: 'recepcion',
+                        empleado_id: currentUser.id || null, // Si el usuario tiene ID numérico
+                        observations: `Plan: ${planData.nombre} ${planData.duracion} - Pago: ${formData.metodoPago}`
+                    }])
+                    .select()
+                    .single();
+
+                if (clientError) throw new Error('Error al guardar cliente: ' + clientError.message);
+
+                console.log('Cliente guardado:', client.id);
+
+                // 3. Subir Fotos
+                let photoUrls = [];
+                for (let i = 0; i < capturedPhotos.length; i++) {
+                    const photoBase64 = capturedPhotos[i];
+                    const blob = await (await fetch(photoBase64)).blob();
+                    const fileName = `${client.id}/${Date.now()}_${i}.jpg`;
+
+                    const { data: uploadData, error: uploadError } = await supabase
+                        .storage
+                        .from('member-photos')
+                        .upload(fileName, blob, { contentType: 'image/jpeg' });
+
+                    if (uploadError) {
+                        console.error('Error subiendo foto:', uploadError);
+                        continue;
+                    }
+
+                    // Obtener URL pública
+                    const { data: { publicUrl } } = supabase
+                        .storage
+                        .from('member-photos')
+                        .getPublicUrl(fileName);
+
+                    photoUrls.push(publicUrl);
+                }
+
+                // 4. Guardar Referencias de Fotos (si tabla existe)
+                if (photoUrls.length > 0) {
+                    const photosToInsert = photoUrls.map(url => ({
+                        client_id: client.id,
+                        photo_url: url
+                    }));
+
+                    const { error: photoErr } = await supabase
+                        .from('client_photos')
+                        .insert(photosToInsert);
+
+                    if (photoErr) console.warn('Error guardando ref de fotos:', photoErr);
+                }
+
+                showSuccess(client, planData, expires);
+
+            } catch (err) {
+                console.error('Error completo:', err);
+                alert('Hubo un error al registrar: ' + err.message);
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = 'FINALIZAR REGISTRO';
+            }
         });
 
-        function showSuccess() {
-            const planData = planes.find(p => p.id === formData.plan);
-            const vencimiento = new Date();
-            vencimiento.setDate(vencimiento.getDate() + 30);
-            
+        function showSuccess(client, planData, vencimiento) {
             document.getElementById('member-info').innerHTML = `
                 <div class="grid grid-cols-2 gap-4 text-white">
                     <div>
                         <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Miembro</p>
-                        <p class="text-xl font-bold">${formData.nombre}</p>
+                        <p class="text-xl font-bold">${client.first_name} ${client.last_name1}</p>
                     </div>
                     <div>
-                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">ID</p>
-                        <p class="text-sm font-mono text-orange-400">uuid-${Math.random().toString(36).substr(2, 9)}</p>
+                        <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">ID CLIENTE</p>
+                        <p class="text-sm font-mono text-orange-400">#${client.id}</p>
                     </div>
                     <div>
                         <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Plan</p>
@@ -479,17 +838,17 @@
                     </div>
                     <div>
                         <p class="text-zinc-500 text-sm uppercase tracking-wider mb-1">Válido hasta</p>
-                        <p class="text-lg font-bold text-green-400">${vencimiento.toLocaleDateString('es-MX')}</p>
+                        <p class="text-lg font-bold text-green-400">${new Date(vencimiento).toLocaleDateString('es-MX')}</p>
                     </div>
                 </div>
             `;
-            
+
             document.getElementById('success-photo-count').textContent = capturedPhotos.length;
-            
+
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
-            
+
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
