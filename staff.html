@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff — Elemental Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --or: #FF4D00;
+      --or2: #CC3D00;
+      --or-a: rgba(255, 77, 0, .15);
+      --bg: #090909;
+      --s1: #0f0f0f;
+      --s2: #161616;
+      --s3: #202020;
+      --s4: #2d2d2d;
+      --txt: #eeeeee;
+      --mu: rgba(238, 238, 238, .38);
+      --r: 5px;
+      --fT: 'Bebas Neue', sans-serif;
+      --fB: 'DM Sans', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      height: 100%;
+      scroll-behavior: smooth
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--txt);
+      font-family: var(--fB);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--s4);
+      border-radius: 2px
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9000;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: .025
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      z-index: 9001;
+      background: linear-gradient(90deg, transparent, var(--or), transparent);
+      background-size: 300% 100%;
+      animation: tscan 4s linear infinite
+    }
+
+    @keyframes tscan {
+      0% {
+        background-position: 150% 0
+      }
+
+      100% {
+        background-position: -150% 0
+      }
+    }
+
+    /* ── SCREENS ── */
+    .scr {
+      display: none
+    }
+
+    .scr.on {
+      display: flex;
+      animation: fadeUp .3s ease both
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* ══ LOGIN ══ */
+    #scr-login {
+      min-height: 100vh;
+      align-items: stretch
+    }
+
+    .la {
+      flex: 1.2;
+      position: relative;
+      overflow: hidden;
+      display: none
+    }
+
+    @media(min-width:860px) {
+      .la {
+        display: block
+      }
+    }
+
+    .la-bg {
+      position: absolute;
+      inset: 0;
+      background: url('img/Zona multipower.jpeg') center/cover no-repeat;
+      filter: brightness(.22) contrast(1.1)
+    }
+
+    .la-ov {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 50%, var(--bg) 100%), linear-gradient(to top, var(--bg) 0%, transparent 35%)
+    }
+
+    .la-txt {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      right: 3rem
+    }
+
+    .la-txt h2 {
+      font-family: var(--fT);
+      font-size: clamp(2.4rem, 3.6vw, 4rem);
+      line-height: .93;
+      color: rgba(255, 255, 255, .78);
+      margin-bottom: 1.1rem
+    }
+
+    .la-txt h2 em {
+      font-style: normal;
+      color: var(--or)
+    }
+
+    .la-tags {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap
+    }
+
+    .ltag {
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .09);
+      padding: .25rem .75rem;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .32)
+    }
+
+    .lf {
+      width: 100%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2.5rem 2rem;
+      background: var(--bg);
+      position: relative
+    }
+
+    @media(min-width:600px) {
+      .lf {
+        padding: 3.2rem 2.8rem
+      }
+    }
+
+    .lf::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18%;
+      bottom: 18%;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--or), transparent);
+      opacity: .28
+    }
+
+    .lf-logo {
+      font-family: var(--fT);
+      font-size: 1.75rem;
+      letter-spacing: .1em;
+      margin-bottom: 2.6rem
+    }
+
+    .lf-logo b {
+      color: var(--or);
+      font-weight: 400
+    }
+
+    .lf-eye {
+      display: inline-flex;
+      align-items: center;
+      gap: .42rem;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--or);
+      margin-bottom: .6rem
+    }
+
+    .pdot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--or);
+      box-shadow: 0 0 0 0 rgba(255, 77, 0, .3);
+      animation: ping 1.8s ease infinite
+    }
+
+    @keyframes ping {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 77, 0, .3)
+      }
+
+      60% {
+        box-shadow: 0 0 0 8px transparent
+      }
+    }
+
+    .lf-h1 {
+      font-family: var(--fT);
+      font-size: 2.8rem;
+      line-height: 1;
+      margin-bottom: .4rem
+    }
+
+    .lf-sub {
+      font-size: .8rem;
+      color: var(--mu);
+      line-height: 1.55;
+      margin-bottom: 1.6rem
+    }
+
+    .lerr {
+      display: none;
+      align-items: center;
+      gap: .45rem;
+      background: rgba(220, 50, 50, .07);
+      border: 1px solid rgba(220, 50, 50, .28);
+      border-left: 3px solid #dc3232;
+      padding: .62rem .9rem;
+      margin-bottom: .9rem;
+      font-size: .76rem;
+      color: #f88;
+      border-radius: var(--r);
+      animation: shake .3s ease
+    }
+
+    .lerr.on {
+      display: flex
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: none
+      }
+
+      25% {
+        transform: translateX(-5px)
+      }
+
+      75% {
+        transform: translateX(5px)
+      }
+    }
+
+    .fld {
+      margin-bottom: .95rem
+    }
+
+    .fld label {
+      display: block;
+      font-size: .59rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--mu);
+      margin-bottom: .42rem
+    }
+
+    .fli {
+      position: relative
+    }
+
+    .fli-ico {
+      position: absolute;
+      left: .82rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .82rem;
+      pointer-events: none;
+      color: rgba(255, 255, 255, .2)
+    }
+
+    .fli input {
+      width: 100%;
+      background: var(--s1);
+      border: 1.5px solid var(--s3);
+      padding: .78rem .9rem .78rem 2.4rem;
+      color: var(--txt);
+      font-size: .88rem;
+      font-weight: 500;
+      border-radius: var(--r);
+      transition: border-color .18s, box-shadow .18s;
+      outline: none
+    }
+
+    .fli input::placeholder {
+      color: rgba(255, 255, 255, .13)
+    }
+
+    .fli input:focus {
+      border-color: var(--or);
+      box-shadow: 0 0 0 3px rgba(255, 77, 0, .09)
+    }
+
+    .eye-tog {
+      position: absolute;
+      right: .82rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, .2);
+      font-size: .82rem;
+      padding: .18rem;
+      transition: color .15s
+    }
+
+    .eye-tog:hover {
+      color: rgba(255, 255, 255, .5)
+    }
+
+    .btn-li {
+      width: 100%;
+      background: var(--or);
+      color: #fff;
+      border: none;
+      padding: .95rem;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--r);
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      position: relative;
+      overflow: hidden;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem
+    }
+
+    .btn-li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+      transition: left .38s
+    }
+
+    .btn-li:hover::after {
+      left: 100%
+    }
+
+    .btn-li:hover {
+      background: var(--or2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 77, 0, .35)
+    }
+
+    .btn-li:disabled {
+      opacity: .44;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none
+    }
+
+    .lf-foot {
+      margin-top: 1.7rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(255, 255, 255, .05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .lf-foot p {
+      font-size: .61rem;
+      color: rgba(255, 255, 255, .13)
+    }
+
+    .sys-st {
+      display: flex;
+      align-items: center;
+      gap: .38rem;
+      font-size: .61rem;
+      color: rgba(255, 255, 255, .17)
+    }
+
+    .sys-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 7px rgba(34, 197, 94, .6);
+      animation: ping 2.2s ease infinite
+    }
+
+    /* ══ PANEL ══ */
+    #scr-panel {
+      flex-direction: column;
+      min-height: 100vh
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.2rem;
+      background: rgba(9, 9, 9, .94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 77, 0, .1)
+    }
+
+    @media(min-width:640px) {
+      .topbar {
+        padding: 0 2.2rem
+      }
+    }
+
+    .t-logo {
+      font-family: var(--fT);
+      font-size: 1.5rem;
+      letter-spacing: .1em
+    }
+
+    .t-logo b {
+      color: var(--or);
+      font-weight: 400
+    }
+
+    .t-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem
+    }
+
+    .t-av {
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      background: rgba(255, 77, 0, .12);
+      border: 1.5px solid rgba(255, 77, 0, .32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fT);
+      font-size: .9rem;
+      color: var(--or);
+      flex-shrink: 0
+    }
+
+    .t-name {
+      font-size: .73rem;
+      font-weight: 600;
+      color: var(--mu);
+      display: none
+    }
+
+    @media(min-width:500px) {
+      .t-name {
+        display: block
+      }
+    }
+
+    .btn-out {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, .08);
+      color: rgba(255, 255, 255, .3);
+      padding: .36rem .85rem;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--r);
+      transition: all .18s
+    }
+
+    .btn-out:hover {
+      border-color: var(--or);
+      color: var(--or)
+    }
+
+    .panel-tabs {
+      border-bottom: 1px solid var(--s3);
+      background: var(--s1);
+      display: flex;
+      padding: 0 1.2rem;
+      overflow-x: auto
+    }
+
+    @media(min-width:640px) {
+      .panel-tabs {
+        padding: 0 2.2rem
+      }
+    }
+
+    .ptab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--mu);
+      padding: .82rem 1rem;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .18s;
+      margin-bottom: -1px
+    }
+
+    .ptab:hover {
+      color: var(--txt)
+    }
+
+    .ptab.on {
+      color: var(--or);
+      border-bottom-color: var(--or)
+    }
+
+    .pbody {
+      flex: 1;
+      padding: 1.6rem 1.2rem 4rem;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto
+    }
+
+    @media(min-width:640px) {
+      .pbody {
+        padding: 2rem 2.2rem 4rem
+      }
+    }
+
+    .tab-pane {
+      display: none
+    }
+
+    .tab-pane.on {
+      display: block;
+      animation: fadeUp .28s ease both
+    }
+
+    /* welcome */
+    .welcome {
+      background: linear-gradient(135deg, var(--s1), var(--s2));
+      border: 1px solid var(--s3);
+      border-left: 3px solid var(--or);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.6rem;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .7rem
+    }
+
+    .w-text h2 {
+      font-family: var(--fT);
+      font-size: 1.6rem;
+      letter-spacing: .04em;
+      line-height: 1
+    }
+
+    .w-text h2 b {
+      color: var(--or);
+      font-weight: 400
+    }
+
+    .w-text p {
+      font-size: .75rem;
+      color: var(--mu);
+      margin-top: .22rem
+    }
+
+    .w-clk {
+      text-align: right
+    }
+
+    .w-clk strong {
+      display: block;
+      font-size: .95rem;
+      font-weight: 700;
+      text-transform: capitalize
+    }
+
+    .w-clk span {
+      font-size: .7rem;
+      color: var(--mu)
+    }
+
+    /* stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .75rem;
+      margin-bottom: 1.6rem
+    }
+
+    @media(min-width:560px) {
+      .stats {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    .sc {
+      background: var(--s1);
+      border: 1px solid var(--s3);
+      padding: 1rem 1.1rem .9rem;
+      border-radius: var(--r);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s
+    }
+
+    .sc:hover {
+      border-color: rgba(255, 77, 0, .28);
+      transform: translateY(-2px)
+    }
+
+    .sc::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--or), transparent);
+      opacity: 0;
+      transition: opacity .2s
+    }
+
+    .sc:hover::after {
+      opacity: 1
+    }
+
+    .sc-ico {
+      font-size: 1.15rem;
+      margin-bottom: .45rem
+    }
+
+    .sc-num {
+      font-family: var(--fT);
+      font-size: 1.9rem;
+      color: var(--or);
+      line-height: 1;
+      margin-bottom: .18rem
+    }
+
+    .sc-lbl {
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .seh {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1rem
+    }
+
+    .seh h3 {
+      font-family: var(--fT);
+      font-size: 1.4rem;
+      letter-spacing: .04em;
+      white-space: nowrap
+    }
+
+    .seh .ln {
+      flex: 1;
+      height: 1px;
+      background: var(--s3)
+    }
+
+    /* action cards */
+    .ac-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .85rem;
+      margin-bottom: 2rem
+    }
+
+    @media(min-width:520px) {
+      .ac-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(min-width:800px) {
+      .ac-grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    .ac {
+      background: var(--s1);
+      border: 1px solid var(--s3);
+      padding: 1.35rem;
+      border-radius: var(--r);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      position: relative;
+      overflow: hidden;
+      transition: all .2s
+    }
+
+    .ac:hover {
+      border-color: var(--or);
+      background: var(--s2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(255, 77, 0, .1)
+    }
+
+    .ac.prime {
+      border-color: rgba(255, 77, 0, .28);
+      background: linear-gradient(135deg, rgba(255, 77, 0, .07), var(--s1))
+    }
+
+    .ac.prime:hover {
+      border-color: var(--or);
+      background: linear-gradient(135deg, rgba(255, 77, 0, .13), var(--s2));
+      box-shadow: 0 14px 34px rgba(255, 77, 0, .18)
+    }
+
+    .ac-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r);
+      background: rgba(255, 77, 0, .1);
+      border: 1px solid rgba(255, 77, 0, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem
+    }
+
+    .ac h4 {
+      font-family: var(--fT);
+      font-size: 1.28rem;
+      letter-spacing: .04em;
+      line-height: 1
+    }
+
+    .ac p {
+      font-size: .75rem;
+      color: var(--mu);
+      line-height: 1.5
+    }
+
+    .ac-arr {
+      margin-top: auto;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--or)
+    }
+
+    /* ── SCHEDULE ── */
+    .sch-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1rem
+    }
+
+    .leg {
+      display: flex;
+      align-items: center;
+      gap: .38rem;
+      font-size: .67rem;
+      font-weight: 600;
+      color: var(--mu)
+    }
+
+    .leg-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .42rem;
+      margin-bottom: 1rem
+    }
+
+    .fp {
+      background: var(--s1);
+      border: 1.5px solid var(--s3);
+      padding: .33rem .78rem;
+      font-size: .63rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all .18s
+    }
+
+    .fp:hover {
+      border-color: rgba(255, 77, 0, .35);
+      color: var(--txt)
+    }
+
+    .fp.on {
+      background: rgba(255, 77, 0, .1);
+      border-color: var(--or);
+      color: var(--or)
+    }
+
+    .sch-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--s3);
+      border-radius: var(--r)
+    }
+
+    .cal-wrap {
+      background: var(--s2);
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(180px, 1fr));
+      gap: 1px;
+      background: var(--s3);
+    }
+
+    .cal-day {
+      background: var(--s1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cal-dh {
+      background: var(--s2);
+      padding: .6rem .85rem;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--or);
+      border-bottom: 1px solid var(--s3);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .cal-db {
+      padding: .6rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      flex: 1;
+      min-height: 200px;
+    }
+
+    .ccard {
+      background: var(--bg);
+      border: 1px solid var(--s3);
+      border-left: 3px solid var(--col);
+      border-radius: var(--r);
+      padding: .65rem;
+      position: relative;
+      transition: all .15s ease;
+    }
+
+    .ccard:hover {
+      border-color: var(--col);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+    }
+
+    .cc-h {
+      font-size: .55rem;
+      font-weight: 700;
+      color: var(--mu);
+      margin-bottom: .2rem;
+    }
+
+    .cc-t {
+      font-size: .75rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: .4rem;
+    }
+
+    .cc-m {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .2rem;
+    }
+
+    .badge-m {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .cc-btns {
+      position: absolute;
+      top: .4rem;
+      right: .4rem;
+      display: flex;
+      gap: .2rem;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .ccard:hover .cc-btns {
+      opacity: 1;
+    }
+
+    .cc-btn {
+      background: var(--s2);
+      border: 1px solid var(--s3);
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: .6rem;
+      padding: .25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--txt);
+      transition: all .15s ease;
+    }
+
+    .cc-btn:hover {
+      background: var(--col);
+      border-color: var(--col);
+    }
+
+    .cc-btn.x:hover {
+      background: #dc3232;
+      border-color: #dc3232;
+    }
+
+    /* ══ MODAL ══ */
+    .bd {
+      position: fixed;
+      inset: 0;
+      z-index: 800;
+      background: rgba(0, 0, 0, .8);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1rem;
+      overflow-y: auto
+    }
+
+    .bd.on {
+      display: flex;
+      animation: fadeIn .2s ease
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal {
+      background: var(--s1);
+      border: 1px solid var(--s3);
+      border-top: 2px solid var(--or);
+      width: 100%;
+      max-width: 860px;
+      border-radius: var(--r);
+      margin: auto;
+      position: relative;
+      animation: mUp .26s cubic-bezier(.22, 1, .36, 1)
+    }
+
+    @keyframes mUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .mh {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--s3)
+    }
+
+    .mh-title {
+      font-family: var(--fT);
+      font-size: 1.5rem;
+      letter-spacing: .04em
+    }
+
+    .mh-title b {
+      color: var(--or);
+      font-weight: 400
+    }
+
+    .mx {
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+      background: var(--s2);
+      border: 1px solid var(--s3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--mu);
+      font-size: .9rem;
+      transition: all .15s;
+      flex-shrink: 0
+    }
+
+    .mx:hover {
+      background: var(--s3);
+      color: var(--txt)
+    }
+
+    .mb {
+      padding: 1.4rem
+    }
+
+    .mcols {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem
+    }
+
+    @media(min-width:600px) {
+      .mcols {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    .slbl {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--or);
+      margin-bottom: .8rem
+    }
+
+    .slbl::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 77, 0, .18)
+    }
+
+    .mfld {
+      margin-bottom: .85rem
+    }
+
+    .mfld:last-child {
+      margin-bottom: 0
+    }
+
+    .mfld label {
+      display: block;
+      font-size: .57rem;
+      font-weight: 700;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      color: var(--mu);
+      margin-bottom: .4rem
+    }
+
+    .req {
+      color: var(--or)
+    }
+
+    .mfi {
+      position: relative
+    }
+
+    .mfi-i {
+      position: absolute;
+      left: .8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .78rem;
+      pointer-events: none;
+      color: rgba(255, 255, 255, .2)
+    }
+
+    .mfld input,
+    .mfld select {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--s3);
+      padding: .73rem .85rem .73rem 2.35rem;
+      color: var(--txt);
+      font-size: .85rem;
+      font-weight: 500;
+      border-radius: var(--r);
+      transition: border-color .18s, box-shadow .18s;
+      outline: none;
+      appearance: none
+    }
+
+    .mfld input::placeholder {
+      color: rgba(255, 255, 255, .12)
+    }
+
+    .mfld input:focus,
+    .mfld select:focus {
+      border-color: var(--or);
+      box-shadow: 0 0 0 3px rgba(255, 77, 0, .08)
+    }
+
+    .mfld select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23555'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .82rem center;
+      padding-right: 2rem;
+      cursor: pointer
+    }
+
+    .mfld select option {
+      background: #111
+    }
+
+    /* plan types */
+    .pt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .4rem;
+      margin-bottom: .8rem
+    }
+
+    .pt {
+      background: var(--bg);
+      border: 1.5px solid var(--s3);
+      padding: .58rem .3rem;
+      text-align: center;
+      cursor: pointer;
+      border-radius: var(--r);
+      transition: all .18s
+    }
+
+    .pt:hover {
+      border-color: rgba(255, 77, 0, .38)
+    }
+
+    .pt.on {
+      background: rgba(255, 77, 0, .1);
+      border-color: var(--or)
+    }
+
+    .pt-ico {
+      font-size: 1rem;
+      display: block;
+      margin-bottom: .15rem
+    }
+
+    .pt-nm {
+      font-size: .55rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .pt.on .pt-nm {
+      color: var(--or)
+    }
+
+    /* durations */
+    .dp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .4rem;
+      margin-bottom: .75rem
+    }
+
+    @media(min-width:360px) {
+      .dp-grid {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    .dp {
+      background: var(--bg);
+      border: 1.5px solid var(--s3);
+      padding: .62rem .28rem;
+      text-align: center;
+      cursor: pointer;
+      border-radius: var(--r);
+      position: relative;
+      transition: all .18s
+    }
+
+    .dp:hover {
+      border-color: rgba(255, 77, 0, .38)
+    }
+
+    .dp.on {
+      background: rgba(255, 77, 0, .1);
+      border-color: var(--or);
+      box-shadow: 0 0 14px rgba(255, 77, 0, .1)
+    }
+
+    .dp-b {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: .1rem .42rem;
+      font-size: .48rem;
+      font-weight: 900;
+      white-space: nowrap;
+      border-radius: 2px
+    }
+
+    .dp-b.pop {
+      background: var(--or);
+      color: #fff
+    }
+
+    .dp-b.sav {
+      background: #16a34a;
+      color: #fff
+    }
+
+    .dp-l {
+      font-size: .55rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu);
+      margin-bottom: .2rem
+    }
+
+    .dp.on .dp-l {
+      color: rgba(255, 255, 255, .48)
+    }
+
+    .dp-p {
+      font-family: var(--fT);
+      font-size: 1.38rem;
+      line-height: 1;
+      color: var(--txt)
+    }
+
+    .dp.on .dp-p {
+      color: var(--or)
+    }
+
+    .dp-x {
+      font-size: .5rem;
+      color: rgba(255, 255, 255, .16);
+      margin-top: .1rem
+    }
+
+    /* pago */
+    .pg-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .4rem
+    }
+
+    .pg {
+      background: var(--bg);
+      border: 1.5px solid var(--s3);
+      padding: .62rem .28rem;
+      text-align: center;
+      cursor: pointer;
+      border-radius: var(--r);
+      transition: all .18s
+    }
+
+    .pg:hover {
+      border-color: rgba(255, 77, 0, .33)
+    }
+
+    .pg.on {
+      background: rgba(255, 77, 0, .1);
+      border-color: var(--or)
+    }
+
+    .pg-ico {
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: .15rem
+    }
+
+    .pg-lbl {
+      font-size: .55rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .pg.on .pg-lbl {
+      color: var(--or)
+    }
+
+    /* plan summary */
+    .psm {
+      background: rgba(255, 77, 0, .06);
+      border: 1px solid rgba(255, 77, 0, .18);
+      padding: .82rem .95rem;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .7rem;
+      flex-wrap: wrap;
+      margin-top: .65rem
+    }
+
+    .psm-nm-lbl {
+      font-size: .58rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .psm-nm-val {
+      font-family: var(--fT);
+      font-size: 1.1rem;
+      letter-spacing: .03em
+    }
+
+    .psm-price-val {
+      font-family: var(--fT);
+      font-size: 1.85rem;
+      color: var(--or);
+      line-height: 1
+    }
+
+    .psm-price-lbl {
+      font-family: var(--fB);
+      font-size: .57rem;
+      color: var(--mu);
+      text-align: right
+    }
+
+    /* camera */
+    .camw {
+      background: var(--bg);
+      border: 1.5px solid var(--s3);
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--r);
+      margin-bottom: .7rem
+    }
+
+    .cam-idle {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem
+    }
+
+    .cam-idle-ico {
+      font-size: 2.2rem;
+      opacity: .2
+    }
+
+    .cam-idle p {
+      font-size: .68rem;
+      color: rgba(255, 255, 255, .17);
+      font-weight: 600;
+      letter-spacing: .08em
+    }
+
+    #vid {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none
+    }
+
+    .cb {
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      border-style: solid;
+      border-color: transparent;
+      opacity: 0;
+      transition: opacity .3s
+    }
+
+    .cb.tl {
+      top: 7px;
+      left: 7px;
+      border-width: 2px 0 0 2px;
+      border-top-color: var(--or);
+      border-left-color: var(--or)
+    }
+
+    .cb.tr {
+      top: 7px;
+      right: 7px;
+      border-width: 2px 2px 0 0;
+      border-top-color: var(--or);
+      border-right-color: var(--or)
+    }
+
+    .cb.bl {
+      bottom: 7px;
+      left: 7px;
+      border-width: 0 0 2px 2px;
+      border-bottom-color: var(--or);
+      border-left-color: var(--or)
+    }
+
+    .cb.br {
+      bottom: 7px;
+      right: 7px;
+      border-width: 0 2px 2px 0;
+      border-bottom-color: var(--or);
+      border-right-color: var(--or)
+    }
+
+    .camw.live .cb {
+      opacity: .55
+    }
+
+    .vscn {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--or), transparent);
+      opacity: 0;
+      pointer-events: none;
+      animation: vscn 2.8s linear infinite
+    }
+
+    .camw.live .vscn {
+      opacity: 1
+    }
+
+    @keyframes vscn {
+      0% {
+        top: 0;
+        opacity: 0
+      }
+
+      4% {
+        opacity: .5
+      }
+
+      96% {
+        opacity: .5
+      }
+
+      100% {
+        top: 100%;
+        opacity: 0
+      }
+    }
+
+    .cam-bdg {
+      position: absolute;
+      bottom: .45rem;
+      right: .45rem;
+      background: rgba(0, 0, 0, .72);
+      border: 1px solid rgba(255, 77, 0, .38);
+      padding: .18rem .52rem;
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: var(--or);
+      border-radius: 2px;
+      backdrop-filter: blur(4px)
+    }
+
+    .cam-btns {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: .8rem
+    }
+
+    .cbtn {
+      flex: 1;
+      padding: .68rem;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .35rem;
+      transition: all .18s
+    }
+
+    .cbtn-s {
+      background: var(--or);
+      color: #fff
+    }
+
+    .cbtn-s:hover {
+      background: var(--or2);
+      transform: translateY(-1px)
+    }
+
+    .cbtn-c {
+      background: linear-gradient(135deg, var(--or), var(--or2));
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(255, 77, 0, .32)
+    }
+
+    .cbtn-c:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255, 77, 0, .48)
+    }
+
+    .cbtn-x {
+      background: var(--s2);
+      border: 1px solid var(--s3);
+      color: var(--mu);
+      flex: 0 0 auto;
+      padding: .68rem .85rem
+    }
+
+    .cbtn-x:hover {
+      background: var(--s3);
+      color: var(--txt)
+    }
+
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: .38rem;
+      margin-bottom: .6rem
+    }
+
+    .sth {
+      aspect-ratio: 1;
+      background: var(--s2);
+      border: 1.5px solid var(--s3);
+      border-radius: var(--r);
+      position: relative;
+      overflow: hidden
+    }
+
+    .sth img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .sth-del {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .15s;
+      border: none;
+      cursor: pointer;
+      font-size: .82rem
+    }
+
+    .sth:hover .sth-del {
+      opacity: 1
+    }
+
+    .sth-n {
+      position: absolute;
+      bottom: 2px;
+      left: 3px;
+      font-size: .48rem;
+      font-weight: 900;
+      color: rgba(255, 255, 255, .42)
+    }
+
+    .sth-empty {
+      aspect-ratio: 1;
+      border: 1.5px dashed rgba(255, 255, 255, .07);
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .68rem;
+      color: rgba(255, 255, 255, .08)
+    }
+
+    .pp {
+      display: flex;
+      align-items: center;
+      gap: .32rem;
+      padding: .48rem .65rem;
+      background: var(--bg);
+      border: 1px solid var(--s3);
+      border-radius: var(--r);
+      margin-bottom: .65rem
+    }
+
+    .pp-d {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--s3);
+      transition: all .24s
+    }
+
+    .pp-d.fil {
+      background: var(--or);
+      box-shadow: 0 0 6px rgba(255, 77, 0, .5)
+    }
+
+    .pp-d.ok {
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, .5)
+    }
+
+    .pp-txt {
+      margin-left: auto;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .pp-txt.green {
+      color: #22c55e
+    }
+
+    .tip-box {
+      background: rgba(255, 77, 0, .05);
+      border-left: 3px solid rgba(255, 77, 0, .38);
+      padding: .65rem .85rem;
+      border-radius: var(--r)
+    }
+
+    .tip-box p {
+      font-size: .7rem;
+      color: var(--mu);
+      line-height: 1.55
+    }
+
+    .tip-box p b {
+      color: var(--or)
+    }
+
+    .mfoot {
+      padding: 1.1rem 1.5rem;
+      border-top: 1px solid var(--s3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .8rem;
+      flex-wrap: wrap
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--s3);
+      color: var(--mu);
+      padding: .72rem 1.3rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--r);
+      transition: all .18s
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--s4);
+      color: var(--txt)
+    }
+
+    .min-note {
+      font-size: .65rem;
+      color: var(--mu)
+    }
+
+    .min-note.green {
+      color: #22c55e
+    }
+
+    .btn-save {
+      flex: 1;
+      max-width: 260px;
+      background: var(--or);
+      color: #fff;
+      border: none;
+      padding: .82rem 1.4rem;
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all .22s
+    }
+
+    .btn-save::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+      transition: left .38s
+    }
+
+    .btn-save:hover::after {
+      left: 100%
+    }
+
+    .btn-save:hover {
+      background: var(--or2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 77, 0, .38)
+    }
+
+    .btn-save:disabled {
+      opacity: .38;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none
+    }
+
+    .msuc {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.8rem 2rem;
+      text-align: center;
+      gap: .9rem
+    }
+
+    .msuc.on {
+      display: flex;
+      animation: fadeUp .35s ease
+    }
+
+    .ms-ico {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: rgba(255, 77, 0, .1);
+      border: 2px solid var(--or);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.9rem;
+      animation: pop .45s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .ms-title {
+      font-family: var(--fT);
+      font-size: 2.1rem;
+      letter-spacing: .04em
+    }
+
+    .ms-sub {
+      font-size: .8rem;
+      color: var(--mu);
+      max-width: 320px;
+      line-height: 1.55
+    }
+
+    .ms-det {
+      background: var(--s2);
+      border: 1px solid var(--s3);
+      padding: .95rem 1.3rem;
+      width: 100%;
+      max-width: 360px;
+      border-radius: var(--r);
+      text-align: left
+    }
+
+    .ms-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .28rem 0
+    }
+
+    .ms-row:not(:last-child) {
+      border-bottom: 1px solid var(--s3)
+    }
+
+    .ms-k {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--mu)
+    }
+
+    .ms-v {
+      font-size: .82rem;
+      font-weight: 700
+    }
+
+    .ms-v.or {
+      color: var(--or)
+    }
+
+    .ms-btns {
+      display: flex;
+      gap: .75rem;
+      width: 100%;
+      max-width: 360px
+    }
+
+    .ms-btns button {
+      flex: 1;
+      padding: .78rem;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      border-radius: var(--r);
+      transition: all .18s
+    }
+
+    .ms-new {
+      background: var(--or);
+      color: #fff
+    }
+
+    .ms-new:hover {
+      background: var(--or2);
+      transform: translateY(-1px)
+    }
+
+    .ms-cls {
+      background: var(--s2);
+      border: 1px solid var(--s3);
+      color: var(--mu)
+    }
+
+    .ms-cls:hover {
+      background: var(--s3);
+      color: var(--txt)
+    }
+
+    canvas {
+      display: none
+    }
+    @media(max-width:640px){.ac-grid-wrap{grid-template-columns:1fr!important}}
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════ LOGIN ══════════ -->
+  <div id="scr-login" class="scr on">
+    <div class="la">
+      <div class="la-bg"></div>
+      <div class="la-ov"></div>
+      <div class="la-txt">
+        <h2>ENTRENA<br>SIN <em>LÍMITES</em></h2>
+        <div class="la-tags">
+          <span class="ltag">León, Gto.</span>
+          <span class="ltag">CrossFit · Hyrox</span>
+          <span class="ltag">6 Programas</span>
+        </div>
+      </div>
+    </div>
+    <div class="lf">
+      <div class="lf-logo">ELEMENTAL <b>CLUB</b></div>
+      <div class="lf-eye">
+        <div class="pdot"></div> Portal de Staff
+      </div>
+      <h1 class="lf-h1">ACCESO<br>EMPLEADOS</h1>
+      <p class="lf-sub">Ingresa tus credenciales para continuar al panel de gestión.</p>
+      <div class="lerr" id="lerr">⚠️ <span id="lerr-txt"></span></div>
+      <form id="login-form" onsubmit="doLogin(event)" novalidate>
+        <div class="fld">
+          <label for="l-u">Usuario / Email</label>
+          <div class="fli"><span class="fli-ico">👤</span><input id="l-u" type="text" placeholder="tu.usuario"
+              autocomplete="username" required /></div>
+        </div>
+        <div class="fld">
+          <label for="l-p">Contraseña</label>
+          <div class="fli">
+            <span class="fli-ico">🔒</span>
+            <input id="l-p" type="password" placeholder="••••••••" autocomplete="current-password" required />
+            <button type="button" class="eye-tog" id="eye-tog" onclick="toggleEye()">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-li" id="btn-li">
+          <span id="btn-li-txt">ENTRAR AL PANEL</span>
+          <span id="btn-li-arr">→</span>
+        </button>
+      </form>
+      <div class="lf-foot">
+        <p>© 2026 Elemental Club</p>
+        <div class="sys-st">
+          <div class="sys-dot"></div> Sistema activo
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PANEL ══════════ -->
+  <div id="scr-panel" class="scr">
+    <header class="topbar">
+      <div class="t-logo">ELEMENTAL <b>CLUB</b></div>
+      <div class="t-right">
+        <div class="t-av" id="t-av">?</div>
+        <span class="t-name" id="t-name"></span>
+        <button class="btn-out" onclick="doLogout()">Salir</button>
+      </div>
+    </header>
+    <nav class="panel-tabs">
+      <button class="ptab on" onclick="switchTab('inicio',this)">🏠 Inicio</button>
+      <button class="ptab" onclick="switchTab('horarios',this)">📅 Horarios y Clases</button>
+      <button class="ptab" onclick="switchTab('accesos',this)">🔑 Accesos Portal</button>
+    </nav>
+    <div class="pbody">
+
+      <!-- Tab Inicio -->
+      <div id="tab-inicio" class="tab-pane on">
+        <div class="welcome">
+          <div class="w-text">
+            <h2>BIENVENIDO, <b id="w-name">STAFF</b></h2>
+            <p>Panel de gestión Elemental Club</p>
+          </div>
+          <div class="w-clk">
+            <strong id="clk-date"></strong>
+            <span id="clk-time"></span>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="sc">
+            <div class="sc-ico">👥</div>
+            <div class="sc-num" id="st-mem">—</div>
+            <div class="sc-lbl">Miembros activos</div>
+          </div>
+          <div class="sc">
+            <div class="sc-ico">📅</div>
+            <div class="sc-num" id="st-hoy">—</div>
+            <div class="sc-lbl">Registros hoy</div>
+          </div>
+          <div class="sc">
+            <div class="sc-ico">⏰</div>
+            <div class="sc-num" id="st-exp">—</div>
+            <div class="sc-lbl">Vencen 7 días</div>
+          </div>
+          <div class="sc">
+            <div class="sc-ico">💰</div>
+            <div class="sc-num" id="st-ing">—</div>
+            <div class="sc-lbl">Ingresos hoy</div>
+          </div>
+        </div>
+        <div class="seh">
+          <h3>ACCIONES RÁPIDAS</h3>
+          <div class="ln"></div>
+        </div>
+        <div class="ac-grid">
+          <div class="ac prime" onclick="openModal()">
+            <div class="ac-ico">➕</div>
+            <h4>NUEVO MIEMBRO</h4>
+            <p>Registra un cliente, selecciona su plan y captura fotos de reconocimiento facial.</p>
+            <div class="ac-arr">Iniciar registro →</div>
+          </div>
+          <div class="ac" onclick="goToHorarios()">
+            <div class="ac-ico">📅</div>
+            <h4>VER HORARIOS</h4>
+            <p>Consulta las clases disponibles y qué membresías tienen acceso a cada una.</p>
+            <div class="ac-arr">Ver horarios →</div>
+          </div>
+          <div class="ac" onclick="alert('Próximamente: Control de acceso por reconocimiento facial.')">
+            <div class="ac-ico">✅</div>
+            <h4>CONTROL ACCESO</h4>
+            <p>Verifica el acceso de miembros por reconocimiento facial o número de membresía.</p>
+            <div class="ac-arr">Próximamente →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Horarios -->
+      <div id="tab-horarios" class="tab-pane">
+        <div class="seh">
+          <h3>CLASES Y HORARIOS</h3>
+          <div class="ln"></div>
+        </div>
+        <p style="font-size:.77rem;color:var(--mu);margin-bottom:1rem;line-height:1.55">
+          Filtra por membresía para ver qué clases están incluidas. Los horarios pueden tener variaciones — consulta
+          siempre la cartelera del gym.
+        </p>
+        <div style="margin-bottom:1rem;text-align:right">
+          <button class="btn-li" style="padding:.5rem 1rem;font-size:.7rem" onclick="openClassModal()">➕ Agregar
+            Clase</button>
+        </div>
+        <div class="sch-legend" id="sch-legend"></div>
+        <div class="filter-pills" id="filter-pills"></div>
+        <div class="sch-wrap cal-wrap">
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+      </div>
+
+      <!-- Tab Accesos Portal -->
+      <div id="tab-accesos" class="tab-pane">
+        <div class="seh"><h3>ACCESOS AL PORTAL DE MIEMBROS</h3><div class="ln"></div></div>
+        <p style="font-size:.77rem;color:var(--mu);margin-bottom:1.6rem;line-height:1.55">
+          Crea accesos para nuevos miembros, resetea contraseñas y verifica el estado de una cuenta.
+        </p>
+        <div style="background:rgba(255,77,0,0.06);border:1px solid rgba(255,77,0,0.2);border-left:3px solid var(--or);padding:1rem 1.2rem;margin-bottom:2rem;border-radius:var(--r)">
+          <p style="font-size:.72rem;color:rgba(255,255,255,0.55);line-height:1.65">
+            <b style="color:var(--or)">¿Cómo funciona?</b> El miembro entra a <code style="background:var(--s3);padding:.1rem .35rem;border-radius:3px">reservar-clases.html</code>
+            con su <b style="color:var(--txt)">número de teléfono</b> y la contraseña que le asignes aquí.
+          </p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem" class="ac-grid-wrap">
+
+          <!-- CREAR -->
+          <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden">
+            <div style="padding:.85rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem">
+              <span>➕</span>
+              <span style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase">Crear Acceso</span>
+            </div>
+            <div style="padding:1.2rem">
+              <div class="mfld"><label>Teléfono <span class="req">*</span></label>
+                <div class="mfi"><span class="mfi-i">📱</span>
+                  <input type="tel" id="ac-phone" placeholder="4779248796" maxlength="10"
+                    oninput="this.value=this.value.replace(/\D/g,'');acLookup()"/>
+                </div>
+              </div>
+              <div id="ac-preview" style="display:none;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.9rem">
+                <p style="font-size:.72rem;font-weight:700" id="ac-preview-name"></p>
+                <p style="font-size:.65rem;color:var(--mu);margin-top:.15rem" id="ac-preview-plan"></p>
+                <p style="font-size:.62rem;margin-top:.3rem" id="ac-preview-status"></p>
+              </div>
+              <div id="ac-not-found" style="display:none;font-size:.72rem;color:#f87171;padding:.4rem 0">⚠️ No se encontró ningún miembro con ese teléfono.</div>
+              <div class="mfld"><label>Contraseña inicial <span class="req">*</span></label>
+                <div class="mfi" style="position:relative"><span class="mfi-i">🔒</span>
+                  <input type="text" id="ac-pass" placeholder="mín. 8 caracteres" style="padding-right:3.2rem"/>
+                  <button type="button" onclick="acGenPass()" style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:var(--s3);border:none;color:var(--mu);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.22rem .5rem;border-radius:3px;cursor:pointer">Auto</button>
+                </div>
+              </div>
+              <div id="ac-msg" style="display:none;font-size:.73rem;font-weight:600;padding:.55rem .85rem;border-radius:var(--r);margin-bottom:.75rem"></div>
+              <button class="btn-li" id="btn-ac-crear" onclick="acCrear()" disabled style="font-size:.72rem;padding:.8rem">Crear Acceso al Portal</button>
+            </div>
+          </div>
+
+          <!-- RESETEAR -->
+          <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden">
+            <div style="padding:.85rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem">
+              <span>🔄</span>
+              <span style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase">Resetear Contraseña</span>
+            </div>
+            <div style="padding:1.2rem">
+              <div class="mfld"><label>Teléfono <span class="req">*</span></label>
+                <div class="mfi"><span class="mfi-i">📱</span>
+                  <input type="tel" id="rp-phone" placeholder="4779248796" maxlength="10"
+                    oninput="this.value=this.value.replace(/\D/g,'');rpLookup()"/>
+                </div>
+              </div>
+              <div id="rp-preview" style="display:none;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.9rem">
+                <p style="font-size:.72rem;font-weight:700" id="rp-preview-name"></p>
+                <p style="font-size:.65rem;color:var(--mu);margin-top:.15rem" id="rp-preview-status"></p>
+              </div>
+              <div id="rp-not-found" style="display:none;font-size:.72rem;color:#f87171;padding:.4rem 0">⚠️ No se encontró ningún miembro con ese teléfono.</div>
+              <div id="rp-no-account" style="display:none;font-size:.72rem;color:#fbbf24;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.2);border-radius:var(--r);padding:.6rem .9rem;margin-bottom:.9rem">⚠️ Este miembro no tiene cuenta de portal. Usa "Crear Acceso" primero.</div>
+              <div class="mfld"><label>Nueva contraseña <span class="req">*</span></label>
+                <div class="mfi" style="position:relative"><span class="mfi-i">🔒</span>
+                  <input type="text" id="rp-pass" placeholder="mín. 8 caracteres" style="padding-right:3.2rem"/>
+                  <button type="button" onclick="rpGenPass()" style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:var(--s3);border:none;color:var(--mu);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.22rem .5rem;border-radius:3px;cursor:pointer">Auto</button>
+                </div>
+              </div>
+              <div id="rp-msg" style="display:none;font-size:.73rem;font-weight:600;padding:.55rem .85rem;border-radius:var(--r);margin-bottom:.75rem"></div>
+              <button class="btn-li" id="btn-rp" onclick="rpReset()" disabled style="font-size:.72rem;padding:.8rem;background:var(--s3);color:var(--mu);clip-path:none">Resetear Contraseña</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VERIFICAR -->
+        <div style="margin-top:1.5rem;background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden">
+          <div style="padding:.85rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem">
+            <span>🔍</span>
+            <span style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase">Verificar Estado de Cuenta</span>
+          </div>
+          <div style="padding:1.2rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end">
+            <div style="flex:1;min-width:180px" class="mfld">
+              <label>Teléfono</label>
+              <div class="mfi"><span class="mfi-i">📱</span>
+                <input type="tel" id="vf-phone" placeholder="4779248796" maxlength="10"
+                  oninput="this.value=this.value.replace(/\D/g,'')"/>
+              </div>
+            </div>
+            <button class="btn-li" onclick="vfCheck()" style="font-size:.72rem;padding:.78rem 1.4rem;flex-shrink:0;margin-bottom:.95rem">Verificar</button>
+          </div>
+          <div id="vf-result" style="display:none;padding:0 1.2rem 1.2rem"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ MODAL REGISTRO ══════════ -->
+  <div class="bd" id="bd" onclick="bdClose(event)">
+    <div class="modal" id="modal">
+      <div class="mh">
+        <div class="mh-title">NUEVO <b>MIEMBRO</b></div>
+        <div class="mx" onclick="closeModal()">✕</div>
+      </div>
+
+      <!-- form -->
+      <div id="m-fv">
+        <div class="mb">
+          <div class="mcols">
+            <!-- col 1: datos + plan -->
+            <div>
+              <div class="slbl">📝 Datos Personales</div>
+              <div class="mfld"><label>Nombre(s) <span class="req">*</span></label>
+                <div class="mfi"><span class="mfi-i">👤</span><input type="text" id="m-nom" placeholder="Juan"
+                    required /></div>
+              </div>
+              <div class="mfld"><label>Apellidos <span class="req">*</span></label>
+                <div class="mfi"><span class="mfi-i">👤</span><input type="text" id="m-ape" placeholder="Pérez García"
+                    required /></div>
+              </div>
+              <div class="mfld"><label>Teléfono <span class="req">*</span></label>
+                <div class="mfi"><span class="mfi-i">📞</span><input type="tel" id="m-tel" placeholder="477 123 4567"
+                    required /></div>
+              </div>
+              <div class="mfld"><label>Email <span
+                    style="font-size:.52rem;color:rgba(255,255,255,.18);letter-spacing:.1em">(opcional)</span></label>
+                <div class="mfi"><span class="mfi-i">✉️</span><input type="email" id="m-email"
+                    placeholder="juan@correo.com" /></div>
+              </div>
+              <div class="slbl" style="margin-top:1.1rem">💪 Membresía</div>
+              <div class="pt-grid" id="pt-grid"></div>
+              <div class="dp-grid" id="dp-grid"></div>
+              <div class="psm">
+                <div>
+                  <div class="psm-nm-lbl">Plan seleccionado</div>
+                  <div class="psm-nm-val" id="psm-nm">Básica — Trimestral</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="psm-price-val" id="psm-price">$2,700</div>
+                  <div class="psm-price-lbl">total</div>
+                </div>
+              </div>
+              <div class="slbl" style="margin-top:1rem">💳 Método de Pago</div>
+              <div class="pg-grid">
+                <div class="pg on" data-pg="efectivo" onclick="selPagoBtn(this)"><span class="pg-ico">💵</span><span
+                    class="pg-lbl">Efectivo</span></div>
+                <div class="pg" data-pg="tarjeta" onclick="selPagoBtn(this)"><span class="pg-ico">💳</span><span
+                    class="pg-lbl">Tarjeta</span></div>
+                <div class="pg" data-pg="transferencia" onclick="selPagoBtn(this)"><span class="pg-ico">📲</span><span
+                    class="pg-lbl">Transferencia</span></div>
+              </div>
+            </div>
+            <!-- col 2: cámara -->
+            <div>
+              <div class="slbl">📷 Captura Facial</div>
+              <div class="camw" id="camw">
+                <div class="cam-idle" id="cam-idle">
+                  <div class="cam-idle-ico">📷</div>
+                  <p>Cámara desactivada</p>
+                </div>
+                <video id="vid" autoplay playsinline></video>
+                <div class="vscn"></div>
+                <div class="cb tl"></div>
+                <div class="cb tr"></div>
+                <div class="cb bl"></div>
+                <div class="cb br"></div>
+                <div class="cam-bdg" id="cam-bdg">0 FOTOS</div>
+              </div>
+              <canvas id="canv"></canvas>
+              <div class="cam-btns">
+                <button class="cbtn cbtn-s" id="cb-s" onclick="camStart()">📷 Activar</button>
+                <button class="cbtn cbtn-c" id="cb-c" onclick="camCap()" style="display:none">📸 Capturar</button>
+                <button class="cbtn cbtn-x" id="cb-x" onclick="camStop()" style="display:none">⏹</button>
+              </div>
+              <div class="strip" id="strip"></div>
+              <div class="pp">
+                <div class="pp-d" id="ppd1"></div>
+                <div class="pp-d" id="ppd2"></div>
+                <div class="pp-d" id="ppd3"></div>
+                <div class="pp-d" id="ppd4"></div>
+                <div class="pp-d" id="ppd5"></div>
+                <span class="pp-txt" id="pp-txt">Mín. 3 fotos</span>
+              </div>
+              <div class="tip-box">
+                <p><b>💡 Tip:</b> Captura frente, izquierda y derecha. 3–5 fotos son suficientes para un buen
+                  reconocimiento.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mfoot">
+          <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <span class="min-note" id="min-note">Mín. 3 fotos requeridas</span>
+          <button class="btn-save" id="btn-save" onclick="saveReg()" disabled>✓ REGISTRAR MIEMBRO</button>
+        </div>
+      </div>
+
+      <!-- success -->
+      <div class="msuc" id="m-suc">
+        <div class="ms-ico">✓</div>
+        <h2 class="ms-title">¡REGISTRADO!</h2>
+        <p class="ms-sub">El miembro fue registrado exitosamente y ya puede acceder al gym.</p>
+        <div class="ms-det" id="ms-det"></div>
+        <div class="ms-btns">
+          <button class="ms-new" onclick="resetModal()">+ Nuevo registro</button>
+          <button class="ms-cls" onclick="closeModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ MODAL CLASE ══════════ -->
+  <div class="bd" id="class-bd" onclick="classBdClose(event)">
+    <div class="modal">
+      <div class="mh">
+        <div class="mh-title">AGREGAR <b>CLASE</b></div>
+        <div class="mx" onclick="closeClassModal()">✕</div>
+      </div>
+      <div class="mb">
+        <div class="mcols">
+          <div>
+            <div class="slbl">📝 Información de la Clase</div>
+            <div class="mfld"><label>Nombre de la Clase <span class="req">*</span></label>
+              <div class="mfi"><span class="mfi-i">🏋️</span><input type="text" id="class-nom" placeholder="CrossFit"
+                  required /></div>
+            </div>
+
+            <div class="slbl" style="margin-top:1.1rem">🕒 Horarios (Sesiones)</div>
+            <div id="class-sessions-list" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem;">
+            </div>
+            <div style="display:flex;gap:.4rem">
+              <select id="new-sess-d"
+                style="flex:1;padding:.6rem .85rem;font-size:.7rem;border-radius:var(--r);background:var(--bg);color:var(--txt);border:1.5px solid var(--s3);outline:none;appearance:none;cursor:pointer;">
+                <option value="0">Lunes</option>
+                <option value="1">Martes</option>
+                <option value="2">Miércoles</option>
+                <option value="3">Jueves</option>
+                <option value="4">Viernes</option>
+                <option value="5">Sábado</option>
+                <option value="6">Domingo</option>
+              </select>
+              <input type="time" id="new-sess-t"
+                style="flex:1;padding:.6rem .85rem;font-size:.7rem;border-radius:var(--r);background:var(--bg);color:var(--txt);border:1.5px solid var(--s3);outline:none;" />
+              <button class="btn-li" type="button"
+                style="padding:.6rem;font-size:.7rem;clip-path:none;flex:none;border-radius:var(--r);"
+                onclick="addSession()">+ Añadir</button>
+            </div>
+            <div class="slbl" style="margin-top:1.1rem">🎫 Membresías Incluidas</div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:.8rem">
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-basica"> Básica</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-ilimitada"> Ilimitada</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-visita"> Visita</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-estudios"> Estudios</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-crossfit"> CrossFit/Hyrox</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-momentum"> Momentum</label>
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
+                  id="mem-spinning"> Spinning</label>
+            </div>
+            <div class="mfld" style="margin-top:1rem"><button class="btn-li" onclick="saveClass()">Guardar
+                Clase</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Inicializar Supabase inline — no depende de archivo externo
+    (function initSupa() {
+      var URL = 'https://aveonbmcbopqqcambxoi.supabase.co';
+      var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg0MzksImV4cCI6MjA3MzAxNDQzOX0.wKhEMF4K6Zv6PuobxCwubmhNTyzk6qlmjKyGO7JqH9Y';
+      if (window.supabase && window.supabase.createClient) {
+        window.supabase = window.supabase.createClient(URL, KEY);
+        console.log('✅ Supabase inicializado');
+      } else {
+        console.error('❌ Supabase CDN no cargó');
+      }
+    })();
+  </script>
+  <script>
+    'use strict';
+
+    /* ── PLAN DATA ── */
+    var PLAN_TYPES = [
+      { id: 'basica', ico: '💪', nm: 'Básica' },
+      { id: 'ilimitada', ico: '🔥', nm: 'Ilimitada' },
+      { id: 'estudios', ico: '🎯', nm: 'Estudios' },
+      { id: 'crossfit', ico: '⚡', nm: 'CrossFit' },
+      { id: 'momentum', ico: '🚀', nm: 'Momentum' },
+      { id: 'visita', ico: '📅', nm: 'Visita' },
+    ];
+    var PRECIOS = {
+      basica: { mensual: 1000, trimestral: 2700, semestral: 4800, anual: 8800 },
+      ilimitada: { mensual: 1800, trimestral: 5000, semestral: 9000, anual: 16200 },
+      estudios: { mensual: 1650, trimestral: 4500, semestral: 8000, anual: 14400 },
+      crossfit: { mensual: 1400, trimestral: 3800, semestral: 6800, anual: 12400 },
+      momentum: { mensual: 1400, trimestral: 3800, semestral: 6800, anual: 12400 },
+      visita: { diaria: 150 },
+    };
+    var AHORROS = { trimestral: '10%', semestral: '20%', anual: '26%' };
+    var DUR_LBL = { mensual: 'Mensual', trimestral: 'Trimestral', semestral: 'Semestral', anual: 'Anual', diaria: 'Día' };
+
+    /* ── SCHEDULE DATA ── */
+    var MEM_COLS = ['basica', 'ilimitada', 'visita', 'estudios', 'crossfit', 'momentum', 'spinning'];
+    var MEM_COLORS = { basica: '#FF4D00', ilimitada: '#f59e0b', visita: '#22c55e', estudios: '#3b82f6', crossfit: '#a855f7', momentum: '#ec4899', spinning: '#06b6d4' };
+    var MEM_NAMES = { basica: 'Básica', ilimitada: 'Ilimitada', visita: 'Visita', estudios: 'Estudios', crossfit: 'CrossFit/Hyrox', momentum: 'Momentum', spinning: 'Spinning' };
+    var CLASES = [
+      { nm: 'Strong & Bike', desc: '', mems: { ilimitada: 1, visita: 1, estudios: 1 }, sessions: [{ d: 0, t: '08:10' }, { d: 1, t: '08:10' }, { d: 2, t: '08:10' }, { d: 3, t: '08:10' }, { d: 4, t: '08:10' }, { d: 5, t: '08:10' }, { d: 6, t: '08:10' }] },
+      { nm: 'Halterofilia', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 5, t: '07:00' }] },
+      { nm: 'Yoga', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '10:00' }, { d: 1, t: '10:00' }, { d: 2, t: '10:00' }, { d: 3, t: '10:00' }, { d: 4, t: '10:00' }] },
+      { nm: 'Artes Marciales', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 1, t: '20:00' }, { d: 3, t: '20:00' }, { d: 5, t: '09:00' }] },
+      { nm: 'Multipower', desc: 'La clase que transforma tu cuerpo de forma completa y eficiente', mems: { ilimitada: 1, visita: 1, estudios: 1 }, sessions: [{ d: 0, t: '18:00' }, { d: 1, t: '18:00' }, { d: 2, t: '18:00' }, { d: 3, t: '18:00' }, { d: 4, t: '18:00' }, { d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 5, t: '07:00' }, { d: 5, t: '08:00' }] },
+      { nm: 'Momentum', desc: '', mems: { ilimitada: 1, visita: 1, momentum: 1 }, sessions: [{ d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 0, t: '20:00' }, { d: 1, t: '20:00' }, { d: 2, t: '20:00' }, { d: 3, t: '20:00' }, { d: 4, t: '20:00' }, { d: 5, t: '08:00' }] },
+      { nm: 'Hyrox Competición', desc: '', mems: { ilimitada: 1, visita: 1, crossfit: 1 }, sessions: [{ d: 0, t: '08:00' }, { d: 1, t: '08:00' }, { d: 2, t: '08:00' }, { d: 3, t: '08:00' }, { d: 4, t: '08:00' }] },
+      { nm: 'Crossfit', desc: '', mems: { ilimitada: 1, visita: 1, crossfit: 1 }, sessions: [{ d: 0, t: '07:00' }, { d: 1, t: '07:00' }, { d: 2, t: '07:00' }, { d: 3, t: '07:00' }, { d: 4, t: '07:00' }, { d: 5, t: '08:00' }] },
+      { nm: 'Combat Fit', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '07:00' }, { d: 1, t: '07:00' }, { d: 2, t: '07:00' }, { d: 3, t: '07:00' }, { d: 4, t: '07:00' }] },
+      { nm: 'Spinning', desc: '', mems: { ilimitada: 1, visita: 1, estudios: 1, spinning: 1 }, sessions: [{ d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 0, t: '20:00' }, { d: 1, t: '20:00' }] },
+      { nm: 'Hyrox Base', desc: 'Para el día que quieras hacer un Hyrox, estés preparado', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '18:00' }, { d: 1, t: '18:00' }, { d: 2, t: '18:00' }, { d: 3, t: '18:00' }, { d: 4, t: '18:00' }, { d: 1, t: '07:00' }, { d: 3, t: '07:00' }] },
+    ];
+
+    /* ── STATE (no const/let to avoid redeclaration issues) ── */
+    var curPlanType = 'basica';
+    var curDur = 'trimestral';
+    var curPagoVal = 'efectivo';
+    var photos = [];
+    var camStream = null;
+    var schFilter = 'all';
+
+    /* ── INIT ── */
+    document.addEventListener('DOMContentLoaded', function () {
+      var saved = localStorage.getItem('ecUser') || localStorage.getItem('currentUser');
+      if (saved) {
+        try { enterPanel(JSON.parse(saved)); } catch (e) { localStorage.removeItem('ecUser'); }
+      }
+      renderPlanTypes();
+      renderDurs();
+      updateSummary();
+      renderStrip();
+      renderSchedule();
+      renderLegend();
+      renderFilters();
+      clock();
+      setInterval(clock, 1000);
+      document.getElementById('m-nom').addEventListener('input', checkSave);
+      document.getElementById('m-ape').addEventListener('input', checkSave);
+      document.getElementById('m-tel').addEventListener('input', checkSave);
+    });
+
+    /* ── AUTH ── */
+    function doLogin(e) {
+      e.preventDefault();
+      var u = document.getElementById('l-u').value.trim();
+      var p = document.getElementById('l-p').value;
+      var btn = document.getElementById('btn-li');
+
+      if (!u || !p) { showLoginErr('Por favor ingresa usuario y contraseña.'); return; }
+
+      btn.disabled = true;
+      document.getElementById('btn-li-txt').textContent = 'Verificando…';
+      document.getElementById('btn-li-arr').textContent = '⏳';
+
+      if (!window.supabase) {
+        btn.disabled = false;
+        document.getElementById('btn-li-txt').textContent = 'ENTRAR AL PANEL';
+        document.getElementById('btn-li-arr').textContent = '→';
+        showLoginErr('Supabase no está configurado. Verifica js/supabase-config.js');
+        return;
+      }
+
+      // Check employees table for username/password
+      supabase.from('employees').select('*').eq('username', u).single()
+        .then(function (r) {
+          if (r.error || !r.data) throw new Error('Usuario o contraseña incorrectos.');
+          var emp = r.data;
+          if (emp.password !== p && emp.pin !== p) throw new Error('Usuario o contraseña incorrectos.');
+          return { name: emp.name || emp.nombre || u, email: emp.email || u, role: emp.role || emp.rol || 'staff', id: emp.id };
+        })
+        .then(function (user) {
+          localStorage.setItem('ecUser', JSON.stringify(user));
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          enterPanel(user);
+        })
+        .catch(function (err) {
+          showLoginErr(err.message || 'Error al iniciar sesión.');
+        })
+        .finally(function () {
+          btn.disabled = false;
+          document.getElementById('btn-li-txt').textContent = 'ENTRAR AL PANEL';
+          document.getElementById('btn-li-arr').textContent = '→';
+        });
+    }
+
+    function showLoginErr(msg) {
+      var el = document.getElementById('lerr');
+      document.getElementById('lerr-txt').textContent = msg;
+      el.classList.add('on');
+      setTimeout(function () { el.classList.remove('on'); }, 4500);
+    }
+
+    function enterPanel(user) {
+      document.getElementById('w-name').textContent = (user.name || '').split(' ')[0].toUpperCase();
+      document.getElementById('t-av').textContent = (user.name || '?')[0].toUpperCase();
+      document.getElementById('t-name').textContent = user.name || '';
+      showScr('panel');
+      loadStats();
+    }
+
+    function doLogout() {
+      if (!confirm('¿Cerrar sesión?')) return;
+      localStorage.removeItem('ecUser');
+      localStorage.removeItem('currentUser');
+      if (window.supabase) supabase.auth.signOut();
+      showScr('login');
+      document.getElementById('l-u').value = '';
+      document.getElementById('l-p').value = '';
+    }
+
+    function toggleEye() {
+      var i = document.getElementById('l-p');
+      var b = document.getElementById('eye-tog');
+      i.type = i.type === 'password' ? 'text' : 'password';
+      b.textContent = i.type === 'password' ? '👁' : '🙈';
+    }
+
+    /* ── SCREENS / TABS ── */
+    function showScr(id) {
+      document.querySelectorAll('.scr').forEach(function (s) { s.classList.remove('on'); s.style.display = 'none'; });
+      var el = document.getElementById('scr-' + id);
+      el.style.display = 'flex';
+      el.classList.add('on');
+    }
+
+    function switchTab(id, btn) {
+      document.querySelectorAll('.ptab').forEach(function (b) { b.classList.remove('on'); });
+      document.querySelectorAll('.tab-pane').forEach(function (p) { p.classList.remove('on'); });
+      btn.classList.add('on');
+      document.getElementById('tab-' + id).classList.add('on');
+    }
+
+    function goToHorarios() {
+      var tabs = document.querySelectorAll('.ptab');
+      switchTab('horarios', tabs[1]);
+    }
+
+    /* ── CLOCK ── */
+    function clock() {
+      var n = new Date();
+      var dd = document.getElementById('clk-date');
+      var dt = document.getElementById('clk-time');
+      if (dd) dd.textContent = n.toLocaleDateString('es-MX', { weekday: 'long', day: '2-digit', month: 'long' });
+      if (dt) dt.textContent = n.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    /* ── STATS ── */
+    function loadStats() {
+      if (!window.supabase) return;
+      var todayStr = new Date().toISOString().split('T')[0];
+
+      supabase.from('clients').select('*', { count: 'exact', head: true }).eq('membership_status', 'active')
+        .then(function (r) { if (r.count !== null) document.getElementById('st-mem').textContent = r.count; });
+
+      supabase.from('clients').select('*', { count: 'exact', head: true }).gte('membership_starts', todayStr + 'T00:00:00')
+        .then(function (r) { if (r.count !== null) document.getElementById('st-hoy').textContent = r.count; });
+
+      var wk = new Date(); wk.setDate(wk.getDate() + 7);
+      supabase.from('clients').select('*', { count: 'exact', head: true })
+        .lte('membership_expires', wk.toISOString()).gte('membership_expires', new Date().toISOString())
+        .then(function (r) { if (r.count !== null) document.getElementById('st-exp').textContent = r.count; });
+    }
+
+    /* ── SCHEDULE ── */
+    function renderLegend() {
+      document.getElementById('sch-legend').innerHTML = MEM_COLS.map(function (m) {
+        return '<div class="leg"><div class="leg-dot" style="background:' + MEM_COLORS[m] + '"></div>' + MEM_NAMES[m] + '</div>';
+      }).join('');
+    }
+
+    function renderFilters() {
+      document.getElementById('filter-pills').innerHTML =
+        '<button class="fp on" onclick="setFilter(this,\'all\')">Todas las clases</button>' +
+        MEM_COLS.map(function (m) {
+          return '<button class="fp" onclick="setFilter(this,\'' + m + '\')">' + MEM_NAMES[m] + '</button>';
+        }).join('');
+    }
+
+    function setFilter(btn, f) {
+      document.querySelectorAll('.fp').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      schFilter = f;
+      renderSchedule();
+    }
+
+    var DAYS_ARR = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+    function renderSchedule() {
+      var filtered = schFilter === 'all' ? CLASES : CLASES.filter(function (c) { return c.mems[schFilter]; });
+      var daysHTML = '';
+      for (var d = 0; d < 7; d++) {
+        var dayClasses = [];
+        filtered.forEach(function (c, cIdx) {
+          (c.sessions || []).forEach(function (s) {
+            if (s.d === d) dayClasses.push({ c: c, cIdx: CLASES.indexOf(c), t: s.t });
+          });
+        });
+        dayClasses.sort(function (a, b) { return a.t.localeCompare(b.t); });
+
+        var cardsHTML = dayClasses.map(function (item) {
+          var t12 = formatTime12(item.t);
+          var memBadges = MEM_COLS.filter(m => item.c.mems[m]).map(m => '<div class="badge-m" style="background:' + MEM_COLORS[m] + '" title="' + MEM_NAMES[m] + '"></div>').join('');
+          return '<div class="ccard" style="--col:' + (MEM_COLORS[Object.keys(item.c.mems)[0]] || 'var(--or)') + '">' +
+            '<div class="cc-h"><span>🕒 ' + t12 + '</span></div>' +
+            '<div class="cc-t">' + item.c.nm + '</div>' +
+            '<div class="cc-m">' + memBadges + '</div>' +
+            '<div class="cc-btns"><button class="cc-btn" onclick="editClass(' + item.cIdx + ')">✏️</button><button class="cc-btn x" onclick="deleteClass(' + item.cIdx + ')">🗑️</button></div>' +
+            '</div>';
+        }).join('');
+
+        daysHTML += '<div class="cal-day"><div class="cal-dh">' + DAYS_ARR[d] + '</div><div class="cal-db">' + (cardsHTML || '<div style="font-size:.6rem;color:rgba(255,255,255,.2);text-align:center;padding:1rem 0;">Sin clases</div>') + '</div></div>';
+      }
+      document.getElementById('cal-grid').innerHTML = daysHTML;
+    }
+
+    function formatTime12(t24) {
+      if (!t24) return '';
+      var parts = t24.split(':');
+      var h = parseInt(parts[0], 10);
+      var m = parts[1];
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12;
+      if (h === 0) h = 12;
+      return h + ':' + m + ' ' + ampm;
+    }
+
+    function deleteClass(idx) {
+      if (confirm('¿Seguro que deseas eliminar la clase ' + CLASES[idx].nm + '?')) {
+        CLASES.splice(idx, 1);
+        renderSchedule();
+      }
+    }
+
+    /* ── MODAL ── */
+    function openModal() {
+      document.getElementById('bd').classList.add('on');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('bd').classList.remove('on');
+      document.body.style.overflow = '';
+      camStop();
+    }
+
+    function bdClose(e) {
+      if (e.target === document.getElementById('bd')) closeModal();
+    }
+
+    function resetModal() {
+      document.getElementById('m-fv').style.display = '';
+      document.getElementById('m-suc').classList.remove('on');
+      photos = [];
+      curPlanType = 'basica';
+      curDur = 'trimestral';
+      curPagoVal = 'efectivo';
+      ['m-nom', 'm-ape', 'm-tel', 'm-email'].forEach(function (id) { document.getElementById(id).value = ''; });
+      document.querySelectorAll('.pg').forEach(function (b) { b.classList.toggle('on', b.dataset.pg === 'efectivo'); });
+      renderPlanTypes();
+      renderDurs();
+      updateSummary();
+      renderStrip();
+      camStop();
+    }
+
+    var curSessions = [];
+
+    function renderSessions() {
+      var html = curSessions.map(function (s, i) {
+        return '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg);padding:.4rem .6rem;border:1px solid var(--s3);border-radius:3px;">' +
+          '<span style="font-size:.7rem;font-weight:600;color:var(--mu)">' + DAYS_ARR[s.d] + ' a las ' + formatTime12(s.t) + '</span>' +
+          '<button type="button" onclick="delSession(' + i + ')" style="background:transparent;border:none;color:#f88;font-size:.7rem;cursor:pointer">✕</button>' +
+          '</div>';
+      }).join('');
+      document.getElementById('class-sessions-list').innerHTML = html || '<div style="font-size:.6rem;color:var(--mu)">Sin horarios.</div>';
+    }
+
+    function addSession() {
+      var d = parseInt(document.getElementById('new-sess-d').value, 10);
+      var t = document.getElementById('new-sess-t').value;
+      if (t) {
+        curSessions.push({ d: d, t: t });
+        // Sort sessions by day then time
+        curSessions.sort(function (a, b) {
+          if (a.d !== b.d) return a.d - b.d;
+          return a.t.localeCompare(b.t);
+        });
+        renderSessions();
+      }
+    }
+
+    function delSession(i) {
+      curSessions.splice(i, 1);
+      renderSessions();
+    }
+
+    function openClassModal(editIdx) {
+      document.getElementById('class-bd').classList.add('on');
+      document.body.style.overflow = 'hidden';
+      if (editIdx !== undefined) {
+        // Editing mode
+        var cls = CLASES[editIdx];
+        document.getElementById('class-nom').value = cls.nm;
+        curSessions = JSON.parse(JSON.stringify(cls.sessions || []));
+        ['basica', 'ilimitada', 'visita', 'estudios', 'crossfit', 'momentum', 'spinning'].forEach(m => {
+          document.getElementById('mem-' + m).checked = cls.mems[m];
+        });
+        document.getElementById('class-bd').dataset.editIdx = editIdx;
+        document.querySelector('.mh-title').innerHTML = 'EDITAR <b>CLASE</b>';
+      } else {
+        // Add mode
+        document.getElementById('class-nom').value = '';
+        curSessions = [];
+        document.querySelectorAll('#class-bd input[type="checkbox"]').forEach(cb => cb.checked = false);
+        delete document.getElementById('class-bd').dataset.editIdx;
+        document.querySelector('.mh-title').innerHTML = 'AGREGAR <b>CLASE</b>';
+      }
+      renderSessions();
+    }
+
+    function closeClassModal() {
+      document.getElementById('class-bd').classList.remove('on');
+      document.body.style.overflow = '';
+    }
+
+    function classBdClose(e) {
+      if (e.target === document.getElementById('class-bd')) closeClassModal();
+    }
+
+    function editClass(idx) {
+      openClassModal(idx);
+    }
+
+    function saveClass() {
+      var nom = document.getElementById('class-nom').value.trim();
+      if (!nom) { alert('Por favor completa el nombre de la clase.'); return; }
+      if (curSessions.length === 0) { alert('Agrega al menos un horario.'); return; }
+
+      var mems = {};
+      ['basica', 'ilimitada', 'visita', 'estudios', 'crossfit', 'momentum', 'spinning'].forEach(m => {
+        mems[m] = document.getElementById('mem-' + m).checked;
+      });
+
+      var editIdx = document.getElementById('class-bd').dataset.editIdx;
+      if (editIdx !== undefined) {
+        // Update existing
+        CLASES[editIdx] = { nm: nom, mems: mems, sessions: JSON.parse(JSON.stringify(curSessions)) };
+      } else {
+        // Add new
+        CLASES.push({ nm: nom, mems: mems, sessions: JSON.parse(JSON.stringify(curSessions)) });
+      }
+      renderSchedule();
+      renderLegend();
+      renderFilters();
+      closeClassModal();
+    }
+
+    /* ── PLANS ── */
+    function renderPlanTypes() {
+      document.getElementById('pt-grid').innerHTML = PLAN_TYPES.map(function (t) {
+        return '<div class="pt' + (curPlanType === t.id ? ' on' : '') + '" onclick="selPT(\'' + t.id + '\')">' +
+          '<span class="pt-ico">' + t.ico + '</span><span class="pt-nm">' + t.nm + '</span></div>';
+      }).join('');
+    }
+
+    function selPT(id) {
+      curPlanType = id;
+      var durs = Object.keys(PRECIOS[id]);
+      curDur = durs.indexOf('trimestral') !== -1 ? 'trimestral' : durs[0];
+      renderPlanTypes();
+      renderDurs();
+      updateSummary();
+    }
+
+    function renderDurs() {
+      var durs = Object.keys(PRECIOS[curPlanType]);
+      document.getElementById('dp-grid').innerHTML = durs.map(function (d) {
+        var price = PRECIOS[curPlanType][d];
+        var isPop = d === 'trimestral';
+        var ahorro = AHORROS[d];
+        var needI = (d === 'mensual' || d === 'diaria');
+        return '<div class="dp' + (curDur === d ? ' on' : '') + '" onclick="selDur(\'' + d + '\')">' +
+          (isPop ? '<div class="dp-b pop">POPULAR</div>' : '') +
+          (ahorro && !isPop ? '<div class="dp-b sav">-' + ahorro + '</div>' : '') +
+          '<div class="dp-l">' + DUR_LBL[d] + '</div>' +
+          '<div class="dp-p">$' + price.toLocaleString() + '</div>' +
+          (needI ? '<div class="dp-x">+$500 inscripción</div>' : '') +
+          '</div>';
+      }).join('');
+    }
+
+    function selDur(d) {
+      curDur = d;
+      renderDurs();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      var found = null;
+      for (var i = 0; i < PLAN_TYPES.length; i++) { if (PLAN_TYPES[i].id === curPlanType) { found = PLAN_TYPES[i]; break; } }
+      var nm = found ? found.nm : '';
+      var price = PRECIOS[curPlanType][curDur] || 0;
+      document.getElementById('psm-nm').textContent = nm + ' — ' + DUR_LBL[curDur];
+      document.getElementById('psm-price').textContent = '$' + price.toLocaleString();
+    }
+
+    function selPagoBtn(btn) {
+      document.querySelectorAll('.pg').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      curPagoVal = btn.dataset.pg;
+    }
+
+    /* ── CAMERA ── */
+    function camStart() {
+      navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720, facingMode: 'user' } })
+        .then(function (stream) {
+          camStream = stream;
+          var v = document.getElementById('vid');
+          v.srcObject = stream;
+          v.style.display = 'block';
+          document.getElementById('cam-idle').style.display = 'none';
+          document.getElementById('camw').classList.add('live');
+          document.getElementById('cb-s').style.display = 'none';
+          document.getElementById('cb-c').style.display = 'flex';
+          document.getElementById('cb-x').style.display = 'flex';
+        })
+        .catch(function (e) { alert('Error al acceder a la cámara: ' + e.message); });
+    }
+
+    function camStop() {
+      if (camStream) { camStream.getTracks().forEach(function (t) { t.stop(); }); camStream = null; }
+      var v = document.getElementById('vid'); if (v) v.style.display = 'none';
+      var ci = document.getElementById('cam-idle'); if (ci) ci.style.display = 'flex';
+      var cw = document.getElementById('camw'); if (cw) cw.classList.remove('live');
+      var cs = document.getElementById('cb-s'); if (cs) cs.style.display = 'flex';
+      var cc = document.getElementById('cb-c'); if (cc) cc.style.display = 'none';
+      var cx = document.getElementById('cb-x'); if (cx) cx.style.display = 'none';
+    }
+
+    function camCap() {
+      var v = document.getElementById('vid');
+      var c = document.getElementById('canv');
+      c.width = v.videoWidth; c.height = v.videoHeight;
+      c.getContext('2d').drawImage(v, 0, 0);
+      photos.push(c.toDataURL('image/jpeg', 0.92));
+      renderStrip();
+    }
+
+    function delPhoto(i) { photos.splice(i, 1); renderStrip(); }
+
+    function renderStrip() {
+      var n = photos.length;
+      document.getElementById('cam-bdg').textContent = n + ' FOTO' + (n !== 1 ? 'S' : '');
+
+      var thumbs = photos.map(function (p, i) {
+        return '<div class="sth"><img src="' + p + '" alt="foto ' + (i + 1) + '"/>' +
+          '<button class="sth-del" onclick="delPhoto(' + i + ')">✕</button>' +
+          '<span class="sth-n">#' + (i + 1) + '</span></div>';
+      }).join('');
+
+      var empties = '';
+      for (var j = n; j < 5; j++) {
+        empties += '<div class="sth-empty">' + (j < (3 - n) && n < 3 ? '📸' : '') + '</div>';
+      }
+      document.getElementById('strip').innerHTML = thumbs + empties;
+
+      for (var k = 1; k <= 5; k++) {
+        var d = document.getElementById('ppd' + k);
+        if (d) d.className = 'pp-d' + (k <= n ? (k <= 3 ? ' fil' : ' ok') : '');
+      }
+
+      var ppt = document.getElementById('pp-txt');
+      if (ppt) {
+        if (n >= 3) { ppt.textContent = n >= 5 ? '✓ Excelente' : '✓ Listo'; ppt.className = 'pp-txt green'; }
+        else { ppt.textContent = 'Faltan ' + (3 - n); ppt.className = 'pp-txt'; }
+      }
+
+      checkSave();
+    }
+
+    function checkSave() {
+      var nom = (document.getElementById('m-nom') ? document.getElementById('m-nom').value.trim() : '');
+      var ape = (document.getElementById('m-ape') ? document.getElementById('m-ape').value.trim() : '');
+      var tel = (document.getElementById('m-tel') ? document.getElementById('m-tel').value.trim() : '');
+      var ok = nom && ape && tel && photos.length >= 3;
+      var btn = document.getElementById('btn-save');
+      if (btn) btn.disabled = !ok;
+      var note = document.getElementById('min-note');
+      if (note) {
+        if (ok) { note.textContent = '✓ Todo listo'; note.className = 'min-note green'; }
+        else if (photos.length < 3) { note.textContent = 'Mín. 3 fotos requeridas'; note.className = 'min-note'; }
+        else { note.textContent = 'Completa nombre y teléfono'; note.className = 'min-note'; }
+      }
+    }
+
+    /* ── SAVE ── */
+    function calcExp(dur) {
+      var d = new Date();
+      if (dur === 'mensual') d.setMonth(d.getMonth() + 1);
+      if (dur === 'trimestral') d.setMonth(d.getMonth() + 3);
+      if (dur === 'semestral') d.setMonth(d.getMonth() + 6);
+      if (dur === 'anual') d.setFullYear(d.getFullYear() + 1);
+      if (dur === 'diaria') d.setDate(d.getDate() + 1);
+      return d;
+    }
+
+    function saveReg() {
+      var btn = document.getElementById('btn-save');
+      btn.disabled = true;
+      btn.textContent = '⏳ Guardando…';
+
+      var nom = document.getElementById('m-nom').value.trim();
+      var ape = document.getElementById('m-ape').value.trim();
+      var tel = document.getElementById('m-tel').value.trim();
+      var email = document.getElementById('m-email').value.trim();
+      var precio = PRECIOS[curPlanType][curDur];
+      var planNm = '';
+      for (var i = 0; i < PLAN_TYPES.length; i++) { if (PLAN_TYPES[i].id === curPlanType) { planNm = PLAN_TYPES[i].nm; break; } }
+      var expires = calcExp(curDur);
+
+      if (!window.supabase) {
+        alert('Supabase no está configurado. Verifica js/supabase-config.js');
+        btn.disabled = false;
+        btn.textContent = '✓ REGISTRAR MIEMBRO';
+        return;
+      }
+
+      var cu = {};
+      try { cu = JSON.parse(localStorage.getItem('ecUser') || '{}'); } catch (e) { }
+
+      supabase.from('clients').insert([{
+        first_name: nom,
+        last_name1: ape,
+        phone: tel,
+        email: email || null,
+        client_type: 'member',
+        membership_type: curPlanType,
+        membership_status: 'active',
+        membership_starts: new Date().toISOString(),
+        membership_expires: expires.toISOString(),
+        source: 'recepcion',
+        empleado_id: cu.id || null,
+        observations: planNm + ' ' + DUR_LBL[curDur] + ' $' + precio + ' — Pago: ' + curPagoVal
+      }]).select().single()
+        .then(function (res) {
+          if (res.error) throw new Error(res.error.message);
+          var client = res.data;
+
+          // upload photos sequentially
+          var chain = Promise.resolve();
+          photos.forEach(function (photoData, idx) {
+            chain = chain.then(function () {
+              return fetch(photoData).then(function (r) { return r.blob(); })
+                .then(function (blob) {
+                  var path = client.id + '/' + Date.now() + '_' + idx + '.jpg';
+                  return supabase.storage.from('member-photos').upload(path, blob, { contentType: 'image/jpeg' })
+                    .then(function (up) {
+                      if (!up.error) {
+                        var pub = supabase.storage.from('member-photos').getPublicUrl(path);
+                        return supabase.from('client_photos').insert([{ client_id: client.id, photo_url: pub.data.publicUrl }]);
+                      }
+                    });
+                });
+            });
+          });
+
+          return chain.then(function () { return { client: client, planNm: planNm, precio: precio, expires: expires }; });
+        })
+        .then(function (d) {
+          showSuccess(d.client, d.planNm, d.precio, d.expires);
+          loadStats();
+        })
+        .catch(function (err) {
+          alert('Error al registrar: ' + err.message);
+          btn.disabled = false;
+          btn.textContent = '✓ REGISTRAR MIEMBRO';
+        });
+    }
+
+    function showSuccess(client, planNm, precio, expires) {
+      camStop();
+      document.getElementById('m-fv').style.display = 'none';
+      document.getElementById('ms-det').innerHTML =
+        '<div class="ms-row"><span class="ms-k">Miembro</span><span class="ms-v">' + client.first_name + ' ' + client.last_name1 + '</span></div>' +
+        '<div class="ms-row"><span class="ms-k">ID</span><span class="ms-v or">#' + client.id + '</span></div>' +
+        '<div class="ms-row"><span class="ms-k">Plan</span><span class="ms-v">' + planNm + ' — $' + precio.toLocaleString() + '</span></div>' +
+        '<div class="ms-row"><span class="ms-k">Válido hasta</span><span class="ms-v" style="color:#22c55e">' + expires.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) + '</span></div>' +
+        '<div class="ms-row"><span class="ms-k">Fotos</span><span class="ms-v" style="color:#22c55e">✓ ' + photos.length + ' capturadas</span></div>';
+      document.getElementById('m-suc').classList.add('on');
+    }
+  
+
+    /* ══ ACCESOS PORTAL ══ */
+    var SUPA_URL = 'https://aveonbmcbopqqcambxoi.supabase.co';
+    var SUPA_SR  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzQzODQzOSwiZXhwIjoyMDczMDE0NDM5fQ.DoRxcgSeYUH7ISiCIt94UZYfrIcR0UT2uD3ZHvtr8QY';
+
+    function adminFetch(path, method, body) {
+      var opts = { method: method || 'GET', headers: { 'apikey': SUPA_SR, 'Authorization': 'Bearer ' + SUPA_SR, 'Content-Type': 'application/json' } };
+      if (body) opts.body = JSON.stringify(body);
+      return fetch(SUPA_URL + path, opts).then(function(r) { return r.json(); });
+    }
+
+    function findAuthUser(phone) {
+      var email = phone + '@elemental.local';
+      return adminFetch('/auth/v1/admin/users?email=' + encodeURIComponent(email))
+        .then(function(d) { var u = (d.users||[]); return u.find(function(x){return x.email===email;})||null; });
+    }
+
+    function genPass() {
+      var w = ['Elemental','Fuerte','Rapido','Activo','Energy','Power','Elite','Gym'];
+      return w[Math.floor(Math.random()*w.length)] + Math.floor(100+Math.random()*900) + ['!','@','#','$'][Math.floor(Math.random()*4)];
+    }
+
+    function acMsg(id, msg, type) {
+      var el = document.getElementById(id), c = {ok:['rgba(34,197,94,.08)','rgba(34,197,94,.3)','#4ade80'],warn:['rgba(251,191,36,.08)','rgba(251,191,36,.3)','#fbbf24'],err:['rgba(239,68,68,.08)','rgba(239,68,68,.3)','#f87171']}[type]||[0,0,'#f87171'];
+      el.textContent=msg; el.style.cssText='display:block;background:'+c[0]+';border:1px solid '+c[1]+';color:'+c[2]+';padding:.55rem .85rem;border-radius:var(--r);font-size:.73rem;font-weight:600;margin-bottom:.75rem';
+    }
+
+    /* — Crear — */
+    var acMember=null, acTimer=null;
+    function acGenPass(){document.getElementById('ac-pass').value=genPass();}
+    function acLookup(){
+      clearTimeout(acTimer); acMember=null;
+      ['ac-preview','ac-not-found','ac-msg'].forEach(function(id){document.getElementById(id).style.display='none';});
+      document.getElementById('btn-ac-crear').disabled=true;
+      var p=document.getElementById('ac-phone').value.trim();
+      if(p.length<10)return;
+      acTimer=setTimeout(function(){
+        window.supabase.from('clients').select('id,first_name,last_name1,membership_type,membership_status,membership_expires').eq('phone',p).maybeSingle()
+          .then(function(r){
+            if(!r.data){document.getElementById('ac-not-found').style.display='block';return;}
+            acMember=r.data;
+            var exp=r.data.membership_expires?new Date(r.data.membership_expires).toLocaleDateString('es-MX'):'N/A';
+            document.getElementById('ac-preview-name').textContent=r.data.first_name+' '+r.data.last_name1;
+            document.getElementById('ac-preview-plan').textContent=(r.data.membership_type||'Sin plan')+' · Vence: '+exp;
+            document.getElementById('ac-preview-status').innerHTML=r.data.membership_status==='active'
+              ?'<span style="color:#4ade80;font-size:.65rem;font-weight:700">✓ Membresía activa</span>'
+              :'<span style="color:#f87171;font-size:.65rem;font-weight:700">✗ Membresía inactiva</span>';
+            document.getElementById('ac-preview').style.display='block';
+            document.getElementById('btn-ac-crear').disabled=false;
+          });
+      },400);
+    }
+    function acCrear(){
+      var phone=document.getElementById('ac-phone').value.trim(), pass=document.getElementById('ac-pass').value.trim();
+      if(!phone||phone.length<10){acMsg('ac-msg','Ingresa un teléfono de 10 dígitos.','err');return;}
+      if(!pass||pass.length<8){acMsg('ac-msg','La contraseña debe tener al menos 8 caracteres.','err');return;}
+      var btn=document.getElementById('btn-ac-crear'); btn.disabled=true; btn.textContent='Creando...';
+      findAuthUser(phone).then(function(existing){
+        if(existing){acMsg('ac-msg','⚠️ Este miembro ya tiene cuenta. Usa Resetear Contraseña.','warn');return;}
+        return adminFetch('/auth/v1/admin/users','POST',{email:phone+'@elemental.local',password:pass,email_confirm:true})
+          .then(function(d){
+            if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error desconocido');
+            acMsg('ac-msg','✓ Acceso creado. Contraseña: '+pass+' (copiada al portapapeles)','ok');
+            if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
+            document.getElementById('ac-phone').value=''; document.getElementById('ac-pass').value='';
+            document.getElementById('ac-preview').style.display='none'; acMember=null;
+          });
+      }).catch(function(e){acMsg('ac-msg','Error: '+e.message,'err');})
+        .finally(function(){btn.disabled=false;btn.textContent='Crear Acceso al Portal';});
+    }
+
+    /* — Resetear — */
+    var rpMember=null, rpTimer=null;
+    function rpGenPass(){document.getElementById('rp-pass').value=genPass();}
+    function rpLookup(){
+      clearTimeout(rpTimer); rpMember=null;
+      ['rp-preview','rp-not-found','rp-no-account','rp-msg'].forEach(function(id){document.getElementById(id).style.display='none';});
+      var btn=document.getElementById('btn-rp'); btn.disabled=true; btn.style.background='var(--s3)'; btn.style.color='var(--mu)'; btn.style.clipPath='none';
+      var p=document.getElementById('rp-phone').value.trim();
+      if(p.length<10)return;
+      rpTimer=setTimeout(function(){
+        window.supabase.from('clients').select('id,first_name,last_name1,membership_type,membership_status').eq('phone',p).maybeSingle()
+          .then(function(r){
+            if(!r.data){document.getElementById('rp-not-found').style.display='block';return;}
+            rpMember=r.data;
+            document.getElementById('rp-preview-name').textContent=r.data.first_name+' '+r.data.last_name1;
+            document.getElementById('rp-preview-status').textContent=(r.data.membership_type||'Sin plan')+' · '+(r.data.membership_status==='active'?'✓ Activo':'✗ Inactivo');
+            document.getElementById('rp-preview').style.display='block';
+            findAuthUser(p).then(function(u){
+              if(!u){document.getElementById('rp-no-account').style.display='block';return;}
+              btn.disabled=false; btn.style.background='var(--or)'; btn.style.color='#fff'; btn.style.clipPath='polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)';
+            });
+          });
+      },400);
+    }
+    function rpReset(){
+      var phone=document.getElementById('rp-phone').value.trim(), pass=document.getElementById('rp-pass').value.trim();
+      if(!phone||phone.length<10){acMsg('rp-msg','Ingresa un teléfono de 10 dígitos.','err');return;}
+      if(!pass||pass.length<8){acMsg('rp-msg','La contraseña debe tener al menos 8 caracteres.','err');return;}
+      var btn=document.getElementById('btn-rp'); btn.disabled=true; btn.textContent='Actualizando...';
+      findAuthUser(phone).then(function(u){
+        if(!u){
+          return adminFetch('/auth/v1/admin/users','POST',{email:phone+'@elemental.local',password:pass,email_confirm:true})
+            .then(function(d){
+              if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error');
+              acMsg('rp-msg','✓ Cuenta creada con contraseña: '+pass+' (copiada)','ok');
+              if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
+            });
+        }
+        return adminFetch('/auth/v1/admin/users/'+u.id,'PUT',{password:pass})
+          .then(function(d){
+            if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error');
+            acMsg('rp-msg','✓ Contraseña actualizada: '+pass+' (copiada)','ok');
+            if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
+            document.getElementById('rp-phone').value=''; document.getElementById('rp-pass').value='';
+            document.getElementById('rp-preview').style.display='none'; rpMember=null;
+          });
+      }).catch(function(e){acMsg('rp-msg','Error: '+e.message,'err');})
+        .finally(function(){btn.disabled=false;btn.textContent='Resetear Contraseña';});
+    }
+
+    /* — Verificar — */
+    function vfCheck(){
+      var phone=document.getElementById('vf-phone').value.trim(), res=document.getElementById('vf-result');
+      if(!phone||phone.length<10){res.style.display='block';res.innerHTML='<p style="font-size:.75rem;color:#f87171">Ingresa 10 dígitos.</p>';return;}
+      res.style.display='block'; res.innerHTML='<p style="font-size:.72rem;color:var(--mu)">Buscando...</p>';
+      Promise.all([
+        window.supabase.from('clients').select('id,first_name,last_name1,membership_type,membership_status,membership_expires').eq('phone',phone).maybeSingle(),
+        findAuthUser(phone)
+      ]).then(function(results){
+        var m=results[0].data, authUser=results[1];
+        if(!m){res.innerHTML='<div style="font-size:.75rem;color:#f87171;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);padding:.75rem 1rem;border-radius:var(--r)">❌ No existe ningún miembro con el teléfono <b>'+phone+'</b>.</div>';return;}
+        var exp=m.membership_expires?new Date(m.membership_expires).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'N/A';
+        var isActive=m.membership_status==='active', hasAuth=!!authUser;
+        var badge=hasAuth
+          ?'<span style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80;font-size:.62rem;font-weight:800;padding:.2rem .6rem">✓ Tiene acceso portal</span>'
+          :'<span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;font-size:.62rem;font-weight:800;padding:.2rem .6rem">✗ Sin cuenta portal</span>';
+        res.innerHTML='<div style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:1rem 1.2rem">'+
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem"><span style="font-size:.9rem;font-weight:800">'+m.first_name+' '+m.last_name1+'</span>'+badge+'</div>'+
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem">'+
+          '<div style="background:var(--bg);padding:.6rem .8rem;border-radius:var(--r)"><p style="font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.2rem">Plan</p><p style="font-size:.78rem;font-weight:700">'+(m.membership_type||'N/A')+'</p></div>'+
+          '<div style="background:var(--bg);padding:.6rem .8rem;border-radius:var(--r)"><p style="font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.2rem">Estado</p><p style="font-size:.78rem;font-weight:700;color:'+(isActive?'#4ade80':'#f87171')+'">'+(isActive?'Activo':'Inactivo')+'</p></div>'+
+          '<div style="background:var(--bg);padding:.6rem .8rem;border-radius:var(--r)"><p style="font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.2rem">Vence</p><p style="font-size:.78rem;font-weight:700">'+exp+'</p></div>'+
+          '</div>'+
+          (!hasAuth?'<div style="margin-top:.75rem;font-size:.7rem;color:#fbbf24">💡 Sin cuenta — usa Crear Acceso para habilitarle el portal.</div>':'<div style="margin-top:.75rem;font-size:.7rem;color:rgba(255,255,255,.3)">Último acceso: '+(authUser.last_sign_in_at?new Date(authUser.last_sign_in_at).toLocaleString('es-MX'):'Nunca')+'</div>')+
+          '</div>';
+      }).catch(function(e){res.innerHTML='<p style="font-size:.75rem;color:#f87171">Error: '+e.message+'</p>';});
+    }
+
+  </script>
+
+</body>
+
+</html>
