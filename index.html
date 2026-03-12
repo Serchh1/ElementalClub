@@ -1839,31 +1839,16 @@
 
             <div class="reveal">
                 <div style="margin-bottom:1.5rem;">
-                    <div class="section-label">Formulario</div>
-                    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.03em;">Agenda Tu
-                        Clase Gratis</h3>
+                    <div class="section-label">Clase de prueba</div>
+                    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.03em;">AGENDA TU
+                        VISITA GRATIS</h3>
                 </div>
-                <form id="contactForm"
-                    style="display:flex;flex-direction:column;gap:1.5px;background:rgba(255,255,255,0.04);">
-                    <div class="form-row" style="gap:1.5px;">
-                        <div class="form-group"><input type="text" placeholder="Nombre completo" required /></div>
-                        <div class="form-group"><input type="tel" placeholder="Teléfono" required /></div>
-                    </div>
-                    <div class="form-group"><input type="email" placeholder="Email" /></div>
-                    <div class="form-group">
-                        <select>
-                            <option value="">¿Qué te interesa?</option>
-                            <option>Membresía Básica</option>
-                            <option>Membresía Ilimitada</option>
-                            <option>CrossFit / Hyrox</option>
-                            <option>Estudios</option>
-                            <option>Momentum</option>
-                            <option>Visita de Prueba</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><textarea placeholder="Mensaje (opcional)" rows="4"></textarea></div>
-                    <button type="submit" class="form-submit">Enviar Solicitud →</button>
-                </form>
+                <div style="background:rgba(255,255,255,0.04);padding:2.5rem;border:1px solid rgba(255,255,255,0.06);">
+                    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;line-height:1.8;margin-bottom:1.5rem;">
+                        Registra tus datos en nuestro portal y agenda tu primera clase de prueba <strong style="color:#fff;">completamente gratis</strong>. Elige la clase que más te interese y vive la experiencia Elemental.
+                    </p>
+                    <a href="reservar-clases.html?tab=visit" class="btn-hero" style="display:inline-block;text-align:center;text-decoration:none;">Registrar Mi Visita →</a>
+                </div>
             </div>
         </div>
     </section>
@@ -2028,12 +2013,8 @@
         }, { threshold: 0.12 });
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-        // ── Form submit ──
-        document.getElementById('contactForm').addEventListener('submit', e => {
-            e.preventDefault();
-            alert('¡Gracias! Te contactaremos en breve.');
-            e.target.reset();
-        });
+
+
     </script>
 </body>
 
