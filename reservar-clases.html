@@ -1097,6 +1097,12 @@ window.addEventListener('scroll', () => {
 // ─── INIT ───────────────────────────────────────────────────────
 initReveal();
 
+// Auto-switch to visit tab if URL has ?tab=visit
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('tab') === 'visit') {
+    switchTab('visit');
+}
+
 (async () => {
     const { data:{ session } } = await sb.auth.getSession();
     if (session) {
