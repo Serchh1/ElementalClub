@@ -500,6 +500,85 @@
             background: rgba(255, 255, 255, 0.06);
         }
 
+        .entry-plans {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5px;
+            background: rgba(255, 255, 255, 0.06);
+            margin-bottom: 1.5px;
+        }
+
+        .entry-plan {
+            background: var(--zinc);
+            padding: 2rem 2.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 1rem;
+            transition: background 0.2s;
+        }
+
+        .entry-plan:hover { background: #161616; }
+
+        .entry-plan-badge {
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.35);
+            display: inline-block;
+            margin-bottom: 0.4rem;
+        }
+
+        .entry-plan-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .entry-plan-note {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.35);
+            margin-top: 0.2rem;
+            line-height: 1.5;
+        }
+
+        .entry-plan-right { text-align: right; }
+
+        .entry-plan-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            line-height: 1;
+        }
+
+        .entry-plan-alts {
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 0.25rem;
+            line-height: 1.6;
+        }
+
+        .entry-plan-link {
+            display: inline-block;
+            margin-top: 0.6rem;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--orange);
+            text-decoration: none;
+            border: 1px solid rgba(255,77,0,0.3);
+            padding: 0.3rem 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .entry-plan-link:hover {
+            background: var(--orange);
+            color: #fff;
+        }
+
         .plan-card {
             background: var(--zinc);
             padding: 3rem 2.5rem;
@@ -650,52 +729,42 @@
             padding: 0.3rem 0.75rem;
         }
 
-        /* secondary plans */
-        .mini-plans {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: rgba(255, 255, 255, 0.06);
-            margin-top: 1.5px;
-        }
-
-        .mini-plan {
+        /* visita strip */
+        .visita-strip {
             background: var(--zinc);
-            padding: 1.75rem 2rem;
+            margin-top: 1.5px;
+            padding: 1.5rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
             transition: background 0.2s;
         }
-
-        .mini-plan:hover {
-            background: #161616;
+        .visita-strip:hover { background: #161616; }
+        .visita-strip-left { display: flex; align-items: center; gap: 1.25rem; }
+        .visita-strip-icon {
+            width: 42px; height: 42px;
+            border: 1px solid rgba(255,77,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
         }
-
-        .mini-plan-name {
+        .visita-strip-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 0.05em;
+            font-size: 1.6rem; letter-spacing: 0.05em;
         }
-
-        .mini-plan-sub {
+        .visita-strip-sub {
             font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 0.15rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.1rem;
         }
-
-        .mini-plan-price {
-            text-align: right;
-        }
-
-        .mini-plan-price .p {
+        .visita-strip-price {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
+            font-size: 2.5rem; color: #fff;
         }
-
-        .mini-plan-price .s {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.4);
+        .visita-strip-price span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem; opacity: 0.5;
         }
 
         /* ── CLASES ── */
@@ -1389,7 +1458,7 @@
             }
 
             .plans-grid,
-            .mini-plans,
+            .entry-plans,
             .install-grid {
                 grid-template-columns: 1fr;
             }
@@ -1600,98 +1669,112 @@
                     Planes diseñados para adaptarse a tu estilo de vida. Consulta nuestras diferentes opciones.</p>
             </div>
 
+            <!-- Planes de entrada: Subbásica y Básica -->
+            <div class="entry-plans reveal">
+                <div class="entry-plan">
+                    <div>
+                        <div class="entry-plan-badge">Sin clases grupales</div>
+                        <div class="entry-plan-name">Subbásica</div>
+                        <div class="entry-plan-note">Horario restringido (9AM–5:30PM) · Área de equipos · Regaderas y vapor</div>
+                    </div>
+                    <div class="entry-plan-right">
+                        <div class="entry-plan-price">$1,000 <span style="font-family:'Inter',sans-serif;font-size:0.9rem;opacity:0.5;">/mes</span></div>
+                        <div class="entry-plan-alts">Trim $2,850 · Sem $5,400 (3 MSI)<br>Anual $10,200 (12 MSI)</div>
+                        <a href="https://buy.stripe.com/dRm9AV1NC0HzejO0m963K0i" target="_blank" class="entry-plan-link">Seleccionar →</a>
+                    </div>
+                </div>
+                <div class="entry-plan">
+                    <div>
+                        <div class="entry-plan-badge">Sin clases grupales</div>
+                        <div class="entry-plan-name">Básica</div>
+                        <div class="entry-plan-note">Acceso total de horario · Área de equipos · Regaderas y vapor</div>
+                    </div>
+                    <div class="entry-plan-right">
+                        <div class="entry-plan-price">$1,200 <span style="font-family:'Inter',sans-serif;font-size:0.9rem;opacity:0.5;">/mes</span></div>
+                        <div class="entry-plan-alts">Trim $3,420 · Sem $6,480 (3 MSI)<br>Anual $12,240 (12 MSI)</div>
+                        <a href="https://buy.stripe.com/bJe6oJeAoeyp6Rm2uh63K0m" target="_blank" class="entry-plan-link">Seleccionar →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planes principales: Training, Prime, VIP -->
             <div class="plans-grid reveal">
-                <!-- Básica -->
+                <!-- Training -->
                 <div class="plan-card">
                     <div class="plan-line"></div>
-                    <div class="plan-name">Básica</div>
-                    <div class="plan-desc">Acceso completo al área de máquinas y cardio</div>
-                    <div class="plan-price">$1,000 <span>/mes</span></div>
-                    <div class="plan-alts">Trimestral $2,700 · Semestral $4,800 · Anual $8,800<br></div>
+                    <div class="plan-name">Training</div>
+                    <div class="plan-desc">Acceso completo + todas las clases grupales estándar</div>
+                    <div class="plan-price">$1,400 <span>/mes</span></div>
+                    <div class="plan-alts">Trim $3,990 · Sem $7,560 (3 MSI) · Anual $14,280 (12 MSI)</div>
                     <ul class="plan-features">
-                        <li>Área de pesas y máquinas</li>
-                        <li>Máquinas cardiovasculares</li>
-                        <li>Vestidores y regaderas</li>
-                        <li>CombatFit incluido</li>
+                        <li>Área de equipos, regaderas y vapor</li>
+                        <li>Acceso total de horario</li>
+                        <li>Spinning, Strong &amp; Bike, Yoga</li>
+                        <li>Hyrox Base, Hyrox Competición</li>
+                        <li>GAP, CombatFit, Halterofilia</li>
+                        <li>Artes Marciales</li>
                     </ul>
-                    <a href="https://buy.stripe.com/14AcN777Wdul6Rmgl763K00" target="_blank"
-                        class="plan-btn">Seleccionar</a>
+                    <a href="https://buy.stripe.com/4gMfZjfEs1LDfnS1qd63K0r" target="_blank" class="plan-btn">Seleccionar</a>
                 </div>
 
-                <!-- Ilimitada -->
+                <!-- Prime -->
                 <div class="plan-card featured">
                     <div class="plan-line"></div>
                     <div class="plan-popular">★ MÁS POPULAR</div>
-                    <div class="plan-name">Ilimitada</div>
-                    <div class="plan-desc">Todo incluido + todas las clases grupales sin límite</div>
-                    <div class="plan-price">$1,800 <span>/mes</span></div>
-                    <div class="plan-alts">Trimestral $5,000 · Semestral $9,000 · Anual $16,200<br></div>
+                    <div class="plan-name">Prime</div>
+                    <div class="plan-desc">Todo Training + elige 1 clase Premium exclusiva</div>
+                    <div class="plan-price">$1,600 <span>/mes</span></div>
+                    <div class="plan-alts">Trim $4,560 · Sem $8,640 (3 MSI) · Anual $16,320 (12 MSI)</div>
                     <ul class="plan-features">
-                        <li>Todo lo de Básica incluido</li>
-                        <li>Las 11 clases grupales</li>
-                        <li>Reserva de clases con QR</li>
-                        <li>CrossFit, Hyrox y Momentum</li>
-                        <li>Programa personalizado</li>
+                        <li>Todo lo de Training incluido</li>
+                        <li>1 clase Premium a elegir</li>
+                        <li>CrossFit ilimitado, ó</li>
+                        <li>Multipower ilimitado, ó</li>
+                        <li>Momentum ilimitado</li>
                     </ul>
-                    <a href="https://buy.stripe.com/6oUfZj8c01LD4Jec4R63K02" target="_blank"
-                        class="plan-btn">Seleccionar</a>
+                    <a href="https://buy.stripe.com/28EbJ38c0ai98Zu8SF63K0v" target="_blank" class="plan-btn">Seleccionar</a>
                 </div>
 
-                <!-- CrossFit -->
+                <!-- VIP -->
                 <div class="plan-card">
                     <div class="plan-line"></div>
-                    <div class="plan-name">CrossFit / Hyrox</div>
-                    <div class="plan-desc">Entrenamiento funcional intensivo especializado</div>
-                    <div class="plan-price">$1,400 <span>/mes</span></div>
-                    <div class="plan-alts">Trimestral $3,800 · Semestral $6,800 · Anual $12,400<br></div>
+                    <div class="plan-name">VIP</div>
+                    <div class="plan-desc">Acceso ilimitado a TODAS las clases, Premium y estándar</div>
+                    <div class="plan-price">$1,800 <span>/mes</span></div>
+                    <div class="plan-alts">Trim $5,130 · Sem $9,720 (3 MSI) · Anual $18,360 (12 MSI)</div>
                     <ul class="plan-features">
-                        <li>Clases CrossFit ilimitadas</li>
-                        <li>Hyrox Competición + Hyrox Base</li>
-                        <li>Coach certificado en cada clase</li>
+                        <li>Todo lo de Prime incluido</li>
+                        <li>Todas las clases Premium sin límite</li>
+                        <li>CrossFit + Multipower + Momentum</li>
+                        <li>Locker fijo + $1,000 en puntos*</li>
                     </ul>
-                    <a href="registro.html" class="plan-btn">Seleccionar</a>
+                    <a href="https://buy.stripe.com/6oU8wR77W8a18Zu8SF63K0z" target="_blank" class="plan-btn">Seleccionar</a>
                 </div>
             </div>
 
-            <div class="mini-plans reveal">
-                <div class="mini-plan">
+            <!-- Visita de un día -->
+            <div class="visita-strip reveal">
+                <div class="visita-strip-left">
+                    <div class="visita-strip-icon">🎟️</div>
                     <div>
-                        <div class="mini-plan-name">Estudios</div>
-                        <div class="mini-plan-sub">Clases de estudio + Spinning</div>
-                    </div>
-                    <div class="mini-plan-price">
-                        <div class="p">$1,650</div>
-                        <div class="s">Trim $4,500</div>
+                        <div class="visita-strip-name">Visita de un día</div>
+                        <div class="visita-strip-sub">Acceso completo al gym por un día · Sin compromiso</div>
                     </div>
                 </div>
-                <div class="mini-plan">
-                    <div>
-                        <div class="mini-plan-name">Momentum</div>
-                        <div class="mini-plan-sub">Hipertrofia guiada</div>
-                    </div>
-                    <div class="mini-plan-price">
-                        <div class="p">$1,400</div>
-                        <div class="s">Trim $3,800</div>
-                    </div>
-                </div>
-                <div class="mini-plan">
-                    <div>
-                        <div class="mini-plan-name">Visita</div>
-                        <div class="mini-plan-sub">Entrena sin límites</div>
-                    </div>
-                    <div class="mini-plan-price">
-                        <div class="p">$150</div>
-                        <div class="s">Por día</div>
-                    </div>
+                <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+                    <div class="visita-strip-price">$200 <span>/día</span></div>
                 </div>
             </div>
 
-            <div style="margin-top:2rem;padding:1.5rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);display:flex;align-items:center;gap:1rem;"
+            <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:flex-start;gap:1rem;"
                 class="reveal">
-                <span style="font-size:1.25rem;">ℹ️</span>
-                <p style="font-size:0.8rem;color:rgba(255,255,255,0.4);line-height:1.6;"><strong
-                        style="color:rgba(255,255,255,0.6);">Inscripción:</strong> $500 adicional solo para primera vez
-                    en plan mensual. Visita nuestro gimnasio para completar tu registro.</p>
+                <span style="font-size:1.1rem;flex-shrink:0;">ℹ️</span>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.7;">
+                    <strong style="color:rgba(255,255,255,0.55);">3 MSI</strong> aplica al plan semestral · 
+                    <strong style="color:rgba(255,255,255,0.55);">12 MSI</strong> aplica al plan anual (consultar tarjetas participantes) · 
+                    Plan anual en efectivo/débito/transferencia incluye <strong style="color:rgba(255,255,255,0.55);">13° mes GRATIS</strong> · 
+                    *Locker fijo + puntos exclusivo para VIP anual.
+                </p>
             </div>
         </div>
     </section>
@@ -1705,8 +1788,8 @@
             </div>
             <div>
                 <p
-                    style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:1.25rem;max-width:280px;line-height:1.6;">
-                    12 clases diseñadas por expertos. Reserva tu lugar y llega con tu código QR.</p>
+                    style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:1.25rem;max-width:280px;line-height:1.6;"
+                    >12 clases diseñadas por expertos: <strong style="color:rgba(255,255,255,0.5);">3 Premium</strong> y <strong style="color:rgba(255,255,255,0.5);">9 Estándar</strong>. Reserva tu lugar y llega con tu código QR.</p>
                 <div class="filters" id="filters">
                     <button class="fpill active" data-filter="all">Todas</button>
                     <button class="fpill" data-filter="estudio">🌙 Estudio</button>
@@ -1928,25 +2011,63 @@
         });
 
         // ── Marquee content ──
-        const MARQUEE_ITEMS = ['CrossFit', 'Hyrox', 'Spinning', 'Yoga', 'Momentum', 'CombatFit', 'GAP', 'Energy Kits', 'Strong & Bike', 'Artes Marciales', 'Multipower', 'Hyrox Base'];
+        const MARQUEE_ITEMS = ['CrossFit', 'Hyrox', 'Spinning', 'Yoga', 'Momentum', 'CombatFit', 'GAP', 'Halterofilia', 'Strong & Bike', 'Artes Marciales', 'Multipower', 'Hyrox Base'];
         const track = document.getElementById('marqueeTrack');
         const html = MARQUEE_ITEMS.map(i => `<span class="marquee-item">${i}</span><span class="marquee-item marquee-sep">·</span>`).join('');
         track.innerHTML = html + html; // duplicate for seamless loop
 
         // ── Clases data ──
         const CLASES = [
-            { key: 'crossfit', nombre: 'CrossFit', emoji: '🔥', cat: 'competicion', h: 'L-V 50 min', dur: '50 min', cupo: 28, desc: 'Movimientos funcionales, levantamiento olímpico y trabajo metabólico. Enfoque en técnicas correctas, progresiones seguras y comunidad que impulsa.', mem: ['Ilimitada', 'CrossFit/Hyrox'] },
-            { key: 'multipower', nombre: 'Multipower', emoji: '💪', cat: 'funcional', h: 'L-V 6-9 AM, 6-7 PM · S 7-8 AM', dur: '50 min', cupo: 28, desc: 'La clase más dinámica: fuerza, resistencia y cardio en formato por tiempos. Remo, ski, bici y movimientos funcionales que cambian cada semana.', mem: ['Ilimitada', 'Estudios', 'Visita'] },
-            { key: 'momentum', nombre: 'Momentum', emoji: '⚡', cat: 'funcional', h: 'L-V 6-8 AM, 6-8 PM · S 8 AM', dur: '50 min', cupo: 18, desc: 'Hipertrofia y fuerza con peso libre guiada paso a paso por coaches expertos. Rutinas estructuradas para progresar semana a semana con resultados visibles.', mem: ['Ilimitada', 'Momentum'] },
-            { key: 'combatfit', nombre: 'CombatFit', emoji: '🥊', cat: 'estudio', h: 'L-V 7:00 AM', dur: '50 min', cupo: 24, desc: 'MMA + acondicionamiento funcional en estudio semi-oscuro. Golpes, combinaciones y trabajo de core de alto impacto. Apto para principiantes.', mem: ['Básica', 'Ilimitada', 'Estudios', 'Visita', 'CrossFit/Hyrox', 'Momentum', 'Spinning'] },
-            { key: 'hyrox-comp', nombre: 'Hyrox Competición', emoji: '🏆', cat: 'competicion', h: 'L-V 8 PM · MA, J 7 AM · D 8 AM', dur: '50 min', cupo: 30, desc: 'Replicamos el formato real de competencia Hyrox: carrera indoor, trineos, ski, remo y estaciones funcionales en espacio amplio y profesional.', mem: ['Ilimitada', 'CrossFit/Hyrox'] },
-            { key: 'strong-bike', nombre: 'Strong & Bike', emoji: '🚴‍♂️', cat: 'estudio', h: 'L-V 8:10 AM', dur: '50 min', cupo: 22, desc: 'Combina entrenamiento funcional full body con intervalos en la bici. Ambiente semi-oscuro, ritmo intenso y quema máxima de calorías. Versátil para principiantes y experimentados.', mem: ['Ilimitada', 'Estudios', 'Visita'] },
-            { key: 'energy-kits', nombre: 'Energy Kits', emoji: '⚡', cat: 'estudio', h: 'L-V 18:00', dur: '50 min', cupo: 26, desc: 'Clase especial para niños de 6 a 11 años. Actividades dinámicas de movimiento, coordinación y energía en un entorno seguro y divertido. Acceso con membresía de papás.', mem: ['Membresía Papás'] },
-            { key: 'hyrox-base', nombre: 'Hyrox Base', emoji: '🏃', cat: 'competicion', h: 'L-V 6 PM · MA, JU 7 AM', dur: '50 min', cupo: 30, desc: 'Base de fuerza y aeróbico para prepararte hacia el Hyrox competición. Entrena los fundamentos de forma progresiva y segura con coaching experto.', mem: ['Ilimitada', 'Estudios', 'Visita', 'CrossFit/Hyrox', 'Momentum', 'Spinning'] },
-            { key: 'spinning', nombre: 'Spinning', emoji: '🚲', cat: 'estudio', h: 'L-V 7 PM · L 8 PM · MA 8 PM', dur: '50 min', cupo: 12, desc: 'Cardio intenso en bicicletas estáticas con instructor en tiempo real. Ambiente oscuro, música potente y ritmo que te lleva al máximo.', mem: ['Ilimitada', 'Estudios', 'Spinning'] },
-            { key: 'gap', nombre: 'GAP', emoji: '🍑', cat: 'funcional', h: 'L-V 19:00', dur: '50 min', cupo: 28, desc: 'Clase enfocada en glúteo, abdomen y pierna. Tonificación y fortalecimiento de tren inferior y core con ejercicios progresivos y dinámicos para todos los niveles.', mem: ['Ilimitada', 'Estudios', 'Visita'] },
-            { key: 'yoga', nombre: 'Yoga', emoji: '🧘', cat: 'bienestar', h: 'MI, V 9:10 AM · J 8 PM · S 10 AM', dur: '50 min', cupo: 25, desc: 'Equilibrio, flexibilidad y mindfulness. Perfecto para recuperación activa y control del estrés. Apto para todos los niveles.', mem: ['Ilimitada', 'Estudios', 'Visita', 'CrossFit/Hyrox', 'Momentum', 'Spinning'] },
-            { key: 'artes-marciales', nombre: 'Artes Marciales', emoji: '🥋', cat: 'bienestar', h: 'MA, J 8 PM · S 9 AM', dur: '50 min', cupo: 20, desc: 'Técnica marcial enfocada en disciplina, coordinación y autodefensa en un ambiente grupal motivador con coaches de experiencia.', mem: ['Ilimitada', 'Estudios', 'Visita', 'CrossFit/Hyrox', 'Momentum', 'Spinning'] },
+            // ── PREMIUM ──
+            { key: 'crossfit', nombre: 'CrossFit', emoji: '🔥', cat: 'competicion',
+              h: 'L-V 5, 6, 8 AM · L, MI, V 7 AM · L-V 7 PM · S 8 AM', dur: '50 min', cupo: 28,
+              desc: 'Movimientos funcionales de alta intensidad: levantamiento olímpico, kettlebells, gimásia, remo y metabólicos. Adaptado a cada atleta. Espacio amplio con equipamiento profesional.',
+              mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium' },
+            { key: 'multipower', nombre: 'Multipower', emoji: '💪', cat: 'funcional',
+              h: 'L-V 6, 7, 8 AM · L-V 6, 7 PM · S 7, 8 AM', dur: '50 min', cupo: 28,
+              desc: 'La clase más completa del estudio. Combina fuerza, resistencia y cardio con equipos multifuncionales, barras, discos y máquinas de cardio (remo, ski, bici). Rutinas semanales variables.',
+              mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium' },
+            { key: 'momentum', nombre: 'Momentum', emoji: '⚡', cat: 'funcional',
+              h: 'L-V 6, 7, 8, 9 AM · L-V 6, 7, 8 PM · S 8 AM', dur: '50 min', cupo: 18,
+              desc: 'Hipertrofia y fuerza guiada por coaches con utilización de máquinas multifuncionales para un entrenamiento completo. Los mejores resultados en una comunidad que te motiva.',
+              mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium' },
+            // ── ESTÁNDAR ──
+            { key: 'combatfit', nombre: 'CombatFit', emoji: '🥊', cat: 'estudio',
+              h: 'L-V 7:00 AM', dur: '50 min', cupo: 24,
+              desc: 'Combina técnica de artes marciales mixtas (MMA) con entrenamiento funcional. Mejora coordinación, fuerza, velocidad y agilidad. Apto para principiantes.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'hyrox-comp', nombre: 'Hyrox Competición', emoji: '🏆', cat: 'competicion',
+              h: 'L-V 8:00 PM · MA, J 7:00 AM · D 8:00 AM', dur: '50 min', cupo: 30,
+              desc: 'Entrenamiento avanzado que replica la experiencia real de competencia Hyrox: carrera indoor, trineos, ski, remo, cargas y muros. Coaching técnico en cada estación.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'strong-bike', nombre: 'Strong & Bike', emoji: '🚴‍♂️', cat: 'estudio',
+              h: 'L-D 8:10 AM', dur: '50 min', cupo: 22,
+              desc: 'Combina entrenamiento funcional full body con spinning en estudio semi-oscuro. Alterna bloques de fuerza con intervalos en bici para quemar calorías y mejorar el cardio.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'hyrox-base', nombre: 'Hyrox Base', emoji: '🏃', cat: 'competicion',
+              h: 'L-V 6:00 PM · MA y JU 7:00 AM', dur: '50 min', cupo: 30,
+              desc: 'Base de fuerza y resistencia aeróbica orientada a quien quiere prepararse para competir en Hyrox. Técnica, acondicionamiento y progresión guiada.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'spinning', nombre: 'Spinning', emoji: '🚲', cat: 'estudio',
+              h: 'L-V 7:00 PM · L 8:00 PM · MA 8:00 PM', dur: '50 min', cupo: 12,
+              desc: 'Ciclismo indoor de alta intensidad. Sesiones en bici estacionaria con variaciones de ritmo, resistencia e intervalos. Quema calórica elevada.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'gap', nombre: 'GAP', emoji: '🏅', cat: 'funcional',
+              h: 'L-V 7:00 PM', dur: '50 min', cupo: 28,
+              desc: 'Glúteos, Abdomen y Piernas. Clase de tonificación y fuerza con énfasis en tren inferior y core. Alta demanda muscular, baja carga articular. Para todos los niveles.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'yoga', nombre: 'Yoga', emoji: '🧘', cat: 'bienestar',
+              h: 'L, MI y V 9:10 AM · J 8:00 PM · S 10:00 AM', dur: '50 min', cupo: 25,
+              desc: 'Clase de flexibilidad, equilibrio y bienestar mental. Combina posturas, respiración y relajación. Apta para todos los niveles. Perfecta para recuperación activa.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'halterofilia', nombre: 'Halterofilia', emoji: '🏋️', cat: 'funcional',
+              h: 'S 7:00 AM', dur: '50 min', cupo: 20,
+              desc: 'Levantamiento olímpico: arrancada y cargada. Mejora fuerza, potencia y técnica de movimiento. Guiada por coaches especializados en levantamiento olímpico.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
+            { key: 'artes-marciales', nombre: 'Artes Marciales', emoji: '🥋', cat: 'bienestar',
+              h: 'MA, J 8:00 PM · S 9:00 AM', dur: '50 min', cupo: 20,
+              desc: 'Técnica marcial enfocada en disciplina, coordinación y autodefensa en un ambiente grupal motivador con coaches de experiencia.',
+              mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar' },
         ];
         const CAT_LABEL = { estudio: '🌙 Estudio', funcional: '⚡ Funcional', competicion: '🏆 Competición', bienestar: '🧘 Bienestar' };
 
@@ -1988,7 +2109,10 @@
         <button class="modal-close" onclick="closeModal('${c.key}')">✕</button>
         <div class="modal-body">
           <span class="modal-emoji">${c.emoji}</span>
-          <div class="modal-cat">${CAT_LABEL[c.cat]}</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+            <div class="modal-cat">${CAT_LABEL[c.cat]}</div>
+            ${c.tipo ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo==='Premium'?'rgba(255,77,0,0.15)':'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo==='Premium'?'rgba(255,77,0,0.4)':'rgba(255,255,255,0.12)'};color:${c.tipo==='Premium'?'var(--orange)':'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
+          </div>
           <div class="modal-name">${c.nombre}</div>
           <p class="modal-desc">${c.desc}</p>
           <table class="modal-table">
@@ -2003,7 +2127,6 @@
       </div>
     </div>
   `).join('');
-
         function openModal(key) { document.getElementById('modal-' + key).classList.add('open'); document.body.style.overflow = 'hidden'; }
         function closeModal(key) { document.getElementById('modal-' + key).classList.remove('open'); document.body.style.overflow = ''; }
 

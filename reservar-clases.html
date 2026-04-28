@@ -539,6 +539,7 @@
                     <option value="strong&bike">🚴 Strong & Bike</option>
                     <option value="gap">🍑 GAP</option>
                     <option value="yoga">🧘 Yoga</option>
+                    <option value="halterofilia">🏋️ Halterofilia</option>
                     <option value="artes-marciales">🥋 Artes Marciales</option>
                 </select>
             </div>
@@ -664,11 +665,19 @@ let pendingCancelId   = null;
 
 // ─── CLASS NAMES ────────────────────────────────────────────────
 const CLASS_NAMES = {
-    'crossfit':'🔥 CrossFit','multipower':'💪 Multipower','momentum':'⚡ Momentum',
-    'combatfit':'🥊 CombatFit','hyrox-competicion':'🏆 Hyrox Competición',
-    'strong&bike':'🚴 Strong & Bike','energy-kits':'⚡ Energy Kits',
-    'hyrox-base':'🏃 Hyrox Base','spinning':'🚲 Spinning','gap':'🍑 GAP',
-    'yoga':'🧘 Yoga','artes-marciales':'🥋 Artes Marciales','gym-general':'🏋️ Gym Libre'
+    'crossfit':          '🔥 CrossFit',
+    'multipower':        '💪 Multipower',
+    'momentum':          '⚡ Momentum',
+    'combatfit':         '🥊 CombatFit',
+    'hyrox-competicion': '🏆 Hyrox Competición',
+    'strong&bike':       '🚴 Strong & Bike',
+    'hyrox-base':        '🏃 Hyrox Base',
+    'spinning':          '🚲 Spinning',
+    'gap':               '🍑 GAP',
+    'yoga':              '🧘 Yoga',
+    'halterofilia':      '🏋️ Halterofilia',
+    'artes-marciales':   '🥋 Artes Marciales',
+    'gym-general':       '🏋️ Gym Libre'
 };
 const cn = t => CLASS_NAMES[t] || t;
 
@@ -879,21 +888,26 @@ function memberHasAccess(classType) {
     if (currentMember.membership_expires && new Date(currentMember.membership_expires) < new Date()) return false;
 
     const plan = (currentMember.membership_type || '').toLowerCase();
-    const ACCESS = {
-        'crossfit':          ['ilimitada','crossfit/hyrox'],
-        'hyrox-competicion': ['ilimitada','crossfit/hyrox'],
-        'hyrox-base':        ['ilimitada','estudios','crossfit/hyrox','momentum','spinning'],
-        'multipower':        ['ilimitada','estudios'],
-        'momentum':          ['ilimitada','momentum'],
-        'strong&bike':       ['ilimitada','estudios'],
-        'energy-kits':       ['ilimitada','estudios'],
-        'spinning':          ['ilimitada','estudios','spinning'],
-        'gap':               ['ilimitada','estudios'],
-        'yoga':              ['ilimitada','estudios','crossfit/hyrox','momentum','spinning'],
-        'combatfit':         ['ilimitada','estudios','crossfit/hyrox','momentum','spinning'],
-        'artes-marciales':   ['ilimitada','estudios','crossfit/hyrox','momentum','spinning'],
-    };
-    return (ACCESS[classType] || ['ilimitada']).some(a => plan.includes(a));
+    // Plan mapping: training = todas las clases estándar
+    // prime = estándar + 1 premium a elegir (CrossFit, Multipower o Momentum)
+    // vip = todas (estándar + premium sin límite)
+    const STANDARD = ['strong&bike','yoga','hyrox-base','gap','combatfit','hyrox-competicion',
+                      'halterofilia','spinning','artes-marciales'];
+    const PREMIUM  = ['crossfit','multipower','momentum'];
+    const isStandard = STANDARD.includes(classType);
+    const isPremium  = PREMIUM.includes(classType);
+
+    if (plan.includes('vip'))      return true;               // VIP: todo
+    if (plan.includes('prime'))    return true;               // Prime: todo (1 premium libre)
+    if (plan.includes('training')) return isStandard;         // Training: solo estándar
+    // planes legacy por si existen registros anteriores
+    if (plan.includes('ilimitada'))  return true;
+    if (plan.includes('estudios'))   return isStandard;
+    if (plan.includes('crossfit'))   return isPremium || isStandard;
+    if (plan.includes('momentum'))   return classType==='momentum' || isStandard;
+    if (plan.includes('spinning'))   return classType==='spinning' || isStandard;
+    if (plan.includes('basica'))     return isStandard;
+    return false;
 }
 
 // ─── RENDER CARDS ───────────────────────────────────────────────

@@ -2023,7 +2023,7 @@
         <div class="la-tags">
           <span class="ltag">León, Gto.</span>
           <span class="ltag">CrossFit · Hyrox</span>
-          <span class="ltag">6 Programas</span>
+          <span class="ltag">12 Clases</span>
         </div>
       </div>
     </div>
@@ -2450,19 +2450,11 @@
             <div class="slbl" style="margin-top:1.1rem">Membresías Incluidas</div>
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:.8rem">
               <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-basica"> Básica</label>
+                  id="mem-training"> Training</label>
               <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-ilimitada"> Ilimitada</label>
+                  id="mem-prime"> Prime</label>
               <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-visita"> Visita</label>
-              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-estudios"> Estudios</label>
-              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-crossfit"> CrossFit/Hyrox</label>
-              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-momentum"> Momentum</label>
-              <label style="display:flex;align-items:center;gap:.5rem;font-size:.7rem"><input type="checkbox"
-                  id="mem-spinning"> Spinning</label>
+                  id="mem-vip"> VIP</label>
             </div>
             <div class="mfld" style="margin-top:1rem"><button class="btn-li" onclick="saveClass()">Guardar
                 Clase</button></div>
@@ -2497,11 +2489,11 @@
         <div class="mfld"><label>Tipo de membresía</label>
           <div class="mfi"><span class="mfi-i">✦</span>
             <select id="ed-plan">
+              <option value="subbasica">Subbásica</option>
               <option value="basica">Básica</option>
-              <option value="ilimitada">Ilimitada</option>
-              <option value="estudios">Estudios</option>
-              <option value="crossfit">CrossFit / Hyrox</option>
-              <option value="momentum">Momentum</option>
+              <option value="training">Training</option>
+              <option value="prime">Prime</option>
+              <option value="vip">VIP</option>
               <option value="visita">Visita</option>
             </select>
           </div>
@@ -2549,45 +2541,48 @@
 
     /* ── PLAN DATA ── */
     var PLAN_TYPES = [
-      { id: 'basica', ico: '✦', nm: 'Básica' },
-      { id: 'ilimitada', ico: '✦', nm: 'Ilimitada' },
-      { id: 'estudios', ico: '✦', nm: 'Estudios' },
-      { id: 'crossfit', ico: '✦', nm: 'CrossFit' },
-      { id: 'momentum', ico: '✦', nm: 'Momentum' },
-      { id: 'visita', ico: '✦', nm: 'Visita' },
+      { id: 'subbasica', ico: '✦', nm: 'Subbásica' },
+      { id: 'basica',    ico: '✦', nm: 'Básica'    },
+      { id: 'training',  ico: '✦', nm: 'Training'   },
+      { id: 'prime',     ico: '★', nm: 'Prime'      },
+      { id: 'vip',       ico: '♛', nm: 'VIP'        },
+      { id: 'visita',    ico: '✦', nm: 'Visita'     },
     ];
     var PRECIOS = {
-      basica: { mensual: 1000, trimestral: 2700, semestral: 4800, anual: 8800 },
-      ilimitada: { mensual: 1800, trimestral: 5000, semestral: 9000, anual: 16200 },
-      estudios: { mensual: 1650, trimestral: 4500, semestral: 8000, anual: 14400 },
-      crossfit: { mensual: 1400, trimestral: 3800, semestral: 6800, anual: 12400 },
-      momentum: { mensual: 1400, trimestral: 3800, semestral: 6800, anual: 12400 },
-      visita: { diaria: 150 },
+      subbasica: { mensual: 1000,  trimestral: 2850,  semestral: 5400,  anual: 10200 },
+      basica:    { mensual: 1200,  trimestral: 3420,  semestral: 6480,  anual: 12240 },
+      training:  { mensual: 1400,  trimestral: 3990,  semestral: 7560,  anual: 14280 },
+      prime:     { mensual: 1600,  trimestral: 4560,  semestral: 8640,  anual: 16320 },
+      vip:       { mensual: 1800,  trimestral: 5130,  semestral: 9720,  anual: 18360 },
+      visita:    { diaria: 200 },
     };
-    var AHORROS = { trimestral: '10%', semestral: '20%', anual: '26%' };
+    var AHORROS = { trimestral: '5%', semestral: '10% (3 MSI)', anual: '15% (12 MSI)' };
     var DUR_LBL = { mensual: 'Mensual', trimestral: 'Trimestral', semestral: 'Semestral', anual: 'Anual', diaria: 'Día' };
 
     /* ── SCHEDULE DATA ── */
-    var MEM_COLS = ['basica', 'ilimitada', 'visita', 'estudios', 'crossfit', 'momentum', 'spinning'];
-    var MEM_COLORS = { basica: '#FF4D00', ilimitada: '#f59e0b', visita: '#22c55e', estudios: '#3b82f6', crossfit: '#a855f7', momentum: '#ec4899', spinning: '#06b6d4' };
-    var MEM_NAMES = { basica: 'Básica', ilimitada: 'Ilimitada', visita: 'Visita', estudios: 'Estudios', crossfit: 'CrossFit/Hyrox', momentum: 'Momentum', spinning: 'Spinning' };
+    var MEM_COLS   = ['training', 'prime', 'vip'];
+    var MEM_COLORS = { training: '#FF4D00', prime: '#f59e0b', vip: '#a855f7' };
+    var MEM_NAMES  = { training: 'Training', prime: 'Prime', vip: 'VIP' };
     var CLASES = [
-      { nm: 'Strong & Bike', desc: '', mems: { ilimitada: 1, visita: 1, estudios: 1 }, sessions: [{ d: 0, t: '08:10' }, { d: 1, t: '08:10' }, { d: 2, t: '08:10' }, { d: 3, t: '08:10' }, { d: 4, t: '08:10' }, { d: 5, t: '08:10' }, { d: 6, t: '08:10' }] },
-      { nm: 'Halterofilia', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 5, t: '07:00' }] },
-      { nm: 'Yoga', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '10:00' }, { d: 1, t: '10:00' }, { d: 2, t: '10:00' }, { d: 3, t: '10:00' }, { d: 4, t: '10:00' }] },
-      { nm: 'Artes Marciales', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 1, t: '20:00' }, { d: 3, t: '20:00' }, { d: 5, t: '09:00' }] },
-      { nm: 'Multipower', desc: 'La clase que transforma tu cuerpo de forma completa y eficiente', mems: { ilimitada: 1, visita: 1, estudios: 1 }, sessions: [{ d: 0, t: '18:00' }, { d: 1, t: '18:00' }, { d: 2, t: '18:00' }, { d: 3, t: '18:00' }, { d: 4, t: '18:00' }, { d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 5, t: '07:00' }, { d: 5, t: '08:00' }] },
-      { nm: 'Momentum', desc: '', mems: { ilimitada: 1, visita: 1, momentum: 1 }, sessions: [{ d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 0, t: '20:00' }, { d: 1, t: '20:00' }, { d: 2, t: '20:00' }, { d: 3, t: '20:00' }, { d: 4, t: '20:00' }, { d: 5, t: '08:00' }] },
-      { nm: 'Hyrox Competición', desc: '', mems: { ilimitada: 1, visita: 1, crossfit: 1 }, sessions: [{ d: 0, t: '08:00' }, { d: 1, t: '08:00' }, { d: 2, t: '08:00' }, { d: 3, t: '08:00' }, { d: 4, t: '08:00' }] },
-      { nm: 'Crossfit', desc: '', mems: { ilimitada: 1, visita: 1, crossfit: 1 }, sessions: [{ d: 0, t: '07:00' }, { d: 1, t: '07:00' }, { d: 2, t: '07:00' }, { d: 3, t: '07:00' }, { d: 4, t: '07:00' }, { d: 5, t: '08:00' }] },
-      { nm: 'Combat Fit', desc: '', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '07:00' }, { d: 1, t: '07:00' }, { d: 2, t: '07:00' }, { d: 3, t: '07:00' }, { d: 4, t: '07:00' }] },
-      { nm: 'Spinning', desc: '', mems: { ilimitada: 1, visita: 1, estudios: 1, spinning: 1 }, sessions: [{ d: 0, t: '19:00' }, { d: 1, t: '19:00' }, { d: 2, t: '19:00' }, { d: 3, t: '19:00' }, { d: 4, t: '19:00' }, { d: 0, t: '20:00' }, { d: 1, t: '20:00' }] },
-      { nm: 'Hyrox Base', desc: 'Para el día que quieras hacer un Hyrox, estés preparado', mems: { basica: 1, ilimitada: 1, visita: 1, estudios: 1, crossfit: 1, momentum: 1, spinning: 1 }, sessions: [{ d: 0, t: '18:00' }, { d: 1, t: '18:00' }, { d: 2, t: '18:00' }, { d: 3, t: '18:00' }, { d: 4, t: '18:00' }, { d: 1, t: '07:00' }, { d: 3, t: '07:00' }] },
+      // ESTÁNDAR (Training, Prime, VIP)
+      { nm: 'Strong & Bike',     desc: 'Funcional + spinning. L-D 8:10 AM.',          mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'08:10'},{d:1,t:'08:10'},{d:2,t:'08:10'},{d:3,t:'08:10'},{d:4,t:'08:10'},{d:5,t:'08:10'},{d:6,t:'08:10'}] },
+      { nm: 'Yoga',              desc: 'Flexibilidad y bienestar. L,MI,V 9:10AM · J 8PM · S 10AM.', mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'09:10'},{d:2,t:'09:10'},{d:3,t:'20:00'},{d:4,t:'09:10'},{d:5,t:'10:00'}] },
+      { nm: 'Hyrox Base',        desc: 'Base aeróbica. L-V 6PM · MA,JU 7AM.',          mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'18:00'},{d:1,t:'07:00'},{d:1,t:'18:00'},{d:2,t:'18:00'},{d:3,t:'07:00'},{d:3,t:'18:00'},{d:4,t:'18:00'}] },
+      { nm: 'GAP',               desc: 'Glúteos, Abdomen y Piernas. L-V 7PM.',          mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'19:00'},{d:1,t:'19:00'},{d:2,t:'19:00'},{d:3,t:'19:00'},{d:4,t:'19:00'}] },
+      { nm: 'CombatFit',         desc: 'MMA + funcional. L-V 7AM.',                      mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'07:00'},{d:1,t:'07:00'},{d:2,t:'07:00'},{d:3,t:'07:00'},{d:4,t:'07:00'}] },
+      { nm: 'Hyrox Competición', desc: 'Competencia real. L-V 8PM · MA,J 7AM · D 8AM.', mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'20:00'},{d:1,t:'07:00'},{d:1,t:'20:00'},{d:2,t:'20:00'},{d:3,t:'07:00'},{d:3,t:'20:00'},{d:4,t:'20:00'},{d:6,t:'08:00'}] },
+      { nm: 'Halterofilia',      desc: 'Levantamiento olímpico. S 7AM.',                 mems: { training:1, prime:1, vip:1 }, sessions: [{d:5,t:'07:00'}] },
+      { nm: 'Spinning',          desc: 'Ciclismo indoor. L-V 7PM · L 8PM · MA 8PM.',   mems: { training:1, prime:1, vip:1 }, sessions: [{d:0,t:'19:00'},{d:0,t:'20:00'},{d:1,t:'19:00'},{d:1,t:'20:00'},{d:2,t:'19:00'},{d:3,t:'19:00'},{d:4,t:'19:00'}] },
+      { nm: 'Artes Marciales',   desc: 'Técnica marcial. MA,J 8PM · S 9AM.',            mems: { training:1, prime:1, vip:1 }, sessions: [{d:1,t:'20:00'},{d:3,t:'20:00'},{d:5,t:'09:00'}] },
+      // PREMIUM (Prime 1 a elegir / VIP ilimitado)
+      { nm: 'CrossFit',  desc: 'Funcional intenso. L-V 5,6,8AM · L,MI,V 7AM · L-V 7PM · S 8AM.', mems: { prime:1, vip:1 }, sessions: [{d:0,t:'05:00'},{d:0,t:'06:00'},{d:0,t:'07:00'},{d:0,t:'08:00'},{d:0,t:'19:00'},{d:1,t:'05:00'},{d:1,t:'06:00'},{d:1,t:'07:00'},{d:1,t:'08:00'},{d:1,t:'19:00'},{d:2,t:'05:00'},{d:2,t:'06:00'},{d:2,t:'07:00'},{d:2,t:'08:00'},{d:2,t:'19:00'},{d:3,t:'05:00'},{d:3,t:'06:00'},{d:3,t:'07:00'},{d:3,t:'08:00'},{d:3,t:'19:00'},{d:4,t:'05:00'},{d:4,t:'06:00'},{d:4,t:'07:00'},{d:4,t:'08:00'},{d:4,t:'19:00'},{d:5,t:'08:00'}] },
+      { nm: 'Multipower', desc: 'La clase más completa. L-V 6,7,8AM · L-V 6,7PM · S 7,8AM.', mems: { prime:1, vip:1 }, sessions: [{d:0,t:'06:00'},{d:0,t:'07:00'},{d:0,t:'08:00'},{d:0,t:'18:00'},{d:0,t:'19:00'},{d:1,t:'06:00'},{d:1,t:'07:00'},{d:1,t:'08:00'},{d:1,t:'18:00'},{d:1,t:'19:00'},{d:2,t:'06:00'},{d:2,t:'07:00'},{d:2,t:'08:00'},{d:2,t:'18:00'},{d:2,t:'19:00'},{d:3,t:'06:00'},{d:3,t:'07:00'},{d:3,t:'08:00'},{d:3,t:'18:00'},{d:3,t:'19:00'},{d:4,t:'06:00'},{d:4,t:'07:00'},{d:4,t:'08:00'},{d:4,t:'18:00'},{d:4,t:'19:00'},{d:5,t:'07:00'},{d:5,t:'08:00'}] },
+      { nm: 'Momentum',   desc: 'Hipertrofia guiada. L-V 6,7,8,9AM · L-V 6,7,8PM · S 8AM.', mems: { prime:1, vip:1 }, sessions: [{d:0,t:'06:00'},{d:0,t:'07:00'},{d:0,t:'08:00'},{d:0,t:'09:00'},{d:0,t:'18:00'},{d:0,t:'19:00'},{d:0,t:'20:00'},{d:1,t:'06:00'},{d:1,t:'07:00'},{d:1,t:'08:00'},{d:1,t:'09:00'},{d:1,t:'18:00'},{d:1,t:'19:00'},{d:1,t:'20:00'},{d:2,t:'06:00'},{d:2,t:'07:00'},{d:2,t:'08:00'},{d:2,t:'09:00'},{d:2,t:'18:00'},{d:2,t:'19:00'},{d:2,t:'20:00'},{d:3,t:'06:00'},{d:3,t:'07:00'},{d:3,t:'08:00'},{d:3,t:'09:00'},{d:3,t:'18:00'},{d:3,t:'19:00'},{d:3,t:'20:00'},{d:4,t:'06:00'},{d:4,t:'07:00'},{d:4,t:'08:00'},{d:4,t:'09:00'},{d:4,t:'18:00'},{d:4,t:'19:00'},{d:4,t:'20:00'},{d:5,t:'08:00'}] },
     ];
 
     /* ── STATE (no const/let to avoid redeclaration issues) ── */
-    var curPlanType = 'basica';
-    var curDur = 'trimestral';
+    var curPlanType = 'training';
+    var curDur = 'mensual';
     var curPagoVal = 'efectivo';
     var photos = [];
     var camStream = null;
