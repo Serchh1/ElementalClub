@@ -3561,6 +3561,81 @@
         : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
     }
 
+    // --- Cambio de contraseña: mostrar modal, validación y guardado ---
+    var pendingPwdUser = null;
+
+    function pwdMostrar(user) {
+      pendingPwdUser = user || null;
+      try { document.getElementById('pwd-welcome-name').textContent = (user.name || user.username || 'STAFF').split(' ')[0].toUpperCase(); } catch (e) {}
+      var hid = document.getElementById('pwd-hidden-user'); if (hid) hid.value = user.username || user.email || '';
+      document.getElementById('pwd-new').value = '';
+      document.getElementById('pwd-confirm').value = '';
+      document.getElementById('pwd-match-msg').textContent = '';
+      var err = document.getElementById('pwd-err'); if (err) { err.classList.remove('on'); err.textContent = ''; }
+      ['rule-len','rule-upper','rule-num','rule-diff'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('ok'); });
+      var btn = document.getElementById('btn-pwd-save'); if (btn) btn.disabled = true;
+      var ov = document.getElementById('pwd-overlay'); if (ov) ov.classList.add('on');
+      pwdValidate();
+    }
+
+    function pwdToggleEye(inputId, btn) {
+      var i = document.getElementById(inputId);
+      if (!i) return;
+      i.type = i.type === 'password' ? 'text' : 'password';
+      if (!btn) return;
+      btn.innerHTML = i.type === 'password'
+        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    }
+
+    function pwdValidate() {
+      var nv = document.getElementById('pwd-new').value || '';
+      var cf = document.getElementById('pwd-confirm').value || '';
+      var okLen = nv.length >= 8;
+      var okUpper = /[A-Z]/.test(nv);
+      var okNum = /\d/.test(nv);
+      var notGeneric = nv !== 'elemental00';
+      var mlen = document.getElementById('rule-len'); if (mlen) mlen.classList.toggle('ok', okLen);
+      var mupper = document.getElementById('rule-upper'); if (mupper) mupper.classList.toggle('ok', okUpper);
+      var mnum = document.getElementById('rule-num'); if (mnum) mnum.classList.toggle('ok', okNum);
+      var mdiff = document.getElementById('rule-diff'); if (mdiff) mdiff.classList.toggle('ok', notGeneric);
+      var matchEl = document.getElementById('pwd-match-msg');
+      if (!nv && !cf) { matchEl.textContent = ''; matchEl.classList.remove('ok','err'); }
+      else if (nv && cf && nv === cf) { matchEl.textContent = 'Contraseñas coinciden'; matchEl.classList.add('ok'); matchEl.classList.remove('err'); }
+      else { matchEl.textContent = 'No coinciden'; matchEl.classList.add('err'); matchEl.classList.remove('ok'); }
+      var canSave = okLen && okUpper && okNum && notGeneric && nv && cf && nv === cf;
+      var btn = document.getElementById('btn-pwd-save'); if (btn) btn.disabled = !canSave;
+    }
+
+    function pwdGuardar() {
+      var btn = document.getElementById('btn-pwd-save');
+      var err = document.getElementById('pwd-err'); if (err) { err.classList.remove('on'); err.textContent = ''; }
+      var nv = document.getElementById('pwd-new').value || '';
+      var cf = document.getElementById('pwd-confirm').value || '';
+      if (!nv || nv !== cf) { if (err) { err.classList.add('on'); err.textContent = 'Las contraseñas no coinciden.'; } return; }
+      if (nv.length < 8) { if (err) { err.classList.add('on'); err.textContent = 'La contraseña debe tener al menos 8 caracteres.'; } return; }
+      if (!pendingPwdUser || !window.supabase) {
+        if (err) { err.classList.add('on'); err.textContent = 'Error interno: no hay sesión de usuario.'; }
+        return;
+      }
+      btn.disabled = true; btn.innerHTML = '<span>Guardando…</span>';
+      supabase.from('employees').update({ password: nv, must_change_password: false }).eq('id', pendingPwdUser.id)
+        .then(function (r) {
+          if (r.error) throw r.error;
+          pendingPwdUser.mustChangePwd = false;
+          localStorage.setItem('ecUser', JSON.stringify(pendingPwdUser));
+          localStorage.setItem('currentUser', JSON.stringify(pendingPwdUser));
+          var ov = document.getElementById('pwd-overlay'); if (ov) ov.classList.remove('on');
+          enterPanel(pendingPwdUser);
+        })
+        .catch(function (e) {
+          if (err) { err.classList.add('on'); err.textContent = e.message || 'Error al guardar contraseña.'; }
+        })
+        .finally(function () {
+          btn.disabled = false; btn.innerHTML = '<span>Guardar contraseña y entrar</span> <span>→</span>';
+        });
+    }
+
     /* ── SCREENS / TABS ── */
     function showScr(id) {
       document.querySelectorAll('.scr').forEach(function (s) { s.classList.remove('on'); s.style.display = 'none'; });
