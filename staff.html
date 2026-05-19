@@ -2287,6 +2287,180 @@
     .mov-badge-trp { background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3); color:#fbbf24; }
     .td-trp { color: #fbbf24 !important; font-weight: 700; }
 
+/* ── CAJA CHICA WIDGET ── */
+.cc-widget {
+  background: var(--s1);
+  border: 1px solid var(--s3);
+  border-left: 3px solid #fbbf24;
+  border-radius: var(--r);
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.cc-widget::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #fbbf24, transparent);
+}
+.cc-widget:hover { border-color: #fbbf24; }
+.cc-widget-left { display: flex; align-items: center; gap: 1rem; }
+.cc-widget-ico {
+  width: 42px; height: 42px;
+  background: rgba(251,191,36,.1);
+  border: 1px solid rgba(251,191,36,.3);
+  border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; flex-shrink: 0;
+}
+.cc-widget-lbl {
+  font-size: .6rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: rgba(251,191,36,.8); margin-bottom: .25rem;
+}
+.cc-widget-val {
+  font-family: var(--fT); font-size: 2rem; line-height: 1; color: #fbbf24;
+}
+.cc-widget-sub { font-size: .65rem; color: var(--mu); margin-top: .2rem; }
+.cc-widget-right { text-align: right; }
+.cc-widget-ts {
+  font-size: .62rem; color: rgba(255,255,255,.2);
+  letter-spacing: .08em; margin-bottom: .35rem;
+}
+.cc-widget-desglose {
+  display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: flex-end;
+}
+.cc-dg-item { text-align: center; }
+.cc-dg-val { font-family: var(--fT); font-size: 1.1rem; line-height: 1; }
+.cc-dg-val.pos { color: #4ade80; }
+.cc-dg-val.neg { color: #f87171; }
+.cc-dg-lbl {
+  font-size: .55rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--mu); margin-top: .15rem;
+}
+.cc-loading { font-size: .75rem; color: var(--mu); animation: ccpulse 1.4s ease-in-out infinite; }
+@keyframes ccpulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ── BOTÓN EDITAR EN TABLA ── */
+.btn-mov-edit {
+  background: transparent;
+  border: 1px solid rgba(251,191,36,.35);
+  color: #fbbf24;
+  padding: .25rem .65rem;
+  font-size: .58rem; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; border-radius: 3px;
+  transition: all .18s; white-space: nowrap;
+  font-family: var(--fB);
+}
+.btn-mov-edit:hover { background: rgba(251,191,36,.12); border-color: #fbbf24; }
+.btn-mov-expired {
+  font-size: .58rem; color: rgba(255,255,255,.18);
+  letter-spacing: .06em; font-family: var(--fB); font-style: italic;
+}
+.mov-timer-badge {
+  display: inline-flex; align-items: center; gap: .25rem;
+  background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2);
+  padding: .15rem .5rem; border-radius: 2px;
+  font-size: .56rem; font-weight: 700; color: #fbbf24; letter-spacing: .08em;
+  margin-left: .35rem;
+}
+
+/* ── MODAL EDITAR MOVIMIENTO ── */
+.mov-edit-overlay {
+  display: none; position: fixed; inset: 0; z-index: 900;
+  background: rgba(0,0,0,.85); backdrop-filter: blur(10px);
+  align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;
+}
+.mov-edit-overlay.on { display: flex; }
+.mov-edit-box {
+  background: var(--s1); border: 1px solid var(--s3);
+  border-top: 2px solid #fbbf24;
+  width: 100%; max-width: 600px; border-radius: var(--r);
+  margin: auto; animation: mUp .26s cubic-bezier(.22,1,.36,1);
+}
+.mov-edit-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--s3);
+}
+.mov-edit-title { font-family: var(--fT); font-size: 1.4rem; letter-spacing: .04em; }
+.mov-edit-title b { color: #fbbf24; font-weight: 400; }
+.mov-edit-body { padding: 1.4rem; }
+.mov-edit-timer {
+  display: flex; align-items: center; gap: .6rem;
+  background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.2);
+  padding: .6rem 1rem; border-radius: var(--r); margin-bottom: 1.2rem;
+}
+.mov-edit-timer-txt { font-size: .72rem; color: #fbbf24; font-weight: 700; }
+.mov-edit-timer-count {
+  margin-left: auto; font-family: var(--fT); font-size: 1.3rem; color: #fbbf24;
+}
+
+/* ── MODAL CONFIRMAR CAMBIOS (DIFF) ── */
+.mov-confirm-overlay {
+  display: none; position: fixed; inset: 0; z-index: 950;
+  background: rgba(0,0,0,.88); backdrop-filter: blur(12px);
+  align-items: center; justify-content: center; padding: 1rem;
+}
+.mov-confirm-overlay.on { display: flex; animation: fadeIn .2s ease; }
+.mov-confirm-box {
+  background: var(--s1); border: 1.5px solid rgba(255,77,0,.35);
+  border-top: 2px solid var(--or);
+  width: 100%; max-width: 480px; border-radius: var(--r);
+  animation: mUp .25s cubic-bezier(.22,1,.36,1);
+}
+.mov-confirm-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.4rem; border-bottom: 1px solid var(--s3);
+}
+.mov-confirm-title { font-family: var(--fT); font-size: 1.3rem; letter-spacing: .04em; }
+.mov-confirm-title b { color: var(--or); font-weight: 400; }
+.mov-confirm-body { padding: 1.3rem; }
+.diff-table { width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; }
+.diff-table th {
+  text-align: left; padding: .5rem .75rem;
+  font-size: .57rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or); background: var(--s2); border-bottom: 1px solid var(--s3);
+}
+.diff-table td {
+  padding: .6rem .75rem; font-size: .78rem;
+  border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle;
+}
+.diff-table tbody tr:last-child td { border-bottom: none; }
+.diff-table .td-campo {
+  color: var(--mu); font-weight: 700; font-size: .68rem;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.diff-table .td-old { color: #f87171; text-decoration: line-through; opacity: .75; }
+.diff-table .td-new { color: #4ade80; font-weight: 700; }
+.diff-table .td-same { color: rgba(255,255,255,.5); }
+.diff-no-change {
+  padding: .5rem; text-align: center;
+  font-size: .75rem; color: var(--mu); font-style: italic;
+}
+.mov-confirm-note {
+  font-size: .72rem; color: var(--mu); line-height: 1.55; margin-bottom: 1.1rem;
+  background: rgba(255,77,0,.05); border: 1px solid rgba(255,77,0,.15);
+  padding: .65rem .9rem; border-radius: var(--r);
+}
+.mov-confirm-actions { display: flex; gap: .75rem; }
+.mov-confirm-actions .btn-cancel { flex: 1; padding: .78rem; font-size: .72rem; }
+.btn-confirm-save {
+  flex: 1; padding: .78rem; background: var(--or); color: #fff; border: none;
+  font-family: var(--fB); font-size: .72rem; font-weight: 800;
+  letter-spacing: .15em; text-transform: uppercase;
+  cursor: pointer; border-radius: var(--r);
+  clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition: all .2s;
+}
+.btn-confirm-save:hover { background: var(--or2); transform: translateY(-1px); }
+.btn-confirm-save:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
   </style>
 </head>
 
@@ -2395,6 +2569,7 @@
             <div class="sc-lbl">Ingresos hoy</div>
           </div>
         </div>
+
         <div class="seh">
           <h3>ACCIONES RÁPIDAS</h3>
           <div class="ln"></div>
@@ -2580,6 +2755,40 @@
 
       <!-- Tab Finanzas -->
       <div id="tab-finanzas" class="tab-pane">
+
+        <!-- CAJA CHICA WIDGET -->
+        <div class="cc-widget" id="cc-widget">
+          <div class="cc-widget-left">
+            <div class="cc-widget-ico">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
+            </div>
+            <div>
+              <div class="cc-widget-lbl">Caja Chica · Balance hoy</div>
+              <div class="cc-widget-val" id="cc-saldo">
+                <span class="cc-loading">Calculando…</span>
+              </div>
+              <div class="cc-widget-sub" id="cc-sub">—</div>
+            </div>
+          </div>
+          <div class="cc-widget-right">
+            <div class="cc-widget-ts" id="cc-ts">Última actualización: —</div>
+            <div class="cc-widget-desglose">
+              <div class="cc-dg-item">
+                <div class="cc-dg-val pos" id="cc-ing">—</div>
+                <div class="cc-dg-lbl">Ingresos hoy</div>
+              </div>
+              <div class="cc-dg-item">
+                <div class="cc-dg-val neg" id="cc-egr">—</div>
+                <div class="cc-dg-lbl">Egresos hoy</div>
+              </div>
+              <div class="cc-dg-item">
+                <div class="cc-dg-val" id="cc-trp" style="color:#60a5fa">—</div>
+                <div class="cc-dg-lbl">Traspasos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <!-- ══ REGISTRAR MOVIMIENTO (todos los empleados) ══ -->
         <div class="seh"><h3>REGISTRAR MOVIMIENTO</h3><div class="ln"></div></div>
@@ -2785,6 +2994,7 @@
                 <tr>
                   <th>Fecha</th><th>Tipo</th><th>Concepto</th>
                   <th>Categoría</th><th>Cartera</th><th style="text-align:right">Monto</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody id="mov-tbody">
@@ -3219,6 +3429,8 @@
       document.getElementById('t-name').textContent = user.name || '';
       showScr('panel');
       loadStats();
+      cargarCajaChica();
+      setInterval(cargarCajaChica, 180000); // refresca cada 3 min
       // Reinicializar módulo finanzas con el rol correcto del nuevo usuario
       if(typeof window.finReset === 'function') window.finReset();
     }
@@ -4239,12 +4451,12 @@
       var hoy = new Date(); hoy.setDate(hoy.getDate()-60);
       var desde = hoy.toISOString().split('T')[0];
       Promise.all([
-        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
-        window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
+        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
+        window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
         window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
-        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera}; });
-        var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera}; });
+        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, created_at:r.created_at}; });
+        var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, created_at:r.created_at}; });
         var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
         renderMovimientos();
@@ -4255,23 +4467,42 @@
       var lista = movFilter==='all' ? movData : movData.filter(function(r){ return r.tipo===movFilter; });
       var tbody = document.getElementById('mov-tbody');
       if(!lista.length) {
-        tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Sin movimientos recientes</td></tr>';
+        tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Sin movimientos recientes</td></tr>';
         return;
       }
+      var now = Date.now();
       tbody.innerHTML = lista.map(function(r) {
         var isIng = r.tipo==='ingreso', isTrp = r.tipo==='traspaso';
         var fecha = r.fecha ? new Date(r.fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}) : '—';
         var badgeClass = isIng ? 'mov-badge-ing' : (isTrp ? 'mov-badge-trp' : 'mov-badge-egr');
         var montoClass = isIng ? 'td-ing' : (isTrp ? 'td-trp' : 'td-egr');
         var signo = isIng ? '+$' : (isTrp ? '$' : '-$');
-        return '<tr>'+
-          '<td>'+fecha+'</td>'+
-          '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'+
-          '<td style="font-weight:600;color:var(--txt);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'+
-          '<td>'+(r.categoria||'—')+'</td>'+
-          '<td>'+(r.cartera||'—')+'</td>'+
-          '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'+
-          '</tr>';
+
+        var editBtn = '';
+        if (!isTrp && r.created_at) {
+          var creado = new Date(r.created_at).getTime();
+          var minLeft = 60 - (now - creado) / 60000;
+          if (minLeft > 0) {
+            var minsStr = minLeft < 1
+              ? Math.round(minLeft * 60) + 's'
+              : Math.round(minLeft) + ' min';
+            editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
+              + 'Editar <span class="mov-timer-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;margin-top:-1px"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' + minsStr + '</span>'
+              + '</button>';
+          } else {
+            editBtn = '<span class="btn-mov-expired">Sin edición</span>';
+          }
+        }
+
+        return '<tr>'
+          + '<td>'+fecha+'</td>'
+          + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
+          + '<td style="font-weight:600;color:var(--txt);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
+          + '<td>'+(r.categoria||'—')+'</td>'
+          + '<td>'+(r.cartera||'—')+'</td>'
+          + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
+          + '<td>'+editBtn+'</td>'
+          + '</tr>';
       }).join('');
     }
 
@@ -4658,6 +4889,181 @@
         });
       }, 500);
     };
+    // ── CAJA CHICA ──────────────────────────────────────────────
+    function cargarCajaChica() {
+      if(!window.supabase) return;
+      var hoy = new Date().toISOString().split('T')[0];
+      Promise.all([
+        window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
+        window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
+        window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').eq('fecha', hoy)
+      ]).then(function(res) {
+        var ings = res[0].data || [], egrs = res[1].data || [], trps = res[2].data || [];
+        var totalIng = ings.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
+        var totalEgr = egrs.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
+        var trpEntra = trps.filter(function(t){ return t.entrada_en==='Caja chica'; })
+                          .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var trpSale  = trps.filter(function(t){ return t.salida_de==='Caja chica'; })
+                          .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var totalTrp = trpEntra - trpSale;
+        var saldo = totalIng - totalEgr + totalTrp;
+        var ahora = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+        var saldoEl = document.getElementById('cc-saldo');
+        if(!saldoEl) return;
+        saldoEl.textContent = '$' + Math.round(saldo).toLocaleString('es-MX');
+        saldoEl.style.color = saldo >= 0 ? '#fbbf24' : '#f87171';
+        document.getElementById('cc-sub').textContent = (ings.length+egrs.length) + ' movimiento(s) en Caja chica hoy';
+        document.getElementById('cc-ts').textContent  = 'Actualizado a las ' + ahora;
+        document.getElementById('cc-ing').textContent = '+$'+Math.round(totalIng).toLocaleString('es-MX');
+        document.getElementById('cc-egr').textContent = '-$'+Math.round(totalEgr).toLocaleString('es-MX');
+        var trpEl = document.getElementById('cc-trp');
+        trpEl.textContent  = (totalTrp>=0?'+':'')+' $'+Math.round(totalTrp).toLocaleString('es-MX');
+        trpEl.style.color  = totalTrp >= 0 ? '#60a5fa' : '#f87171';
+      });
+    }
+    window.cargarCajaChica = cargarCajaChica;
+
+    // ── EDICIÓN DE MOVIMIENTOS ───────────────────────────────────
+    var editMovOriginal  = null;
+    var editTimerInterval = null;
+
+    window.abrirEditMov = function(id, tipo) {
+      var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
+      if(!mov) { alert('No se encontró el movimiento.'); return; }
+      if(!mov.created_at) { alert('Este movimiento no tiene marca de tiempo.'); return; }
+      var minLeft = 60 - (Date.now() - new Date(mov.created_at).getTime()) / 60000;
+      if(minLeft <= 0) { alert('El tiempo para editar ha expirado.'); return; }
+
+      editMovOriginal = mov;
+      document.getElementById('edit-mov-id').value   = id;
+      document.getElementById('edit-mov-tipo').value = tipo;
+      document.getElementById('edit-monto').value    = mov.monto || '';
+      document.getElementById('edit-fecha').value    = mov.fecha || '';
+      document.getElementById('edit-cartera').value  = mov.cartera || '';
+      document.getElementById('edit-categoria').value= mov.categoria || '';
+      document.getElementById('edit-desc').value     = '';
+
+      var esIng = tipo==='ingreso';
+      document.getElementById('edit-field-nombre-wrap').style.display = esIng ? '' : 'none';
+      document.getElementById('edit-field-titulo-wrap').style.display = esIng ? 'none' : '';
+      if(esIng) document.getElementById('edit-nombre').value = mov.concepto || '';
+      else      document.getElementById('edit-titulo').value = mov.concepto || '';
+
+      clearInterval(editTimerInterval);
+      editTimerInterval = setInterval(function() {
+        var ml = 60 - (Date.now() - new Date(editMovOriginal.created_at).getTime()) / 60000;
+        var countEl = document.getElementById('edit-timer-count');
+        if(!countEl) { clearInterval(editTimerInterval); return; }
+        if(ml <= 0) {
+          countEl.textContent = '00:00'; countEl.style.color = '#f87171';
+          clearInterval(editTimerInterval);
+          setTimeout(function(){ cerrarEditMov(); alert('Tiempo de edición expirado.'); }, 800);
+          return;
+        }
+        var mins = Math.floor(ml), secs = Math.floor((ml-mins)*60);
+        countEl.textContent = String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0');
+        countEl.style.color = ml < 5 ? '#f87171' : '#fbbf24';
+      }, 1000);
+
+      document.getElementById('mov-edit-overlay').classList.add('on');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.cerrarEditMov = function() {
+      clearInterval(editTimerInterval);
+      document.getElementById('mov-edit-overlay').classList.remove('on');
+      document.body.style.overflow = '';
+      editMovOriginal = null;
+    };
+
+    window.abrirConfirmEditMov = function() {
+      if(!editMovOriginal) return;
+      var tipo  = document.getElementById('edit-mov-tipo').value;
+      var esIng = tipo==='ingreso';
+      var nuevoConcepto = esIng ? document.getElementById('edit-nombre').value.trim()
+                                : document.getElementById('edit-titulo').value.trim();
+      var nuevoMonto    = document.getElementById('edit-monto').value.trim();
+      var nuevaFecha    = document.getElementById('edit-fecha').value;
+      var nuevaCartera  = document.getElementById('edit-cartera').value;
+      var nuevaCateg    = document.getElementById('edit-categoria').value;
+      var nuevaDesc     = document.getElementById('edit-desc').value.trim();
+
+      if(!nuevoMonto || !nuevaFecha) { alert('Monto y fecha son obligatorios.'); return; }
+
+      var campos = [
+        { lbl:'Concepto',  viejo: editMovOriginal.concepto||'—', nuevo: nuevoConcepto||editMovOriginal.concepto||'—' },
+        { lbl:'Monto',     viejo: '$'+parseFloat(editMovOriginal.monto||0).toLocaleString('es-MX'), nuevo: '$'+parseFloat(nuevoMonto).toLocaleString('es-MX') },
+        { lbl:'Fecha',     viejo: editMovOriginal.fecha||'—', nuevo: nuevaFecha },
+        { lbl:'Cartera',   viejo: editMovOriginal.cartera||'—', nuevo: nuevaCartera||editMovOriginal.cartera||'—' },
+        { lbl:'Categoría', viejo: editMovOriginal.categoria||'—', nuevo: nuevaCateg||editMovOriginal.categoria||'—' },
+      ];
+      if(nuevaDesc) campos.push({ lbl:'Observaciones', viejo:'—', nuevo: nuevaDesc });
+
+      var hayDiffs = false;
+      var rows = campos.map(function(c) {
+        var cambio = c.viejo !== c.nuevo;
+        if(cambio) hayDiffs = true;
+        return '<tr>'
+          + '<td class="td-campo">'+c.lbl+'</td>'
+          + '<td class="'+(cambio?'td-old':'td-same')+'">'+c.viejo+'</td>'
+          + '<td class="'+(cambio?'td-new':'td-same')+'">'+c.nuevo+'</td>'
+          + '</tr>';
+      }).join('');
+
+      document.getElementById('diff-content').innerHTML = hayDiffs
+        ? '<table class="diff-table"><thead><tr><th>Campo</th><th>Valor anterior</th><th>Valor nuevo</th></tr></thead><tbody>'+rows+'</tbody></table>'
+        : '<div class="diff-no-change">⚠️ Sin cambios. Modifica al menos un campo.</div>';
+
+      document.getElementById('btn-confirm-save').disabled = !hayDiffs;
+      document.getElementById('mov-confirm-overlay').classList.add('on');
+    };
+
+    window.cerrarConfirmMov = function() {
+      document.getElementById('mov-confirm-overlay').classList.remove('on');
+    };
+
+    window.guardarEditMov = function() {
+      var id   = document.getElementById('edit-mov-id').value;
+      var tipo = document.getElementById('edit-mov-tipo').value;
+      if(!id || !tipo) return;
+      var saveBtn = document.getElementById('btn-confirm-save');
+      saveBtn.disabled=true; saveBtn.textContent='Guardando…';
+
+      var esIng = tipo==='ingreso';
+      var nuevoConcepto = esIng ? document.getElementById('edit-nombre').value.trim()
+                                : document.getElementById('edit-titulo').value.trim();
+      var nuevoMonto   = parseFloat(document.getElementById('edit-monto').value);
+      var nuevaFecha   = document.getElementById('edit-fecha').value;
+      var nuevaCartera = document.getElementById('edit-cartera').value;
+      var nuevaCateg   = document.getElementById('edit-categoria').value;
+      var nuevaDesc    = document.getElementById('edit-desc').value.trim();
+
+      var tabla   = esIng ? 'ingresos' : 'egresos';
+      var updates = { monto: nuevoMonto, fecha: nuevaFecha };
+      if(nuevaCartera) updates.cartera   = nuevaCartera;
+      if(nuevaCateg)   updates.categoria = nuevaCateg;
+      if(esIng)  { if(nuevoConcepto) updates.nombre = nuevoConcepto; if(nuevaDesc) updates.descripcion = nuevaDesc; }
+      else        { if(nuevoConcepto) updates.titulo = nuevoConcepto; if(nuevaDesc) updates.observaciones = nuevaDesc; }
+
+      window.supabase.from(tabla).update(updates).eq('id', parseInt(id))
+        .then(function(r) {
+          if(r.error) throw r.error;
+          var idx = movData.findIndex(function(m){ return String(m.id)===String(id) && m.tipo===tipo; });
+          if(idx > -1) {
+            movData[idx].monto     = nuevoMonto;
+            movData[idx].fecha     = nuevaFecha;
+            movData[idx].concepto  = nuevoConcepto || movData[idx].concepto;
+            movData[idx].cartera   = nuevaCartera  || movData[idx].cartera;
+            movData[idx].categoria = nuevaCateg    || movData[idx].categoria;
+          }
+          cerrarConfirmMov();
+          cerrarEditMov();
+          renderMovimientos();
+          cargarCajaChica();
+        })
+        .catch(function(e) { alert('Error: ' + e.message); })
+        .finally(function() { saveBtn.disabled=false; saveBtn.textContent='✓ Confirmar cambios'; });
+    };
 
     })();
 
@@ -4697,6 +5103,122 @@
     </div>
   </div>
   </div> <!-- Close hidden wrapper -->
+
+  <!-- Modal: Editar movimiento -->
+  <div class="mov-edit-overlay" id="mov-edit-overlay" onclick="if(event.target===this)cerrarEditMov()">
+    <div class="mov-edit-box">
+      <div class="mov-edit-hdr">
+        <div class="mov-edit-title">EDITAR <b>MOVIMIENTO</b></div>
+        <div class="mx" onclick="cerrarEditMov()">✕</div>
+      </div>
+      <div class="mov-edit-body">
+        <div class="mov-edit-timer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#fbbf24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span class="mov-edit-timer-txt">Tiempo restante para editar</span>
+          <span class="mov-edit-timer-count" id="edit-timer-count">—</span>
+        </div>
+        <input type="hidden" id="edit-mov-id" />
+        <input type="hidden" id="edit-mov-tipo" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem">
+          <div class="mfld" id="edit-field-nombre-wrap">
+            <label>Nombre / Cliente</label>
+            <div class="mfi"><span class="mfi-i">✦</span>
+              <input type="text" id="edit-nombre" placeholder="Nombre del cliente" />
+            </div>
+          </div>
+          <div class="mfld" id="edit-field-titulo-wrap" style="display:none">
+            <label>Concepto / Título</label>
+            <div class="mfi"><span class="mfi-i">✦</span>
+              <input type="text" id="edit-titulo" placeholder="Concepto del egreso" />
+            </div>
+          </div>
+          <div class="mfld">
+            <label>Monto (MXN) <span class="req">*</span></label>
+            <div class="mfi"><span class="mfi-i">$</span>
+              <input type="number" id="edit-monto" placeholder="0" min="0" step="0.01" />
+            </div>
+          </div>
+          <div class="mfld">
+            <label>Fecha <span class="req">*</span></label>
+            <div class="mfi"><span class="mfi-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+              <input type="date" id="edit-fecha" style="padding-left:2.35rem" />
+            </div>
+          </div>
+          <div class="mfld">
+            <label>Cartera</label>
+            <div class="mfi"><span class="mfi-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10"></rect><rect x="10" y="10" width="4" height="10"></rect><rect x="16" y="10" width="4" height="10"></rect><polygon points="12 2 2 8 22 8"></polygon><line x1="2" y1="22" x2="22" y2="22"></line></svg></span>
+              <select id="edit-cartera">
+                <option value="">— Selecciona —</option>
+                <option>Banbajio</option><option>Caja chica</option>
+                <option>Mercado libre</option><option>Stripe</option>
+                <option>alfonso mercado</option><option>Tensa</option>
+                <option>2Bajio</option><option>Resguardo</option>
+              </select>
+            </div>
+          </div>
+          <div class="mfld">
+            <label>Categoría</label>
+            <div class="mfi"><span class="mfi-i">✦</span>
+              <select id="edit-categoria">
+                <option value="">— Sin cambio —</option>
+                <option value="membresia">Membresía / Renovación</option>
+                <option value="visita">Visita de un día</option>
+                <option value="servicio">Servicio extra</option>
+                <option value="Nomina">Nomina</option>
+                <option value="inversion">inversion</option>
+                <option value="Renta">Renta</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Mantenimiento">Mantenimiento</option>
+                <option value="consumibles">consumibles</option>
+                <option value="Marketing/Ventas">Marketing/Ventas</option>
+                <option value="Comisiones">Comisiones</option>
+                <option value="Utilidades">Utilidades</option>
+                <option value="prestamo">prestamo</option>
+                <option value="General">General</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+          </div>
+          <div class="mfld" style="grid-column:1/-1">
+            <label>Observaciones (opcional)</label>
+            <div class="mfi"><span class="mfi-i">✦</span>
+              <input type="text" id="edit-desc" placeholder="Notas adicionales…" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.75rem;margin-top:1.2rem">
+          <button class="btn-cancel" style="flex:1" onclick="cerrarEditMov()">Cancelar</button>
+          <button class="btn-save" style="flex:1;max-width:none;margin-top:0" onclick="abrirConfirmEditMov()">
+            Ver Cambios →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar cambios (diff) -->
+  <div class="mov-confirm-overlay" id="mov-confirm-overlay" onclick="if(event.target===this)cerrarConfirmMov()">
+    <div class="mov-confirm-box">
+      <div class="mov-confirm-hdr">
+        <div class="mov-confirm-title">CONFIRMAR <b>CAMBIOS</b></div>
+        <div class="mx" onclick="cerrarConfirmMov()">✕</div>
+      </div>
+      <div class="mov-confirm-body">
+        <div id="diff-content"></div>
+        <div class="mov-confirm-note">
+          <b style="color:var(--or)">Revisa antes de confirmar.</b>
+          Este movimiento quedará actualizado en el sistema permanentemente.
+          Solo se puede editar dentro de la primera hora tras registrarlo.
+        </div>
+        <div class="mov-confirm-actions">
+          <button class="btn-cancel" onclick="cerrarConfirmMov()">← Volver a editar</button>
+          <button class="btn-confirm-save" id="btn-confirm-save" onclick="guardarEditMov()">
+            ✓ Confirmar cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
