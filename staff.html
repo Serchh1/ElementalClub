@@ -3085,12 +3085,12 @@
               <thead>
                 <tr>
                   <th>Fecha</th><th>Tipo</th><th>Concepto</th>
-                  <th>Categoría</th><th>Cartera</th><th style="text-align:right">Monto</th>
+                  <th>Categoría</th><th>Cartera</th><th>Empleado</th><th style="text-align:right">Monto</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody id="mov-tbody">
-                <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Cargando...</td></tr>
+                <tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -4634,13 +4634,13 @@
       var hoy = new Date(); hoy.setDate(hoy.getDate()-60);
       var desde = hoy.toISOString().split('T')[0];
       Promise.all([
-        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
-        window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
+        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
+        window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
         window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
-        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, created_at:r.created_at}; });
-        var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, created_at:r.created_at}; });
-        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en}; });
+        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
         renderMovimientos();
       });
@@ -4650,7 +4650,7 @@
       var lista = movFilter==='all' ? movData : movData.filter(function(r){ return r.tipo===movFilter; });
       var tbody = document.getElementById('mov-tbody');
       if(!lista.length) {
-        tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Sin movimientos recientes</td></tr>';
+        tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem">Sin movimientos recientes</td></tr>';
         return;
       }
       var now = Date.now();
@@ -4683,6 +4683,7 @@
           + '<td style="font-weight:600;color:var(--txt);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
           + '<td>'+(r.categoria||'—')+'</td>'
           + '<td>'+(r.cartera||'—')+'</td>'
+          + '<td>'+(r.empleado||'—')+'</td>'
           + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
           + '<td>'+editBtn+'</td>'
           + '</tr>';
