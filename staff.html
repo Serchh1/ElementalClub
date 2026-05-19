@@ -4664,7 +4664,7 @@
         var editBtn = '';
         if (!isTrp && r.created_at) {
           var creado = new Date(r.created_at).getTime();
-          var minLeft = 60 - (now - creado) / 60000;
+          var minLeft = 90 - (now - creado) / 60000;
           if (minLeft > 0) {
             var minsStr = minLeft < 1
               ? Math.round(minLeft * 60) + 's'
@@ -5114,7 +5114,7 @@
       var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
       if(!mov) { alert('No se encontró el movimiento.'); return; }
       if(!mov.created_at) { alert('Este movimiento no tiene marca de tiempo.'); return; }
-      var minLeft = 60 - (Date.now() - new Date(mov.created_at).getTime()) / 60000;
+      var minLeft = 90 - (Date.now() - new Date(mov.created_at).getTime()) / 60000;
       if(minLeft <= 0) { alert('El tiempo para editar ha expirado.'); return; }
 
       editMovOriginal = mov;
@@ -5134,7 +5134,7 @@
 
       clearInterval(editTimerInterval);
       editTimerInterval = setInterval(function() {
-        var ml = 60 - (Date.now() - new Date(editMovOriginal.created_at).getTime()) / 60000;
+        var ml = 90 - (Date.now() - new Date(editMovOriginal.created_at).getTime()) / 60000;
         var countEl = document.getElementById('edit-timer-count');
         if(!countEl) { clearInterval(editTimerInterval); return; }
         if(ml <= 0) {
@@ -5228,7 +5228,8 @@
       if(esIng)  { if(nuevoConcepto) updates.nombre = nuevoConcepto; if(nuevaDesc) updates.descripcion = nuevaDesc; }
       else        { if(nuevoConcepto) updates.titulo = nuevoConcepto; if(nuevaDesc) updates.observaciones = nuevaDesc; }
 
-      window.supabase.from(tabla).update(updates).eq('id', parseInt(id))
+      // IDs in the DB may be UUIDs — don't coerce to int which yields NaN
+      window.supabase.from(tabla).update(updates).eq('id', id)
         .then(function(r) {
           if(r.error) throw r.error;
           var idx = movData.findIndex(function(m){ return String(m.id)===String(id) && m.tipo===tipo; });
