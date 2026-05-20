@@ -3060,6 +3060,10 @@
                 <label>Fecha <span class="req">*</span></label>
                 <input type="date" id="trp-fecha" />
               </div>
+              <div class="ff-fld">
+                <label>Registrado por</label>
+                <input type="text" id="trp-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
+              </div>
               <div class="ff-fld" style="grid-column:1/-1">
                 <label>Concepto</label>
                 <input type="text" id="trp-titulo" placeholder="Ej: Retiro efectivo para pago de nómina" />
@@ -4444,6 +4448,8 @@
       if(eu) eu.value = nombre;
       var iu = document.getElementById('ing-usuario');
       if(iu) iu.value = nombre;
+      var tu = document.getElementById('trp-usuario');
+      if(tu) tu.value = nombre;
 
       // Mostrar/ocultar bloque de socios según rol actual
       var socBlock = document.getElementById('fin-socios-block');
@@ -4608,7 +4614,8 @@
 
       window.supabase.from('traspasos').insert([{
         titulo: titulo || null, fecha: fecha,
-        salida_de: salida, entrada_en: entrada, cantidad: cantidad
+        salida_de: salida, entrada_en: entrada, cantidad: cantidad,
+        usuario: usuarioActual() || null
       }]).then(function(r){
         if(r.error) throw r.error;
         showFinMsg('fin-form-msg','✓ Traspaso registrado correctamente','ok');
