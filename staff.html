@@ -2654,7 +2654,7 @@
           <div class="sc">
 
             <div class="sc-num" id="st-ing">—</div>
-            <div class="sc-lbl">Ingresos hoy</div>
+            <div class="sc-lbl">Ingresos hoy (CC + AM + Stripe)</div>
           </div>
         </div>
 
@@ -2663,11 +2663,11 @@
           <div class="ln"></div>
         </div>
         <div class="ac-grid">
-          <div class="ac prime" onclick="openModal()">
-            <div class="ac-ico">+</div>
-            <h4>NUEVO MIEMBRO</h4>
-            <p>Registra un cliente, selecciona su plan y captura fotos de reconocimiento facial.</p>
-            <div class="ac-arr">Iniciar registro →</div>
+          <div class="ac prime" onclick="switchTab('finanzas', document.querySelector('.ptab:nth-child(5)'))">
+            <div class="ac-ico">💰</div>
+            <h4>REGISTRAR MOVIMIENTO</h4>
+            <p>Registra ingresos, egresos o traspasos entre carteras de forma rápida.</p>
+            <div class="ac-arr">Ir a finanzas →</div>
           </div>
           <div class="ac" onclick="goToHorarios()">
             <div class="ac-ico">✦</div>
@@ -2675,11 +2675,11 @@
             <p>Consulta las clases disponibles y qué membresías tienen acceso a cada una.</p>
             <div class="ac-arr">Ver horarios →</div>
           </div>
-          <div class="ac" onclick="alert('Próximamente: Control de acceso por reconocimiento facial.')">
-            <div class="ac-ico">✦</div>
-            <h4>CONTROL ACCESO</h4>
-            <p>Verifica el acceso de miembros por reconocimiento facial o número de membresía.</p>
-            <div class="ac-arr">Próximamente →</div>
+          <div class="ac" onclick="openModal()">
+            <div class="ac-ico">+</div>
+            <h4>NUEVO MIEMBRO</h4>
+            <p>Registra un cliente, selecciona su plan y captura fotos de reconocimiento facial.</p>
+            <div class="ac-arr">Iniciar registro →</div>
           </div>
         </div>
       </div>
@@ -3059,10 +3059,6 @@
               <div class="ff-fld">
                 <label>Fecha <span class="req">*</span></label>
                 <input type="date" id="trp-fecha" />
-              </div>
-              <div class="ff-fld">
-                <label>Registrado por</label>
-                <input type="text" id="trp-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
               </div>
               <div class="ff-fld" style="grid-column:1/-1">
                 <label>Concepto</label>
@@ -3685,6 +3681,15 @@
       supabase.from('clients').select('*', { count: 'exact', head: true })
         .lte('membership_expires', wk.toISOString()).gte('membership_expires', new Date().toISOString())
         .then(function (r) { if (r.count !== null) document.getElementById('st-exp').textContent = r.count; });
+
+      // Ingresos hoy: suma de Caja chica + alfonso mercado + Stripe
+      supabase.from('ingresos').select('monto,cartera')
+        .eq('fecha', todayStr)
+        .in('cartera', ['Caja chica', 'alfonso mercado', 'Stripe'])
+        .then(function(r) {
+          var total = (r.data || []).reduce(function(a, row) { return a + parseFloat(row.monto || 0); }, 0);
+          document.getElementById('st-ing').textContent = '$' + Math.round(total).toLocaleString('es-MX');
+        });
     }
 
     /* ── SCHEDULE ── */
@@ -4448,8 +4453,6 @@
       if(eu) eu.value = nombre;
       var iu = document.getElementById('ing-usuario');
       if(iu) iu.value = nombre;
-      var tu = document.getElementById('trp-usuario');
-      if(tu) tu.value = nombre;
 
       // Mostrar/ocultar bloque de socios según rol actual
       var socBlock = document.getElementById('fin-socios-block');
@@ -4614,8 +4617,7 @@
 
       window.supabase.from('traspasos').insert([{
         titulo: titulo || null, fecha: fecha,
-        salida_de: salida, entrada_en: entrada, cantidad: cantidad,
-        usuario: usuarioActual() || null
+        salida_de: salida, entrada_en: entrada, cantidad: cantidad
       }]).then(function(r){
         if(r.error) throw r.error;
         showFinMsg('fin-form-msg','✓ Traspaso registrado correctamente','ok');
