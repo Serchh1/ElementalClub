@@ -2651,10 +2651,12 @@
             <div class="sc-num" id="st-exp">—</div>
             <div class="sc-lbl">Vencen 7 días</div>
           </div>
-          <div class="sc">
+          <div class="sc" onclick="abrirModalIngresosHoy()" style="cursor:pointer;" title="Ver detalle de ingresos de hoy">
 
             <div class="sc-num" id="st-ing">—</div>
-            <div class="sc-lbl">Ingresos hoy (CC + AM + Stripe)</div>
+            <div class="sc-lbl">Ingresos hoy
+              <span style="display:inline-block;margin-left:.35rem;font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span>
+            </div>
           </div>
         </div>
 
@@ -2663,11 +2665,11 @@
           <div class="ln"></div>
         </div>
         <div class="ac-grid">
-          <div class="ac prime" onclick="switchTab('finanzas', document.querySelector('.ptab:nth-child(5)'))">
-            <div class="ac-ico">💰</div>
-            <h4>REGISTRAR MOVIMIENTO</h4>
-            <p>Registra ingresos, egresos o traspasos entre carteras de forma rápida.</p>
-            <div class="ac-arr">Ir a finanzas →</div>
+          <div class="ac prime" onclick="openModal()">
+            <div class="ac-ico">+</div>
+            <h4>NUEVO MIEMBRO</h4>
+            <p>Registra un cliente, selecciona su plan y captura fotos de reconocimiento facial.</p>
+            <div class="ac-arr">Iniciar registro →</div>
           </div>
           <div class="ac" onclick="goToHorarios()">
             <div class="ac-ico">✦</div>
@@ -2675,11 +2677,11 @@
             <p>Consulta las clases disponibles y qué membresías tienen acceso a cada una.</p>
             <div class="ac-arr">Ver horarios →</div>
           </div>
-          <div class="ac" onclick="openModal()">
-            <div class="ac-ico">+</div>
-            <h4>NUEVO MIEMBRO</h4>
-            <p>Registra un cliente, selecciona su plan y captura fotos de reconocimiento facial.</p>
-            <div class="ac-arr">Iniciar registro →</div>
+          <div class="ac" onclick="alert('Próximamente: Control de acceso por reconocimiento facial.')">
+            <div class="ac-ico">✦</div>
+            <h4>CONTROL ACCESO</h4>
+            <p>Verifica el acceso de miembros por reconocimiento facial o número de membresía.</p>
+            <div class="ac-arr">Próximamente →</div>
           </div>
         </div>
       </div>
@@ -3681,15 +3683,6 @@
       supabase.from('clients').select('*', { count: 'exact', head: true })
         .lte('membership_expires', wk.toISOString()).gte('membership_expires', new Date().toISOString())
         .then(function (r) { if (r.count !== null) document.getElementById('st-exp').textContent = r.count; });
-
-      // Ingresos hoy: suma de Caja chica + alfonso mercado + Stripe
-      supabase.from('ingresos').select('monto,cartera')
-        .eq('fecha', todayStr)
-        .in('cartera', ['Caja chica', 'alfonso mercado', 'Stripe'])
-        .then(function(r) {
-          var total = (r.data || []).reduce(function(a, row) { return a + parseFloat(row.monto || 0); }, 0);
-          document.getElementById('st-ing').textContent = '$' + Math.round(total).toLocaleString('es-MX');
-        });
     }
 
     /* ── SCHEDULE ── */
@@ -5485,6 +5478,158 @@
     </div>
   </div>
 
+
+  <!-- MODAL: DETALLE INGRESOS HOY -->
+  <div class="bd" id="ing-hoy-bd" onclick="if(event.target===this)cerrarModalIngresosHoy()">
+    <div class="modal" style="max-width:760px;">
+      <div class="mh">
+        <div class="mh-title">INGRESOS <b>HOY</b></div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <span style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+                color:rgba(255,255,255,.3);">Caja chica · Alfonso Mercado · Stripe</span>
+          <div class="mx" onclick="cerrarModalIngresosHoy()">✕</div>
+        </div>
+      </div>
+      <!-- resumen top -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05);
+                  border-bottom:1px solid var(--s3);" id="ing-hoy-resumen">
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+                      color:var(--mu);margin-bottom:.3rem;">Caja chica</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#fbbf24;" id="ing-hoy-cc">—</div>
+        </div>
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+                      color:var(--mu);margin-bottom:.3rem;">Alfonso Mercado</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#60a5fa;" id="ing-hoy-am">—</div>
+        </div>
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+                      color:var(--mu);margin-bottom:.3rem;">Stripe</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#a78bfa;" id="ing-hoy-stripe">—</div>
+        </div>
+      </div>
+      <!-- total -->
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  padding:.75rem 1.4rem;background:rgba(255,77,0,.07);border-bottom:1px solid var(--s3);">
+        <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+                     color:rgba(255,255,255,.4);">Total combinado hoy</span>
+        <span style="font-family:var(--fT);font-size:1.9rem;color:var(--or);" id="ing-hoy-total">—</span>
+      </div>
+      <!-- tabla movimientos -->
+      <div style="max-height:380px;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;" id="ing-hoy-tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;
+                         letter-spacing:.15em;text-transform:uppercase;color:var(--or);
+                         background:var(--s2);border-bottom:1px solid var(--s3);
+                         position:sticky;top:0;z-index:2;">Cliente / Concepto</th>
+              <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;
+                         letter-spacing:.15em;text-transform:uppercase;color:var(--or);
+                         background:var(--s2);border-bottom:1px solid var(--s3);
+                         position:sticky;top:0;z-index:2;">Cartera</th>
+              <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;
+                         letter-spacing:.15em;text-transform:uppercase;color:var(--or);
+                         background:var(--s2);border-bottom:1px solid var(--s3);
+                         position:sticky;top:0;z-index:2;">Categoría</th>
+              <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;
+                         letter-spacing:.15em;text-transform:uppercase;color:var(--or);
+                         background:var(--s2);border-bottom:1px solid var(--s3);
+                         position:sticky;top:0;z-index:2;">Registrado por</th>
+              <th style="text-align:right;padding:.6rem 1rem;font-size:.56rem;font-weight:700;
+                         letter-spacing:.15em;text-transform:uppercase;color:var(--or);
+                         background:var(--s2);border-bottom:1px solid var(--s3);
+                         position:sticky;top:0;z-index:2;">Monto</th>
+            </tr>
+          </thead>
+          <tbody id="ing-hoy-tbody">
+            <tr><td colspan="5" style="text-align:center;padding:2rem;
+                color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalIngresosHoy() {
+      document.getElementById('ing-hoy-bd').classList.add('on');
+      document.body.style.overflow = 'hidden';
+      cargarIngresosHoy();
+    }
+    function cerrarModalIngresosHoy() {
+      document.getElementById('ing-hoy-bd').classList.remove('on');
+      document.body.style.overflow = '';
+    }
+    function cargarIngresosHoy() {
+      var hoy = new Date().toISOString().split('T')[0];
+      var tbody = document.getElementById('ing-hoy-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;'
+        + 'color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
+
+      window.supabase.from('ingresos').select('nombre,monto,cartera,categoria,usuario')
+        .eq('fecha', hoy)
+        .in('cartera', ['Caja chica', 'alfonso mercado', 'Stripe'])
+        .order('created_at', { ascending: false })
+        .then(function(r) {
+          var rows = r.data || [];
+
+          // Totales por cartera
+          var totCC = 0, totAM = 0, totST = 0;
+          rows.forEach(function(row) {
+            var m = parseFloat(row.monto || 0);
+            if (row.cartera === 'Caja chica')       totCC += m;
+            if (row.cartera === 'alfonso mercado')   totAM += m;
+            if (row.cartera === 'Stripe')            totST += m;
+          });
+          var fmt = function(n) { return '$' + Math.round(n).toLocaleString('es-MX'); };
+          document.getElementById('ing-hoy-cc').textContent     = fmt(totCC);
+          document.getElementById('ing-hoy-am').textContent     = fmt(totAM);
+          document.getElementById('ing-hoy-stripe').textContent = fmt(totST);
+          document.getElementById('ing-hoy-total').textContent  = fmt(totCC + totAM + totST);
+
+          // Colores por cartera
+          var carteraColor = {
+            'Caja chica':      '#fbbf24',
+            'alfonso mercado': '#60a5fa',
+            'Stripe':          '#a78bfa'
+          };
+
+          // Tabla
+          if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2.5rem;'
+              + 'color:rgba(255,255,255,.2);font-size:.78rem;">'
+              + 'Sin ingresos registrados hoy en estas carteras</td></tr>';
+            return;
+          }
+          tbody.innerHTML = rows.map(function(row) {
+            var col = carteraColor[row.cartera] || 'var(--or)';
+            return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">'
+              + '<td style="padding:.65rem 1rem;font-size:.78rem;font-weight:600;'
+              +     'color:rgba(255,255,255,.82);">' + (row.nombre || '—') + '</td>'
+              + '<td style="padding:.65rem 1rem;">'
+              +   '<span style="font-size:.65rem;font-weight:800;letter-spacing:.08em;'
+              +         'text-transform:uppercase;padding:.2rem .55rem;border-radius:2px;'
+              +         'border:1px solid ' + col + '40;color:' + col + ';'
+              +         'background:' + col + '15;">' + (row.cartera || '—') + '</span>'
+              + '</td>'
+              + '<td style="padding:.65rem 1rem;font-size:.75rem;'
+              +     'color:rgba(255,255,255,.45);">' + (row.categoria || '—') + '</td>'
+              + '<td style="padding:.65rem 1rem;font-size:.72rem;'
+              +     'color:rgba(255,255,255,.35);">' + (row.usuario || '—') + '</td>'
+              + '<td style="padding:.65rem 1rem;text-align:right;font-family:var(--fT);'
+              +     'font-size:1rem;color:#4ade80;">+$'
+              +     parseFloat(row.monto || 0).toLocaleString('es-MX') + '</td>'
+              + '</tr>';
+          }).join('');
+        })
+        .catch(function(e) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;'
+            + 'color:#f87171;font-size:.75rem;">⚠️ Error: ' + e.message + '</td></tr>';
+        });
+    }
+  </script>
 
 </body>
 
