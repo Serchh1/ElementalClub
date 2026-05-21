@@ -2948,10 +2948,6 @@
                 <input type="text" id="ing-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
               </div>
               <div class="ff-fld">
-                <label>Registrado por</label>
-                <input type="text" id="ing-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
-              </div>
-              <div class="ff-fld">
                 <label>Tipo de ingreso <span class="req">*</span></label>
                 <select id="ing-categoria" onchange="finMostrarCamposIngreso(this.value)">
                   <option value="">— Selecciona —</option>
@@ -4486,8 +4482,6 @@
       if(iu) iu.value = nombre;
       var tu = document.getElementById('trp-usuario');
       if(tu) tu.value = nombre;
-      var iu = document.getElementById('ing-usuario');
-      if(iu) iu.value = nombre;
 
       var finBtn = document.getElementById('tab-btn-finanzas');
       if(finBtn) finBtn.style.display = socio ? '' : 'none';
