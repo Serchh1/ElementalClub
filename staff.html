@@ -2576,7 +2576,7 @@
       <h1 class="lf-h1">ACCESO<br>EMPLEADOS</h1>
       <p class="lf-sub">Ingresa tus credenciales para continuar al panel de gestión.</p>
       <div class="lerr" id="lerr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f88" stroke-width="2" style="flex-shrink:0"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg> <span id="lerr-txt"></span></div>
-      <form id="login-form" onsubmit="doLogin(event)" novalidate>
+      <div id="login-form">
         <div class="fld">
           <label for="l-u">Usuario / Email</label>
           <div class="fli"><span class="fli-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input id="l-u" type="text" placeholder="tu.usuario"
@@ -2590,11 +2590,11 @@
             <button type="button" class="eye-tog" id="eye-tog" onclick="toggleEye()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
           </div>
         </div>
-        <button type="submit" class="btn-li" id="btn-li">
+        <button type="button" class="btn-li" id="btn-li" onclick="doLogin(event)">
           <span id="btn-li-txt">ENTRAR AL PANEL</span>
           <span id="btn-li-arr">→</span>
         </button>
-      </form>
+      </div>
       <div class="lf-foot">
         <p>© 2026 Elemental Club</p>
         <div class="sys-st">
@@ -2619,7 +2619,8 @@
       <button class="ptab" onclick="switchTab('miembros',this)">Miembros</button>
       <button class="ptab" onclick="switchTab('horarios',this)">Horarios y Clases</button>
       <button class="ptab" onclick="switchTab('accesos',this)">Accesos Portal</button>
-      <button class="ptab" onclick="switchTab('finanzas',this)">Finanzas</button>
+      <button class="ptab" onclick="switchTab('movimientos',this)">Movimientos</button>
+      <button class="ptab" id="tab-btn-finanzas" style="display:none" onclick="switchTab('finanzas',this)">Finanzas</button>
     </nav>
     <div class="pbody">
 
@@ -2663,7 +2664,7 @@
           <div class="ln"></div>
         </div>
         <div class="ac-grid">
-          <div class="ac prime" onclick="switchTab('finanzas', document.querySelector('.ptab:nth-child(5)'))">
+          <div class="ac prime" onclick="switchTab('movimientos', document.querySelector('.ptab:nth-child(5)'))">
             <div class="ac-ico" style="color:var(--or)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6"></path>
@@ -2862,7 +2863,7 @@
       </div>
 
       <!-- Tab Finanzas -->
-      <div id="tab-finanzas" class="tab-pane">
+      <div id="tab-movimientos" class="tab-pane">
 
         <!-- CAJA CHICA WIDGET -->
         <div class="cc-widget" id="cc-widget">
@@ -2941,6 +2942,10 @@
                   <option>alfonso mercado</option><option>Tensa</option>
                   <option>2Bajio</option><option>Resguardo</option>
                 </select>
+              </div>
+              <div class="ff-fld">
+                <label>Registrado por</label>
+                <input type="text" id="ing-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
               </div>
               <div class="ff-fld">
                 <label>Registrado por</label>
@@ -3080,6 +3085,10 @@
                 <label>Fecha <span class="req">*</span></label>
                 <input type="date" id="trp-fecha" />
               </div>
+              <div class="ff-fld">
+                <label>Registrado por</label>
+                <input type="text" id="trp-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
+              </div>
               <div class="ff-fld" style="grid-column:1/-1">
                 <label>Concepto</label>
                 <input type="text" id="trp-titulo" placeholder="Ej: Retiro efectivo para pago de nómina" />
@@ -3116,57 +3125,47 @@
           </div>
         </div>
 
-        <!-- ══ RESUMEN FINANCIERO + GRÁFICAS + IA  → solo socios ══ -->
-        <div id="fin-socios-block" style="display:none">
+      </div><!-- /tab-movimientos -->
 
-          <!-- KPIs -->
-          <div class="seh" style="margin-top:2.5rem"><h3>RESUMEN FINANCIERO</h3><div class="ln"></div>
-            <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
-              style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
-          </div>
-          <div class="fin-grid" id="fin-kpis">
-            <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
-            <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
-            <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
-            <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
-          </div>
+      <!-- TAB FINANZAS (solo socios) -->
+      <div id="tab-finanzas" class="tab-pane">
 
-          <!-- Gráficas -->
-          <div class="seh" style="margin-top:1.5rem"><h3>ANÁLISIS GRÁFICO</h3><div class="ln"></div></div>
-          <div class="charts-row">
-            <div class="chart-box">
-              <h4>Flujo mensual — Ingresos vs Egresos</h4>
-              <div class="chart-wrap"><canvas id="chart-flujo"></canvas></div>
-            </div>
-            <div class="chart-box">
-              <h4>Ingresos por categoría</h4>
-              <div class="chart-wrap"><canvas id="chart-cat"></canvas></div>
-            </div>
-          </div>
-          <div class="charts-row">
-            <div class="chart-box">
-              <h4>Egresos por categoría</h4>
-              <div class="chart-wrap"><canvas id="chart-egr-cat"></canvas></div>
-            </div>
-            <div class="chart-box">
-              <h4>Ingresos por cartera</h4>
-              <div class="chart-wrap"><canvas id="chart-cartera"></canvas></div>
-            </div>
-          </div>
+        <div class="seh"><h3>SALDOS POR CARTERA</h3><div class="ln"></div>
+          <select id="fin-cartera-mes-sel" onchange="cargarSaldosCartera(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div id="saldos-carteras-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin-bottom:2rem;">
+          <div style="padding:2rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Cargando saldos...</div>
+        </div>
 
-          <!-- Asistente IA -->
-          <div class="ia-section" id="ia-section" style="margin-top:1rem">
-            <div class="ia-hdr">
-              <div class="ia-hdr-left">
-                <div style="width:28px;height:28px;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem">✦</div>
-                <h4>Asistente Financiero</h4>
-                <span class="ia-badge">IA · Solo Socios</span>
-              </div>
-            </div>
-            <div class="ia-body" id="ia-body"></div>
-          </div>
+        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN FINANCIERO</h3><div class="ln"></div>
+          <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div class="fin-grid" id="fin-kpis">
+          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
+          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
+        </div>
 
-        </div><!-- /fin-socios-block -->
+        <div class="seh" style="margin-top:1.5rem"><h3>ANÁLISIS GRÁFICO</h3><div class="ln"></div></div>
+        <div class="charts-row">
+          <div class="chart-box"><h4>Flujo mensual</h4><div class="chart-wrap"><canvas id="chart-flujo"></canvas></div></div>
+          <div class="chart-box"><h4>Ingresos por categoría</h4><div class="chart-wrap"><canvas id="chart-cat"></canvas></div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-box"><h4>Egresos por categoría</h4><div class="chart-wrap"><canvas id="chart-egr-cat"></canvas></div></div>
+          <div class="chart-box"><h4>Ingresos por cartera</h4><div class="chart-wrap"><canvas id="chart-cartera"></canvas></div></div>
+        </div>
+
+        <div class="ia-section" id="ia-section" style="margin-top:1rem">
+          <div class="ia-hdr"><div class="ia-hdr-left">
+            <div style="width:28px;height:28px;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem">✦</div>
+            <h4>Asistente Financiero</h4><span class="ia-badge">IA · Solo Socios</span>
+          </div></div>
+          <div class="ia-body" id="ia-body"></div>
+        </div>
 
       </div><!-- /tab-finanzas -->
 
@@ -3482,11 +3481,17 @@
       document.getElementById('m-nom').addEventListener('input', checkSave);
       document.getElementById('m-ape').addEventListener('input', checkSave);
       document.getElementById('m-tel').addEventListener('input', checkSave);
+      ['l-u','l-p'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.addEventListener('keydown', function(ev){
+          if(ev.key==='Enter') doLogin(ev);
+        });
+      });
     });
 
     /* ── AUTH ── */
     function doLogin(e) {
-      e.preventDefault();
+      if(e && e.preventDefault) e.preventDefault();
       var u = document.getElementById('l-u').value.trim();
       var p = document.getElementById('l-p').value;
       var btn = document.getElementById('btn-li');
@@ -3555,8 +3560,11 @@
       showScr('panel');
       loadStats();
       cargarCajaChica();
-      setInterval(cargarCajaChica, 180000); // refresca cada 3 min
-      // Reinicializar módulo finanzas con el rol correcto del nuevo usuario
+      setInterval(cargarCajaChica, 180000);
+      // Mostrar tab Finanzas de inmediato si es socio
+      var isSocio = user.role === 'socio' || user.rol === 'socio';
+      var finTabBtn = document.getElementById('tab-btn-finanzas');
+      if(finTabBtn) finTabBtn.style.display = isSocio ? '' : 'none';
       if(typeof window.finReset === 'function') window.finReset();
     }
 
@@ -4376,7 +4384,7 @@
           '<td><span class="st-badge ' + stClass + '">' + (STATUS_LBL[st] || st) + '</span></td>' +
           '<td>' + starts + '</td>' +
           '<td>' + expires + '</td>' +
-          '<td><button class="btn-edit-sm" onclick="openEditMember(' + m.id + ')">Editar</button></td>' +
+          '<td><button class="btn-edit-sm" onclick="openEditMember(\'' + m.id + '\')">Editar</button></td>' +
           '</tr>';
       }).join('');
     }
@@ -4476,14 +4484,15 @@
       if(eu) eu.value = nombre;
       var iu = document.getElementById('ing-usuario');
       if(iu) iu.value = nombre;
+      var tu = document.getElementById('trp-usuario');
+      if(tu) tu.value = nombre;
+      var iu = document.getElementById('ing-usuario');
+      if(iu) iu.value = nombre;
 
-      // Mostrar/ocultar bloque de socios según rol actual
-      var socBlock = document.getElementById('fin-socios-block');
-      if(socBlock) socBlock.style.display = socio ? 'block' : 'none';
+      var finBtn = document.getElementById('tab-btn-finanzas');
+      if(finBtn) finBtn.style.display = socio ? '' : 'none';
 
-      poblarMeses();
       cargarMovimientos();
-      if(socio) { cargarKPIs(finMes); setTimeout(cargarGraficas, 300); iniciarIA(); }
     }
 
     // Exponer para que enterPanel y doLogout puedan llamarla
@@ -4495,13 +4504,11 @@
       chartFlujo=null; chartCat=null; chartEgrCat=null; chartCartera=null;
       iaMessages=[]; iaLoading=false; movData=[]; finMes='';
 
-      // Ocultar bloque socios inmediatamente
-      var socBlock = document.getElementById('fin-socios-block');
-      if(socBlock) socBlock.style.display = 'none';
+      var finBtn2 = document.getElementById('tab-btn-finanzas');
+      if(finBtn2) finBtn2.style.display = 'none';
 
-      // Si el tab finanzas está activo, reinicializar ya
-      var tabFin = document.getElementById('tab-finanzas');
-      if(tabFin && tabFin.classList.contains('on')) finInit();
+      var tabMov = document.getElementById('tab-movimientos');
+      if(tabMov && tabMov.classList.contains('on')) finInit();
     };
 
     // ── TIPO DE MOVIMIENTO ───────────────────────────────────
@@ -4640,7 +4647,8 @@
 
       window.supabase.from('traspasos').insert([{
         titulo: titulo || null, fecha: fecha,
-        salida_de: salida, entrada_en: entrada, cantidad: cantidad
+        salida_de: salida, entrada_en: entrada, cantidad: cantidad,
+        usuario: usuarioActual() || null
       }]).then(function(r){
         if(r.error) throw r.error;
         showFinMsg('fin-form-msg','✓ Traspaso registrado correctamente','ok');
@@ -4989,8 +4997,12 @@
     var _origSwitchTab = window.switchTab;
     window.switchTab = function(id, btn) {
       if(_origSwitchTab) _origSwitchTab(id, btn);
+      if(id === 'movimientos') { finInit(); }
       if(id === 'finanzas') {
-        finInit(); // lee el rol en vivo cada vez
+        poblarMeses();
+        if(!finMes) finMes = new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+        cargarKPIs(finMes);
+        setTimeout(function(){ cargarGraficas(); cargarSaldosCartera(); iniciarIA(); }, 150);
       }
     };
 
@@ -5000,6 +5012,113 @@
       sc.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
       sc.onload=function(){ if(document.getElementById('tab-finanzas')&&document.getElementById('tab-finanzas').classList.contains('on')) cargarGraficas(); };
       document.head.appendChild(sc);
+    }
+
+    // SALDOS POR CARTERA
+    var CARTERAS_LIST = ['Banbajio','Caja chica','Mercado libre','Stripe','alfonso mercado','Tensa','2Bajio','Resguardo'];
+    var CARTERAS_COLORS = {'Banbajio':'#60a5fa','Caja chica':'#fbbf24','Mercado libre':'#34d399','Stripe':'#a78bfa','alfonso mercado':'#fb923c','Tensa':'#f472b6','2Bajio':'#38bdf8','Resguardo':'#4ade80'};
+
+    function poblarMesesCartera() {
+      var sel = document.getElementById('fin-cartera-mes-sel');
+      if(!sel || sel.options.length > 1) return;
+      var meses=[], d=new Date();
+      for(var i=0;i<18;i++){
+        meses.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+        d.setMonth(d.getMonth()-1);
+      }
+      sel.innerHTML='<option value="all">Todos los meses (acumulado)</option>'
+        +meses.map(function(m){
+          var p=m.split('-');
+          var lbl=new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+          return '<option value="'+m+'">'+lbl.charAt(0).toUpperCase()+lbl.slice(1)+'</option>';
+        }).join('');
+    }
+
+    function cargarSaldosCartera(mes) {
+      poblarMesesCartera();
+      var grid=document.getElementById('saldos-carteras-grid');
+      if(!grid||!window.supabase) return;
+      grid.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Calculando saldos...</div>';
+      var sel=document.getElementById('fin-cartera-mes-sel');
+      var mesVal=(mes!==undefined?mes:(sel?sel.value:'all'))||'all';
+      if(sel&&mes!==undefined) sel.value=mesVal;
+
+      // Construir filtro de fechas
+      var start=null, end=null;
+      if(mesVal && mesVal!=='all'){
+        var pts=mesVal.split('-');
+        var lastDay=new Date(parseInt(pts[0]),parseInt(pts[1]),0).getDate();
+        start=mesVal+'-01';
+        end=mesVal+'-'+String(lastDay).padStart(2,'0');
+      }
+
+      var ingQ=window.supabase.from('ingresos').select('cartera,monto');
+      var egrQ=window.supabase.from('egresos').select('cartera,monto');
+      var trpQ=window.supabase.from('traspasos').select('salida_de,entrada_en,cantidad');
+      if(start){
+        ingQ=ingQ.gte('fecha',start).lte('fecha',end);
+        egrQ=egrQ.gte('fecha',start).lte('fecha',end);
+        trpQ=trpQ.gte('fecha',start).lte('fecha',end);
+      }
+
+      Promise.all([ingQ,egrQ,trpQ]).then(function(res){
+        var ings=res[0].data||[], egrs=res[1].data||[], trps=res[2].data||[];
+
+        // 1. Inicializar todas las carteras conocidas en 0
+        var saldos={};
+        CARTERAS_LIST.forEach(function(c){ saldos[c]=0; });
+
+        // 2. SUMAR ingresos a cada cartera
+        ings.forEach(function(r){
+          if(r.cartera){
+            if(saldos[r.cartera]===undefined) saldos[r.cartera]=0;
+            saldos[r.cartera] += parseFloat(r.monto||0);
+          }
+        });
+
+        // 3. RESTAR egresos de cada cartera
+        egrs.forEach(function(r){
+          if(r.cartera){
+            if(saldos[r.cartera]===undefined) saldos[r.cartera]=0;
+            saldos[r.cartera] -= parseFloat(r.monto||0);
+          }
+        });
+
+        // 4. TRASPASOS: resta de la cartera origen, suma a la cartera destino
+        trps.forEach(function(r){
+          var amt=parseFloat(r.cantidad||0);
+          if(r.salida_de){
+            if(saldos[r.salida_de]===undefined) saldos[r.salida_de]=0;
+            saldos[r.salida_de] -= amt;   // sale dinero
+          }
+          if(r.entrada_en){
+            if(saldos[r.entrada_en]===undefined) saldos[r.entrada_en]=0;
+            saldos[r.entrada_en] += amt;  // entra dinero
+          }
+        });
+        var total=Object.values(saldos).reduce(function(a,v){return a+v;},0);
+        var fmtS=function(n){return '$'+Math.abs(Math.round(n)).toLocaleString('es-MX');};
+        var selEl=document.getElementById('fin-cartera-mes-sel');
+        var labelMes=mesVal==='all'?'Acumulado total':(selEl&&selEl.options[selEl.selectedIndex]?selEl.options[selEl.selectedIndex].text:mesVal);
+        var carteras=CARTERAS_LIST.slice();
+        Object.keys(saldos).forEach(function(c){if(carteras.indexOf(c)<0)carteras.push(c);});
+        var html=carteras.map(function(nombre){
+          var saldo=saldos[nombre]||0,col=CARTERAS_COLORS[nombre]||'var(--or)',isPos=saldo>=0;
+          return '<div style="background:var(--s1);border:1px solid var(--s3);border-left:3px solid '+col+';border-radius:var(--r);padding:1rem 1.1rem;position:relative;">'
+            +'<div style="font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.4rem;">'+nombre+'</div>'
+            +'<div style="font-family:var(--fT);font-size:1.75rem;line-height:1;color:'+(isPos?col:'#f87171')+';">'+(isPos?'+':'-')+fmtS(saldo)+'</div>'
+            +'<div style="font-size:.6rem;color:var(--mu);margin-top:.3rem;">'+labelMes+'</div>'
+            +'<div style="position:absolute;top:.5rem;right:.5rem;font-size:.54rem;font-weight:800;padding:.12rem .42rem;border-radius:2px;background:'+(isPos?col+'18':'rgba(248,113,113,.12)')+';color:'+(isPos?col:'#f87171')+';border:1px solid '+(isPos?col+'45':'rgba(248,113,113,.3)')+';">'+(isPos?'▲':'▼')+'</div>'
+            +'</div>';
+        }).join('');
+        html+='<div style="background:rgba(255,77,0,.07);border:1.5px solid rgba(255,77,0,.3);border-radius:var(--r);padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;grid-column:1/-1;">'
+          +'<div><div style="font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Saldo total combinado</div>'
+          +'<div style="font-size:.63rem;color:var(--mu);margin-top:.15rem;">'+labelMes+'</div></div>'
+          +'<div style="font-family:var(--fT);font-size:2.2rem;color:'+(total>=0?'var(--or)':'#f87171')+';">'+(total>=0?'+':'-')+'$'+Math.abs(Math.round(total)).toLocaleString('es-MX')+'</div></div>';
+        grid.innerHTML=html;
+      }).catch(function(e){
+        grid.innerHTML='<div style="padding:1.5rem;color:#f87171;grid-column:1/-1;">⚠️ Error: '+e.message+'</div>';
+      });
     }
 
     // ══════════ EXPORTACIÓN HORARIO WHATSAPP (PDF) ══════════
@@ -5607,6 +5726,103 @@
         })
         .catch(function(e) {
           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;">⚠️ Error: ' + e.message + '</td></tr>';
+        });
+    }
+  </script>
+  <!-- MODAL: DETALLE INGRESOS HOY -->
+  <div class="bd" id="ing-hoy-bd" onclick="if(event.target===this)cerrarModalIngresosHoy()">
+    <div class="modal" style="max-width:780px;">
+      <div class="mh">
+        <div class="mh-title">INGRESOS <b>HOY</b></div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <span style="font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Caja chica · Alfonso Mercado · Stripe</span>
+          <div class="mx" onclick="cerrarModalIngresosHoy()">✕</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05);border-bottom:1px solid var(--s3);">
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Caja chica</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#fbbf24;" id="ing-hoy-cc">—</div>
+        </div>
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Alfonso Mercado</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#60a5fa;" id="ing-hoy-am">—</div>
+        </div>
+        <div style="background:var(--s2);padding:.9rem 1.2rem;">
+          <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Stripe</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#a78bfa;" id="ing-hoy-stripe">—</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.4rem;background:rgba(255,77,0,.07);border-bottom:1px solid var(--s3);">
+        <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);">Total combinado hoy</span>
+        <span style="font-family:var(--fT);font-size:1.9rem;color:var(--or);" id="ing-hoy-total">—</span>
+      </div>
+      <div style="max-height:380px;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;min-width:560px;">
+          <thead><tr>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Cliente</th>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Cartera</th>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Categoria</th>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Empleado</th>
+            <th style="text-align:right;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Monto</th>
+          </tr></thead>
+          <tbody id="ing-hoy-tbody">
+            <tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalIngresosHoy() {
+      document.getElementById('ing-hoy-bd').classList.add('on');
+      document.body.style.overflow = 'hidden';
+      cargarIngresosHoy();
+    }
+    function cerrarModalIngresosHoy() {
+      document.getElementById('ing-hoy-bd').classList.remove('on');
+      document.body.style.overflow = '';
+    }
+    function cargarIngresosHoy() {
+      var hoy=new Date().toISOString().split('T')[0];
+      var tbody=document.getElementById('ing-hoy-tbody');
+      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
+      ['ing-hoy-cc','ing-hoy-am','ing-hoy-stripe','ing-hoy-total'].forEach(function(id){document.getElementById(id).textContent='$0';});
+      window.supabase.from('ingresos').select('nombre,monto,cartera,categoria,usuario')
+        .eq('fecha',hoy).in('cartera',['Caja chica','alfonso mercado','Stripe'])
+        .order('created_at',{ascending:false})
+        .then(function(r){
+          var rows=r.data||[];
+          var fmt=function(n){return '$'+Math.round(n).toLocaleString('es-MX');};
+          var colMap={'Caja chica':'#fbbf24','alfonso mercado':'#60a5fa','Stripe':'#a78bfa'};
+          var totCC=0,totAM=0,totST=0;
+          rows.forEach(function(row){
+            var m=parseFloat(row.monto||0);
+            if(row.cartera==='Caja chica') totCC+=m;
+            else if(row.cartera==='alfonso mercado') totAM+=m;
+            else if(row.cartera==='Stripe') totST+=m;
+          });
+          document.getElementById('ing-hoy-cc').textContent=fmt(totCC);
+          document.getElementById('ing-hoy-am').textContent=fmt(totAM);
+          document.getElementById('ing-hoy-stripe').textContent=fmt(totST);
+          document.getElementById('ing-hoy-total').textContent=fmt(totCC+totAM+totST);
+          if(!rows.length){
+            tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2.5rem;color:rgba(255,255,255,.2);font-size:.78rem;">Sin ingresos hoy en estas carteras</td></tr>';
+            return;
+          }
+          tbody.innerHTML=rows.map(function(row){
+            var c=colMap[row.cartera]||'var(--or)';
+            return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">'
+              +'<td style="padding:.65rem 1rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.82);">'+( row.nombre||'—')+'</td>'
+              +'<td style="padding:.65rem 1rem;"><span style="font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:2px;border:1px solid '+c+'40;color:'+c+';background:'+c+'18;">'+( row.cartera||'—')+'</span></td>'
+              +'<td style="padding:.65rem 1rem;font-size:.75rem;color:rgba(255,255,255,.45);">'+( row.categoria||'—')+'</td>'
+              +'<td style="padding:.65rem 1rem;font-size:.72rem;color:rgba(255,255,255,.35);">'+( row.usuario||'—')+'</td>'
+              +'<td style="padding:.65rem 1rem;text-align:right;font-family:var(--fT);font-size:1rem;color:#4ade80;">+$'+parseFloat(row.monto||0).toLocaleString('es-MX')+'</td>'
+              +'</tr>';
+          }).join('');
+        }).catch(function(e){
+          tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;">⚠️ Error: '+e.message+'</td></tr>';
         });
     }
   </script>
