@@ -5171,39 +5171,68 @@
       if(!hayFiltro) { limpiarBusqueda(); return; }
 
       _modoBusqueda = true;
+      if(!window.supabase) return;
 
-      // Si hay rango de fechas fuera de los 60 días cargados, hacer query directa a Supabase
-      var needFetch = false;
-      if(desde) {
-        var desdeDate = new Date(desde);
-        var limite = new Date(); limite.setDate(limite.getDate()-60);
-        if(desdeDate < limite) needFetch = true;
+      var tbody = document.getElementById('mov-tbody');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem;">Buscando...</td></tr>';
+
+      // SIEMPRE ir a Supabase para no perder registros por el límite de carga inicial
+      var start = desde || '2020-01-01';
+      var end   = hasta || new Date().toISOString().split('T')[0];
+
+      // Construir queries con filtros en Supabase cuando sea posible
+      var ingQ = window.supabase.from('ingresos')
+        .select('id,nombre,monto,fecha,categoria,cartera,usuario,created_at')
+        .gte('fecha', start).lte('fecha', end)
+        .order('fecha', {ascending:false})
+        .limit(1000);
+
+      var egrQ = window.supabase.from('egresos')
+        .select('id,titulo,monto,fecha,categoria,cartera,usuario,created_at')
+        .gte('fecha', start).lte('fecha', end)
+        .order('fecha', {ascending:false})
+        .limit(1000);
+
+      var trpQ = window.supabase.from('traspasos')
+        .select('id,titulo,cantidad,fecha,salida_de,entrada_en')
+        .gte('fecha', start).lte('fecha', end)
+        .order('fecha', {ascending:false})
+        .limit(500);
+
+      // Filtros adicionales en Supabase para reducir datos
+      if(tipo === 'ingreso')  { egrQ = null; trpQ = null; }
+      if(tipo === 'egreso')   { ingQ = null; trpQ = null; }
+      if(tipo === 'traspaso') { ingQ = null; egrQ = null; }
+      if(cartera && tipo !== 'traspaso') {
+        if(ingQ) ingQ = ingQ.eq('cartera', cartera);
+        if(egrQ) egrQ = egrQ.eq('cartera', cartera);
       }
+      if(categoria && ingQ) ingQ = ingQ.eq('categoria', categoria);
+      if(categoria && egrQ) egrQ = egrQ.eq('categoria', categoria);
 
-      if(needFetch && window.supabase) {
-        var start = desde || '2020-01-01';
-        var end   = hasta || new Date().toISOString().split('T')[0];
-        var ingQ = window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,usuario,created_at').gte('fecha',start).lte('fecha',end).order('fecha',{ascending:false}).limit(500);
-        var egrQ = window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,usuario,created_at').gte('fecha',start).lte('fecha',end).order('fecha',{ascending:false}).limit(500);
-        var trpQ = window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en').gte('fecha',start).lte('fecha',end).order('fecha',{ascending:false}).limit(200);
+      var promises = [
+        ingQ ? ingQ : Promise.resolve({data:[]}),
+        egrQ ? egrQ : Promise.resolve({data:[]}),
+        trpQ ? trpQ : Promise.resolve({data:[]}),
+      ];
 
-        var tbody = document.getElementById('mov-tbody');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem;">Buscando en el historial completo...</td></tr>';
-
-        Promise.all([ingQ, egrQ, trpQ]).then(function(res) {
-          var ings = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
-          var egrs = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
-          var trps = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
-          var todos = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
-          _resultadosBusqueda = aplicarFiltrosLocales(todos, texto, tipo, cartera, categoria, null, null);
-          mostrarResultadosBusqueda(_resultadosBusqueda);
-        });
-      } else {
-        // Filtrar en los datos ya cargados en memoria
-        var filtrados = aplicarFiltrosLocales(movData, texto, tipo, cartera, categoria, desde, hasta);
-        _resultadosBusqueda = filtrados;
-        mostrarResultadosBusqueda(filtrados);
-      }
+      Promise.all(promises).then(function(res) {
+        var ings = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var egrs = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var trps = (res[2].data||[]).map(function(r){ return {tipo:'traspaso', concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
+        var todos = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
+        // Filtro de texto en cliente (no se puede hacer en Supabase fácilmente)
+        if(texto) {
+          todos = todos.filter(function(r){
+            var hay = [(r.concepto||''),(r.cartera||''),(r.categoria||''),(r.empleado||'')].join(' ').toLowerCase();
+            return hay.indexOf(texto) > -1;
+          });
+        }
+        _resultadosBusqueda = todos;
+        mostrarResultadosBusqueda(todos);
+      }).catch(function(e){
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#f87171;">Error: '+e.message+'</td></tr>';
+      });
     }
 
     window.aplicarFiltrosLocales = function(data, texto, tipo, cartera, categoria, desde, hasta) {
