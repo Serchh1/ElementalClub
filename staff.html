@@ -2703,6 +2703,54 @@
             <div class="ac-arr">Iniciar registro →</div>
           </div>
         </div>
+
+        <!-- Ingresos Semanales -->
+        <div class="seh" style="margin-top: 2rem;">
+          <h3>INGRESOS SEMANALES</h3>
+          <div class="ln"></div>
+        </div>
+        <div class="stats">
+          <div class="sc">
+            <div class="sc-num" id="ing-sem-efectivo">—</div>
+            <div class="sc-lbl">Efectivo</div>
+          </div>
+          <div class="sc">
+            <div class="sc-num" id="ing-sem-alfonso">—</div>
+            <div class="sc-lbl">Alfonso Mercado</div>
+          </div>
+          <div class="sc">
+            <div class="sc-num" id="ing-sem-stripe">—</div>
+            <div class="sc-lbl">Stripe</div>
+          </div>
+          <div class="sc" style="grid-column: span 2; @media(min-width:560px) { grid-column: auto; }">
+            <div class="sc-num" id="ing-sem-total" style="color: var(--or);">—</div>
+            <div class="sc-lbl">Total Semanal</div>
+          </div>
+        </div>
+
+        <!-- Ingresos Mensuales -->
+        <div class="seh">
+          <h3>INGRESOS MENSUALES</h3>
+          <div class="ln"></div>
+        </div>
+        <div class="stats">
+          <div class="sc">
+            <div class="sc-num" id="ing-mes-efectivo">—</div>
+            <div class="sc-lbl">Efectivo</div>
+          </div>
+          <div class="sc">
+            <div class="sc-num" id="ing-mes-alfonso">—</div>
+            <div class="sc-lbl">Alfonso Mercado</div>
+          </div>
+          <div class="sc">
+            <div class="sc-num" id="ing-mes-stripe">—</div>
+            <div class="sc-lbl">Stripe</div>
+          </div>
+          <div class="sc" style="grid-column: span 2; @media(min-width:560px) { grid-column: auto; }">
+            <div class="sc-num" id="ing-mes-total" style="color: var(--or);">—</div>
+            <div class="sc-lbl">Total Mensual</div>
+          </div>
+        </div>
       </div>
 
       <!-- Tab Miembros -->
@@ -3841,6 +3889,71 @@
           }, 0);
           document.getElementById('st-ing').textContent =
             '$' + Math.round(total).toLocaleString('es-MX');
+        });
+
+      loadIngresosSemanales();
+      loadIngresosMensuales();
+    }
+
+    /* ── INGRESOS SEMANALES ── */
+    function loadIngresosSemanales() {
+      if (!window.supabase) return;
+      var hoy = new Date();
+      var hace7Dias = new Date(hoy);
+      hace7Dias.setDate(hace7Dias.getDate() - 7);
+      
+      var startDate = hace7Dias.toISOString().split('T')[0];
+      var endDate = hoy.toISOString().split('T')[0];
+
+      supabase.from('ingresos').select('monto, cartera')
+        .gte('fecha', startDate)
+        .lte('fecha', endDate)
+        .then(function(r) {
+          var datos = { 'Caja chica': 0, 'alfonso mercado': 0, 'Stripe': 0, 'Total': 0 };
+          (r.data || []).forEach(function(row) {
+            var cartera = row.cartera || 'Otro';
+            var monto = parseFloat(row.monto || 0);
+            if (['Caja chica', 'alfonso mercado', 'Stripe'].includes(cartera)) {
+              datos[cartera] += monto;
+            }
+            datos['Total'] += monto;
+          });
+          
+          document.getElementById('ing-sem-efectivo').textContent = '$' + Math.round(datos['Caja chica']).toLocaleString('es-MX');
+          document.getElementById('ing-sem-alfonso').textContent = '$' + Math.round(datos['alfonso mercado']).toLocaleString('es-MX');
+          document.getElementById('ing-sem-stripe').textContent = '$' + Math.round(datos['Stripe']).toLocaleString('es-MX');
+          document.getElementById('ing-sem-total').textContent = '$' + Math.round(datos['Total']).toLocaleString('es-MX');
+        });
+    }
+
+    /* ── INGRESOS MENSUALES ── */
+    function loadIngresosMensuales() {
+      if (!window.supabase) return;
+      var hoy = new Date();
+      var hace30Dias = new Date(hoy);
+      hace30Dias.setDate(hace30Dias.getDate() - 30);
+      
+      var startDate = hace30Dias.toISOString().split('T')[0];
+      var endDate = hoy.toISOString().split('T')[0];
+
+      supabase.from('ingresos').select('monto, cartera')
+        .gte('fecha', startDate)
+        .lte('fecha', endDate)
+        .then(function(r) {
+          var datos = { 'Caja chica': 0, 'alfonso mercado': 0, 'Stripe': 0, 'Total': 0 };
+          (r.data || []).forEach(function(row) {
+            var cartera = row.cartera || 'Otro';
+            var monto = parseFloat(row.monto || 0);
+            if (['Caja chica', 'alfonso mercado', 'Stripe'].includes(cartera)) {
+              datos[cartera] += monto;
+            }
+            datos['Total'] += monto;
+          });
+          
+          document.getElementById('ing-mes-efectivo').textContent = '$' + Math.round(datos['Caja chica']).toLocaleString('es-MX');
+          document.getElementById('ing-mes-alfonso').textContent = '$' + Math.round(datos['alfonso mercado']).toLocaleString('es-MX');
+          document.getElementById('ing-mes-stripe').textContent = '$' + Math.round(datos['Stripe']).toLocaleString('es-MX');
+          document.getElementById('ing-mes-total').textContent = '$' + Math.round(datos['Total']).toLocaleString('es-MX');
         });
     }
 
