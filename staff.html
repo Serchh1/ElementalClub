@@ -2657,6 +2657,10 @@
             <div class="sc-num" id="st-ing">—</div>
             <div class="sc-lbl">Ingresos hoy <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span></div>
           </div>
+          <div class="sc" onclick="abrirModalIngresosSemana()" style="cursor:pointer;" title="Ver detalle">
+            <div class="sc-num" id="st-ing-semana">—</div>
+            <div class="sc-lbl">Ingresos semana <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span></div>
+          </div>
         </div>
 
         <div class="seh">
@@ -2704,53 +2708,6 @@
           </div>
         </div>
 
-        <!-- Ingresos Semanales -->
-        <div class="seh" style="margin-top: 2rem;">
-          <h3>INGRESOS SEMANALES</h3>
-          <div class="ln"></div>
-        </div>
-        <div class="stats">
-          <div class="sc">
-            <div class="sc-num" id="ing-sem-efectivo">—</div>
-            <div class="sc-lbl">Efectivo</div>
-          </div>
-          <div class="sc">
-            <div class="sc-num" id="ing-sem-alfonso">—</div>
-            <div class="sc-lbl">Alfonso Mercado</div>
-          </div>
-          <div class="sc">
-            <div class="sc-num" id="ing-sem-stripe">—</div>
-            <div class="sc-lbl">Stripe</div>
-          </div>
-          <div class="sc" style="grid-column: span 2; @media(min-width:560px) { grid-column: auto; }">
-            <div class="sc-num" id="ing-sem-total" style="color: var(--or);">—</div>
-            <div class="sc-lbl">Total Semanal</div>
-          </div>
-        </div>
-
-        <!-- Ingresos Mensuales -->
-        <div class="seh">
-          <h3>INGRESOS MENSUALES</h3>
-          <div class="ln"></div>
-        </div>
-        <div class="stats">
-          <div class="sc">
-            <div class="sc-num" id="ing-mes-efectivo">—</div>
-            <div class="sc-lbl">Efectivo</div>
-          </div>
-          <div class="sc">
-            <div class="sc-num" id="ing-mes-alfonso">—</div>
-            <div class="sc-lbl">Alfonso Mercado</div>
-          </div>
-          <div class="sc">
-            <div class="sc-num" id="ing-mes-stripe">—</div>
-            <div class="sc-lbl">Stripe</div>
-          </div>
-          <div class="sc" style="grid-column: span 2; @media(min-width:560px) { grid-column: auto; }">
-            <div class="sc-num" id="ing-mes-total" style="color: var(--or);">—</div>
-            <div class="sc-lbl">Total Mensual</div>
-          </div>
-        </div>
       </div>
 
       <!-- Tab Miembros -->
@@ -3892,7 +3849,6 @@
         });
 
       loadIngresosSemanales();
-      loadIngresosMensuales();
     }
 
     /* ── INGRESOS SEMANALES ── */
@@ -3919,41 +3875,7 @@
             datos['Total'] += monto;
           });
           
-          document.getElementById('ing-sem-efectivo').textContent = '$' + Math.round(datos['Caja chica']).toLocaleString('es-MX');
-          document.getElementById('ing-sem-alfonso').textContent = '$' + Math.round(datos['alfonso mercado']).toLocaleString('es-MX');
-          document.getElementById('ing-sem-stripe').textContent = '$' + Math.round(datos['Stripe']).toLocaleString('es-MX');
-          document.getElementById('ing-sem-total').textContent = '$' + Math.round(datos['Total']).toLocaleString('es-MX');
-        });
-    }
-
-    /* ── INGRESOS MENSUALES ── */
-    function loadIngresosMensuales() {
-      if (!window.supabase) return;
-      var hoy = new Date();
-      var hace30Dias = new Date(hoy);
-      hace30Dias.setDate(hace30Dias.getDate() - 30);
-      
-      var startDate = hace30Dias.toISOString().split('T')[0];
-      var endDate = hoy.toISOString().split('T')[0];
-
-      supabase.from('ingresos').select('monto, cartera')
-        .gte('fecha', startDate)
-        .lte('fecha', endDate)
-        .then(function(r) {
-          var datos = { 'Caja chica': 0, 'alfonso mercado': 0, 'Stripe': 0, 'Total': 0 };
-          (r.data || []).forEach(function(row) {
-            var cartera = row.cartera || 'Otro';
-            var monto = parseFloat(row.monto || 0);
-            if (['Caja chica', 'alfonso mercado', 'Stripe'].includes(cartera)) {
-              datos[cartera] += monto;
-            }
-            datos['Total'] += monto;
-          });
-          
-          document.getElementById('ing-mes-efectivo').textContent = '$' + Math.round(datos['Caja chica']).toLocaleString('es-MX');
-          document.getElementById('ing-mes-alfonso').textContent = '$' + Math.round(datos['alfonso mercado']).toLocaleString('es-MX');
-          document.getElementById('ing-mes-stripe').textContent = '$' + Math.round(datos['Stripe']).toLocaleString('es-MX');
-          document.getElementById('ing-mes-total').textContent = '$' + Math.round(datos['Total']).toLocaleString('es-MX');
+          document.getElementById('st-ing-semana').textContent = '$' + Math.round(datos['Total']).toLocaleString('es-MX');
         });
     }
 
@@ -6282,45 +6204,46 @@
         });
     }
   </script>
-  <!-- MODAL: DETALLE INGRESOS HOY -->
-  <div class="bd" id="ing-hoy-bd" onclick="if(event.target===this)cerrarModalIngresosHoy()">
+  <!-- MODAL: DETALLE INGRESOS SEMANA -->
+  <div class="bd" id="ing-sem-bd" onclick="if(event.target===this)cerrarModalIngresosSemana()">
     <div class="modal" style="max-width:780px;">
       <div class="mh">
-        <div class="mh-title">INGRESOS <b>HOY</b></div>
+        <div class="mh-title">INGRESOS <b>SEMANA</b></div>
         <div style="display:flex;align-items:center;gap:.75rem;">
           <span style="font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);">Caja chica · Alfonso Mercado · Stripe</span>
-          <div class="mx" onclick="cerrarModalIngresosHoy()">✕</div>
+          <div class="mx" onclick="cerrarModalIngresosSemana()">✕</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05);border-bottom:1px solid var(--s3);">
         <div style="background:var(--s2);padding:.9rem 1.2rem;">
           <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Caja chica</div>
-          <div style="font-family:var(--fT);font-size:1.6rem;color:#fbbf24;" id="ing-hoy-cc">—</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#fbbf24;" id="ing-sem-cc">—</div>
         </div>
         <div style="background:var(--s2);padding:.9rem 1.2rem;">
           <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Alfonso Mercado</div>
-          <div style="font-family:var(--fT);font-size:1.6rem;color:#60a5fa;" id="ing-hoy-am">—</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#60a5fa;" id="ing-sem-am">—</div>
         </div>
         <div style="background:var(--s2);padding:.9rem 1.2rem;">
           <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem;">Stripe</div>
-          <div style="font-family:var(--fT);font-size:1.6rem;color:#a78bfa;" id="ing-hoy-stripe">—</div>
+          <div style="font-family:var(--fT);font-size:1.6rem;color:#a78bfa;" id="ing-sem-stripe">—</div>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.4rem;background:rgba(255,77,0,.07);border-bottom:1px solid var(--s3);">
-        <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);">Total combinado hoy</span>
-        <span style="font-family:var(--fT);font-size:1.9rem;color:var(--or);" id="ing-hoy-total">—</span>
+        <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);">Total combinado semana</span>
+        <span style="font-family:var(--fT);font-size:1.9rem;color:var(--or);" id="ing-sem-total">—</span>
       </div>
       <div style="max-height:380px;overflow-y:auto;">
-        <table style="width:100%;border-collapse:collapse;min-width:560px;">
+        <table style="width:100%;border-collapse:collapse;min-width:600px;">
           <thead><tr>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Fecha</th>
             <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Cliente</th>
             <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Cartera</th>
             <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Categoria</th>
             <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Empleado</th>
             <th style="text-align:right;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Monto</th>
           </tr></thead>
-          <tbody id="ing-hoy-tbody">
-            <tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>
+          <tbody id="ing-sem-tbody">
+            <tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>
           </tbody>
         </table>
       </div>
@@ -6328,23 +6251,29 @@
   </div>
 
   <script>
-    function abrirModalIngresosHoy() {
-      document.getElementById('ing-hoy-bd').classList.add('on');
+    function abrirModalIngresosSemana() {
+      document.getElementById('ing-sem-bd').classList.add('on');
       document.body.style.overflow = 'hidden';
-      cargarIngresosHoy();
+      cargarIngresosSemanaModal();
     }
-    function cerrarModalIngresosHoy() {
-      document.getElementById('ing-hoy-bd').classList.remove('on');
+    function cerrarModalIngresosSemana() {
+      document.getElementById('ing-sem-bd').classList.remove('on');
       document.body.style.overflow = '';
     }
-    function cargarIngresosHoy() {
-      var hoy=new Date().toISOString().split('T')[0];
-      var tbody=document.getElementById('ing-hoy-tbody');
-      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
-      ['ing-hoy-cc','ing-hoy-am','ing-hoy-stripe','ing-hoy-total'].forEach(function(id){document.getElementById(id).textContent='$0';});
-      window.supabase.from('ingresos').select('nombre,monto,cartera,categoria,usuario')
-        .eq('fecha',hoy).in('cartera',['Caja chica','alfonso mercado','Stripe'])
-        .order('created_at',{ascending:false})
+    function cargarIngresosSemanaModal() {
+      var d = new Date();
+      var dStr = d.toISOString().split('T')[0];
+      var d7 = new Date();
+      d7.setDate(d.getDate() - 6);
+      var d7Str = d7.toISOString().split('T')[0];
+
+      var tbody=document.getElementById('ing-sem-tbody');
+      tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
+      ['ing-sem-cc','ing-sem-am','ing-sem-stripe','ing-sem-total'].forEach(function(id){document.getElementById(id).textContent='$0';});
+      
+      window.supabase.from('ingresos').select('nombre,monto,cartera,categoria,usuario,fecha')
+        .gte('fecha',d7Str).lte('fecha',dStr).in('cartera',['Caja chica','alfonso mercado','Stripe'])
+        .order('fecha',{ascending:false})
         .then(function(r){
           var rows=r.data||[];
           var fmt=function(n){return '$'+Math.round(n).toLocaleString('es-MX');};
@@ -6356,17 +6285,19 @@
             else if(row.cartera==='alfonso mercado') totAM+=m;
             else if(row.cartera==='Stripe') totST+=m;
           });
-          document.getElementById('ing-hoy-cc').textContent=fmt(totCC);
-          document.getElementById('ing-hoy-am').textContent=fmt(totAM);
-          document.getElementById('ing-hoy-stripe').textContent=fmt(totST);
-          document.getElementById('ing-hoy-total').textContent=fmt(totCC+totAM+totST);
+          document.getElementById('ing-sem-cc').textContent=fmt(totCC);
+          document.getElementById('ing-sem-am').textContent=fmt(totAM);
+          document.getElementById('ing-sem-stripe').textContent=fmt(totST);
+          document.getElementById('ing-sem-total').textContent=fmt(totCC+totAM+totST);
           if(!rows.length){
-            tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2.5rem;color:rgba(255,255,255,.2);font-size:.78rem;">Sin ingresos hoy en estas carteras</td></tr>';
+            tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:rgba(255,255,255,.2);font-size:.78rem;">Sin ingresos registrados esta semana en estas carteras</td></tr>';
             return;
           }
           tbody.innerHTML=rows.map(function(row){
             var c=colMap[row.cartera]||'var(--or)';
+            var fechaFormat = row.fecha ? row.fecha.substring(5) : '—';
             return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">'
+              +'<td style="padding:.65rem 1rem;font-size:.72rem;color:rgba(255,255,255,.5);">'+fechaFormat+'</td>'
               +'<td style="padding:.65rem 1rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.82);">'+( row.nombre||'—')+'</td>'
               +'<td style="padding:.65rem 1rem;"><span style="font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:2px;border:1px solid '+c+'40;color:'+c+';background:'+c+'18;">'+( row.cartera||'—')+'</span></td>'
               +'<td style="padding:.65rem 1rem;font-size:.75rem;color:rgba(255,255,255,.45);">'+( row.categoria||'—')+'</td>'
@@ -6375,7 +6306,7 @@
               +'</tr>';
           }).join('');
         }).catch(function(e){
-          tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;">⚠️ Error: '+e.message+'</td></tr>';
+          tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#f87171;">⚠️ Error: '+e.message+'</td></tr>';
         });
     }
   </script>
