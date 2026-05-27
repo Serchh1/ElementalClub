@@ -2647,10 +2647,10 @@
             <div class="sc-num" id="st-hoy">—</div>
             <div class="sc-lbl">Registros hoy</div>
           </div>
-          <div class="sc">
+          <div class="sc" onclick="abrirModalVencimientos()" style="cursor:pointer;" title="Ver miembros que vencen esta semana">
 
             <div class="sc-num" id="st-exp">—</div>
-            <div class="sc-lbl">Vencen 7 días</div>
+            <div class="sc-lbl">Vencen 7 días <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span></div>
           </div>
           <div class="sc" onclick="abrirModalIngresosHoy()" style="cursor:pointer;" title="Ver detalle">
 
@@ -2920,6 +2920,25 @@
 
           <!-- ── INGRESO ── -->
           <div id="fin-panel-ingreso">
+            <!-- Buscador de cliente (membresía/renovación) -->
+            <div id="ing-buscar-bloque" style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.85rem;">
+              <div style="font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--or);margin-bottom:.6rem;">Buscar cliente existente</div>
+              <div style="position:relative;">
+                <input type="text" id="ing-buscar-input"
+                  placeholder="Escribe nombre o teléfono..."
+                  style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.6rem .85rem;color:var(--txt);font-family:var(--fB);font-size:.82rem;border-radius:var(--r);outline:none;box-sizing:border-box;"
+                  oninput="ingBuscarCliente(this.value)"
+                  onfocus="this.style.borderColor='var(--or)'" onblur="setTimeout(function(){this.style.borderColor='var(--s3)';document.getElementById('ing-buscar-lista').style.display='none';}.bind(this),200)" />
+                <div id="ing-buscar-lista" style="display:none;position:absolute;z-index:50;width:100%;background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);max-height:220px;overflow-y:auto;margin-top:2px;"></div>
+              </div>
+              <div id="ing-cliente-sel" style="display:none;margin-top:.65rem;background:var(--bg);border:1px solid rgba(255,77,0,.3);border-radius:var(--r);padding:.65rem .9rem;display:none;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;">
+                <div>
+                  <div id="ing-cli-nombre" style="font-size:.88rem;font-weight:800;color:var(--txt);">—</div>
+                  <div id="ing-cli-info" style="font-size:.68rem;color:var(--mu);margin-top:.15rem;">—</div>
+                </div>
+                <button onclick="ingLimpiarCliente()" style="background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);font-size:.65rem;padding:.2rem .5rem;border-radius:3px;cursor:pointer;">✕ Quitar</button>
+              </div>
+            </div>
             <div class="ff-grid ff-grid-3">
               <div class="ff-fld">
                 <label>Nombre / Cliente <span class="req">*</span></label>
@@ -2937,10 +2956,6 @@
                 <label>Cartera <span class="req">*</span></label>
                 <select id="ing-cartera">
                   <option value="">— Selecciona —</option>
-                  <option>Banbajio</option><option>Caja chica</option>
-                  <option>Mercado libre</option><option>Stripe</option>
-                  <option>alfonso mercado</option><option>Tensa</option>
-                  <option>2Bajio</option><option>Resguardo</option>
                 </select>
               </div>
               <div class="ff-fld">
@@ -2998,7 +3013,7 @@
               <span class="fin-resumen-lbl">Resumen:</span>
               <span id="ing-resumen-txt"></span>
             </div>
-            <button class="fin-btn fin-btn-ing" onclick="registrarIngreso()" style="margin-top:1rem">↑ Registrar Ingreso</button>
+            <button class="fin-btn fin-btn-ing" onclick="registrarIngresoConMembresia()" style="margin-top:1rem">↑ Registrar Ingreso</button>
           </div>
 
           <!-- ── EGRESO ── -->
@@ -3020,10 +3035,6 @@
                 <label>Cartera <span class="req">*</span></label>
                 <select id="egr-cartera">
                   <option value="">— Selecciona —</option>
-                  <option>Banbajio</option><option>Caja chica</option>
-                  <option>Mercado libre</option><option>Stripe</option>
-                  <option>alfonso mercado</option><option>Tensa</option>
-                  <option>2Bajio</option><option>Resguardo</option>
                 </select>
               </div>
               <div class="ff-fld">
@@ -3061,20 +3072,12 @@
                 <label>Sale de <span class="req">*</span></label>
                 <select id="trp-salida">
                   <option value="">— Origen —</option>
-                  <option>Banbajio</option><option>Caja chica</option>
-                  <option>Mercado libre</option><option>Stripe</option>
-                  <option>alfonso mercado</option><option>Tensa</option>
-                  <option>2Bajio</option><option>Resguardo</option>
                 </select>
               </div>
               <div class="ff-fld">
                 <label>Entra en <span class="req">*</span></label>
                 <select id="trp-entrada">
                   <option value="">— Destino —</option>
-                  <option>Banbajio</option><option>Caja chica</option>
-                  <option>Mercado libre</option><option>Stripe</option>
-                  <option>alfonso mercado</option><option>Tensa</option>
-                  <option>2Bajio</option><option>Resguardo</option>
                 </select>
               </div>
               <div class="ff-fld">
@@ -3126,10 +3129,6 @@
               <select id="busq-cartera" onchange="buscarMovimientos()"
                 style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.6rem .85rem;color:var(--txt);font-family:var(--fB);font-size:.8rem;border-radius:var(--r);outline:none;appearance:none;cursor:pointer;">
                 <option value="">Todas</option>
-                <option>Banbajio</option><option>Caja chica</option>
-                <option>Mercado libre</option><option>Stripe</option>
-                <option>alfonso mercado</option><option>Tensa</option>
-                <option>2Bajio</option><option>Resguardo</option>
               </select>
             </div>
             <!-- Categoría -->
@@ -3288,11 +3287,11 @@
             <div>
               <div class="slbl">Datos Personales</div>
               <div class="mfld"><label>Nombre(s) <span class="req">*</span></label>
-                <div class="mfi"><span class="mfi-i"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="m-nom" placeholder="Juan"
+                <div class="mfi"><span class="mfi-i"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="m-nom" onblur="this.value=toTitleCase(this.value)" placeholder="Juan"
                     required /></div>
               </div>
               <div class="mfld"><label>Apellidos <span class="req">*</span></label>
-                <div class="mfi"><span class="mfi-i"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="m-ape" placeholder="Pérez García"
+                <div class="mfi"><span class="mfi-i"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="m-ape" onblur="this.value=toTitleCase(this.value)" placeholder="Pérez García"
                     required /></div>
               </div>
               <div class="mfld"><label>Teléfono <span class="req">*</span></label>
@@ -3513,6 +3512,17 @@
   </script>
   <script>
     'use strict';
+    /* ── Title Case (igual que migración Python) ── */
+    function toTitleCase(s) {
+      if (!s) return s;
+      var prep = {de:1,del:1,la:1,las:1,los:1,y:1};
+      return s.split(/\s+/).map(function(w, i) {
+        if (!w) return w;
+        var l = w.toLowerCase();
+        return (i > 0 && prep[l]) ? l : l.charAt(0).toUpperCase() + l.slice(1);
+      }).join(' ');
+    }
+
 
     /* ── PLAN DATA ── */
     var PLAN_TYPES = [
@@ -3661,6 +3671,10 @@
       loadStats();
       cargarCajaChica();
       setInterval(cargarCajaChica, 180000);
+      // Cargar carteras activas desde BD
+      cargarCarterasActivas().catch(function(err) {
+        console.error('Error cargando carteras en enterPanel:', err);
+      });
       // Llamar finReset primero, luego mostrar tab Finanzas si es socio
       if(typeof window.finReset === 'function') window.finReset();
       var isSocio = user.role === 'socio' || user.rol === 'socio';
@@ -4198,8 +4212,8 @@
       btn.disabled = true;
       btn.textContent = 'Guardando…';
 
-      var nom = document.getElementById('m-nom').value.trim();
-      var ape = document.getElementById('m-ape').value.trim();
+      var nom = toTitleCase(document.getElementById('m-nom').value.trim());
+      var ape = toTitleCase(document.getElementById('m-ape').value.trim());
       var tel = document.getElementById('m-tel').value.trim();
       var email = document.getElementById('m-email').value.trim();
       var precio = PRECIOS[curPlanType][curDur];
@@ -4594,7 +4608,13 @@
       var finBtn = document.getElementById('tab-btn-finanzas');
       if(finBtn) finBtn.style.display = socio ? '' : 'none';
 
-      cargarMovimientos();
+      // Cargar carteras activas primero, luego movimientos
+      cargarCarterasActivas().then(function() {
+        cargarMovimientos();
+      }).catch(function(err) {
+        console.error('Error cargando carteras:', err);
+        cargarMovimientos();
+      });
     }
 
     // Exponer para que enterPanel y doLogout puedan llamarla
@@ -5632,7 +5652,97 @@
     }
 
     // SALDOS POR CARTERA
-    var CARTERAS_LIST = ['Banbajio','Caja chica','Mercado libre','Stripe','alfonso mercado','Tensa','2Bajio','Resguardo'];
+    var CARTERAS_LIST = []; // se llena dinámicamente desde la tabla carteras
+
+    /* ── Carga carteras activas desde Supabase ── */
+    function cargarCarterasActivas() {
+      if (!window.supabase) {
+        console.warn('⚠️  Supabase no disponible');
+        return Promise.resolve([]);
+      }
+      
+      console.log('🔄 Iniciando carga de carteras desde Supabase...');
+      
+      // Primero intentar obtener TODAS las carteras para diagnosticar
+      return window.supabase.from('carteras')
+        .select('*')
+        .then(function(r) {
+          console.log('📡 Respuesta completa de Supabase:', r);
+          
+          if (r.error) {
+            console.error('❌ Error obteniendo carteras:', r.error);
+            return [];
+          }
+          
+          if (!r.data || r.data.length === 0) {
+            console.warn('⚠️  No hay datos retornados. Probablemente problema de RLS o permisos');
+            console.log('📋 Intenta desactivar RLS en la tabla "carteras" en Supabase');
+            return [];
+          }
+          
+          console.log('✅ Total de carteras en BD:', r.data.length);
+          console.log('📊 Estructura de datos:', r.data[0]);
+          console.log('📋 Todas las carteras:', r.data);
+          
+          // Filtrar por activa = true
+          var filtered = r.data.filter(function(c) {
+            console.log('🔍 Revisando cartera:', c.nombre, '| activa:', c.activa, '(tipo:', typeof c.activa + ')');
+            
+            var esActiva = c.activa === true || 
+                          c.activa === 'true' ||
+                          c.activa === 1 ||
+                          c.activa === '1' ||
+                          (c.activa !== false && c.activa !== 'false' && c.activa !== 0 && c.activa !== '0' && c.activa !== null && c.activa !== undefined);
+            return esActiva;
+          });
+          
+          console.log('✅ Carteras activas después de filtrar:', filtered.length);
+          console.log('📋 Carteras activas:', filtered.map(function(c){ return {nombre: c.nombre, activa: c.activa}; }));
+          
+          var names = filtered.map(function(c){ return c.nombre; }).sort();
+          
+          if (names.length === 0) {
+            console.warn('⚠️  No hay carteras con activa=true (0 resultados)');
+            console.log('📋 Resumen de carteras:', r.data.map(function(c) { return {nombre: c.nombre, activa: c.activa}; }));
+            return [];
+          }
+          
+          CARTERAS_LIST = names;
+          poblarSelectsCarteras(names);
+          console.log('✅ Carteras activas cargadas correctamente:', names);
+          return names;
+        })
+        .catch(function(err) {
+          console.error('❌ Error al cargar carteras desde Supabase:', err);
+          console.error('📋 Detalles del error:', JSON.stringify(err));
+          return [];
+        });
+    }
+
+    /* ── Rellena todos los <select> de carteras con las activas ── */
+    var CARTERAS_SELECTS = [
+      'ing-cartera','egr-cartera','trp-salida','trp-entrada',
+      'busq-cartera','edit-cartera'
+    ];
+    function poblarSelectsCarteras(names) {
+      console.log('📝 Llenando selects con carteras:', names);
+      CARTERAS_SELECTS.forEach(function(id) {
+        var sel = document.getElementById(id);
+        if (!sel) {
+          console.warn('⚠️  Select no encontrado:', id);
+          return;
+        }
+        var esDoble = (id === 'trp-salida' || id === 'trp-entrada');
+        var placeholder = esDoble
+          ? (id==='trp-salida' ? '— Origen —' : '— Destino —')
+          : (id==='busq-cartera' ? 'Todas' : id==='edit-cartera' ? '— Selecciona —' : '— Selecciona —');
+        // Opción vacía inicial
+        var opts = '<option value="">' + placeholder + '</option>';
+        names.forEach(function(n) { opts += '<option value="' + n + '">' + n + '</option>'; });
+        sel.innerHTML = opts;
+        console.log('✅ Select #' + id + ' llenado con ' + names.length + ' carteras');
+      });
+    }
     var CARTERAS_COLORS = {'Banbajio':'#60a5fa','Caja chica':'#fbbf24','Mercado libre':'#34d399','Stripe':'#a78bfa','alfonso mercado':'#fb923c','Tensa':'#f472b6','2Bajio':'#38bdf8','Resguardo':'#4ade80'};
 
     window.poblarMesesCartera = function() {
@@ -5819,10 +5929,6 @@
             <div class="mfi"><span class="mfi-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10"></rect><rect x="10" y="10" width="4" height="10"></rect><rect x="16" y="10" width="4" height="10"></rect><polygon points="12 2 2 8 22 8"></polygon><line x1="2" y1="22" x2="22" y2="22"></line></svg></span>
               <select id="edit-cartera">
                 <option value="">— Selecciona —</option>
-                <option>Banbajio</option><option>Caja chica</option>
-                <option>Mercado libre</option><option>Stripe</option>
-                <option>alfonso mercado</option><option>Tensa</option>
-                <option>2Bajio</option><option>Resguardo</option>
               </select>
             </div>
           </div>
@@ -6158,6 +6264,197 @@
         }).catch(function(e){
           tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;">⚠️ Error: '+e.message+'</td></tr>';
         });
+    }
+  </script>
+
+
+  <!-- MODAL: VENCIMIENTOS 7 DÍAS -->
+  <div class="bd" id="venc-bd" onclick="if(event.target===this)cerrarModalVencimientos()">
+    <div class="modal" style="max-width:700px;">
+      <div class="mh">
+        <div class="mh-title">VENCIMIENTOS <b>PRÓXIMOS 7 DÍAS</b></div>
+        <div class="mx" onclick="cerrarModalVencimientos()">✕</div>
+      </div>
+      <div style="padding:.9rem 1.4rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--s3);gap:.75rem;flex-wrap:wrap;">
+        <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);">Miembros cuya membresía vence entre hoy y los próximos 7 días</span>
+        <span id="venc-count" style="font-family:var(--fT);font-size:1.5rem;color:var(--or);">—</span>
+      </div>
+      <div style="max-height:440px;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;min-width:520px;">
+          <thead><tr>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Nombre</th>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Teléfono</th>
+            <th style="text-align:left;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Plan</th>
+            <th style="text-align:right;padding:.6rem 1rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3);position:sticky;top:0;z-index:2;">Vence</th>
+          </tr></thead>
+          <tbody id="venc-tbody">
+            <tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalVencimientos() {
+      document.getElementById('venc-bd').classList.add('on');
+      document.body.style.overflow = 'hidden';
+      cargarVencimientos();
+    }
+    function cerrarModalVencimientos() {
+      document.getElementById('venc-bd').classList.remove('on');
+      document.body.style.overflow = '';
+    }
+    function cargarVencimientos() {
+      var tbody = document.getElementById('venc-tbody');
+      var countEl = document.getElementById('venc-count');
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
+      var hoy = new Date();
+      var wk  = new Date(); wk.setDate(wk.getDate() + 7);
+      window.supabase.from('clients')
+        .select('first_name,last_name1,phone,membership_type,membership_expires,membership_status')
+        .gte('membership_expires', hoy.toISOString())
+        .lte('membership_expires', wk.toISOString())
+        .in('membership_status', ['active','overdue'])
+        .order('membership_expires', { ascending: true })
+        .then(function(r) {
+          var rows = r.data || [];
+          countEl.textContent = rows.length;
+          if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2.5rem;color:rgba(255,255,255,.2);font-size:.78rem;">No hay vencimientos en los próximos 7 días</td></tr>';
+            return;
+          }
+          tbody.innerHTML = rows.map(function(m) {
+            var expDate = new Date(m.membership_expires);
+            var hoyD    = new Date(); hoyD.setHours(0,0,0,0);
+            var diffMs  = expDate - hoyD;
+            var dias    = Math.ceil(diffMs / 86400000);
+            var urgColor = dias <= 1 ? '#f87171' : dias <= 3 ? '#fbbf24' : '#4ade80';
+            var diasLbl  = dias <= 0 ? 'Hoy' : dias === 1 ? 'Mañana' : 'En ' + dias + ' días';
+            var expStr   = expDate.toLocaleDateString('es-MX', {day:'2-digit', month:'short', year:'numeric'});
+            return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">'
+              + '<td style="padding:.65rem 1rem;font-size:.82rem;font-weight:700;color:rgba(255,255,255,.88);">' + (m.first_name||'') + ' ' + (m.last_name1||'') + '</td>'
+              + '<td style="padding:.65rem 1rem;font-size:.78rem;color:rgba(255,255,255,.5);">' + (m.phone ? '<a href="https://wa.me/52'+m.phone+'" target="_blank" style="color:var(--or);text-decoration:none;">'+m.phone+'</a>' : '<span style="color:rgba(255,255,255,.2)">—</span>') + '</td>'
+              + '<td style="padding:.65rem 1rem;font-size:.75rem;color:rgba(255,255,255,.5);">' + (m.membership_type||'—') + '</td>'
+              + '<td style="padding:.65rem 1rem;text-align:right;">'
+                + '<div style="font-size:.78rem;color:rgba(255,255,255,.5);">' + expStr + '</div>'
+                + '<div style="font-size:.68rem;font-weight:800;color:'+urgColor+';">'+diasLbl+'</div>'
+              + '</td>'
+              + '</tr>';
+          }).join('');
+        })
+        .catch(function(e) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;">⚠️ Error: ' + e.message + '</td></tr>';
+        });
+    }
+  </script>
+
+  <script>
+    /* ══ BUSCADOR DE CLIENTE EN INGRESO ══ */
+    var ingClienteSeleccionado = null;
+
+    function ingBuscarCliente(q) {
+      var lista = document.getElementById('ing-buscar-lista');
+      q = (q||'').trim();
+      if (q.length < 2) { lista.style.display='none'; return; }
+      lista.style.display='block';
+      lista.innerHTML = '<div style="padding:.6rem 1rem;font-size:.72rem;color:var(--mu);">Buscando...</div>';
+      var isPhone = /^[0-9]{4,}$/.test(q);
+      var qry = window.supabase.from('clients')
+        .select('id,first_name,last_name1,last_name2,phone,membership_type,membership_status,membership_expires')
+        .eq('client_type','member')
+        .order('first_name')
+        .limit(10);
+      if (isPhone) {
+        qry = qry.ilike('phone', q + '%');
+      } else {
+        qry = qry.or('first_name.ilike.%'+q+'%,last_name1.ilike.%'+q+'%');
+      }
+      qry.then(function(r) {
+        var rows = r.data || [];
+        if (!rows.length) {
+          lista.innerHTML = '<div style="padding:.6rem 1rem;font-size:.72rem;color:rgba(255,255,255,.3);">Sin resultados para "'+q+'"</div>';
+          return;
+        }
+        lista.innerHTML = rows.map(function(m) {
+          var nombre = (m.first_name||'') + ' ' + (m.last_name1||'') + (m.last_name2?' '+m.last_name2:'');
+          var expStr = m.membership_expires ? new Date(m.membership_expires).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+          var stColor = m.membership_status==='active'?'#4ade80':m.membership_status==='overdue'?'#fbbf24':'#f87171';
+          var mEsc = JSON.stringify(m).replace(/'/g,"&#39;");
+          return '<div onclick=\'ingSeleccionarCliente('+mEsc+')\' style="padding:.6rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background=\'rgba(255,77,0,.08)\'" onmouseout="this.style.background=\'\'">'+
+            '<div style="font-size:.82rem;font-weight:700;color:var(--txt);">'+nombre+'</div>'+
+            '<div style="font-size:.68rem;color:var(--mu);margin-top:.1rem;">'+
+              '<span style="color:'+stColor+'">●</span> '+
+              (m.membership_type||'sin plan') + ' · Vence: ' + expStr +
+              (m.phone?' · '+m.phone:'') +
+            '</div>'+
+          '</div>';
+        }).join('');
+      });
+    }
+
+    function ingSeleccionarCliente(m) {
+      ingClienteSeleccionado = m;
+      var nombre = (m.first_name||'') + ' ' + (m.last_name1||'') + (m.last_name2?' '+m.last_name2:'');
+      var expStr = m.membership_expires ? new Date(m.membership_expires).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+      var stLbl  = {active:'Activa',overdue:'Vencida',inactive:'Inactiva',cancelled:'Cancelada',cancel_requested:'Baja solicitada'}[m.membership_status]||m.membership_status;
+      document.getElementById('ing-nombre').value = nombre;
+      document.getElementById('ing-cli-nombre').textContent = nombre;
+      document.getElementById('ing-cli-info').textContent   = (m.membership_type||'Sin plan') + ' · ' + stLbl + ' · Vence: ' + expStr;
+      document.getElementById('ing-cliente-sel').style.display = 'flex';
+      document.getElementById('ing-buscar-lista').style.display = 'none';
+      document.getElementById('ing-buscar-input').value = '';
+    }
+
+    function ingLimpiarCliente() {
+      ingClienteSeleccionado = null;
+      document.getElementById('ing-nombre').value = '';
+      document.getElementById('ing-buscar-input').value = '';
+      document.getElementById('ing-cliente-sel').style.display = 'none';
+    }
+
+    /* ── Actualizar membresía al registrar ingreso tipo membresía/renovación ── */
+    function ingActualizarMembresia(clientId, meses) {
+      if (!clientId || !meses) return Promise.resolve();
+      return window.supabase.from('clients')
+        .select('membership_expires')
+        .eq('id', clientId)
+        .single()
+        .then(function(r) {
+          var base = r.data && r.data.membership_expires ? new Date(r.data.membership_expires) : new Date();
+          if (base < new Date()) base = new Date();
+          base.setMonth(base.getMonth() + parseInt(meses));
+          return window.supabase.from('clients').update({
+            membership_expires: base.toISOString(),
+            last_payment_date:  new Date().toISOString(),
+            membership_status:  'active',
+            updated_at:         new Date().toISOString()
+          }).eq('id', String(clientId));
+        });
+    }
+
+    /* ── Wrapper que registra ingreso y actualiza membresía si aplica ── */
+    function registrarIngresoConMembresia() {
+      var cat    = (document.getElementById('ing-categoria').value || '');
+      var mesesEl = document.getElementById('ing-meses');
+      var meses  = mesesEl ? (parseInt(mesesEl.value) || 0) : 0;
+      var cliente = ingClienteSeleccionado;
+
+      var result = window.registrarIngreso ? window.registrarIngreso() : registrarIngreso();
+
+      if (cat === 'membresia' && cliente && cliente.id && meses > 0) {
+        var p = (result && typeof result.then === 'function') ? result : Promise.resolve();
+        p.then(function() {
+          return ingActualizarMembresia(cliente.id, meses);
+        }).then(function() {
+          loadStats();
+          ingLimpiarCliente();
+        }).catch(function(e) {
+          console.warn('No se pudo actualizar membresía:', e.message);
+        });
+      } else {
+        ingLimpiarCliente();
+      }
     }
   </script>
 
