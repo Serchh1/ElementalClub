@@ -3204,6 +3204,39 @@
       <!-- TAB FINANZAS (solo socios) -->
       <div id="tab-finanzas" class="tab-pane">
 
+        <!-- RESUMEN FINANCIERO (MES) -->
+        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN MENSUAL</h3><div class="ln"></div>
+          <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div class="fin-grid" id="fin-kpis" style="margin-bottom:2rem;">
+          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
+          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
+        </div>
+
+        <!-- RESUMEN FINANCIERO (SEMANA) -->
+        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN SEMANAL</h3><div class="ln"></div>
+          <select id="fin-sem-sel" onchange="finCambiarSemana(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div class="fin-grid" id="fin-kpis-sem" style="margin-bottom:1rem;">
+          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos semana</div><div class="kpi-val" id="kpi-sem-ing">—</div><div class="kpi-sub" id="kpi-sem-ing-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos semana</div><div class="kpi-val" id="kpi-sem-egr">—</div><div class="kpi-sub" id="kpi-sem-egr-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-sem-neto">—</div><div class="kpi-delta" id="kpi-sem-neto-delta"></div></div>
+          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-sem-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
+        </div>
+        
+        <!-- DESGLOSE CARTERAS SEMANA -->
+        <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1rem;margin-bottom:2rem;">
+          <h4 style="font-size:.65rem;color:var(--mu);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em;">Ingresos por cartera (Semana)</h4>
+          <div id="kpi-sem-carteras" style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);">Cargando desglose...</div>
+          </div>
+        </div>
+
+        <!-- SALDOS POR CARTERA -->
         <div class="seh" style="flex-wrap:wrap;row-gap:.5rem;"><h3>SALDOS POR CARTERA</h3><div class="ln"></div>
           <select id="fin-cartera-mes-sel" onchange="cargarSaldosCartera(this.value)"
             style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
@@ -3240,27 +3273,6 @@
         </div>
         <div id="saldos-carteras-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin-bottom:2rem;">
           <div style="padding:2rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Cargando saldos...</div>
-        </div>
-
-        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN FINANCIERO</h3><div class="ln"></div>
-          <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
-            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
-        </div>
-        <div class="fin-grid" id="fin-kpis">
-          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
-          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
-        </div>
-
-        <div class="seh" style="margin-top:1.5rem"><h3>ANÁLISIS GRÁFICO</h3><div class="ln"></div></div>
-        <div class="charts-row">
-          <div class="chart-box"><h4>Flujo mensual</h4><div class="chart-wrap"><canvas id="chart-flujo"></canvas></div></div>
-          <div class="chart-box"><h4>Ingresos por categoría</h4><div class="chart-wrap"><canvas id="chart-cat"></canvas></div></div>
-        </div>
-        <div class="charts-row">
-          <div class="chart-box"><h4>Egresos por categoría</h4><div class="chart-wrap"><canvas id="chart-egr-cat"></canvas></div></div>
-          <div class="chart-box"><h4>Ingresos por cartera</h4><div class="chart-wrap"><canvas id="chart-cartera"></canvas></div></div>
         </div>
 
         <div class="ia-section" id="ia-section" style="margin-top:1rem">
@@ -3800,9 +3812,10 @@
       if (id === 'movimientos') { finInit(); }
       if (id === 'finanzas') {
         poblarMeses();
+        poblarSemanas();
         if(!finMes) finMes = new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
         cargarKPIs(finMes);
-        setTimeout(function(){ cargarGraficas(); cargarSaldosCartera(); iniciarIA(); }, 150);
+        setTimeout(function(){ cargarSaldosCartera(); iniciarIA(); }, 150);
       }
     }
 
@@ -3823,7 +3836,7 @@
     /* ── STATS ── */
     function loadStats() {
       if (!window.supabase) return;
-      var todayStr = new Date().toISOString().split('T')[0];
+      var todayStr = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
 
       supabase.from('clients').select('*', { count: 'exact', head: true }).eq('membership_status', 'active')
         .then(function (r) { if (r.count !== null) document.getElementById('st-mem').textContent = r.count; });
@@ -3858,8 +3871,8 @@
       var hace7Dias = new Date(hoy);
       hace7Dias.setDate(hace7Dias.getDate() - 7);
       
-      var startDate = hace7Dias.toISOString().split('T')[0];
-      var endDate = hoy.toISOString().split('T')[0];
+      var startDate = hace7Dias.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var endDate = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
 
       supabase.from('ingresos').select('monto, cartera')
         .gte('fecha', startDate)
@@ -4629,7 +4642,7 @@
       var socio = esSocio();
       var nombre = usuarioActual();
 
-      var hoy = new Date().toISOString().split('T')[0];
+      var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       ['ing-fecha','egr-fecha','trp-fecha'].forEach(function(id){
         var el = document.getElementById(id); if(el) el.value = hoy;
       });
@@ -4748,7 +4761,7 @@
         document.getElementById('ing-extra-membresia').style.display = 'none';
         document.getElementById('ing-resumen').style.display = 'none';
         cargarMovimientos();
-        if(esSocio) { cargarKPIs(finMes); setTimeout(cargarGraficas, 400); }
+        if(esSocio) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
       }).catch(function(e){ showFinMsg('fin-form-msg','Error: '+e.message,'err'); })
         .finally(function(){ btn.disabled=false; btn.textContent='↑ Registrar Ingreso'; });
     };
@@ -4778,7 +4791,7 @@
         ['egr-titulo','egr-monto','egr-obs'].forEach(function(id){ document.getElementById(id).value=''; });
         document.getElementById('egr-categoria').value = '';
         cargarMovimientos();
-        if(esSocio) { cargarKPIs(finMes); setTimeout(cargarGraficas, 400); }
+        if(esSocio) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
       }).catch(function(e){ showFinMsg('fin-form-msg','Error: '+e.message,'err'); })
         .finally(function(){ btn.disabled=false; btn.textContent='↓ Registrar Egreso'; });
     };
@@ -4842,9 +4855,9 @@
         end=mesVal+'-'+String(lastDay).padStart(2,'0');
       }
 
-      var ingQ=window.supabase.from('ingresos').select('cartera,monto');
-      var egrQ=window.supabase.from('egresos').select('cartera,monto');
-      var trpQ=window.supabase.from('traspasos').select('salida_de,entrada_en,cantidad');
+      var ingQ=window.supabase.from('ingresos').select('cartera,monto').limit(10000);
+      var egrQ=window.supabase.from('egresos').select('cartera,monto').limit(10000);
+      var trpQ=window.supabase.from('traspasos').select('salida_de,entrada_en,cantidad').limit(10000);
       if(start){
         ingQ=ingQ.gte('fecha',start).lte('fecha',end);
         egrQ=egrQ.gte('fecha',start).lte('fecha',end);
@@ -5017,7 +5030,7 @@
     // ── CAJA CHICA ──────────────────────────────────────────────
     function cargarCajaChica() {
       if(!window.supabase) return;
-      var hoy = new Date().toISOString().split('T')[0];
+      var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       Promise.all([
         window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
         window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
@@ -5233,7 +5246,7 @@
 
       // SIEMPRE ir a Supabase para no perder registros por el límite de carga inicial
       var start = desde || '2020-01-01';
-      var end   = hasta || new Date().toISOString().split('T')[0];
+      var end   = hasta || new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
 
       // Construir queries con filtros en Supabase cuando sea posible
       var ingQ = window.supabase.from('ingresos')
@@ -5355,15 +5368,15 @@
     function cargarMovimientos() {
       if(!window.supabase) return;
       var hoy = new Date(); hoy.setDate(hoy.getDate()-60);
-      var desde = hoy.toISOString().split('T')[0];
+      var desde = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       Promise.all([
         window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
         window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
-        window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
+        window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
         var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
         var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
-        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
+        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:r.usuario||'—'}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
         renderMovimientos();
       });
@@ -5441,7 +5454,7 @@
     window.finCambiarMes = function(mes) {
       finMes = mes;
       cargarKPIs(mes);
-      cargarGraficas();
+      
     };
 
     function fmt(n) {
@@ -5477,85 +5490,83 @@
       });
     }
 
-    // ── GRÁFICAS ─────────────────────────────────────────────
-    function cargarGraficas() {
-      if(!window.supabase || typeof Chart === 'undefined') return;
-      var mesStr = finMes;
-      var start  = mesStr+'-01';
-      var parts  = mesStr.split('-');
-      var ultimo = new Date(parseInt(parts[0]),parseInt(parts[1]),0).getDate();
-      var end    = mesStr+'-'+String(ultimo).padStart(2,'0');
-
-      // Flujo 12 meses
-      window.supabase.from('resumen_mensual').select('mes,tipo,total')
-        .gte('mes', function(){ var d=new Date(); d.setMonth(d.getMonth()-11); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }())
-        .order('mes')
-        .then(function(r){
-          var rows=r.data||[], meses=[], seen={};
-          rows.forEach(function(x){ if(!seen[x.mes]){seen[x.mes]=1;meses.push(x.mes);} });
-          meses.sort();
-          var agg={};
-          rows.forEach(function(x){ var k=x.mes+'|'+x.tipo; agg[k]=(agg[k]||0)+parseFloat(x.total||0); });
-          var labels=meses.map(function(m){ var p=m.split('-'); return new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleDateString('es-MX',{month:'short',year:'2-digit'}); });
-          if(chartFlujo) chartFlujo.destroy();
-          chartFlujo = new Chart(document.getElementById('chart-flujo').getContext('2d'),{
-            type:'bar', data:{ labels:labels, datasets:[
-              {label:'Ingresos',data:meses.map(function(m){return agg[m+'|ingreso']||0;}),backgroundColor:'rgba(34,197,94,.6)',borderColor:'rgba(34,197,94,.9)',borderWidth:1.5,borderRadius:3},
-              {label:'Egresos', data:meses.map(function(m){return agg[m+'|egreso']||0;}), backgroundColor:'rgba(239,68,68,.5)',borderColor:'rgba(239,68,68,.8)',borderWidth:1.5,borderRadius:3}
-            ]}, options:chartOpts('$')
-          });
-        });
-
-      // Ingresos por categoría (mes seleccionado)
-      window.supabase.from('ingresos').select('categoria,monto').gte('fecha',start).lte('fecha',end)
-        .then(function(r){
-          var agg={};
-          (r.data||[]).forEach(function(x){ agg[x.categoria]=(agg[x.categoria]||0)+parseFloat(x.monto||0); });
-          var labels=Object.keys(agg), data=labels.map(function(k){return agg[k];});
-          if(chartCat) chartCat.destroy();
-          chartCat = new Chart(document.getElementById('chart-cat').getContext('2d'),{
-            type:'doughnut', data:{labels:labels,datasets:[{data:data,backgroundColor:['#FF4D00','#22c55e','#60a5fa','#fbbf24','#a855f7','#f472b6'],borderWidth:0}]},
-            options:{plugins:{legend:{labels:{color:'rgba(255,255,255,.55)',font:{size:11}}}},maintainAspectRatio:false}
-          });
-        });
-
-      // Egresos por categoría
-      window.supabase.from('egresos').select('categoria,monto').gte('fecha',start).lte('fecha',end)
-        .then(function(r){
-          var agg={};
-          (r.data||[]).forEach(function(x){ agg[x.categoria]=(agg[x.categoria]||0)+parseFloat(x.monto||0); });
-          var labels=Object.keys(agg), data=labels.map(function(k){return agg[k];});
-          if(chartEgrCat) chartEgrCat.destroy();
-          chartEgrCat = new Chart(document.getElementById('chart-egr-cat').getContext('2d'),{
-            type:'doughnut', data:{labels:labels,datasets:[{data:data,backgroundColor:['#f87171','#fb923c','#fbbf24','#a3e635','#34d399','#60a5fa','#c084fc'],borderWidth:0}]},
-            options:{plugins:{legend:{labels:{color:'rgba(255,255,255,.55)',font:{size:11}}}},maintainAspectRatio:false}
-          });
-        });
-
-      // Ingresos por cartera
-      window.supabase.from('ingresos').select('cartera,monto').gte('fecha',start).lte('fecha',end)
-        .then(function(r){
-          var agg={};
-          (r.data||[]).forEach(function(x){ agg[x.cartera]=(agg[x.cartera]||0)+parseFloat(x.monto||0); });
-          var labels=Object.keys(agg), data=labels.map(function(k){return agg[k];});
-          if(chartCartera) chartCartera.destroy();
-          chartCartera = new Chart(document.getElementById('chart-cartera').getContext('2d'),{
-            type:'bar', data:{labels:labels,datasets:[{data:data,backgroundColor:'rgba(255,77,0,.6)',borderColor:'rgba(255,77,0,.9)',borderWidth:1.5,borderRadius:3}]},
-            options:chartOpts('$',true)
-          });
-        });
+    // ── SEMANAS ──────────────────────────────────────────────
+    function poblarSemanas() {
+      var sel = document.getElementById('fin-sem-sel');
+      if(!sel) return;
+      var semanas = [], d = new Date();
+      var day = d.getDay();
+      var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      var inicioSemana = new Date(d.setDate(diff));
+      
+      for(var i=0; i<12; i++) {
+        var start = new Date(inicioSemana);
+        start.setDate(inicioSemana.getDate() - (i*7));
+        var end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        
+        var startStr = start.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+        var endStr = end.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+        var label = start.toLocaleDateString('es-MX',{day:'2-digit',month:'short'}) + ' - ' + end.toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
+        
+        semanas.push({ value: startStr + '|' + endStr, label: label });
+      }
+      
+      sel.innerHTML = semanas.map(function(s) {
+        return '<option value="'+s.value+'">Semana: '+s.label+'</option>';
+      }).join('');
+      
+      finCambiarSemana(semanas[0].value);
     }
 
-    function chartOpts(prefix, horizontal) {
-      return {
-        indexAxis: horizontal ? 'y' : 'x', maintainAspectRatio:false,
-        plugins:{legend:{labels:{color:'rgba(255,255,255,.5)',font:{size:11}}}},
-        scales:{
-          x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(255,255,255,.4)',font:{size:10},callback:function(v){return prefix?prefix+Math.round(v/1000)+'k':v;}}},
-          y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(255,255,255,.4)',font:{size:10},callback:function(v){return typeof v==='number'?(prefix?prefix+Math.round(v/1000)+'k':v):v;}}}
+    window.finCambiarSemana = function(rango) {
+      if(!window.supabase || !rango) return;
+      var partes = rango.split('|');
+      var start = partes[0];
+      var end = partes[1];
+      
+      document.getElementById('kpi-sem-ing-sub').textContent = 'cargando...';
+      document.getElementById('kpi-sem-egr-sub').textContent = 'cargando...';
+      
+      Promise.all([
+        window.supabase.from('ingresos').select('monto, cartera').gte('fecha',start).lte('fecha',end),
+        window.supabase.from('egresos').select('monto').gte('fecha',start).lte('fecha',end)
+      ]).then(function(r) {
+        var ings = r[0].data||[], egrs = r[1].data||[];
+        var sumIng = 0, sumEgr = 0, carteras = {};
+        ings.forEach(function(x) { 
+          var amt = parseFloat(x.monto||0);
+          sumIng += amt;
+          carteras[x.cartera] = (carteras[x.cartera]||0) + amt;
+        });
+        egrs.forEach(function(x) { sumEgr += parseFloat(x.monto||0); });
+        
+        var neto = sumIng - sumEgr;
+        var mg = sumIng > 0 ? ((neto/sumIng)*100).toFixed(1)+'%' : '0%';
+        
+        document.getElementById('kpi-sem-ing').textContent = '$' + sumIng.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-egr').textContent = '$' + sumEgr.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-neto').textContent= '$' + Math.abs(neto).toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-margen').textContent = mg;
+        
+        document.getElementById('kpi-sem-ing-sub').textContent = ings.length + ' regs';
+        document.getElementById('kpi-sem-egr-sub').textContent = egrs.length + ' regs';
+        
+        var deltaEl = document.getElementById('kpi-sem-neto-delta');
+        if(neto>=0){deltaEl.textContent='▲ Positivo';deltaEl.className='kpi-delta pos';}
+        else       {deltaEl.textContent='▼ Negativo';deltaEl.className='kpi-delta neg';}
+        
+        var carContainer = document.getElementById('kpi-sem-carteras');
+        var keys = Object.keys(carteras).sort(function(a,b){return carteras[b]-carteras[a];});
+        if(keys.length === 0) {
+          carContainer.innerHTML = '<div style="font-size:.75rem;color:rgba(255,255,255,.4);">Sin ingresos en la semana</div>';
+        } else {
+          carContainer.innerHTML = keys.map(function(k) {
+            return '<div style="display:flex;align-items:center;gap:.5rem;background:var(--s2);padding:.4rem .8rem;border-radius:4px;"><span style="font-size:.65rem;color:var(--mu);text-transform:uppercase;">'+k+'</span><span style="font-weight:600;font-size:.8rem;color:var(--txt);">$' + carteras[k].toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0}) + '</span></div>';
+          }).join('');
         }
-      };
-    }
+      });
+    };
 
     // ── AGENTE IA ─────────────────────────────────────────────
     var IA_SUGERENCIAS = [
@@ -5682,7 +5693,7 @@
     if(typeof Chart === 'undefined') {
       var sc=document.createElement('script');
       sc.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-      sc.onload=function(){ if(document.getElementById('tab-finanzas')&&document.getElementById('tab-finanzas').classList.contains('on')) cargarGraficas(); };
+      sc.onload=function(){ if(document.getElementById('tab-finanzas')&&document.getElementById('tab-finanzas').classList.contains('on')) { /* scripts cargados */ } };
       document.head.appendChild(sc);
     }
 
@@ -6158,7 +6169,7 @@
       document.body.style.overflow = '';
     }
     function cargarIngresosHoy() {
-      var hoy = new Date().toISOString().split('T')[0];
+      var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       var tbody = document.getElementById('ing-hoy-tbody');
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
       ['ing-hoy-cc','ing-hoy-am','ing-hoy-stripe','ing-hoy-total'].forEach(function(id){
@@ -6262,10 +6273,10 @@
     }
     function cargarIngresosSemanaModal() {
       var d = new Date();
-      var dStr = d.toISOString().split('T')[0];
+      var dStr = d.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       var d7 = new Date();
       d7.setDate(d.getDate() - 6);
-      var d7Str = d7.toISOString().split('T')[0];
+      var d7Str = d7.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
 
       var tbody=document.getElementById('ing-sem-tbody');
       tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.2);font-size:.75rem;">Cargando...</td></tr>';
