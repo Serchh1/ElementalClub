@@ -4603,8 +4603,6 @@
     var iaMessages   = [];
     var iaLoading    = false;
 
-    // ── PON AQUÍ TU API KEY DE OPENAI ──────────────────────
-    window.OPENAI_KEY = 'PEGA_TU_KEY_AQUI';
 
     // Siempre leer el rol en vivo — nunca cachear
     function getUser() {
@@ -5647,27 +5645,25 @@
       try {
         var ctx=await cargarContextoIA();
         var systemPrompt='Eres el asistente financiero de Elemental Club, un gimnasio en Leon, Guanajuato.\nTienes acceso a todos los movimientos financieros del gym.\n\nDATOS ACTUALES (ultimos 18 meses):\n'+ctx+'\n\nINSTRUCCIONES:\n- Responde en espanol, de forma directa y concisa\n- Cuando des cifras, usa formato $X,XXX\n- Si te piden tablas o comparativos, usa HTML simple con <table>\n- Se analitico: senala tendencias, meses buenos/malos, categorias problematicas\n- No inventes datos. Si algo no esta en el contexto, dilo claramente';
-        var OPENAI_KEY = window.OPENAI_KEY || '';
-        if(!OPENAI_KEY || OPENAI_KEY === 'PEGA_TU_KEY_AQUI') {
-          iaMessages.push({role:'assistant',content:'⚠️ Falta la API key de OpenAI. Agrégala donde dice window.OPENAI_KEY en el archivo.'});
-          var t2=document.getElementById('ia-typing'); if(t2) t2.remove();
-          iaLoading=false; document.getElementById('ia-send').disabled=false;
-          renderIAMsgs(); return;
-        }
         var openaiMsgs = [{role:'system', content:systemPrompt}].concat(iaMessages.slice(-10));
-        var response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + OPENAI_KEY
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            max_tokens: 1500,
-            temperature: 0.3,
-            messages: openaiMsgs
-          })
-        });
+        // Usar la anon key de Supabase como token (funciona sin sesión de auth para empleados de staff)
+        var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg0MzksImV4cCI6MjA3MzAxNDQzOX0.wKhEMF4K6Zv6PuobxCwubmhNTyzk6qlmjKyGO7JqH9Y';
+        var response = await fetch(
+          'https://aveonbmcbopqqcambxoi.supabase.co/functions/v1/openai-proxy',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type':  'application/json',
+              'Authorization': 'Bearer ' + anonKey,
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              max_tokens: 1500,
+              temperature: 0.3,
+              messages: openaiMsgs
+            })
+          }
+        );
         if(!response.ok) {
           var errData = await response.json().catch(function(){return {};});
           throw new Error('OpenAI ' + response.status + ': ' + (errData.error&&errData.error.message ? errData.error.message : response.statusText));
