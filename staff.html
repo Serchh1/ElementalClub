@@ -2155,7 +2155,7 @@
     }
     .mov-fp:hover { border-color:rgba(255,77,0,.4); color:var(--or); }
     .mov-fp.on { background:rgba(255,77,0,.1); border-color:var(--or); color:var(--or); }
-    .mov-tbl { width:100%; border-collapse:collapse; min-width:600px; }
+    .mov-tbl { width:100%; border-collapse:collapse; min-width:950px; }
     .mov-tbl th {
       text-align:left; padding:.6rem .85rem; font-size:.56rem; font-weight:700;
       letter-spacing:.15em; text-transform:uppercase; color:var(--or);
@@ -2925,8 +2925,24 @@
 
           <!-- ── INGRESO ── -->
           <div id="fin-panel-ingreso">
+            <!-- Tipo de ingreso first -->
+            <div class="ff-grid ff-grid-3" style="margin-bottom: .85rem;">
+              <div class="ff-fld">
+                <label>Tipo de ingreso <span class="req">*</span></label>
+                <select id="ing-categoria" onchange="finMostrarCamposIngreso(this.value)">
+                  <option value="">— Selecciona —</option>
+                  <option value="membresia">Membresía / Renovación</option>
+                  <option value="cliente_nuevo">Cliente nuevo</option>
+                  <option value="visita">Visita de un día</option>
+                  <option value="servicio">Servicio extra</option>
+                  <option value="prestamo">Préstamo</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+            </div>
+
             <!-- Buscador de cliente (membresía/renovación) -->
-            <div id="ing-buscar-bloque" style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.85rem;">
+            <div id="ing-buscar-bloque" style="display:none;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.85rem;">
               <div style="font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--or);margin-bottom:.6rem;">Buscar cliente existente</div>
               <div style="position:relative;">
                 <input type="text" id="ing-buscar-input"
@@ -2936,7 +2952,7 @@
                   onfocus="this.style.borderColor='var(--or)'" onblur="setTimeout(function(){this.style.borderColor='var(--s3)';document.getElementById('ing-buscar-lista').style.display='none';}.bind(this),200)" />
                 <div id="ing-buscar-lista" style="display:none;position:absolute;z-index:50;width:100%;background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);max-height:220px;overflow-y:auto;margin-top:2px;"></div>
               </div>
-              <div id="ing-cliente-sel" style="display:none;margin-top:.65rem;background:var(--bg);border:1px solid rgba(255,77,0,.3);border-radius:var(--r);padding:.65rem .9rem;display:none;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;">
+              <div id="ing-cliente-sel" style="display:none;margin-top:.65rem;background:var(--bg);border:1px solid rgba(255,77,0,.3);border-radius:var(--r);padding:.65rem .9rem;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;">
                 <div>
                   <div id="ing-cli-nombre" style="font-size:.88rem;font-weight:800;color:var(--txt);">—</div>
                   <div id="ing-cli-info" style="font-size:.68rem;color:var(--mu);margin-top:.15rem;">—</div>
@@ -2944,10 +2960,17 @@
                 <button onclick="ingLimpiarCliente()" style="background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);font-size:.65rem;padding:.2rem .5rem;border-radius:3px;cursor:pointer;">✕ Quitar</button>
               </div>
             </div>
+
+            <!-- Campos básicos -->
             <div class="ff-grid ff-grid-3">
               <div class="ff-fld">
                 <label>Nombre / Cliente <span class="req">*</span></label>
                 <input type="text" id="ing-nombre" placeholder="Ej: Juan Pérez" />
+              </div>
+              <!-- Campo teléfono: aparece si es cliente nuevo -->
+              <div class="ff-fld" id="ing-telefono-fld" style="display:none">
+                <label>Teléfono <span class="req">*</span></label>
+                <input type="text" id="ing-telefono" placeholder="Ej: 5512345678" maxlength="10" />
               </div>
               <div class="ff-fld">
                 <label>Monto (MXN) <span class="req">*</span></label>
@@ -2967,19 +2990,7 @@
                 <label>Registrado por</label>
                 <input type="text" id="ing-usuario" readonly style="color:var(--mu);cursor:not-allowed" />
               </div>
-              <div class="ff-fld">
-                <label>Tipo de ingreso <span class="req">*</span></label>
-                <select id="ing-categoria" onchange="finMostrarCamposIngreso(this.value)">
-                  <option value="">— Selecciona —</option>
-                  <option value="membresia">Membresía / Renovación</option>
-                  <option value="membresia">Cliente nuevo</option>
-                  <option value="visita">Visita de un día</option>
-                  <option value="servicio">Servicio extra</option>
-                  <option value="prestamo">Préstamo</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </div>
-              <!-- Campo meses: aparece si es membresía -->
+              <!-- Campo meses: aparece si es membresía o cliente nuevo -->
               <div class="ff-fld" id="ing-campo-meses" style="display:none">
                 <label>Duración</label>
                 <select id="ing-meses">
@@ -3007,8 +3018,11 @@
                   <label>Plan de membresía</label>
                   <select id="ing-plan">
                     <option value="">— Selecciona —</option>
-                    <option>Subbásica</option><option>Básica</option>
-                    <option>Training</option><option>Prime</option><option>VIP</option>
+                    <option value="subbasica">Subbásica</option>
+                    <option value="basica">Básica</option>
+                    <option value="training">Training</option>
+                    <option value="prime">Prime</option>
+                    <option value="vip">VIP</option>
                   </select>
                 </div>
               </div>
@@ -3018,7 +3032,20 @@
               <span class="fin-resumen-lbl">Resumen:</span>
               <span id="ing-resumen-txt"></span>
             </div>
-            <button class="fin-btn fin-btn-ing" onclick="registrarIngresoConMembresia()" style="margin-top:1rem">↑ Registrar Ingreso</button>
+
+            <!-- Bloque de éxito y envío de WhatsApp (sin emojis, usando SVG) -->
+            <div id="ing-ticket-whatsapp-bloque" style="display:none;background:rgba(37,211,102,0.06);border:1px dashed rgba(37,211,102,0.3);border-radius:var(--r);padding:1.2rem;margin-top:1rem;text-align:center;">
+              <div style="color:#25D366;font-size:.85rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:16px;height:16px;fill:#25D366;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                Ingreso registrado correctamente
+              </div>
+              <button id="btn-ticket-whatsapp" class="fin-btn" style="background:#25D366;color:#ffffff;border:none;margin:0 auto;display:inline-flex;align-items:center;gap:0.6rem;padding:0.65rem 1.25rem;font-size:0.8rem;font-weight:700;border-radius:var(--r);cursor:pointer;transition:all 0.2s ease;" onmouseover="this.style.background='#20ba59'" onmouseout="this.style.background='#25D366'">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:14px;height:14px;fill:currentColor;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L3 496l133-34.9c32.7 17.8 69.3 27.2 106.7 27.2 122.4 0 222-99.6 222-222 0-59.3-23-115.1-64.8-157.1zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-79.8 20.9 21.3-77.8-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 54 81.2 54 130.5 0 101.7-82.8 184.5-184.6 184.5zm100.5-137.5c-5.5-2.7-32.4-16-37.5-17.8-5-1.8-8.7-2.7-12.4 2.7-3.7 5.5-14.2 17.8-17.4 21.4-3.2 3.7-6.4 4.1-12 1.4-5.5-2.7-23.4-8.6-44.6-27.5-16.5-14.7-27.6-32.9-30.8-38.4-3.2-5.5-.3-8.5 2.5-11.2 2.5-2.5 5.5-6.4 8.2-9.6 2.7-3.2 3.7-5.5 5.5-9.1 1.8-3.7.9-6.9-.5-9.6-1.4-2.7-12.4-29.9-17-41.2-4.5-11-9.1-9.5-12.5-9.6-3.2-.2-6.9-.2-10.5-.2-3.7 0-9.6 1.4-14.6 6.9-5 5.5-19.2 18.7-19.2 45.6s19.7 53 22 56c2.3 3 38.8 59.3 94 83.2 13.1 5.7 23.4 9.1 31.4 11.7 13.2 4.2 25.2 3.6 34.7 2.2 10.6-1.6 32.4-13.2 37-25.9 4.6-12.7 4.6-23.7 3.2-25.9-1.4-2.3-5.2-3.7-10.7-6.4z"/></svg>
+                Enviar ticket
+              </button>
+            </div>
+
+            <button class="fin-btn fin-btn-ing" onclick="registrarIngresoConMembresia()" style="margin-top:1rem">Registrar Ingreso</button>
           </div>
 
           <!-- ── EGRESO ── -->
@@ -3248,7 +3275,7 @@
         <div class="ia-section" id="ia-section" style="margin-top:1rem">
           <div class="ia-hdr"><div class="ia-hdr-left">
             <div style="width:28px;height:28px;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem">✦</div>
-            <h4>Asistente Financiero</h4><span class="ia-badge">IA · Solo Socios</span>
+            <h4>Asistente Financiero</h4><span class="ia-badge">IA · Socios / Staff</span>
           </div></div>
           <div class="ia-body" id="ia-body"></div>
         </div>
@@ -3662,11 +3689,11 @@
       cargarCarterasActivas().catch(function(err) {
         console.error('Error cargando carteras en enterPanel:', err);
       });
-      // Llamar finReset primero, luego mostrar tab Finanzas si es socio
+      // Llamar finReset primero, luego mostrar tab Finanzas si puede acceder
       if(typeof window.finReset === 'function') window.finReset();
-      var isSocio = user.role === 'socio' || user.rol === 'socio';
+      var puedeVerFinanzas = ['socio', 'staff', 'admin'].indexOf(String(user.role || user.rol || '').toLowerCase()) >= 0;
       var finTabBtn = document.getElementById('tab-btn-finanzas');
-      if(finTabBtn) finTabBtn.style.display = isSocio ? '' : 'none';
+      if(finTabBtn) finTabBtn.style.display = puedeVerFinanzas ? '' : 'none';
     }
 
     function doLogout() {
@@ -3788,10 +3815,10 @@
         // Esperar a que las carteras activas esten listas, luego calcular saldos
         cargarCarterasActivas().then(function(){
           cargarSaldosCartera();
-          iniciarIA();
+          if(!esAdmin()) iniciarIA();
         }).catch(function(){
           cargarSaldosCartera();
-          iniciarIA();
+          if(!esAdmin()) iniciarIA();
         });
       }
     }
@@ -4618,11 +4645,14 @@
       catch(e) { return {}; }
     }
     function esSocio()       { var u=getUser(); return u.role==='socio'||u.rol==='socio'; }
+    function esStaff()       { var u=getUser(); return u.role==='staff'||u.rol==='staff'; }
+    function esAdmin()       { var u=getUser(); return u.role==='admin'||u.rol==='admin'; }
+    function puedeVerFinanzas() { return esSocio() || esStaff() || esAdmin(); }
     function usuarioActual() { return getUser().name || ''; }
 
     // ── INIT — se llama en cada login/logout/tab-switch ────────
     function finInit() {
-      var socio = esSocio();
+      var puedeVer = puedeVerFinanzas();
       var nombre = usuarioActual();
 
       var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
@@ -4637,7 +4667,10 @@
       if(tu) tu.value = nombre;
 
       var finBtn = document.getElementById('tab-btn-finanzas');
-      if(finBtn) finBtn.style.display = socio ? '' : 'none';
+      if(finBtn) finBtn.style.display = puedeVer ? '' : 'none';
+
+      var iaSection = document.getElementById('ia-section');
+      if(iaSection) iaSection.style.display = esAdmin() ? 'none' : '';
 
       // Cargar carteras activas primero, luego movimientos
       cargarCarterasActivas().then(function() {
@@ -4681,15 +4714,46 @@
     // ── CAMPOS DINÁMICOS INGRESO ─────────────────────────────
     window.finMostrarCamposIngreso = function(val) {
       var esMembresia = (val === 'membresia');
-      document.getElementById('ing-campo-meses').style.display      = esMembresia ? '' : 'none';
-      document.getElementById('ing-extra-membresia').style.display  = esMembresia ? '' : 'none';
+      var esClienteNuevo = (val === 'cliente_nuevo');
+      var esMembresiaOClienteNuevo = (esMembresia || esClienteNuevo);
+      
+      var buscarBloque = document.getElementById('ing-buscar-bloque');
+      if (buscarBloque) {
+        buscarBloque.style.display = esMembresia ? '' : 'none';
+      }
+      
+      var telFld = document.getElementById('ing-telefono-fld');
+      if (telFld) {
+        telFld.style.display = esMembresiaOClienteNuevo ? '' : 'none';
+      }
+      
+      var nomEl = document.getElementById('ing-nombre');
+      if (nomEl) {
+        if (esMembresia) {
+          nomEl.readOnly = true;
+          nomEl.placeholder = 'Selecciona cliente arriba...';
+          if (!ingClienteSeleccionado) nomEl.value = '';
+        } else {
+          nomEl.readOnly = false;
+          nomEl.placeholder = 'Ej: Juan Pérez';
+          ingLimpiarCliente();
+        }
+      }
+
+      document.getElementById('ing-campo-meses').style.display      = esMembresiaOClienteNuevo ? '' : 'none';
+      document.getElementById('ing-extra-membresia').style.display  = esMembresiaOClienteNuevo ? '' : 'none';
+      
+      var waBloque = document.getElementById('ing-ticket-whatsapp-bloque');
+      if (waBloque) waBloque.style.display = 'none';
+      
       finActualizarResumen();
     };
 
     window.finActualizarResumen = function() {
       var monto = document.getElementById('ing-monto').value;
       var meses = document.getElementById('ing-meses') ? document.getElementById('ing-meses').value : '';
-      var plan  = document.getElementById('ing-plan')  ? document.getElementById('ing-plan').value  : '';
+      var planEl = document.getElementById('ing-plan');
+      var plan = (planEl && planEl.value) ? planEl.options[planEl.selectedIndex].text : '';
       var resEl = document.getElementById('ing-resumen');
       var txtEl = document.getElementById('ing-resumen-txt');
       if(!monto) { if(resEl) resEl.style.display='none'; return; }
@@ -4702,40 +4766,198 @@
 
     // ── GUARDAR INGRESO ──────────────────────────────────────
     window.registrarIngreso = function() {
-      var nombre   = document.getElementById('ing-nombre').value.trim();
-      var monto    = parseFloat(document.getElementById('ing-monto').value);
-      var fecha    = document.getElementById('ing-fecha').value;
-      var cartera  = document.getElementById('ing-cartera').value;
-      var categoria= document.getElementById('ing-categoria').value;
-      var meses    = document.getElementById('ing-meses').value;
-      var desc     = document.getElementById('ing-desc').value.trim();
-      var descuento= parseFloat(document.getElementById('ing-descuento').value) || null;
-      var plan     = document.getElementById('ing-plan').value;
+      var nombre    = document.getElementById('ing-nombre').value.trim();
+      var monto     = parseFloat(document.getElementById('ing-monto').value);
+      var fecha     = document.getElementById('ing-fecha').value;
+      var cartera   = document.getElementById('ing-cartera').value;
+      var categoria = document.getElementById('ing-categoria').value;
+      var meses     = document.getElementById('ing-meses').value;
+      var desc      = document.getElementById('ing-desc').value.trim();
+      var descuento = parseFloat(document.getElementById('ing-descuento').value) || null;
+      var plan      = document.getElementById('ing-plan').value;
 
-      if(!nombre||!monto||!fecha||!cartera||!categoria){
-        showFinMsg('fin-form-msg','Completa todos los campos obligatorios.','err'); return;
+      if(!categoria){
+        showFinMsg('fin-form-msg','Por favor selecciona el Tipo de ingreso.','err'); return;
       }
+      if(!nombre||isNaN(monto)||!fecha||!cartera){
+        showFinMsg('fin-form-msg','Completa todos los campos obligatorios (*).','err'); return;
+      }
+
+      var telefono = '';
+      var expirationIso = '';
+
+      if(categoria === 'membresia' || categoria === 'cliente_nuevo'){
+        var telEl = document.getElementById('ing-telefono');
+        telefono = telEl ? telEl.value.trim() : '';
+        if(!telefono || !/^\d{10}$/.test(telefono)){
+          showFinMsg('fin-form-msg','Ingresa un número de teléfono válido de 10 dígitos.','err'); return;
+        }
+        if(!plan||!meses){
+          showFinMsg('fin-form-msg','Completa el Plan y la Duración.','err'); return;
+        }
+        if(categoria === 'membresia' && !ingClienteSeleccionado){
+          showFinMsg('fin-form-msg','Debes buscar y seleccionar un cliente existente para realizar la renovación.','err'); return;
+        }
+      }
+
       var btn = document.querySelector('.fin-btn-ing');
       btn.disabled=true; btn.textContent='Guardando...';
 
-      // Combinar desc con plan si se seleccionó
-      var descFinal = desc || null;
-      if(plan && !descFinal) descFinal = plan;
-      else if(plan && descFinal) descFinal = plan + ' · ' + descFinal;
+      // Asegurar formato de nombre si es cliente nuevo o manual
+      if (typeof toTitleCase === 'function') {
+        nombre = toTitleCase(nombre);
+      }
 
-      window.supabase.from('ingresos').insert([{
-        nombre: nombre, monto: monto, fecha: fecha, cartera: cartera,
-        categoria: categoria, categoria_raw: categoria,
-        descripcion: descFinal,
-        meses: meses ? parseInt(meses) : null,
-        descuento: descuento,
-        anio: parseInt(fecha.split('-')[0]),
-        usuario: usuarioActual() || null
-      }]).then(function(r){
-        if(r.error) throw r.error;
-        showFinMsg('fin-form-msg','✓ Ingreso registrado correctamente','ok');
-        ['ing-nombre','ing-monto','ing-desc','ing-descuento'].forEach(function(id){
-          var el=document.getElementById(id); if(el) el.value='';
+      var clientPromise;
+
+      if(categoria === 'cliente_nuevo'){
+        var parts = nombre.split(' ');
+        var first_name = parts[0];
+        var last_name1 = parts.slice(1).join(' ') || '';
+        
+        var startBase = new Date(fecha + 'T12:00:00');
+        var expBase = new Date(startBase);
+        expBase.setMonth(expBase.getMonth() + parseInt(meses));
+        expirationIso = expBase.toISOString();
+
+        var cu = {};
+        try { cu = JSON.parse(localStorage.getItem('ecUser') || '{}'); } catch (e) { }
+
+        clientPromise = window.supabase.from('clients').insert([{
+          first_name: first_name,
+          last_name1: last_name1,
+          phone: telefono,
+          client_type: 'member',
+          membership_type: plan,
+          membership_status: 'active',
+          membership_starts: startBase.toISOString(),
+          membership_expires: expirationIso,
+          source: 'recepcion',
+          empleado_id: cu.id || null,
+          observations: 'Cliente nuevo creado desde Ingresos'
+        }]).select().single().then(function(res){
+          if(res.error) throw res.error;
+          return res.data;
+        });
+      } else if(categoria === 'membresia'){
+        clientPromise = window.supabase.from('clients')
+          .select('membership_expires')
+          .eq('id', ingClienteSeleccionado.id)
+          .single()
+          .then(function(res) {
+            if(res.error) throw res.error;
+            var base = res.data && res.data.membership_expires ? new Date(res.data.membership_expires) : new Date(fecha + 'T12:00:00');
+            var today = new Date();
+            if (base < today) base = today;
+            base.setMonth(base.getMonth() + parseInt(meses));
+            expirationIso = base.toISOString();
+
+            return window.supabase.from('clients').update({
+              phone: telefono,
+              membership_expires: base.toISOString(),
+              membership_type: plan,
+              last_payment_date: new Date().toISOString(),
+              membership_status: 'active',
+              updated_at: new Date().toISOString()
+            }).eq('id', String(ingClienteSeleccionado.id)).then(function(upRes) {
+              if(upRes.error) throw upRes.error;
+              return ingClienteSeleccionado;
+            });
+          });
+      } else {
+        clientPromise = Promise.resolve(null);
+      }
+
+      // Guardar el ingreso después de operar el cliente
+      clientPromise.then(function(clientObj) {
+        var planEl = document.getElementById('ing-plan');
+        var planText = (planEl && planEl.value) ? planEl.options[planEl.selectedIndex].text : '';
+        var descFinal = desc || null;
+        if(planText && !descFinal) descFinal = planText;
+        else if(planText && descFinal) descFinal = planText + ' · ' + descFinal;
+
+        return window.supabase.from('ingresos').insert([{
+          nombre: nombre, monto: monto, fecha: fecha, cartera: cartera,
+          categoria: (categoria === 'cliente_nuevo' ? 'membresia' : categoria),
+          categoria_raw: categoria,
+          descripcion: descFinal,
+          meses: meses ? parseInt(meses) : null,
+          descuento: descuento,
+          anio: parseInt(fecha.split('-')[0]),
+          usuario: usuarioActual() || null
+        }]).then(function(insRes) {
+          if(insRes.error) throw insRes.error;
+          return clientObj;
+        });
+      })
+      .then(function(clientObj) {
+        // Ocultar mensaje general si hubiera
+        document.getElementById('fin-form-msg').style.display = 'none';
+
+        // Generar ticket (sin emojis)
+        var planEl = document.getElementById('ing-plan');
+        var planText = (planEl && planEl.value) ? planEl.options[planEl.selectedIndex].text : '';
+        
+        var concepto = planText || categoria;
+        if (meses) {
+          concepto += ' - ' + meses + (parseInt(meses) === 1 ? ' mes' : ' meses');
+        }
+        if (desc) {
+          concepto += ' (' + desc + ')';
+        }
+
+        var ticketLines = [
+          "Elemental Club",
+          "Gracias por tu pago. Aqui tienes tu comprobante de movimiento.",
+          "",
+          "Cliente: " + nombre,
+          "Fecha: " + new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'}),
+          "Concepto: " + concepto,
+          "Monto: $" + monto.toLocaleString('es-MX', {minimumFractionDigits: 2}) + " MXN",
+          "Cartera: " + cartera
+        ];
+
+        if (categoria === 'membresia' || categoria === 'cliente_nuevo') {
+          var expD = new Date(expirationIso);
+          var expStr = expD.toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'});
+          ticketLines.push("Vence: " + expStr);
+        }
+
+        ticketLines.push("", "Nos vemos en el club.");
+        var ticketText = ticketLines.join("\n");
+
+        var waNumber = "52" + telefono;
+        var waUrl = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(ticketText);
+
+        // Intentar abrir WhatsApp de forma automática
+        if (telefono) {
+          var win = window.open(waUrl, '_blank');
+          if (!win) {
+            console.warn("Popup de WhatsApp bloqueado por el navegador.");
+          }
+        }
+
+        // Mostrar bloque de ticket y configurar botón "Enviar ticket"
+        var successBanner = document.getElementById('ing-ticket-whatsapp-bloque');
+        if (successBanner) {
+          successBanner.style.display = 'block';
+          var btnWa = document.getElementById('btn-ticket-whatsapp');
+          if (btnWa) {
+            if (telefono) {
+              btnWa.style.display = 'inline-flex';
+              btnWa.onclick = function() {
+                window.open(waUrl, '_blank');
+              };
+            } else {
+              btnWa.style.display = 'none';
+            }
+          }
+        }
+
+        // Limpiar campos del formulario
+        ['ing-nombre', 'ing-telefono', 'ing-monto', 'ing-desc', 'ing-descuento'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.value = '';
         });
         document.getElementById('ing-categoria').value = '';
         document.getElementById('ing-meses').value = '';
@@ -4743,10 +4965,33 @@
         document.getElementById('ing-campo-meses').style.display = 'none';
         document.getElementById('ing-extra-membresia').style.display = 'none';
         document.getElementById('ing-resumen').style.display = 'none';
+        if (document.getElementById('ing-telefono-fld')) {
+          document.getElementById('ing-telefono-fld').style.display = 'none';
+        }
+        
+        ingLimpiarCliente();
+
+        // Recargar datos
         cargarMovimientos();
-        if(esSocio) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
-      }).catch(function(e){ showFinMsg('fin-form-msg','Error: '+e.message,'err'); })
-        .finally(function(){ btn.disabled=false; btn.textContent='↑ Registrar Ingreso'; });
+        if (typeof loadStats === 'function') loadStats();
+        if (typeof loadMembers === 'function') loadMembers();
+
+        if (puedeVerFinanzas()) {
+          cargarKPIs(finMes);
+          setTimeout(function() {
+            var semSel = document.getElementById('fin-sem-sel');
+            if (semSel) finCambiarSemana(semSel.value);
+          }, 400);
+        }
+      })
+      .catch(function(e) {
+        console.error("Error al registrar movimiento:", e);
+        showFinMsg('fin-form-msg', 'Error: ' + e.message, 'err');
+      })
+      .finally(function() {
+        btn.disabled = false;
+        btn.textContent = 'Registrar Ingreso';
+      });
     };
 
     // ── GUARDAR EGRESO ───────────────────────────────────────
@@ -4774,7 +5019,7 @@
         ['egr-titulo','egr-monto','egr-obs'].forEach(function(id){ document.getElementById(id).value=''; });
         document.getElementById('egr-categoria').value = '';
         cargarMovimientos();
-        if(esSocio) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
+        if(puedeVerFinanzas()) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
       }).catch(function(e){ showFinMsg('fin-form-msg','Error: '+e.message,'err'); })
         .finally(function(){ btn.disabled=false; btn.textContent='↓ Registrar Egreso'; });
     };
@@ -5377,9 +5622,9 @@
           }
         }
         return '<tr>'
-          + '<td>'+fecha+'</td>'
+          + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
-          + '<td style="font-weight:600;color:var(--txt);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
+          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
           + '<td>'+(r.categoria||'—')+'</td>'
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
@@ -5439,9 +5684,9 @@
         }
 
         return '<tr>'
-          + '<td>'+fecha+'</td>'
+          + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
-          + '<td style="font-weight:600;color:var(--txt);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
+          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
           + '<td>'+(r.categoria||'—')+'</td>'
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
@@ -6392,6 +6637,10 @@
       document.getElementById('ing-cliente-sel').style.display = 'flex';
       document.getElementById('ing-buscar-lista').style.display = 'none';
       document.getElementById('ing-buscar-input').value = '';
+      var telEl = document.getElementById('ing-telefono');
+      if (telEl) {
+        telEl.value = m.phone || '';
+      }
     }
 
     function ingLimpiarCliente() {
@@ -6399,49 +6648,16 @@
       document.getElementById('ing-nombre').value = '';
       document.getElementById('ing-buscar-input').value = '';
       document.getElementById('ing-cliente-sel').style.display = 'none';
+      var telEl = document.getElementById('ing-telefono');
+      if (telEl) {
+        telEl.value = '';
+      }
     }
 
-    /* ── Actualizar membresía al registrar ingreso tipo membresía/renovación ── */
-    function ingActualizarMembresia(clientId, meses) {
-      if (!clientId || !meses) return Promise.resolve();
-      return window.supabase.from('clients')
-        .select('membership_expires')
-        .eq('id', clientId)
-        .single()
-        .then(function(r) {
-          var base = r.data && r.data.membership_expires ? new Date(r.data.membership_expires) : new Date();
-          if (base < new Date()) base = new Date();
-          base.setMonth(base.getMonth() + parseInt(meses));
-          return window.supabase.from('clients').update({
-            membership_expires: base.toISOString(),
-            last_payment_date:  new Date().toISOString(),
-            membership_status:  'active',
-            updated_at:         new Date().toISOString()
-          }).eq('id', String(clientId));
-        });
-    }
-
-    /* ── Wrapper que registra ingreso y actualiza membresía si aplica ── */
+    /* ── Wrapper que delega al validador y procesador principal de ingresos ── */
     function registrarIngresoConMembresia() {
-      var cat    = (document.getElementById('ing-categoria').value || '');
-      var mesesEl = document.getElementById('ing-meses');
-      var meses  = mesesEl ? (parseInt(mesesEl.value) || 0) : 0;
-      var cliente = ingClienteSeleccionado;
-
-      var result = window.registrarIngreso ? window.registrarIngreso() : registrarIngreso();
-
-      if (cat === 'membresia' && cliente && cliente.id && meses > 0) {
-        var p = (result && typeof result.then === 'function') ? result : Promise.resolve();
-        p.then(function() {
-          return ingActualizarMembresia(cliente.id, meses);
-        }).then(function() {
-          loadStats();
-          ingLimpiarCliente();
-        }).catch(function(e) {
-          console.warn('No se pudo actualizar membresía:', e.message);
-        });
-      } else {
-        ingLimpiarCliente();
+      if (window.registrarIngreso) {
+        window.registrarIngreso();
       }
     }
   </script>
