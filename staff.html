@@ -3845,11 +3845,19 @@
     function loadIngresosSemanales() {
       if (!window.supabase) return;
       var hoy = new Date();
-      var hace7Dias = new Date(hoy);
-      hace7Dias.setDate(hace7Dias.getDate() - 7);
-      
-      var startDate = hace7Dias.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-      var endDate = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var dia = hoy.getDay();
+      var diff = dia === 0 ? -6 : 1 - dia;
+
+      var inicioSemana = new Date(hoy);
+      inicioSemana.setDate(hoy.getDate() + diff);
+      inicioSemana.setHours(0, 0, 0, 0);
+
+      var finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6);
+      finSemana.setHours(23, 59, 59, 999);
+
+      var startDate = inicioSemana.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var endDate = finSemana.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
 
       supabase.from('ingresos').select('monto, cartera')
         .gte('fecha', startDate)
