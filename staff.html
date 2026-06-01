@@ -3033,15 +3033,15 @@
               <span id="ing-resumen-txt"></span>
             </div>
 
-            <!-- Bloque de éxito y envío de WhatsApp (sin emojis, usando SVG) -->
-            <div id="ing-ticket-whatsapp-bloque" style="display:none;background:rgba(37,211,102,0.06);border:1px dashed rgba(37,211,102,0.3);border-radius:var(--r);padding:1.2rem;margin-top:1rem;text-align:center;">
-              <div style="color:#25D366;font-size:.85rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:16px;height:16px;fill:#25D366;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                <!-- Bloque de éxito + botón ticket PDF -->
+            <div id="ing-ticket-whatsapp-bloque" style="display:none;background:rgba(255,77,0,0.06);border:1px dashed rgba(255,77,0,0.3);border-radius:var(--r);padding:1.2rem;margin-top:1rem;text-align:center;">
+              <div style="color:var(--or);font-size:.82rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:15px;height:15px;fill:var(--or)"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                 Ingreso registrado correctamente
               </div>
-              <button id="btn-ticket-whatsapp" class="fin-btn" style="background:#25D366;color:#ffffff;border:none;margin:0 auto;display:inline-flex;align-items:center;gap:0.6rem;padding:0.65rem 1.25rem;font-size:0.8rem;font-weight:700;border-radius:var(--r);cursor:pointer;transition:all 0.2s ease;" onmouseover="this.style.background='#20ba59'" onmouseout="this.style.background='#25D366'">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:14px;height:14px;fill:currentColor;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L3 496l133-34.9c32.7 17.8 69.3 27.2 106.7 27.2 122.4 0 222-99.6 222-222 0-59.3-23-115.1-64.8-157.1zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-79.8 20.9 21.3-77.8-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 54 81.2 54 130.5 0 101.7-82.8 184.5-184.6 184.5zm100.5-137.5c-5.5-2.7-32.4-16-37.5-17.8-5-1.8-8.7-2.7-12.4 2.7-3.7 5.5-14.2 17.8-17.4 21.4-3.2 3.7-6.4 4.1-12 1.4-5.5-2.7-23.4-8.6-44.6-27.5-16.5-14.7-27.6-32.9-30.8-38.4-3.2-5.5-.3-8.5 2.5-11.2 2.5-2.5 5.5-6.4 8.2-9.6 2.7-3.2 3.7-5.5 5.5-9.1 1.8-3.7.9-6.9-.5-9.6-1.4-2.7-12.4-29.9-17-41.2-4.5-11-9.1-9.5-12.5-9.6-3.2-.2-6.9-.2-10.5-.2-3.7 0-9.6 1.4-14.6 6.9-5 5.5-19.2 18.7-19.2 45.6s19.7 53 22 56c2.3 3 38.8 59.3 94 83.2 13.1 5.7 23.4 9.1 31.4 11.7 13.2 4.2 25.2 3.6 34.7 2.2 10.6-1.6 32.4-13.2 37-25.9 4.6-12.7 4.6-23.7 3.2-25.9-1.4-2.3-5.2-3.7-10.7-6.4z"/></svg>
-                Enviar ticket
+              <button id="btn-ticket-whatsapp" style="background:var(--or);color:#fff;border:none;margin:0 auto;display:inline-flex;align-items:center;gap:0.6rem;padding:0.65rem 1.4rem;font-size:0.78rem;font-weight:800;border-radius:var(--r);cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:var(--fB);clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;" onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Generar Ticket PDF
               </button>
             </div>
 
@@ -3511,6 +3511,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="ticket-system.js"></script>
   <script>
     // Inicializar Supabase inline — no depende de archivo externo
     (function initSupa() {
@@ -4876,6 +4877,21 @@
         if(planText && !descFinal) descFinal = planText;
         else if(planText && descFinal) descFinal = planText + ' · ' + descFinal;
 
+        var opId = generarOperationId(fecha);
+        var _planElTicket = document.getElementById('ing-plan');
+        var _planTextTicket = (_planElTicket && _planElTicket.value) ? _planElTicket.options[_planElTicket.selectedIndex].text : '';
+        window._ultimoIngresoDatos = {
+          nombre: nombre,
+          plan: _planTextTicket || descFinal || categoria,
+          categoria: categoria,
+          monto: monto,
+          fecha: fecha,
+          cartera: cartera,
+          meses: meses ? parseInt(meses) : null,
+          expiracion: expirationIso ? new Date(expirationIso).toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'}) : null,
+          operationId: opId,
+          empleado: usuarioActual() || null
+        };
         return window.supabase.from('ingresos').insert([{
           nombre: nombre, monto: monto, fecha: fecha, cartera: cartera,
           categoria: (categoria === 'cliente_nuevo' ? 'membresia' : categoria),
@@ -4884,7 +4900,8 @@
           meses: meses ? parseInt(meses) : null,
           descuento: descuento,
           anio: parseInt(fecha.split('-')[0]),
-          usuario: usuarioActual() || null
+          usuario: usuarioActual() || null,
+          operation_id: opId
         }]).then(function(insRes) {
           if(insRes.error) throw insRes.error;
           return clientObj;
@@ -4906,51 +4923,18 @@
           concepto += ' (' + desc + ')';
         }
 
-        var ticketLines = [
-          "Elemental Club",
-          "Gracias por tu pago. Aqui tienes tu comprobante de movimiento.",
-          "",
-          "Cliente: " + nombre,
-          "Fecha: " + new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'}),
-          "Concepto: " + concepto,
-          "Monto: $" + monto.toLocaleString('es-MX', {minimumFractionDigits: 2}) + " MXN",
-          "Cartera: " + cartera
-        ];
-
-        if (categoria === 'membresia' || categoria === 'cliente_nuevo') {
-          var expD = new Date(expirationIso);
-          var expStr = expD.toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'});
-          ticketLines.push("Vence: " + expStr);
-        }
-
-        ticketLines.push("", "Nos vemos en el club.");
-        var ticketText = ticketLines.join("\n");
-
-        var waNumber = "52" + telefono;
-        var waUrl = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(ticketText);
-
-        // Intentar abrir WhatsApp de forma automática
-        if (telefono) {
-          var win = window.open(waUrl, '_blank');
-          if (!win) {
-            console.warn("Popup de WhatsApp bloqueado por el navegador.");
-          }
-        }
-
-        // Mostrar bloque de ticket y configurar botón "Enviar ticket"
+            // Mostrar botón de generar ticket PDF
         var successBanner = document.getElementById('ing-ticket-whatsapp-bloque');
         if (successBanner) {
           successBanner.style.display = 'block';
-          var btnWa = document.getElementById('btn-ticket-whatsapp');
-          if (btnWa) {
-            if (telefono) {
-              btnWa.style.display = 'inline-flex';
-              btnWa.onclick = function() {
-                window.open(waUrl, '_blank');
+          var btnTicketIng = document.getElementById('btn-ticket-whatsapp');
+          if (btnTicketIng) {
+            btnTicketIng.style.display = 'inline-flex';
+            (function(capturedDatos) {
+              btnTicketIng.onclick = function() {
+                if (window.abrirTicket) window.abrirTicket(capturedDatos);
               };
-            } else {
-              btnWa.style.display = 'none';
-            }
+            })(window._ultimoIngresoDatos);
           }
         }
 
@@ -5621,6 +5605,14 @@
               + 'Editar <span class="mov-timer-badge">' + Math.round(minLeft) + ' min</span></button>';
           }
         }
+
+        var ticketBtnB = '';
+        if (isIng) {
+          ticketBtnB = ''
+            + '<button class="btn-mov-ticket" onclick="abrirTicketMov(\'' + r.id + '\',\'ingreso\')">'
+            + 'Ticket'
+            + '</button>';
+        }
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
@@ -5629,7 +5621,7 @@
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
           + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
-          + '<td>'+editBtn+'</td>'
+          + '<td>'+editBtn+ticketBtnB+'</td>'
           + '</tr>';
       }).join('');
     }
@@ -5640,11 +5632,11 @@
       var hoy = new Date(); hoy.setDate(hoy.getDate()-60);
       var desde = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       Promise.all([
-        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
+        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario,operation_id').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
         window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
         window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
-        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id}; });
         var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
         var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:r.usuario||'—'}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
@@ -5683,6 +5675,14 @@
           }
         }
 
+        var ticketBtn = '';
+        if (isIng) {
+          ticketBtn = ''
+            + '<button class="btn-mov-ticket" onclick="abrirTicketMov(\'' + r.id + '\',\'ingreso\')">'
+            + 'Ticket'
+            + '</button>';
+        }
+
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
@@ -5691,7 +5691,7 @@
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
           + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
-          + '<td>'+editBtn+'</td>'
+          + '<td>'+editBtn+ticketBtn+'</td>'
           + '</tr>';
       }).join('');
     }
