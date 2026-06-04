@@ -6601,7 +6601,28 @@
       if (isPhone) {
         qry = qry.ilike('phone', q + '%');
       } else {
-        qry = qry.or('first_name.ilike.%'+q+'%,last_name1.ilike.%'+q+'%');
+        /* Fix: soporta nombre completo con espacios.
+           "Sergio Perez"  → busca "sergio" en first_name Y "perez" en last_name1/2
+           "Sergio"        → busca en first_name, last_name1 y last_name2
+           Copia/pega del nombre completo también funciona.               */
+        var partes = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var orParts = [];
+        if (partes.length === 1) {
+          orParts.push('first_name.ilike.%' + partes[0] + '%');
+          orParts.push('last_name1.ilike.%' + partes[0] + '%');
+          orParts.push('last_name2.ilike.%' + partes[0] + '%');
+        } else {
+          var nombre   = partes[0];
+          var apellido = partes.slice(1).join(' ');
+          /* nombre en first_name + apellido en last_name1 */
+          orParts.push('and(first_name.ilike.%' + nombre + '%,last_name1.ilike.%' + apellido + '%)');
+          /* nombre en first_name + apellido en last_name2 */
+          orParts.push('and(first_name.ilike.%' + nombre + '%,last_name2.ilike.%' + apellido + '%)');
+          /* fallback: buscar cada parte suelta */
+          orParts.push('first_name.ilike.%' + nombre + '%');
+          orParts.push('last_name1.ilike.%' + apellido + '%');
+        }
+        qry = qry.or(orParts.join(','));
       }
       qry.then(function(r) {
         var rows = r.data || [];
