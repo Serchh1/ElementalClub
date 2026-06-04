@@ -2653,6 +2653,11 @@
             <div class="sc-num" id="st-exp">—</div>
             <div class="sc-lbl">Vencen 7 días <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span></div>
           </div>
+          <div class="sc" onclick="switchTab('lockers', document.querySelector('.ptab:last-child'))" style="cursor:pointer;" title="Ver lockers próximos a vencer según disponibilidad">
+
+            <div class="sc-num" id="st-lockers-exp">—</div>
+            <div class="sc-lbl">Lockers por vencer <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span><br><span style="font-size:.55rem;color:var(--mu);text-transform:none;letter-spacing:0;"></span></div>
+          </div>
           <div class="sc" onclick="abrirModalIngresosHoy()" style="cursor:pointer;" title="Ver detalle">
 
             <div class="sc-num" id="st-ing">—</div>
@@ -3386,11 +3391,26 @@
                 </div>
               </div>
 
+
+              <!-- Cartera -->
+              <div style="margin-bottom:1rem;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Forma de pago</div>
+                <select id="lk-cartera"
+                  style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .9rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);cursor:pointer;appearance:none;-webkit-appearance:none;"
+                  onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'">
+                  <option value="">Selecciona cartera...</option>
+                  <option value="Caja chica">Caja chica</option>
+                  <option value="alfonso mercado">Alfonso Mercado</option>
+                  <option value="Stripe">Stripe</option>
+                  <option value="Resguardo">Resguardo</option>
+                </select>
+              </div>
+
               <!-- Error -->
               <div id="lk-form-err" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:.55rem .85rem;font-size:.72rem;font-weight:600;margin-bottom:.9rem;border-radius:var(--r);"></div>
 
               <!-- Botón registrar -->
-              <button id="lk-btn-registrar" onclick="lkRegistrar()"
+              <button id="lk-btn-registrar" onclick="lkAbrirConfirmacion()"
                 style="width:100%;padding:.9rem;background:var(--or);color:#fff;border:none;font-family:var(--fB);font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;"
                 onmouseover="if(!this.disabled)this.style.background='var(--or2)'" onmouseout="if(!this.disabled)this.style.background='var(--or)'">
                 Registrar Locker
@@ -4001,6 +4021,12 @@
       supabase.from('clients').select('*', { count: 'exact', head: true })
         .lte('membership_expires', wk.toISOString()).gte('membership_expires', new Date().toISOString())
         .then(function (r) { if (r.count !== null) document.getElementById('st-exp').textContent = r.count; });
+
+      supabase.from('lockers').select('*', { count: 'exact', head: true })
+        .eq('status','ocupado')
+        .gte('fecha_fin', todayStr + 'T00:00:00')
+        .lte('fecha_fin', wk.toISOString())
+        .then(function (r) { if (r.count !== null) document.getElementById('st-lockers-exp').textContent = r.count; });
 
       // Ingresos hoy: Caja chica + alfonso mercado + Stripe
       supabase.from('ingresos').select('monto')
@@ -7111,6 +7137,8 @@
       if(!lkNumeroSel)   return lkError('Selecciona el número de locker.');
       if(!lkClienteSel)  return lkError('Busca y selecciona un cliente.');
       if(!lkDuracionSel) return lkError('Selecciona la duración.');
+      var lkCartera = document.getElementById('lk-cartera').value;
+      if(!lkCartera) return lkError('Selecciona la forma de pago.');
 
       var btn = document.getElementById('lk-btn-registrar');
       btn.disabled=true; btn.style.opacity='.5'; btn.style.clipPath='none';
@@ -7138,6 +7166,7 @@
         meses:        MESES[lkDuracionSel],
         operation_id: opId,
         usuario:      usuario,
+        cartera:      lkCartera,
       }).select('id').single()
       .then(function(ri){
         if(ri.error) throw ri.error;
@@ -7198,6 +7227,7 @@
       document.getElementById('lk-buscar-input').value='';
       document.getElementById('lk-fecha-preview').style.display='none';
       document.getElementById('lk-form-err').style.display='none';
+      document.getElementById('lk-cartera').value='';
     }
 
     /* ── Detalle + liberación ── */
@@ -7312,10 +7342,103 @@
       setTimeout(function(){ t.remove(); }, 3000);
     }
 
+
+    /* ── Modal de confirmación de datos ── */
+    window.lkAbrirConfirmacion = function(){
+      var err = document.getElementById('lk-form-err');
+      err.style.display='none';
+      if(!lkGeneroSel)   return lkError('Selecciona el área (Hombres / Mujeres).');
+      if(!lkNumeroSel)   return lkError('Selecciona el número de locker.');
+      if(!lkClienteSel)  return lkError('Busca y selecciona un cliente.');
+      if(!lkDuracionSel) return lkError('Selecciona la duración.');
+      var cartera = document.getElementById('lk-cartera').value;
+      if(!cartera) return lkError('Selecciona la forma de pago.');
+
+      var nombre = (lkClienteSel.first_name||'') + ' ' + (lkClienteSel.last_name1||'') + (lkClienteSel.last_name2?' '+lkClienteSel.last_name2:'');
+      var fin = new Date(); fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
+      var finStr = fin.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+      var hoyStr = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+
+      function fila(lbl, val, color) {
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--s3);">'
+          + '<span style="font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">'+lbl+'</span>'
+          + '<span style="font-size:.82rem;font-weight:700;color:'+(color||'#fff')+';">'+val+'</span>'
+          + '</div>';
+      }
+
+      document.getElementById('lk-confirm-body').innerHTML =
+        fila('Área',        (lkGeneroSel==='hombre'?'♂ Hombres':'♀ Mujeres'))
+        + fila('Locker',    '#' + lkNumeroSel)
+        + fila('Cliente',   nombre.trim())
+        + fila('Teléfono',  lkClienteSel.phone || '—', 'rgba(255,255,255,.6)')
+        + fila('Plan',      lkClienteSel.membership_type || '—', 'rgba(255,255,255,.6)')
+        + fila('Duración',  lkDuracionSel === 'semestral' ? 'Semestral (6 meses)' : 'Anual (12 meses)')
+        + fila('Inicio',    hoyStr, 'rgba(255,255,255,.7)')
+        + fila('Vence',     finStr, '#4ade80')
+        + fila('Cartera',   cartera, 'rgba(255,255,255,.7)')
+        + '<div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;">'
+          + '<span style="font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Total</span>'
+          + '<span style="font-family:var(--fT);font-size:1.6rem;letter-spacing:.04em;color:var(--or);">$'+PRECIOS[lkDuracionSel].toLocaleString('es-MX')+'.00</span>'
+        + '</div>';
+
+      var confirmBtn = document.getElementById('lk-confirm-ok-btn');
+      confirmBtn.disabled=false; confirmBtn.textContent='Confirmar y registrar';
+      confirmBtn.style.opacity='1'; confirmBtn.style.clipPath='polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%)';
+
+      document.getElementById('lk-confirm-bd').style.display='flex';
+      document.body.style.overflow='hidden';
+    };
+
+    window.lkCerrarConfirmacion = function(){
+      document.getElementById('lk-confirm-bd').style.display='none';
+      document.body.style.overflow='';
+    };
+
+    window.lkConfirmarYRegistrar = function(){
+      var btn = document.getElementById('lk-confirm-ok-btn');
+      btn.disabled=true; btn.textContent='Registrando...';
+      btn.style.opacity='.5'; btn.style.clipPath='none';
+      lkCerrarConfirmacion();
+      lkRegistrar();
+    };
+
     /* Exponer init para switchTab */
     window.lkInit = lkInit;
   })();
   </script>
+
+  <!-- ══ MODAL CONFIRMACIÓN LOCKER ══ -->
+  <div id="lk-confirm-bd" style="display:none;position:fixed;inset:0;z-index:1070;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)lkCerrarConfirmacion()">
+    <div style="background:var(--s1);border:1px solid var(--s3);border-top:2px solid var(--or);width:100%;max-width:400px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--or),transparent);"></div>
+
+      <!-- Header -->
+      <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:.52rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:.2rem;">Confirmar registro</div>
+          <div style="font-family:var(--fT);font-size:1.3rem;letter-spacing:.05em;">VERIFICAR <b style="color:var(--or)">DATOS</b></div>
+        </div>
+        <button onclick="lkCerrarConfirmacion()" style="background:none;border:1px solid var(--s4);color:var(--mu);width:28px;height:28px;cursor:pointer;font-size:.7rem;">✕</button>
+      </div>
+
+      <!-- Resumen -->
+      <div id="lk-confirm-body" style="padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:0;"></div>
+
+      <!-- Acciones -->
+      <div style="padding:.5rem 1.5rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:.65rem;">
+        <button onclick="lkCerrarConfirmacion()"
+          style="padding:.82rem;background:transparent;border:1px solid var(--s4);color:var(--mu);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .18s;"
+          onmouseover="this.style.borderColor='rgba(255,255,255,.25)';this.style.color='#fff'" onmouseout="this.style.borderColor='var(--s4)';this.style.color='var(--mu)'">
+          Corregir
+        </button>
+        <button id="lk-confirm-ok-btn" onclick="lkConfirmarYRegistrar()"
+          style="padding:.82rem;background:var(--or);color:#fff;border:none;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);transition:all .2s;"
+          onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">
+          Confirmar y registrar
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
