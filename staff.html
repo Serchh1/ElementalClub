@@ -2621,6 +2621,7 @@
       <button class="ptab" onclick="switchTab('accesos',this)">Accesos Portal</button>
       <button class="ptab" onclick="switchTab('movimientos',this)">Movimientos</button>
       <button class="ptab" id="tab-btn-finanzas" style="display:none" onclick="switchTab('finanzas',this)">Finanzas</button>
+      <button class="ptab" onclick="switchTab('lockers',this)">Lockers</button>
     </nav>
     <div class="pbody">
 
@@ -3280,7 +3281,153 @@
           <div class="ia-body" id="ia-body"></div>
         </div>
 
+
       </div><!-- /tab-finanzas -->
+
+      <!-- ══════════════════════════════════════════
+           TAB LOCKERS
+      ══════════════════════════════════════════ -->
+      <div id="tab-lockers" class="tab-pane">
+        <div style="display:flex;flex-direction:column;gap:1.5rem;padding-bottom:2rem;">
+
+          <!-- Alerta vencimientos -->
+          <div id="lk-alert-band" style="display:none;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-left:3px solid #fbbf24;padding:.75rem 1.1rem;border-radius:5px;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:.7rem;">
+              <span style="color:#fbbf24;font-size:1rem;">⚠</span>
+              <span id="lk-alert-txt" style="font-size:.75rem;font-weight:600;color:rgba(255,255,255,.8);"></span>
+            </div>
+            <button onclick="document.getElementById('lk-alert-band').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:.85rem;">✕</button>
+          </div>
+
+          <!-- Layout: form izq + tabla der -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="lk-grid">
+            <style>
+              @media(max-width:860px){.lk-grid{grid-template-columns:1fr!important}}
+            </style>
+
+            <!-- ── PANEL REGISTRO ── -->
+            <div style="background:var(--s1);border:1px solid var(--s3);border-top:2px solid var(--or);padding:1.5rem;position:relative;overflow:hidden;">
+              <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--or),transparent);"></div>
+              <div style="font-size:.55rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem;">
+                <span style="width:6px;height:6px;background:var(--or);border-radius:50%;display:inline-block;"></span>
+                Nuevo registro
+              </div>
+              <div style="font-family:var(--fT);font-size:1.6rem;letter-spacing:.05em;margin-bottom:1.25rem;">RENTAR <b style="color:var(--or)">LOCKER</b></div>
+
+              <!-- Género -->
+              <div style="margin-bottom:1rem;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Área</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+                  <button id="lk-btn-h" onclick="lkSetGenero('hombre')"
+                    style="padding:.7rem;border:1.5px solid var(--s4);background:var(--s2);color:rgba(255,255,255,.5);font-family:var(--fB);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .18s;">
+                    ♂ Hombres
+                  </button>
+                  <button id="lk-btn-m" onclick="lkSetGenero('mujer')"
+                    style="padding:.7rem;border:1.5px solid var(--s4);background:var(--s2);color:rgba(255,255,255,.5);font-family:var(--fB);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .18s;">
+                    ♀ Mujeres
+                  </button>
+                </div>
+              </div>
+
+              <!-- Número de locker -->
+              <div style="margin-bottom:1rem;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Número de locker</div>
+                <div id="lk-numeros" style="display:flex;flex-wrap:wrap;gap:.4rem;">
+                  <div style="font-size:.72rem;color:var(--mu);">Selecciona un área primero</div>
+                </div>
+              </div>
+
+              <!-- Buscador cliente -->
+              <div style="margin-bottom:1rem;position:relative;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Cliente (miembro activo)</div>
+                <input id="lk-buscar-input" type="text" placeholder="Buscar por nombre o teléfono..."
+                  oninput="lkBuscarCliente(this.value)"
+                  autocomplete="off"
+                  style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .9rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);"
+                  onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'" />
+                <div id="lk-buscar-lista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--s2);border:1px solid var(--s3);z-index:50;max-height:200px;overflow-y:auto;border-radius:0 0 var(--r) var(--r);"></div>
+              </div>
+
+              <!-- Cliente seleccionado -->
+              <div id="lk-cliente-sel" style="display:none;background:rgba(255,77,0,.07);border:1px solid rgba(255,77,0,.2);border-left:3px solid var(--or);padding:.75rem 1rem;margin-bottom:1rem;border-radius:var(--r);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                  <div>
+                    <div style="font-size:.85rem;font-weight:700;color:#fff;" id="lk-cli-nombre">—</div>
+                    <div style="font-size:.68rem;color:var(--mu);margin-top:.2rem;" id="lk-cli-info">—</div>
+                  </div>
+                  <button onclick="lkLimpiarCliente()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;padding:.1rem;">✕</button>
+                </div>
+              </div>
+
+              <!-- Duración -->
+              <div style="margin-bottom:1rem;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Duración</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+                  <button id="lk-dur-s" onclick="lkSetDuracion('semestral')"
+                    style="padding:.8rem .6rem;border:1.5px solid var(--s4);background:var(--s2);cursor:pointer;transition:all .18s;text-align:center;">
+                    <div style="font-family:var(--fB);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);">Semestral</div>
+                    <div style="font-family:var(--fT);font-size:1.3rem;color:rgba(255,255,255,.6);letter-spacing:.04em;margin-top:.1rem;">$600</div>
+                    <div style="font-size:.58rem;color:rgba(255,255,255,.25);margin-top:.1rem;">6 meses</div>
+                  </button>
+                  <button id="lk-dur-a" onclick="lkSetDuracion('anual')"
+                    style="padding:.8rem .6rem;border:1.5px solid var(--s4);background:var(--s2);cursor:pointer;transition:all .18s;text-align:center;">
+                    <div style="font-family:var(--fB);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);">Anual</div>
+                    <div style="font-family:var(--fT);font-size:1.3rem;color:rgba(255,255,255,.6);letter-spacing:.04em;margin-top:.1rem;">$1,000</div>
+                    <div style="font-size:.58rem;color:rgba(255,255,255,.25);margin-top:.1rem;">12 meses</div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Fecha calculada -->
+              <div id="lk-fecha-preview" style="display:none;background:var(--s2);border:1px solid var(--s3);padding:.65rem 1rem;margin-bottom:1.25rem;border-radius:var(--r);">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Vigente hasta</span>
+                  <span id="lk-fecha-fin-txt" style="font-size:.82rem;font-weight:700;color:#4ade80;"></span>
+                </div>
+              </div>
+
+              <!-- Error -->
+              <div id="lk-form-err" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:.55rem .85rem;font-size:.72rem;font-weight:600;margin-bottom:.9rem;border-radius:var(--r);"></div>
+
+              <!-- Botón registrar -->
+              <button id="lk-btn-registrar" onclick="lkRegistrar()"
+                style="width:100%;padding:.9rem;background:var(--or);color:#fff;border:none;font-family:var(--fB);font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;"
+                onmouseover="if(!this.disabled)this.style.background='var(--or2)'" onmouseout="if(!this.disabled)this.style.background='var(--or)'">
+                Registrar Locker
+              </button>
+            </div>
+
+            <!-- ── TABLA DE LOCKERS ACTIVOS ── -->
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+
+              <!-- Hombres -->
+              <div style="background:var(--s1);border:1px solid var(--s3);">
+                <div style="padding:.75rem 1.1rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:.6rem;">
+                    <span style="font-size:.9rem;">♂</span>
+                    <span style="font-family:var(--fT);font-size:1rem;letter-spacing:.06em;">LOCKERS HOMBRES</span>
+                    <span id="lk-badge-h" style="font-size:.58rem;font-weight:800;letter-spacing:.1em;background:rgba(255,77,0,.15);color:var(--or);padding:.1rem .5rem;border-radius:99px;">0/10</span>
+                  </div>
+                </div>
+                <div id="lk-grid-h" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;padding:.85rem;"></div>
+              </div>
+
+              <!-- Mujeres -->
+              <div style="background:var(--s1);border:1px solid var(--s3);">
+                <div style="padding:.75rem 1.1rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;gap:.6rem;">
+                    <span style="font-size:.9rem;">♀</span>
+                    <span style="font-family:var(--fT);font-size:1rem;letter-spacing:.06em;">LOCKERS MUJERES</span>
+                    <span id="lk-badge-m" style="font-size:.58rem;font-weight:800;letter-spacing:.1em;background:rgba(255,77,0,.15);color:var(--or);padding:.1rem .5rem;border-radius:99px;">0/15</span>
+                  </div>
+                </div>
+                <div id="lk-grid-m" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;padding:.85rem;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div><!-- /tab-lockers -->
 
     </div>
   </div>
@@ -3808,6 +3955,7 @@
       document.getElementById('tab-' + id).classList.add('on');
       if (id === 'miembros' && !membersLoaded) loadMembers();
       if (id === 'movimientos') { finInit(); cargarCarterasActivas(); }
+      if (id === 'lockers') { window.lkInit(); }
       if (id === 'finanzas') {
         poblarMeses();
         poblarSemanas();
@@ -6683,6 +6831,491 @@
     }
   </script>
 
+
+  <!-- ══════════════════════════════════════════
+       MODAL DETALLE / LIBERACIÓN DE LOCKER
+  ══════════════════════════════════════════ -->
+  <div id="lk-detail-bd" style="display:none;position:fixed;inset:0;z-index:1060;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)lkCerrarDetalle()">
+    <div style="background:var(--s1);border:1px solid var(--s3);border-top:2px solid var(--or);width:100%;max-width:380px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--or),transparent);"></div>
+      <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:var(--fT);font-size:1.25rem;letter-spacing:.06em;" id="lk-det-titulo">LOCKER</div>
+        <button onclick="lkCerrarDetalle()" style="background:none;border:1px solid var(--s4);color:var(--mu);width:28px;height:28px;cursor:pointer;font-size:.7rem;">✕</button>
+      </div>
+      <div style="padding:1.25rem 1.5rem;" id="lk-det-body"></div>
+      <!-- Sección liberación con doble verificación -->
+      <div id="lk-liberar-sec" style="padding:0 1.5rem 1.25rem;">
+        <div style="height:1px;background:var(--s3);margin-bottom:1rem;"></div>
+        <div style="font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#f87171;margin-bottom:.5rem;">Zona de acción</div>
+        <div id="lk-liberar-paso1">
+          <button onclick="lkMostrarConfirmacion()"
+            style="width:100%;padding:.75rem;background:transparent;border:1px solid rgba(239,68,68,.35);color:#f87171;font-family:var(--fB);font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .18s;"
+            onmouseover="this.style.background='rgba(239,68,68,.08)'" onmouseout="this.style.background='transparent'">
+            Liberar locker manualmente
+          </button>
+        </div>
+        <div id="lk-liberar-paso2" style="display:none;">
+          <div style="font-size:.72rem;color:rgba(255,255,255,.55);margin-bottom:.65rem;line-height:1.55;">
+            Escribe <strong style="color:#f87171;">LIBERAR</strong> para confirmar. Esta acción no se puede deshacer.
+          </div>
+          <input id="lk-confirm-input" type="text" placeholder="Escribe LIBERAR"
+            oninput="lkValidarConfirmacion()"
+            style="width:100%;background:var(--bg);border:1.5px solid rgba(239,68,68,.3);padding:.65rem .9rem;color:#fff;font-family:var(--fB);font-size:.85rem;font-weight:700;outline:none;margin-bottom:.65rem;border-radius:var(--r);letter-spacing:.06em;" />
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <button onclick="lkCancelarConfirmacion()"
+              style="padding:.72rem;background:transparent;border:1px solid var(--s4);color:var(--mu);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">
+              Cancelar
+            </button>
+            <button id="lk-btn-confirmar-liberar" onclick="lkEjecutarLiberar()" disabled
+              style="padding:.72rem;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:rgba(239,68,68,.4);font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:not-allowed;transition:all .2s;">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ══════════════════════════════════════════════════════
+     LOCKERS — lógica completa
+  ══════════════════════════════════════════════════════ */
+  (function(){
+    var lkGeneroSel   = null;   // 'hombre' | 'mujer'
+    var lkDuracionSel = null;   // 'semestral' | 'anual'
+    var lkNumeroSel   = null;   // 1-10 / 1-15
+    var lkClienteSel  = null;   // objeto cliente
+    var lkLockers     = [];     // cache de lockers activos
+    var lkDetId       = null;   // id del locker en detalle
+
+    var PRECIOS = { semestral: 600, anual: 1000 };
+    var MESES   = { semestral: 6,   anual: 12   };
+    var MAX     = { hombre: 10, mujer: 15 };
+
+    /* ── Cargar lockers al abrir la pestaña ── */
+    window.lkInit = function() {
+      cargarLockers();
+      verificarVencimientos();
+    };
+
+    function cargarLockers() {
+      window.supabase.from('lockers')
+        .select('*')
+        .eq('status','ocupado')
+        .order('genero').order('numero')
+        .then(function(r){
+          lkLockers = r.data || [];
+          renderGrids();
+        });
+    }
+
+    /* ── Renderizar grids de lockers ── */
+    function renderGrids() {
+      ['hombre','mujer'].forEach(function(g){
+        var max = MAX[g];
+        var ocupados = lkLockers.filter(function(l){ return l.genero === g; });
+        var ocupNums = ocupados.map(function(l){ return l.numero; });
+        var gridId   = g === 'hombre' ? 'lk-grid-h' : 'lk-grid-m';
+        var badgeId  = g === 'hombre' ? 'lk-badge-h' : 'lk-badge-m';
+        var grid = document.getElementById(gridId);
+        document.getElementById(badgeId).textContent = ocupados.length + '/' + max;
+
+        var html = '';
+        for(var n = 1; n <= max; n++){
+          var lk = ocupados.find(function(l){ return l.numero === n; });
+          if(lk){
+            var venceProx = false;
+            if(lk.fecha_fin){
+              var diff = (new Date(lk.fecha_fin) - new Date()) / 86400000;
+              if(diff <= 14) venceProx = true;
+            }
+            html += '<div onclick="lkAbrirDetalle(\''+lk.id+'\')" title="'+lk.client_nombre+'" '
+              + 'style="aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;'
+              + 'background:'+(venceProx?'rgba(251,191,36,.12)':'rgba(255,77,0,.1)')+';'
+              + 'border:1.5px solid '+(venceProx?'rgba(251,191,36,.5)':'rgba(255,77,0,.4)')+';'
+              + 'cursor:pointer;transition:all .18s;" '
+              + 'onmouseover="this.style.background=\''+(venceProx?'rgba(251,191,36,.2)':'rgba(255,77,0,.2)')+'\'" '
+              + 'onmouseout="this.style.background=\''+(venceProx?'rgba(251,191,36,.12)':'rgba(255,77,0,.1)')+'\'">'
+              + '<span style="font-family:var(--fT);font-size:1.1rem;color:'+(venceProx?'#fbbf24':'var(--or)')+';">' + n + '</span>'
+              + '<span style="font-size:.42rem;font-weight:700;color:'+(venceProx?'rgba(251,191,36,.7)':'rgba(255,77,0,.6)')+';letter-spacing:.06em;text-transform:uppercase;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;">'
+              + (lk.client_nombre ? lk.client_nombre.split(' ')[0] : '') + '</span>'
+              + '</div>';
+          } else {
+            html += '<div onclick="lkSeleccionarNumero('+ n +',\''+g+'\')" '
+              + 'style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;'
+              + 'background:var(--s2);border:1.5px solid var(--s3);cursor:pointer;transition:all .18s;" '
+              + 'onmouseover="this.style.borderColor=\'var(--or)\';this.style.background=\'rgba(255,77,0,.05)\'" '
+              + 'onmouseout="this.style.borderColor=\'var(--s3)\';this.style.background=\'var(--s2)\'">'
+              + '<span style="font-family:var(--fT);font-size:1.1rem;color:rgba(255,255,255,.3);">' + n + '</span>'
+              + '</div>';
+          }
+        }
+        grid.innerHTML = html;
+      });
+
+      /* Actualizar selector de números en el formulario si hay género seleccionado */
+      if(lkGeneroSel) lkRenderNumeros(lkGeneroSel);
+    }
+
+    /* ── Selector de género ── */
+    window.lkSetGenero = function(g) {
+      lkGeneroSel  = g;
+      lkNumeroSel  = null;
+      var btnH = document.getElementById('lk-btn-h');
+      var btnM = document.getElementById('lk-btn-m');
+      if(g === 'hombre'){
+        btnH.style.borderColor = 'var(--or)'; btnH.style.color = '#fff'; btnH.style.background = 'rgba(255,77,0,.1)';
+        btnM.style.borderColor = 'var(--s4)'; btnM.style.color = 'rgba(255,255,255,.5)'; btnM.style.background = 'var(--s2)';
+      } else {
+        btnM.style.borderColor = 'var(--or)'; btnM.style.color = '#fff'; btnM.style.background = 'rgba(255,77,0,.1)';
+        btnH.style.borderColor = 'var(--s4)'; btnH.style.color = 'rgba(255,255,255,.5)'; btnH.style.background = 'var(--s2)';
+      }
+      lkRenderNumeros(g);
+    };
+
+    function lkRenderNumeros(g){
+      var max = MAX[g];
+      var ocupNums = lkLockers.filter(function(l){ return l.genero===g && l.status==='ocupado'; }).map(function(l){ return l.numero; });
+      var html = '';
+      for(var n = 1; n <= max; n++){
+        var ocup = ocupNums.indexOf(n) > -1;
+        var sel  = (lkNumeroSel === n && lkGeneroSel === g);
+        if(ocup){
+          html += '<div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;'
+            + 'background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.35);'
+            + 'font-family:var(--fT);font-size:1rem;color:rgba(239,68,68,.5);" title="Ocupado">' + n + '</div>';
+        } else {
+          html += '<div onclick="lkSeleccionarNumeroForm('+n+')" '
+            + 'style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;'
+            + 'background:'+(sel?'rgba(255,77,0,.2)':'var(--s3)')+';'
+            + 'border:1.5px solid '+(sel?'var(--or)':'var(--s4)')+';'
+            + 'font-family:var(--fT);font-size:1rem;color:'+(sel?'var(--or)':'rgba(255,255,255,.55)')+';'
+            + '" onmouseover="this.style.borderColor=\'var(--or)\'" onmouseout="this.style.borderColor=\''+(sel?'var(--or)':'var(--s4)')+'\'">'
+            + n + '</div>';
+        }
+      }
+      document.getElementById('lk-numeros').innerHTML = html;
+    }
+
+    window.lkSeleccionarNumeroForm = function(n){
+      lkNumeroSel = n;
+      lkRenderNumeros(lkGeneroSel);
+    };
+
+    /* Clic en locker libre desde el grid principal — pre-selecciona en el form */
+    window.lkSeleccionarNumero = function(n, g){
+      lkSetGenero(g);
+      lkNumeroSel = n;
+      lkRenderNumeros(g);
+      document.getElementById('tab-lockers').scrollTo({top:0, behavior:'smooth'});
+    };
+
+    /* ── Duración ── */
+    window.lkSetDuracion = function(d){
+      lkDuracionSel = d;
+      var btnS = document.getElementById('lk-dur-s');
+      var btnA = document.getElementById('lk-dur-a');
+      [btnS,btnA].forEach(function(b){
+        b.style.borderColor='var(--s4)'; b.style.background='var(--s2)';
+        b.querySelector('div').style.color='rgba(255,255,255,.5)';
+        b.querySelectorAll('div')[1].style.color='rgba(255,255,255,.6)';
+      });
+      var actBtn = d==='semestral'?btnS:btnA;
+      actBtn.style.borderColor='var(--or)'; actBtn.style.background='rgba(255,77,0,.08)';
+      actBtn.querySelector('div').style.color='#fff';
+      actBtn.querySelectorAll('div')[1].style.color='var(--or)';
+      lkActualizarFecha();
+    };
+
+    function lkActualizarFecha(){
+      if(!lkDuracionSel) return;
+      var hoy  = new Date();
+      var fin  = new Date(hoy);
+      fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
+      var finStr = fin.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+      document.getElementById('lk-fecha-fin-txt').textContent = finStr;
+      document.getElementById('lk-fecha-preview').style.display = 'block';
+    }
+
+    /* ── Buscador de cliente ── */
+    window.lkBuscarCliente = function(q){
+      var lista = document.getElementById('lk-buscar-lista');
+      q = (q||'').trim();
+      if(q.length < 2){ lista.style.display='none'; return; }
+      lista.style.display='block';
+      lista.innerHTML='<div style="padding:.6rem 1rem;font-size:.72rem;color:var(--mu);">Buscando...</div>';
+
+      var isPhone = /^[0-9]{4,}$/.test(q);
+      var qry = window.supabase.from('clients')
+        .select('id,first_name,last_name1,last_name2,phone,membership_type,membership_status')
+        .eq('client_type','member')
+        .in('membership_status',['active','overdue'])
+        .order('first_name').limit(8);
+
+      if(isPhone){
+        qry = qry.ilike('phone', q+'%');
+      } else {
+        var partes = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var orP = [];
+        if(partes.length === 1){
+          orP.push('first_name.ilike.%'+partes[0]+'%');
+          orP.push('last_name1.ilike.%'+partes[0]+'%');
+        } else {
+          var nom = partes[0], ape = partes.slice(1).join(' ');
+          orP.push('and(first_name.ilike.%'+nom+'%,last_name1.ilike.%'+ape+'%)');
+          orP.push('and(first_name.ilike.%'+nom+'%,last_name2.ilike.%'+ape+'%)');
+          orP.push('first_name.ilike.%'+nom+'%');
+        }
+        qry = qry.or(orP.join(','));
+      }
+
+      qry.then(function(r){
+        var rows = r.data||[];
+        if(!rows.length){
+          lista.innerHTML='<div style="padding:.6rem 1rem;font-size:.72rem;color:rgba(255,255,255,.3);">Sin resultados</div>';
+          return;
+        }
+        lista.innerHTML = rows.map(function(m){
+          var nombre = (m.first_name||'') + ' ' + (m.last_name1||'') + (m.last_name2?' '+m.last_name2:'');
+          var stColor = m.membership_status==='active'?'#4ade80':'#fbbf24';
+          var mEsc = JSON.stringify(m).replace(/'/g,"&#39;");
+          return '<div onclick=\'lkSeleccionarCliente('+mEsc+')\' style="padding:.6rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background=\'rgba(255,77,0,.08)\'" onmouseout="this.style.background=\'\'">'+
+            '<div style="font-size:.82rem;font-weight:700;color:var(--txt);">'+nombre+'</div>'+
+            '<div style="font-size:.65rem;color:var(--mu);margin-top:.1rem;"><span style="color:'+stColor+'">●</span> '+(m.membership_type||'—')+(m.phone?' · '+m.phone:'')+'</div>'+
+          '</div>';
+        }).join('');
+      });
+    };
+
+    window.lkSeleccionarCliente = function(m){
+      lkClienteSel = m;
+      var nombre = (m.first_name||'') + ' ' + (m.last_name1||'') + (m.last_name2?' '+m.last_name2:'');
+      document.getElementById('lk-cli-nombre').textContent = nombre;
+      document.getElementById('lk-cli-info').textContent   = (m.membership_type||'Sin plan') + (m.phone?' · '+m.phone:'');
+      document.getElementById('lk-cliente-sel').style.display = 'block';
+      document.getElementById('lk-buscar-lista').style.display = 'none';
+      document.getElementById('lk-buscar-input').value = '';
+    };
+
+    window.lkLimpiarCliente = function(){
+      lkClienteSel = null;
+      document.getElementById('lk-buscar-input').value = '';
+      document.getElementById('lk-cliente-sel').style.display = 'none';
+    };
+
+    /* ── Registrar locker ── */
+    window.lkRegistrar = function(){
+      var err = document.getElementById('lk-form-err');
+      err.style.display='none';
+      if(!lkGeneroSel)   return lkError('Selecciona el área (Hombres / Mujeres).');
+      if(!lkNumeroSel)   return lkError('Selecciona el número de locker.');
+      if(!lkClienteSel)  return lkError('Busca y selecciona un cliente.');
+      if(!lkDuracionSel) return lkError('Selecciona la duración.');
+
+      var btn = document.getElementById('lk-btn-registrar');
+      btn.disabled=true; btn.style.opacity='.5'; btn.style.clipPath='none';
+      btn.textContent='Registrando...';
+
+      var hoy  = new Date().toISOString().split('T')[0];
+      var fin  = new Date();
+      fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
+      var finISO = fin.toISOString().split('T')[0];
+
+      var monto  = PRECIOS[lkDuracionSel];
+      var nombre = (lkClienteSel.first_name||'') + ' ' + (lkClienteSel.last_name1||'') + (lkClienteSel.last_name2?' '+lkClienteSel.last_name2:'');
+      var opId   = window.generarOperationId ? window.generarOperationId(hoy) : ('EC-'+hoy.replace(/-/g,'')+'-LK');
+      var usuario = window._empleadoActual || 'staff';
+
+      /* 1. Insertar en ingresos */
+      window.supabase.from('ingresos').insert({
+        client_id:    lkClienteSel.id,
+        nombre:       nombre.trim(),
+        monto:        monto,
+        fecha:        hoy,
+        categoria:    'Locker',
+        categoria_raw:'Locker',
+        descripcion:  'Locker ' + (lkGeneroSel==='hombre'?'Hombres':'Mujeres') + ' #' + lkNumeroSel + ' — ' + lkDuracionSel,
+        meses:        MESES[lkDuracionSel],
+        operation_id: opId,
+        usuario:      usuario,
+      }).select('id').single()
+      .then(function(ri){
+        if(ri.error) throw ri.error;
+        /* 2. Insertar en lockers */
+        return window.supabase.from('lockers').insert({
+          numero:        lkNumeroSel,
+          genero:        lkGeneroSel,
+          status:        'ocupado',
+          client_id:     lkClienteSel.id,
+          client_nombre: nombre.trim(),
+          client_phone:  lkClienteSel.phone || null,
+          duracion:      lkDuracionSel,
+          monto:         monto,
+          fecha_inicio:  hoy,
+          fecha_fin:     finISO,
+          registrado_por:usuario,
+          ingreso_id:    ri.data.id,
+        });
+      })
+      .then(function(rl){
+        if(rl.error) throw rl.error;
+        btn.disabled=false; btn.style.opacity='1'; btn.style.clipPath='';
+        btn.textContent='Registrar Locker';
+        lkResetForm();
+        cargarLockers();
+        lkMostrarToast('Locker registrado correctamente');
+      })
+      .catch(function(e){
+        btn.disabled=false; btn.style.opacity='1'; btn.style.clipPath='';
+        btn.textContent='Registrar Locker';
+        var msg = e.message||'';
+        if(msg.indexOf('lockers_numero_genero_ocupado')>-1)
+          lkError('Ese locker ya fue asignado a otro cliente. Recarga la página.');
+        else
+          lkError('Error: ' + msg);
+      });
+    };
+
+    function lkError(msg){
+      var el = document.getElementById('lk-form-err');
+      el.textContent = msg; el.style.display='block';
+    }
+
+    function lkResetForm(){
+      lkGeneroSel=null; lkDuracionSel=null; lkNumeroSel=null; lkClienteSel=null;
+      ['lk-btn-h','lk-btn-m'].forEach(function(id){
+        var b=document.getElementById(id);
+        b.style.borderColor='var(--s4)';b.style.color='rgba(255,255,255,.5)';b.style.background='var(--s2)';
+      });
+      ['lk-dur-s','lk-dur-a'].forEach(function(id){
+        var b=document.getElementById(id);
+        b.style.borderColor='var(--s4)';b.style.background='var(--s2)';
+        b.querySelector('div').style.color='rgba(255,255,255,.5)';
+        b.querySelectorAll('div')[1].style.color='rgba(255,255,255,.6)';
+      });
+      document.getElementById('lk-numeros').innerHTML='<div style="font-size:.72rem;color:var(--mu);">Selecciona un área primero</div>';
+      document.getElementById('lk-cliente-sel').style.display='none';
+      document.getElementById('lk-buscar-input').value='';
+      document.getElementById('lk-fecha-preview').style.display='none';
+      document.getElementById('lk-form-err').style.display='none';
+    }
+
+    /* ── Detalle + liberación ── */
+    window.lkAbrirDetalle = function(id){
+      lkDetId = id;
+      var lk = lkLockers.find(function(l){ return l.id===id; });
+      if(!lk) return;
+      document.getElementById('lk-det-titulo').textContent =
+        (lk.genero==='hombre'?'♂':'♀') + ' LOCKER #' + lk.numero;
+
+      var finStr = lk.fecha_fin ? new Date(lk.fecha_fin+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+      var iniStr = lk.fecha_inicio ? new Date(lk.fecha_inicio+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+      var diff   = lk.fecha_fin ? Math.ceil((new Date(lk.fecha_fin)-new Date())/86400000) : null;
+      var diffTxt = diff===null?'—':diff<=0?'<span style="color:#f87171">Vencido</span>':diff<=14?'<span style="color:#fbbf24">'+diff+' días</span>':'<span style="color:#4ade80">'+diff+' días</span>';
+
+      document.getElementById('lk-det-body').innerHTML =
+        '<div style="display:flex;flex-direction:column;gap:.65rem;">'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Cliente</span><span style="font-size:.82rem;font-weight:700;color:#fff;">'+lk.client_nombre+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Teléfono</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+(lk.client_phone||'—')+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Duración</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+(lk.duracion||'—')+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Inicio</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+iniStr+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Vence</span><span style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.8);">'+finStr+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Días restantes</span><span style="font-size:.82rem;font-weight:700;">'+diffTxt+'</span></div>'
+        +'</div>';
+
+      lkCancelarConfirmacion();
+      var bd = document.getElementById('lk-detail-bd');
+      bd.style.display='flex';
+      document.body.style.overflow='hidden';
+    };
+
+    window.lkCerrarDetalle = function(){
+      document.getElementById('lk-detail-bd').style.display='none';
+      document.body.style.overflow='';
+      lkDetId=null;
+    };
+
+    window.lkMostrarConfirmacion = function(){
+      document.getElementById('lk-liberar-paso1').style.display='none';
+      document.getElementById('lk-liberar-paso2').style.display='block';
+      document.getElementById('lk-confirm-input').value='';
+      document.getElementById('lk-btn-confirmar-liberar').disabled=true;
+      document.getElementById('lk-btn-confirmar-liberar').style.cssText+='opacity:.4;cursor:not-allowed;';
+    };
+
+    window.lkCancelarConfirmacion = function(){
+      document.getElementById('lk-liberar-paso1').style.display='block';
+      document.getElementById('lk-liberar-paso2').style.display='none';
+    };
+
+    window.lkValidarConfirmacion = function(){
+      var val = document.getElementById('lk-confirm-input').value;
+      var btn = document.getElementById('lk-btn-confirmar-liberar');
+      var ok  = val === 'LIBERAR';
+      btn.disabled = !ok;
+      btn.style.background    = ok?'rgba(239,68,68,.2)':'rgba(239,68,68,.1)';
+      btn.style.borderColor   = ok?'rgba(239,68,68,.6)':'rgba(239,68,68,.3)';
+      btn.style.color         = ok?'#f87171':'rgba(239,68,68,.4)';
+      btn.style.cursor        = ok?'pointer':'not-allowed';
+    };
+
+    window.lkEjecutarLiberar = function(){
+      if(!lkDetId) return;
+      var btn = document.getElementById('lk-btn-confirmar-liberar');
+      btn.disabled=true; btn.textContent='Liberando...';
+      window.supabase.from('lockers')
+        .update({ status:'libre', client_id:null, client_nombre:null, client_phone:null,
+                  duracion:null, monto:null, fecha_inicio:null, fecha_fin:null,
+                  registrado_por:null, ingreso_id:null, updated_at: new Date().toISOString() })
+        .eq('id', lkDetId)
+        .then(function(r){
+          if(r.error) throw r.error;
+          lkCerrarDetalle();
+          cargarLockers();
+          lkMostrarToast('Locker liberado correctamente');
+        })
+        .catch(function(e){
+          btn.disabled=false; btn.textContent='Confirmar';
+          alert('Error al liberar: '+(e.message||e));
+        });
+    };
+
+    /* ── Alerta de vencimientos próximos ── */
+    function verificarVencimientos(){
+      var hoy  = new Date();
+      var lim  = new Date(); lim.setDate(lim.getDate()+14);
+      var hoyISO = hoy.toISOString().split('T')[0];
+      var limISO = lim.toISOString().split('T')[0];
+      window.supabase.from('lockers')
+        .select('id,numero,genero,client_nombre,fecha_fin')
+        .eq('status','ocupado')
+        .lte('fecha_fin', limISO)
+        .gte('fecha_fin', hoyISO)
+        .then(function(r){
+          var rows = r.data||[];
+          if(!rows.length){ document.getElementById('lk-alert-band').style.display='none'; return; }
+          var band = document.getElementById('lk-alert-band');
+          var txt  = rows.length === 1
+            ? 'Locker ' + (rows[0].genero==='hombre'?'H':'M') + '#' + rows[0].numero + ' (' + rows[0].client_nombre + ') vence en los próximos 14 días'
+            : rows.length + ' lockers vencen en los próximos 14 días';
+          document.getElementById('lk-alert-txt').textContent = txt;
+          band.style.display='flex';
+        });
+    }
+
+    /* ── Toast ── */
+    function lkMostrarToast(msg){
+      var t = document.createElement('div');
+      t.textContent = '✓ ' + msg;
+      t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#15803d;color:#fff;padding:.55rem 1.3rem;font-family:var(--fB);font-size:.72rem;font-weight:700;letter-spacing:.08em;z-index:9999;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);white-space:nowrap;';
+      document.body.appendChild(t);
+      setTimeout(function(){ t.remove(); }, 3000);
+    }
+
+    /* Exponer init para switchTab */
+    window.lkInit = lkInit;
+  })();
+  </script>
 </body>
 
 </html>
