@@ -247,7 +247,6 @@
         (datos.meses ? mkTrow('Duración', datos.meses + (parseInt(datos.meses) === 1 ? ' mes' : ' meses')) : '') +
         (datos.expiracion ? mkTrow('Vence', datos.expiracion, 'green') : '') +
         mkTrow('Monto', fmtMXN(datos.monto), 'big') +
-        (datos.cartera ? mkTrow('Cartera', datos.cartera) : '') +
         (datos.empleado ? mkTrow('Atendido por', datos.empleado) : '') +
       '</div>' +
       '<div class="ticket-preview-foot">Elemental Club · León, Gto. · 477 924 8796</div>';
@@ -438,7 +437,6 @@
       row('Fecha de pago', fechaStr);
       if (d.meses) row('Duración', d.meses + (parseInt(d.meses) === 1 ? ' mes' : ' meses'));
       if (d.expiracion) row('Vigencia hasta', d.expiracion, GREEN_R, true);
-      if (d.cartera) row('Forma de pago', d.cartera);
       if (d.empleado) row('Atendido por', d.empleado);
 
       y += 2;
@@ -579,7 +577,6 @@
         row2('Fecha de pago', fechaStr2);
         if (d.meses) row2('Duracion', d.meses + (parseInt(d.meses) === 1 ? ' mes' : ' meses'));
         if (d.expiracion) row2('Vigencia hasta', d.expiracion, GREEN_R, true);
-        if (d.cartera) row2('Forma de pago', d.cartera);
         if (d.empleado) row2('Atendido por', d.empleado);
 
         y += 2;
