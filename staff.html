@@ -3135,7 +3135,48 @@
           </div>
         </div>
 
-        <!-- ══ BUSCADOR DE MOVIMIENTOS ══ -->
+        <!-- ══ EXPORTAR A EXCEL ══ -->
+<div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;">
+  <div style="padding:.8rem 1.1rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem;">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    <span style="font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#4ade80;">Exportar a Excel</span>
+    <span style="margin-left:auto;font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:.06em;">SheetJS · .xlsx · BD completa con paginación</span>
+  </div>
+  <div style="padding:.9rem 1.1rem;display:flex;flex-wrap:wrap;gap:.65rem;align-items:flex-end;">
+    <div style="min-width:130px;">
+      <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem;">Desde (opcional)</div>
+      <input type="date" id="exp-desde" style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.6rem .85rem;color:var(--txt);font-family:var(--fB);font-size:.8rem;border-radius:var(--r);outline:none;" onfocus="this.style.borderColor='#4ade80'" onblur="this.style.borderColor='var(--s3)'"/>
+    </div>
+    <div style="min-width:130px;">
+      <div style="font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem;">Hasta (opcional)</div>
+      <input type="date" id="exp-hasta" style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.6rem .85rem;color:var(--txt);font-family:var(--fB);font-size:.8rem;border-radius:var(--r);outline:none;" onfocus="this.style.borderColor='#4ade80'" onblur="this.style.borderColor='var(--s3)'"/>
+    </div>
+    <div style="display:flex;gap:.45rem;flex-wrap:wrap;align-items:flex-end;">
+      <button onclick="exportarExcel('ingresos')" style="background:rgba(74,222,128,.12);border:1.5px solid rgba(74,222,128,.4);color:#4ade80;padding:.62rem 1.1rem;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.35rem;" onmouseover="this.style.background='rgba(74,222,128,.22)'" onmouseout="this.style.background='rgba(74,222,128,.12)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+        Ingresos
+      </button>
+      <button onclick="exportarExcel('egresos')" style="background:rgba(248,113,113,.1);border:1.5px solid rgba(248,113,113,.4);color:#f87171;padding:.62rem 1.1rem;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.35rem;" onmouseover="this.style.background='rgba(248,113,113,.18)'" onmouseout="this.style.background='rgba(248,113,113,.1)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+        Egresos
+      </button>
+      <button onclick="exportarExcel('traspasos')" style="background:rgba(251,191,36,.1);border:1.5px solid rgba(251,191,36,.35);color:#fbbf24;padding:.62rem 1.1rem;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.35rem;" onmouseover="this.style.background='rgba(251,191,36,.18)'" onmouseout="this.style.background='rgba(251,191,36,.1)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+        Traspasos
+      </button>
+      <button onclick="exportarExcel('todos')" style="background:rgba(255,77,0,.1);border:1.5px solid rgba(255,77,0,.4);color:var(--or);padding:.62rem 1.1rem;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.35rem;" onmouseover="this.style.background='rgba(255,77,0,.18)'" onmouseout="this.style.background='rgba(255,77,0,.1)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg>
+        Todo (3 hojas)
+      </button>
+    </div>
+  </div>
+  <div id="exp-status" style="display:none;padding:.55rem 1.1rem;border-top:1px solid var(--s3);font-size:.7rem;font-weight:600;background:var(--s2);align-items:center;gap:.5rem;">
+    <span id="exp-status-dot" style="width:7px;height:7px;border-radius:50%;background:#4ade80;animation:ping 1.2s ease infinite;flex-shrink:0;"></span>
+    <span id="exp-status-txt">Listo</span>
+  </div>
+</div>
+
+<!-- ══ BUSCADOR DE MOVIMIENTOS ══ -->
         <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden;margin-top:1.5rem;margin-bottom:1px;">
           <div style="padding:.8rem 1.1rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -7439,6 +7480,440 @@
       </div>
     </div>
   </div>
+  <script>
+    // ── Cargar SheetJS si no está disponible ──────────────────────
+    (function() {
+      if (typeof XLSX === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        document.head.appendChild(s);
+      }
+    })();
+
+    // ── Utilidades ────────────────────────────────────────────────
+    function expSetStatus(msg, color) {
+      var bar = document.getElementById('exp-status');
+      var dot = document.getElementById('exp-status-dot');
+      var txt = document.getElementById('exp-status-txt');
+      if (!bar) return;
+      bar.style.display = 'flex';
+      dot.style.background = color || '#4ade80';
+      txt.textContent = msg;
+    }
+
+    // ── Columnas exportadas por tabla ─────────────────────────────
+    var EXP_COLS = {
+      ingresos: [
+        { key: 'fecha',         label: 'Fecha' },
+        { key: 'nombre',        label: 'Cliente / Nombre' },
+        { key: 'monto',         label: 'Monto (MXN)',      fmt: 'currency' },
+        { key: 'cartera',       label: 'Cartera' },
+        { key: 'categoria',     label: 'Categoría' },
+        { key: 'categoria_raw', label: 'Tipo detallado' },
+        { key: 'descripcion',   label: 'Descripción / Plan' },
+        { key: 'meses',         label: 'Meses' },
+        { key: 'descuento',     label: 'Descuento' },
+        { key: 'operation_id',  label: 'ID Operación' },
+        { key: 'usuario',       label: 'Registrado por' },
+        { key: 'created_at',    label: 'Creado en',        fmt: 'datetime' },
+      ],
+      egresos: [
+        { key: 'fecha',         label: 'Fecha' },
+        { key: 'titulo',        label: 'Concepto' },
+        { key: 'monto',         label: 'Monto (MXN)',      fmt: 'currency' },
+        { key: 'cartera',       label: 'Cartera' },
+        { key: 'categoria',     label: 'Categoría' },
+        { key: 'observaciones', label: 'Observaciones' },
+        { key: 'mes',           label: 'Mes (num)' },
+        { key: 'usuario',       label: 'Registrado por' },
+        { key: 'created_at',    label: 'Creado en',        fmt: 'datetime' },
+      ],
+      traspasos: [
+        { key: 'fecha',         label: 'Fecha' },
+        { key: 'titulo',        label: 'Concepto' },
+        { key: 'cantidad',      label: 'Cantidad (MXN)',   fmt: 'currency' },
+        { key: 'salida_de',     label: 'Sale de' },
+        { key: 'entrada_en',    label: 'Entra en' },
+        { key: 'usuario',       label: 'Registrado por' },
+        { key: 'created_at',    label: 'Creado en',        fmt: 'datetime' },
+      ],
+    };
+
+    // ── Query a Supabase con filtro de fechas ─────────────────────
+    function expFetch(tabla, desde, hasta) {
+      var cols = EXP_COLS[tabla];
+      var selectCols = cols.map(function(c) { return c.key; }).join(',') + ',id';
+      var q = window.supabase.from(tabla)
+        .select(selectCols)
+        .order('fecha', { ascending: false })
+        .limit(50000);
+      if (desde) q = q.gte('fecha', desde);
+      if (hasta) q = q.lte('fecha', hasta);
+      return q;
+    }
+
+    // ── Convertir rows a array de arrays ─────────────────────────
+    function expFilasAArray(tabla, rows) {
+      var cols = EXP_COLS[tabla];
+      var resultado = [ cols.map(function(c){ return c.label; }) ];
+      rows.forEach(function(row) {
+        resultado.push(cols.map(function(c) {
+          var v = row[c.key];
+          if (v === null || v === undefined) return '';
+          if (c.fmt === 'currency')  return parseFloat(v) || 0;
+          if (c.fmt === 'datetime')  return v ? new Date(v).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }) : '';
+          return v;
+        }));
+      });
+      return resultado;
+    }
+
+    // ── Estilo de cabecera ───────────────────────────────────────
+    function expEstilarHoja(ws, nCols) {
+      var headerStyle = {
+        font:      { bold: true, color: { rgb: 'FFFFFF' }, sz: 10 },
+        fill:      { fgColor: { rgb: '1A5C2A' } },
+        alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+        border: {
+          top:    { style: 'thin', color: { rgb: '2E7D32' } },
+          bottom: { style: 'thin', color: { rgb: '2E7D32' } },
+          left:   { style: 'thin', color: { rgb: '2E7D32' } },
+          right:  { style: 'thin', color: { rgb: '2E7D32' } },
+        }
+      };
+      for (var c = 0; c < nCols; c++) {
+        var addr = XLSX.utils.encode_cell({ r: 0, c: c });
+        if (ws[addr]) ws[addr].s = headerStyle;
+      }
+      var wscols = [];
+      for (var i = 0; i < nCols; i++) wscols.push({ wch: 20 });
+      wscols[0] = { wch: 12 };
+      ws['!cols']  = wscols;
+      ws['!rows']  = [{ hpt: 22 }];
+    }
+
+    // ── Función principal ─────────────────────────────────────────
+    window.exportarExcel = function(modo) {
+      if (typeof XLSX === 'undefined') {
+        alert('La librería SheetJS aún está cargando. Espera un segundo e intenta de nuevo.');
+        return;
+      }
+      if (!window.supabase) { alert('Supabase no disponible.'); return; }
+
+      var desde = document.getElementById('exp-desde').value || null;
+      var hasta  = document.getElementById('exp-hasta').value  || null;
+
+      if (desde && hasta && hasta < desde) {
+        alert('La fecha "Hasta" debe ser mayor o igual a "Desde".');
+        return;
+      }
+
+      var tablas = modo === 'todos' ? ['ingresos', 'egresos', 'traspasos'] : [modo];
+      var labelFecha = desde || hasta
+        ? (desde || 'inicio') + '_a_' + (hasta || 'hoy')
+        : 'completo';
+
+      expSetStatus('Consultando Supabase…', '#fbbf24');
+
+      Promise.all(tablas.map(function(t) {
+        return expFetch(t, desde, hasta).then(function(r) {
+          if (r.error) throw new Error(t + ': ' + r.error.message);
+          return { tabla: t, rows: r.data || [] };
+        });
+      }))
+      .then(function(resultados) {
+        var wb = XLSX.utils.book_new();
+        var totalFilas = 0;
+
+        resultados.forEach(function(res) {
+          var datos = expFilasAArray(res.tabla, res.rows);
+          totalFilas += res.rows.length;
+          var ws = XLSX.utils.aoa_to_sheet(datos);
+          expEstilarHoja(ws, EXP_COLS[res.tabla].length);
+          var nombreHoja = res.tabla.charAt(0).toUpperCase() + res.tabla.slice(1);
+          XLSX.utils.book_append_sheet(wb, ws, nombreHoja);
+        });
+
+        if (modo === 'todos') {
+          var mapa = {};
+          resultados.forEach(function(r){ mapa[r.tabla] = r.rows.length; });
+          var meta = [
+            ['Reporte Financiero — Elemental Club'],
+            ['Exportado el', new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })],
+            ['Período', (desde || 'Histórico') + ' → ' + (hasta || 'Hoy')],
+            ['Total registros', totalFilas],
+            [],
+            ['Hoja',       'Registros'],
+            ['Ingresos',   mapa['ingresos']  || 0],
+            ['Egresos',    mapa['egresos']   || 0],
+            ['Traspasos',  mapa['traspasos'] || 0],
+          ];
+          var wsMeta = XLSX.utils.aoa_to_sheet(meta);
+          wsMeta['!cols'] = [{wch:30},{wch:32}];
+          XLSX.utils.book_append_sheet(wb, wsMeta, 'Info');
+        }
+
+        var nombreBase = modo === 'todos'
+          ? 'ElementalClub_Finanzas_' + labelFecha
+          : 'ElementalClub_' + (modo.charAt(0).toUpperCase()+modo.slice(1)) + '_' + labelFecha;
+
+        XLSX.writeFile(wb, nombreBase + '.xlsx');
+        expSetStatus('✓ Descargado: ' + nombreBase + '.xlsx  (' + totalFilas + ' registros)', '#4ade80');
+      })
+      .catch(function(e) {
+        console.error('[exportarExcel]', e);
+        expSetStatus('⚠️ Error: ' + e.message, '#f87171');
+      });
+    };
+  </script>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  EXPORTAR A EXCEL — Elemental Club Staff
+//  Paginación completa Supabase (sin límite de 1000 por página)
+//  Todas las columnas reales de la BD consultadas el 2026-06-06
+//  ingresos: 4,767 regs | egresos: 2,243 | traspasos: 400
+// ══════════════════════════════════════════════════════════════
+
+(function () {
+  if (typeof XLSX === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    document.head.appendChild(s);
+  }
+})();
+
+function expSetStatus(msg, color) {
+  var bar = document.getElementById('exp-status');
+  var dot = document.getElementById('exp-status-dot');
+  var txt = document.getElementById('exp-status-txt');
+  if (!bar) return;
+  bar.style.display = 'flex';
+  if (dot) dot.style.background = color || '#4ade80';
+  if (txt) txt.textContent = msg;
+}
+
+// Columnas exactas de cada tabla (todas las de la BD, excepto foto_recibo)
+var EXP_COLS = {
+  ingresos: [
+    { key: 'fecha',           label: 'Fecha' },
+    { key: 'nombre',          label: 'Cliente / Nombre' },
+    { key: 'monto',           label: 'Monto (MXN)',          fmt: 'currency' },
+    { key: 'cartera',         label: 'Cartera' },
+    { key: 'categoria',       label: 'Categoría' },
+    { key: 'categoria_raw',   label: 'Tipo detallado' },
+    { key: 'descripcion',     label: 'Descripción / Plan' },
+    { key: 'meses',           label: 'Meses' },
+    { key: 'meses_membresia', label: 'Meses membresía' },
+    { key: 'descuento',       label: 'Descuento',            fmt: 'currency' },
+    { key: 'semana',          label: 'Semana (num)' },
+    { key: 'anio',            label: 'Año' },
+    { key: 'operation_id',    label: 'ID Operación' },
+    { key: 'id_operacion',    label: 'ID Operación (legacy)' },
+    { key: 'resguardo',       label: 'Resguardo' },
+    { key: 'usuario',         label: 'Registrado por' },
+    { key: 'client_id',       label: 'ID Cliente' },
+    { key: 'id',              label: 'UUID Registro' },
+    { key: 'created_at',      label: 'Creado en',            fmt: 'datetime' },
+  ],
+  egresos: [
+    { key: 'fecha',           label: 'Fecha' },
+    { key: 'titulo',          label: 'Concepto' },
+    { key: 'monto',           label: 'Monto (MXN)',          fmt: 'currency' },
+    { key: 'cartera',         label: 'Cartera' },
+    { key: 'categoria',       label: 'Categoría' },
+    { key: 'observaciones',   label: 'Observaciones' },
+    { key: 'mes',             label: 'Mes (num)' },
+    { key: 'resguardo',       label: 'Resguardo' },
+    { key: 'recibo',          label: 'Recibo' },
+    { key: 'usuario',         label: 'Registrado por' },
+    { key: 'id',              label: 'UUID Registro' },
+    { key: 'created_at',      label: 'Creado en',            fmt: 'datetime' },
+  ],
+  traspasos: [
+    { key: 'fecha',           label: 'Fecha' },
+    { key: 'titulo',          label: 'Concepto' },
+    { key: 'cantidad',        label: 'Cantidad (MXN)',        fmt: 'currency' },
+    { key: 'salida_de',       label: 'Sale de' },
+    { key: 'entrada_en',      label: 'Entra en' },
+    { key: 'resguardo',       label: 'Resguardo' },
+    { key: 'usuario',         label: 'Registrado por' },
+    { key: 'id',              label: 'UUID Registro' },
+    { key: 'created_at',      label: 'Creado en',            fmt: 'datetime' },
+  ],
+};
+
+// Paginación completa: recorre todas las páginas hasta agotar registros
+function expFetchAll(tabla, desde, hasta) {
+  var cols      = EXP_COLS[tabla];
+  var selectStr = cols.map(function (c) { return c.key; }).join(',');
+  var PAGE      = 1000;
+  var todos     = [];
+  var offset    = 0;
+
+  function fetchPage() {
+    var q = window.supabase
+      .from(tabla)
+      .select(selectStr, { count: 'exact' })
+      .order('fecha', { ascending: false })
+      .range(offset, offset + PAGE - 1);
+
+    if (desde) q = q.gte('fecha', desde);
+    if (hasta) q = q.lte('fecha', hasta);
+
+    return q.then(function (r) {
+      if (r.error) throw new Error(tabla + ': ' + r.error.message);
+      var pagina = r.data || [];
+      todos = todos.concat(pagina);
+
+      expSetStatus(
+        'Descargando ' + tabla + '… ' + todos.length +
+        (r.count ? ' / ' + r.count : '') + ' registros',
+        '#fbbf24'
+      );
+
+      if (pagina.length === PAGE) {
+        offset += PAGE;
+        return fetchPage();
+      }
+      return todos;
+    });
+  }
+
+  return fetchPage();
+}
+
+function expFilasAArray(tabla, rows) {
+  var cols      = EXP_COLS[tabla];
+  var resultado = [cols.map(function (c) { return c.label; })];
+
+  rows.forEach(function (row) {
+    resultado.push(cols.map(function (c) {
+      var v = row[c.key];
+      if (v === null || v === undefined) return '';
+      if (c.fmt === 'currency') return parseFloat(v) || 0;
+      if (c.fmt === 'datetime')
+        return v ? new Date(v).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }) : '';
+      return v;
+    }));
+  });
+  return resultado;
+}
+
+function expEstilarHoja(ws, nCols) {
+  var h = {
+    font:      { bold: true, color: { rgb: 'FFFFFF' }, sz: 10 },
+    fill:      { fgColor: { rgb: '1A5C2A' } },
+    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+    border: {
+      top:    { style: 'thin', color: { rgb: '2E7D32' } },
+      bottom: { style: 'thin', color: { rgb: '2E7D32' } },
+      left:   { style: 'thin', color: { rgb: '2E7D32' } },
+      right:  { style: 'thin', color: { rgb: '2E7D32' } },
+    },
+  };
+  for (var c = 0; c < nCols; c++) {
+    var addr = XLSX.utils.encode_cell({ r: 0, c: c });
+    if (ws[addr]) ws[addr].s = h;
+  }
+  var wscols = [];
+  for (var i = 0; i < nCols; i++) wscols.push({ wch: 20 });
+  wscols[0] = { wch: 12 };
+  ws['!cols'] = wscols;
+  ws['!rows'] = [{ hpt: 22 }];
+}
+
+window.exportarExcel = function (modo) {
+  if (typeof XLSX === 'undefined') {
+    alert('La librería SheetJS aún está cargando. Espera un segundo e intenta de nuevo.');
+    return;
+  }
+  if (!window.supabase) { alert('Supabase no disponible.'); return; }
+
+  var desde = (document.getElementById('exp-desde') || {}).value || null;
+  var hasta  = (document.getElementById('exp-hasta')  || {}).value || null;
+  if (desde && hasta && hasta < desde) {
+    alert('La fecha "Hasta" debe ser mayor o igual a "Desde".');
+    return;
+  }
+
+  var tablas = modo === 'todos' ? ['ingresos', 'egresos', 'traspasos'] : [modo];
+  var labelFecha = (desde || hasta)
+    ? (desde || 'inicio') + '_a_' + (hasta || 'hoy')
+    : 'completo';
+
+  // Deshabilitar botones
+  document.querySelectorAll('[onclick^="exportarExcel"]').forEach(function (b) {
+    b.disabled = true; b.style.opacity = '.45'; b.style.cursor = 'not-allowed';
+  });
+  expSetStatus('Iniciando descarga completa de BD…', '#fbbf24');
+
+  // Serie: tabla por tabla para no saturar la conexión
+  var resultados = [];
+  var cadena = Promise.resolve();
+  tablas.forEach(function (t) {
+    cadena = cadena.then(function () {
+      return expFetchAll(t, desde, hasta).then(function (rows) {
+        resultados.push({ tabla: t, rows: rows });
+      });
+    });
+  });
+
+  cadena
+    .then(function () {
+      expSetStatus('Generando archivo Excel…', '#60a5fa');
+      var wb = XLSX.utils.book_new();
+      var totalFilas = 0;
+
+      resultados.forEach(function (res) {
+        var datos = expFilasAArray(res.tabla, res.rows);
+        totalFilas += res.rows.length;
+        var ws = XLSX.utils.aoa_to_sheet(datos);
+        expEstilarHoja(ws, EXP_COLS[res.tabla].length);
+        var hoja = res.tabla.charAt(0).toUpperCase() + res.tabla.slice(1);
+        XLSX.utils.book_append_sheet(wb, ws, hoja);
+      });
+
+      // Hoja Info siempre incluida
+      var mapa = {};
+      resultados.forEach(function (r) { mapa[r.tabla] = r.rows.length; });
+      var meta = [
+        ['Reporte Financiero — Elemental Club'],
+        ['Exportado el', new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })],
+        ['Período', (desde || 'Histórico completo') + ' → ' + (hasta || 'Hoy')],
+        ['Total registros', totalFilas],
+        [],
+        ['Tabla',      'Registros'],
+        ['Ingresos',   mapa['ingresos']  || 0],
+        ['Egresos',    mapa['egresos']   || 0],
+        ['Traspasos',  mapa['traspasos'] || 0],
+      ];
+      var wsMeta = XLSX.utils.aoa_to_sheet(meta);
+      wsMeta['!cols'] = [{ wch: 34 }, { wch: 34 }];
+      XLSX.utils.book_append_sheet(wb, wsMeta, 'Info');
+
+      var nombreBase = modo === 'todos'
+        ? 'ElementalClub_Finanzas_' + labelFecha
+        : 'ElementalClub_' + (modo.charAt(0).toUpperCase() + modo.slice(1)) + '_' + labelFecha;
+
+      XLSX.writeFile(wb, nombreBase + '.xlsx');
+      expSetStatus(
+        '✓ ' + nombreBase + '.xlsx — ' + totalFilas + ' registros totales',
+        '#4ade80'
+      );
+    })
+    .catch(function (e) {
+      console.error('[exportarExcel]', e);
+      expSetStatus('⚠️ Error: ' + e.message, '#f87171');
+    })
+    .finally(function () {
+      document.querySelectorAll('[onclick^="exportarExcel"]').forEach(function (b) {
+        b.disabled = false; b.style.opacity = '1'; b.style.cursor = 'pointer';
+      });
+    });
+};
+</script>
+
 </body>
 
 </html>
