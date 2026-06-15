@@ -5198,12 +5198,28 @@
     // ── EDICIÓN DE MOVIMIENTOS ───────────────────────────────────
     var editMovOriginal  = null;
     var editTimerInterval = null;
+    var EDIT_WINDOW_MINUTES = 24 * 60;
+
+    function getEditTimeLeft(createdAt) {
+      if(!createdAt) return -1;
+      return EDIT_WINDOW_MINUTES - (Date.now() - new Date(createdAt).getTime()) / 60000;
+    }
+
+    function formatEditBadgeLabel(minutesLeft) {
+      if(minutesLeft <= 0) return 'Sin edición';
+      var hours = Math.floor(minutesLeft / 60);
+      var mins = Math.round(minutesLeft % 60);
+      if(hours >= 1) {
+        return hours + 'h' + (mins > 0 ? ' ' + mins + 'm' : '');
+      }
+      return Math.round(minutesLeft) + ' min';
+    }
 
     window.abrirEditMov = function(id, tipo) {
       var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
       if(!mov) { alert('No se encontró el movimiento.'); return; }
       if(!mov.created_at) { alert('Este movimiento no tiene marca de tiempo.'); return; }
-      var minLeft = 90 - (Date.now() - new Date(mov.created_at).getTime()) / 60000;
+      var minLeft = getEditTimeLeft(mov.created_at);
       if(minLeft <= 0) { alert('El tiempo para editar ha expirado.'); return; }
 
       editMovOriginal = mov;
@@ -5221,21 +5237,12 @@
       if(esIng) document.getElementById('edit-nombre').value = mov.concepto || '';
       else      document.getElementById('edit-titulo').value = mov.concepto || '';
 
-      clearInterval(editTimerInterval);
-      editTimerInterval = setInterval(function() {
-        var ml = 90 - (Date.now() - new Date(editMovOriginal.created_at).getTime()) / 60000;
-        var countEl = document.getElementById('edit-timer-count');
-        if(!countEl) { clearInterval(editTimerInterval); return; }
-        if(ml <= 0) {
-          countEl.textContent = '00:00'; countEl.style.color = '#f87171';
-          clearInterval(editTimerInterval);
-          setTimeout(function(){ cerrarEditMov(); alert('Tiempo de edición expirado.'); }, 800);
-          return;
-        }
-        var mins = Math.floor(ml), secs = Math.floor((ml-mins)*60);
-        countEl.textContent = String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0');
-        countEl.style.color = ml < 5 ? '#f87171' : '#fbbf24';
-      }, 1000);
+      var countEl = document.getElementById('edit-timer-count');
+      if(countEl) {
+        var ml = getEditTimeLeft(mov.created_at);
+        countEl.textContent = ml > 0 ? formatEditBadgeLabel(ml) : 'Sin edición';
+        countEl.style.color = ml < 60 ? '#f87171' : '#fbbf24';
+      }
 
       document.getElementById('mov-edit-overlay').classList.add('on');
       document.body.style.overflow = 'hidden';
@@ -5479,10 +5486,10 @@
         var signo = isIng ? '+$' : (isTrp ? '$' : '-$');
         var editBtn = '';
         if(!isTrp && r.created_at) {
-          var minLeft = 90 - (now - new Date(r.created_at).getTime()) / 60000;
+          var minLeft = getEditTimeLeft(r.created_at);
           if(minLeft > 0) {
             editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
-              + 'Editar <span class="mov-timer-badge">' + Math.round(minLeft) + ' min</span></button>';
+              + 'Editar <span class="mov-timer-badge">' + formatEditBadgeLabel(minLeft) + '</span></button>';
           }
         }
 
@@ -5542,11 +5549,9 @@
         var editBtn = '';
         if (!isTrp && r.created_at) {
           var creado = new Date(r.created_at).getTime();
-          var minLeft = 90 - (now - creado) / 60000;
+          var minLeft = getEditTimeLeft(r.created_at);
           if (minLeft > 0) {
-            var minsStr = minLeft < 1
-              ? Math.round(minLeft * 60) + 's'
-              : Math.round(minLeft) + ' min';
+            var minsStr = formatEditBadgeLabel(minLeft);
             editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
               + 'Editar <span class="mov-timer-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;margin-top:-1px"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' + minsStr + '</span>'
               + '</button>';
