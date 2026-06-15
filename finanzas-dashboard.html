@@ -323,21 +323,21 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- YTD Banner -->
       <div class="ytd-banner">
         <div class="ytd-left">
-          <h3>AÑO EN CURSO vs. AÑO ANTERIOR</h3>
-          <p id="ytd-periodo">Comparando enero–<span id="ytd-mes-txt">junio</span> 2026 contra el mismo periodo de 2025</p>
+          <h3>2026 vs. 2025</h3>
+          <p id="ytd-periodo">Total enero–<span id="ytd-mes-txt">junio</span> 2026 vs. total año completo 2025</p>
         </div>
         <div class="ytd-right">
           <div class="ytd-stat">
             <div class="ytd-stat-val" id="ytd-2026" style="color:var(--or)">—</div>
-            <div class="ytd-stat-lbl">Ventas YTD 2026</div>
+            <div class="ytd-stat-lbl">Ingresos 2026 (lo que va)</div>
           </div>
           <div class="ytd-stat">
             <div class="ytd-stat-val" id="ytd-2025" style="color:rgba(255,255,255,.45)">—</div>
-            <div class="ytd-stat-lbl">Ventas YTD 2025</div>
+            <div class="ytd-stat-lbl">Ingresos 2025 (año completo)</div>
           </div>
           <div class="ytd-stat">
             <div class="ytd-stat-val" id="ytd-delta" style="color:var(--green)">—</div>
-            <div class="ytd-stat-lbl">% Variación</div>
+            <div class="ytd-stat-lbl">Ritmo vs 2025 completo</div>
           </div>
         </div>
       </div>
@@ -345,17 +345,17 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- KPIs -->
       <div class="kpi-grid">
         <div class="kpi" style="--kc:var(--green)">
-          <div class="kpi-lbl">Ingresos 2026 (YTD)</div>
+          <div class="kpi-lbl">Ingresos 2026 (lo que va)</div>
           <div class="kpi-val" id="kpi-ing-ytd">—</div>
           <div class="kpi-sub" id="kpi-ing-ytd-regs">cargando...</div>
         </div>
         <div class="kpi" style="--kc:var(--red)">
-          <div class="kpi-lbl">Egresos 2026 (YTD)</div>
+          <div class="kpi-lbl">Egresos 2026 (lo que va)</div>
           <div class="kpi-val" id="kpi-egr-ytd">—</div>
           <div class="kpi-sub" id="kpi-egr-ytd-regs">cargando...</div>
         </div>
         <div class="kpi" style="--kc:var(--blue)">
-          <div class="kpi-lbl">Utilidad Neta 2026</div>
+          <div class="kpi-lbl">Utilidad Neta 2026 (lo que va)</div>
           <div class="kpi-val" id="kpi-util-ytd">—</div>
           <div class="kpi-delta" id="kpi-util-delta"></div>
         </div>
@@ -409,7 +409,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- KPIs ingresos -->
       <div class="kpi-grid" style="margin-bottom:1.6rem">
         <div class="kpi" style="--kc:var(--green)">
-          <div class="kpi-lbl">Total 2026 (YTD)</div>
+          <div class="kpi-lbl">Total 2026 (lo que va)</div>
           <div class="kpi-val" id="ki-total26">—</div>
           <div class="kpi-sub" id="ki-regs26">— registros</div>
         </div>
@@ -433,7 +433,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- Chart ingresos acumulados YTD -->
       <div class="chart-box" style="margin-bottom:1.6rem">
         <div class="chart-hdr">
-          <h4>Ingresos Acumulados YTD — 2025 vs 2026</h4>
+          <h4>Ingresos Acumulados 2026 vs Ritmo 2025</h4>
           <div class="chart-legend">
             <div class="cl"><div class="cl-dot" style="background:var(--or)"></div>2026</div>
             <div class="cl"><div class="cl-dot" style="background:rgba(255,77,0,.4)"></div>2025</div>
@@ -483,14 +483,14 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 
       <div class="kpi-grid" style="margin-bottom:1.6rem">
         <div class="kpi" style="--kc:var(--red)">
-          <div class="kpi-lbl">Total gastos 2026 (YTD)</div>
+          <div class="kpi-lbl">Total gastos 2026 (lo que va)</div>
           <div class="kpi-val" id="ke-total26">—</div>
           <div class="kpi-sub">Sin utilidades ni inversión</div>
         </div>
         <div class="kpi" style="--kc:rgba(255,255,255,.45)">
           <div class="kpi-lbl">Total gastos 2025</div>
           <div class="kpi-val" id="ke-total25">—</div>
-          <div class="kpi-sub">Año completo</div>
+          <div class="kpi-sub">Año completo 2025</div>
         </div>
         <div class="kpi" style="--kc:var(--yellow)">
           <div class="kpi-lbl">Categoría líder 2026</div>
@@ -527,7 +527,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- Tabla categorías -->
       <div class="cat-table-wrap">
         <div class="cat-table-hdr">
-          <h4>Egresos por Categoría — 2026 YTD</h4>
+          <h4>Egresos por Categoría — 2026 (lo que va)</h4>
           <span style="font-size:.62rem;color:var(--mu)">Excluye utilidades, inversión y préstamos</span>
         </div>
         <div class="tbl-scroll">
@@ -555,14 +555,14 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
       <!-- Cajas utilidad -->
       <div class="util-grid">
         <div class="util-box" style="--uc:var(--green)">
-          <div class="util-lbl">Utilidad Neta Acumulada 2026 (YTD)</div>
+          <div class="util-lbl">Utilidad Neta 2026 (lo que va)</div>
           <div class="util-val" id="ut-neta26">—</div>
-          <div class="util-sub">Ingresos totales − Egresos operativos<br><span style="color:rgba(255,255,255,.25)">(sin inversión ni préstamos)</span></div>
+          <div class="util-sub">Enero–<span id="ut-mes25-txt">junio</span> 2026 vs 2025 completo</div>
         </div>
         <div class="util-box" style="--uc:rgba(255,255,255,.45)">
-          <div class="util-lbl">Utilidad Neta 2025 (mismo periodo)</div>
+          <div class="util-lbl">Utilidad Neta 2025 (año completo)</div>
           <div class="util-val" id="ut-neta25">—</div>
-          <div class="util-sub">Enero–<span id="ut-mes25-txt">junio</span> 2025</div>
+          <div class="util-sub">Año completo 2025</div>
         </div>
       </div>
 
@@ -614,7 +614,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
               <th style="text-align:right">Ingresos 2026</th>
               <th style="text-align:right">Egresos 2026</th>
               <th style="text-align:right">Utilidad 2026</th>
-              <th style="text-align:right">Utilidad 2025</th>
+              <th style="text-align:right">Util. 2025 (mes)</th>
               <th style="text-align:right">Margen</th>
             </tr></thead>
             <tbody id="util-mes-tbody"><tr><td colspan="6" style="text-align:center;color:var(--mu);padding:2rem">Cargando...</td></tr></tbody>
@@ -824,17 +824,22 @@ function renderAll(){
   var curMes = new Date().getMonth(); /* 0-based, junio=5 */
   var mesLabel = MESES_FULL[curMes];
 
-  /* ── YTD sums ── */
-  var ytd26=0, ytd25=0, eytd26=0, eytd25=0;
-  for(var i=0;i<=curMes;i++){
-    ytd26+=_ing26[i]; ytd25+=_ing25[i];
-    eytd26+=_egr26[i]; eytd25+=_egr25[i];
-  }
+  /* ── Sumas: 2026 = lo que va del año | 2025 = año completo ── */
+  var ytd26=0, eytd26=0;
+  for(var i=0;i<=curMes;i++){ ytd26+=_ing26[i]; eytd26+=_egr26[i]; }
+
+  /* 2025 siempre total año completo */
+  var ytd25=_ing25.reduce(function(a,v){return a+v;},0);
+  var eytd25=_egr25.reduce(function(a,v){return a+v;},0);
+
   var util26=ytd26-eytd26, util25=ytd25-eytd25;
   var margen26=ytd26>0?Math.round((util26/ytd26)*100):0;
   var margen25=ytd25>0?Math.round((util25/ytd25)*100):0;
-  var deltaPct=ytd25>0?((ytd26-ytd25)/ytd25*100):0;
-  var egrTotal25=_egr25.reduce(function(a,v){return a+v;},0);
+  /* Ritmo: proyectar 2026 a 12 meses para comparar con 2025 completo */
+  var mesesConDatos=curMes+1;
+  var ytd26Proyectado=ytd26/mesesConDatos*12;
+  var deltaPct=ytd25>0?((ytd26Proyectado-ytd25)/ytd25*100):0;
+  var egrTotal25=eytd25;
 
   /* ── Texto periodo ── */
   document.querySelectorAll('#ytd-mes-txt,#ut-mes25-txt').forEach(function(el){ el.textContent=mesLabel.toLowerCase(); });
@@ -845,6 +850,7 @@ function renderAll(){
   var dp=deltaPct.toFixed(1);
   set('ytd-delta',(deltaPct>=0?'+':'')+dp+'%');
   document.getElementById('ytd-delta').style.color=deltaPct>=0?'var(--green)':'var(--red)';
+  /* Nota: % = ritmo proyectado 2026 vs total 2025 */
 
   /* ── KPIs Resumen ── */
   set('kpi-ing-ytd', fmtK(ytd26));
@@ -859,7 +865,7 @@ function renderAll(){
 
   /* ── KPIs Ingresos ── */
   set('ki-total26', fmtK(ytd26)); set('ki-regs26',_regs26+' registros');
-  set('ki-total25', fmtK(_ing25.reduce(function(a,v){return a+v;},0)));
+  set('ki-total25', fmtK(ytd25));
   set('ki-regs25', _regs25+' registros');
   var mejorIdx=0, mejorVal=0;
   _ing26.forEach(function(v,i){ if(v>mejorVal&&i<=curMes){ mejorVal=v; mejorIdx=i; } });
@@ -1048,7 +1054,10 @@ function renderCharts(curMes){
 
   /* 4. Líneas YTD acumulado ingresos */
   var acc25=[],acc26=[],s25=0,s26=0;
-  for(var i=0;i<12;i++){ s25+=_ing25[i]; s26+=_ing26[i]; acc25.push(s25); acc26.push(i<=new Date().getMonth()?s26:null); }
+  for(var i=0;i<12;i++){
+    s25+=_ing25[i]; acc25.push(s25);           /* 2025 completo los 12 meses */
+    s26+=_ing26[i]; acc26.push(i<=curMes?s26:null); /* 2026 solo hasta hoy */
+  }
   destroyChart('chart-ing-ytd');
   var ctxYTD=document.getElementById('chart-ing-ytd');
   if(ctxYTD){
