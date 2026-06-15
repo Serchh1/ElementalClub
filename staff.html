@@ -2060,46 +2060,7 @@
     }
 
     /* ── FINANZAS LAYOUT ── */
-    .fin-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:.75rem; margin-bottom:1.6rem; }
-    @media(max-width:900px){ .fin-grid { grid-template-columns:1fr 1fr; } }
-    @media(max-width:500px){ .fin-grid { grid-template-columns:1fr; } }
-    .kpi {
-      background:var(--s1); border:1px solid var(--s3); border-radius:var(--r);
-      padding:1rem 1.1rem; position:relative; overflow:hidden; transition:border-color .2s;
-    }
-    .kpi:hover { border-color:rgba(255,77,0,.3); }
-    .kpi::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:2px;
-      background:linear-gradient(90deg, var(--kpi-col,var(--or)), transparent);
-    }
-    .kpi-lbl { font-size:.58rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--mu); margin-bottom:.4rem; }
-    .kpi-val { font-family:var(--fT); font-size:1.9rem; line-height:1; color:var(--kpi-col,var(--or)); }
-    .kpi-sub { font-size:.65rem; color:var(--mu); margin-top:.3rem; }
-    .kpi-delta { font-size:.65rem; font-weight:700; margin-top:.2rem; }
-    .kpi-delta.pos { color:#22c55e; }
-    .kpi-delta.neg { color:#f87171; }
-    .charts-row { display:grid; grid-template-columns:2fr 1fr; gap:.75rem; margin-bottom:1.6rem; }
-    @media(max-width:860px){ .charts-row { grid-template-columns:1fr; } }
-    .chart-box {
-      background:var(--s1); border:1px solid var(--s3); border-radius:var(--r); padding:1.2rem;
-    }
-    .chart-box h4 {
-      font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
-      color:var(--or); margin-bottom:1rem;
-    }
-    .chart-wrap { position:relative; height:220px; }
-    .fin-forms { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-bottom:1.6rem; }
-    @media(max-width:700px){ .fin-forms { grid-template-columns:1fr; } }
-    .fin-form-box {
-      background:var(--s1); border:1px solid var(--s3); border-radius:var(--r); overflow:hidden;
-    }
-    .fin-form-hdr {
-      padding:.75rem 1.1rem; border-bottom:1px solid var(--s3);
-      display:flex; align-items:center; gap:.6rem;
-    }
-    .fin-form-hdr-ico { font-size:.95rem; }
-    .fin-form-hdr span { font-size:.68rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
-    .fin-form-body { padding:1.1rem; display:flex; flex-direction:column; gap:.7rem; }
+    /* CSS fin-grid y kpi eliminados — movidos a finanzas-dashboard.html */
     .ff-row { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
     @media(max-width:500px){ .ff-row { grid-template-columns:1fr; } }
     .ff-fld label {
@@ -2252,7 +2213,7 @@
     .ia-locked-ico { font-size:2rem; opacity:.2; }
     .ia-locked p { font-size:.75rem; color:var(--mu); max-width:260px; line-height:1.6; }
 
-    /* ── FINANZAS: TIPO SELECTOR ── */
+    /* ── TIPO SELECTOR ── */
     .fin-tipo-row {
       display: flex; gap: .5rem; margin-bottom: 1.25rem; flex-wrap: wrap;
     }
@@ -2279,7 +2240,6 @@
     .fin-card-ingreso  { border-left: 3px solid #4ade80; }
     .fin-card-egreso   { border-left: 3px solid #f87171; }
     .fin-card-traspaso { border-left: 3px solid #fbbf24; }
-
     .ff-grid { display: grid; gap: .85rem; }
     .ff-grid-2 { grid-template-columns: repeat(2,1fr); }
     .ff-grid-3 { grid-template-columns: repeat(3,1fr); }
@@ -2614,6 +2574,22 @@
       <div class="t-right">
         <div class="t-av" id="t-av">?</div>
         <span class="t-name" id="t-name"></span>
+        <a id="link-dashboard" href="finanzas-dashboard.html" target="_blank"
+          style="display:none;align-items:center;gap:.45rem;
+                 background:var(--or);color:#fff;
+                 padding:.42rem 1.1rem;
+                 font-family:var(--fB);font-size:.68rem;font-weight:800;
+                 letter-spacing:.14em;text-transform:uppercase;
+                 border-radius:var(--r);text-decoration:none;white-space:nowrap;
+                 border:none;cursor:pointer;
+                 clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);
+                 box-shadow:0 4px 14px rgba(255,77,0,.35);
+                 transition:all .2s;"
+          onmouseover="this.style.background='var(--or2)';this.style.transform='translateY(-1px)'"
+          onmouseout="this.style.background='var(--or)';this.style.transform='none'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard Financiero
+        </a>
         <button class="btn-out" onclick="doLogout()">Salir</button>
       </div>
     </header>
@@ -2623,7 +2599,6 @@
       <button class="ptab" onclick="switchTab('horarios',this)">Horarios y Clases</button>
       <button class="ptab" onclick="switchTab('accesos',this)">Accesos Portal</button>
       <button class="ptab" onclick="switchTab('movimientos',this)">Movimientos</button>
-      <button class="ptab" id="tab-btn-finanzas" style="display:none" onclick="switchTab('finanzas',this)">Finanzas</button>
       <button class="ptab" onclick="switchTab('lockers',this)">Lockers</button>
     </nav>
     <div class="pbody">
@@ -2687,7 +2662,7 @@
             </div>
             <h4>REGISTRAR MOVIMIENTO</h4>
             <p>Registra ingresos, egresos o traspasos entre carteras de forma rápida.</p>
-            <div class="ac-arr">Ir a finanzas →</div>
+            <div class="ac-arr">Ir a movimientos →</div>
           </div>
           <div class="ac" onclick="goToHorarios()">
             <div class="ac-ico" style="color:var(--txt)">
@@ -2876,7 +2851,6 @@
         </div>
       </div>
 
-      <!-- Tab Finanzas -->
       <div id="tab-movimientos" class="tab-pane">
 
         <!-- CAJA CHICA WIDGET -->
@@ -3277,61 +3251,6 @@
         </div>
 
       </div><!-- /tab-movimientos -->
-
-      <!-- TAB FINANZAS (solo socios) -->
-      <div id="tab-finanzas" class="tab-pane">
-
-        <!-- RESUMEN FINANCIERO (MES) -->
-        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN MENSUAL</h3><div class="ln"></div>
-          <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
-            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
-        </div>
-        <div class="fin-grid" id="fin-kpis" style="margin-bottom:2rem;">
-          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
-          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
-        </div>
-
-        <!-- RESUMEN FINANCIERO (SEMANA) -->
-        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN SEMANAL</h3><div class="ln"></div>
-          <select id="fin-sem-sel" onchange="finCambiarSemana(this.value)"
-            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
-        </div>
-        <div class="fin-grid" id="fin-kpis-sem" style="margin-bottom:1rem;">
-          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos semana</div><div class="kpi-val" id="kpi-sem-ing">—</div><div class="kpi-sub" id="kpi-sem-ing-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos semana</div><div class="kpi-val" id="kpi-sem-egr">—</div><div class="kpi-sub" id="kpi-sem-egr-sub">cargando...</div></div>
-          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-sem-neto">—</div><div class="kpi-delta" id="kpi-sem-neto-delta"></div></div>
-          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-sem-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
-        </div>
-        
-        <!-- DESGLOSE CARTERAS SEMANA -->
-        <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1rem;margin-bottom:2rem;">
-          <h4 style="font-size:.65rem;color:var(--mu);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em;">Ingresos por cartera (Semana)</h4>
-          <div id="kpi-sem-carteras" style="display:flex;gap:1.5rem;flex-wrap:wrap;">
-            <div style="font-size:.75rem;color:rgba(255,255,255,.4);">Cargando desglose...</div>
-          </div>
-        </div>
-
-        <!-- SALDOS POR CARTERA -->
-        <div class="seh" style="flex-wrap:wrap;row-gap:.5rem;"><h3>SALDOS POR CARTERA</h3><div class="ln"></div>
-          <select id="fin-cartera-mes-sel" onchange="cargarSaldosCartera(this.value)"
-            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
-        </div>
-        <div id="saldos-carteras-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin-bottom:2rem;">
-          <div style="padding:2rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Cargando saldos...</div>
-        </div>
-
-        <div class="ia-section" id="ia-section" style="margin-top:1rem">
-          <div class="ia-hdr"><div class="ia-hdr-left">
-            <div style="width:28px;height:28px;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem">✦</div>
-            <h4>Asistente Financiero</h4><span class="ia-badge">IA · Socios / Staff</span>
-          </div></div>
-          <div class="ia-body" id="ia-body"></div>
-        </div>
-
-
-      </div><!-- /tab-finanzas -->
 
       <!-- ══════════════════════════════════════════
            TAB LOCKERS
@@ -3896,16 +3815,16 @@
       showScr('panel');
       loadStats();
       cargarCajaChica();
+      // Mostrar link al dashboard solo a socios y admin
+      var _rol = String(user.role || user.rol || '').toLowerCase();
+      var linkDash = document.getElementById('link-dashboard');
+      if(linkDash) linkDash.style.display = (_rol==='socio'||_rol==='admin') ? 'inline-flex' : 'none';
       setInterval(cargarCajaChica, 180000);
       // Cargar carteras activas desde BD
       cargarCarterasActivas().catch(function(err) {
         console.error('Error cargando carteras en enterPanel:', err);
       });
-      // Llamar finReset primero, luego mostrar tab Finanzas si puede acceder
       if(typeof window.finReset === 'function') window.finReset();
-      var puedeVerFinanzas = ['socio', 'staff', 'admin'].indexOf(String(user.role || user.rol || '').toLowerCase()) >= 0;
-      var finTabBtn = document.getElementById('tab-btn-finanzas');
-      if(finTabBtn) finTabBtn.style.display = puedeVerFinanzas ? '' : 'none';
     }
 
     function doLogout() {
@@ -3913,9 +3832,9 @@
       localStorage.removeItem('ecUser');
       localStorage.removeItem('currentUser');
       if (window.supabase) supabase.auth.signOut();
-      // Limpiar estado financiero antes de volver al login
-      if(typeof window.finReset === 'function') window.finReset();
       showScr('login');
+      var _ld = document.getElementById('link-dashboard');
+      if(_ld) _ld.style.display = 'none';
       document.getElementById('l-u').value = '';
       document.getElementById('l-p').value = '';
     }
@@ -4020,20 +3939,6 @@
       if (id === 'miembros' && !membersLoaded) loadMembers();
       if (id === 'movimientos') { finInit(); cargarCarterasActivas(); }
       if (id === 'lockers') { window.lkInit(); }
-      if (id === 'finanzas') {
-        poblarMeses();
-        poblarSemanas();
-        if(!finMes) finMes = new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
-        cargarKPIs(finMes);
-        // Esperar a que las carteras activas esten listas, luego calcular saldos
-        cargarCarterasActivas().then(function(){
-          cargarSaldosCartera();
-          if(!esAdmin()) iniciarIA();
-        }).catch(function(){
-          cargarSaldosCartera();
-          if(!esAdmin()) iniciarIA();
-        });
-      }
     }
 
     function goToHorarios() {
@@ -4845,15 +4750,12 @@
         .finally(function() { btn.disabled = false; btn.textContent = 'Guardar Cambios'; });
     }
 
-    // ══════════ FINANZAS MODULE ══════════
+    // ══════════ MÓDULO MOVIMIENTOS ══════════
     var finTipo      = 'ingreso';
     var finMes       = '';
     var movFilter    = 'all';
     var movData      = [];
     var chartFlujo   = null;
-    var chartCat     = null;
-    var chartEgrCat  = null;
-    var chartCartera = null;
     var iaMessages   = [];
     var iaLoading    = false;
 
@@ -4863,15 +4765,10 @@
       try { return JSON.parse(localStorage.getItem('ecUser') || localStorage.getItem('currentUser') || '{}'); }
       catch(e) { return {}; }
     }
-    function esSocio()       { var u=getUser(); return u.role==='socio'||u.rol==='socio'; }
-    function esStaff()       { var u=getUser(); return u.role==='staff'||u.rol==='staff'; }
-    function esAdmin()       { var u=getUser(); return u.role==='admin'||u.rol==='admin'; }
-    function puedeVerFinanzas() { return esSocio() || esStaff() || esAdmin(); }
     function usuarioActual() { return getUser().name || ''; }
 
-    // ── INIT — se llama en cada login/logout/tab-switch ────────
+    // ── INIT — se llama en cada tab-switch a Movimientos ────────
     function finInit() {
-      var puedeVer = puedeVerFinanzas();
       var nombre = usuarioActual();
 
       var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
@@ -4885,12 +4782,6 @@
       var tu = document.getElementById('trp-usuario');
       if(tu) tu.value = nombre;
 
-      var finBtn = document.getElementById('tab-btn-finanzas');
-      if(finBtn) finBtn.style.display = puedeVer ? '' : 'none';
-
-      var iaSection = document.getElementById('ia-section');
-      if(iaSection) iaSection.style.display = esAdmin() ? 'none' : '';
-
       // Cargar carteras activas primero, luego movimientos
       cargarCarterasActivas().then(function() {
         cargarMovimientos();
@@ -4900,16 +4791,9 @@
       });
     }
 
-    // Exponer para que enterPanel y doLogout puedan llamarla
+    // Limpiar estado al cerrar sesión
     window.finReset = function() {
-      // Destruir gráficas para que no queden del usuario anterior
-      [chartFlujo, chartCat, chartEgrCat, chartCartera].forEach(function(ch){
-        if(ch) { try { ch.destroy(); } catch(e){} }
-      });
-      chartFlujo=null; chartCat=null; chartEgrCat=null; chartCartera=null;
       iaMessages=[]; iaLoading=false; movData=[]; finMes='';
-
-      // NO ocultar tab-btn-finanzas aquí — lo maneja enterPanel según el rol
       var tabMov = document.getElementById('tab-movimientos');
       if(tabMov && tabMov.classList.contains('on')) finInit();
     };
@@ -5178,13 +5062,6 @@
         if (typeof loadStats === 'function') loadStats();
         if (typeof loadMembers === 'function') loadMembers();
 
-        if (puedeVerFinanzas()) {
-          cargarKPIs(finMes);
-          setTimeout(function() {
-            var semSel = document.getElementById('fin-sem-sel');
-            if (semSel) finCambiarSemana(semSel.value);
-          }, 400);
-        }
       })
       .catch(function(e) {
         console.error("Error al registrar movimiento:", e);
@@ -5221,7 +5098,6 @@
         ['egr-titulo','egr-monto','egr-obs'].forEach(function(id){ document.getElementById(id).value=''; });
         document.getElementById('egr-categoria').value = '';
         cargarMovimientos();
-        if(puedeVerFinanzas()) { cargarKPIs(finMes); setTimeout(function(){ if(document.getElementById('fin-sem-sel')) finCambiarSemana(document.getElementById('fin-sem-sel').value); }, 400); }
       }).catch(function(e){ showFinMsg('fin-form-msg','Error: '+e.message,'err'); })
         .finally(function(){ btn.disabled=false; btn.textContent='↓ Registrar Egreso'; });
     };
@@ -5266,220 +5142,6 @@
       setTimeout(function(){ el.style.display='none'; }, 4000);
     }
 
-    // ── MOVIMIENTOS RECIENTES ────────────────────────────────
-    window.cargarSaldosCartera = function(mes) {
-      poblarMesesCartera();
-      var grid=document.getElementById('saldos-carteras-grid');
-      if(!grid||!window.supabase) return;
-      grid.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Calculando saldos...</div>';
-
-      var sel=document.getElementById('fin-cartera-mes-sel');
-      var mesVal=(mes!==undefined?mes:(sel?sel.value:'all'))||'all';
-      if(sel&&mes!==undefined) sel.value=mesVal;
-
-      var start=null, end=null;
-      if(mesVal && mesVal!=='all'){
-        var pts=mesVal.split('-');
-        var lastDay=new Date(parseInt(pts[0]),parseInt(pts[1]),0).getDate();
-        start=mesVal+'-01';
-        end=mesVal+'-'+String(lastDay).padStart(2,'0');
-      }
-
-      // Cargar carteras, movimientos EN PARALELO
-      var carterasQ = window.supabase.from('carteras').select('nombre,activa').order('nombre');
-      var ingQ = window.supabase.from('ingresos').select('cartera,monto').limit(10000);
-      var egrQ = window.supabase.from('egresos').select('cartera,monto').limit(10000);
-      var trpQ = window.supabase.from('traspasos').select('salida_de,entrada_en,cantidad').limit(10000);
-      if(start){
-        ingQ=ingQ.gte('fecha',start).lte('fecha',end);
-        egrQ=egrQ.gte('fecha',start).lte('fecha',end);
-        trpQ=trpQ.gte('fecha',start).lte('fecha',end);
-      }
-
-      Promise.all([carterasQ, ingQ, egrQ, trpQ]).then(function(res){
-        var todasCarteras = res[0].data||[];
-        var ings = res[1].data||[];
-        var egrs = res[2].data||[];
-        var trps = res[3].data||[];
-
-        // Inicializar saldos en 0 para TODAS las carteras de la BD
-        var saldos={};
-        todasCarteras.forEach(function(c){ saldos[c.nombre]=0; });
-
-        // Sumar ingresos
-        ings.forEach(function(r){
-          if(r.cartera){
-            if(saldos[r.cartera]===undefined) saldos[r.cartera]=0;
-            saldos[r.cartera] += parseFloat(r.monto)||0;
-          }
-        });
-
-        // Restar egresos
-        egrs.forEach(function(r){
-          if(r.cartera){
-            if(saldos[r.cartera]===undefined) saldos[r.cartera]=0;
-            saldos[r.cartera] -= parseFloat(r.monto)||0;
-          }
-        });
-
-        // Traspasos: resta al origen, suma al destino
-        trps.forEach(function(r){
-          var amt=parseFloat(r.cantidad)||0;
-          if(r.salida_de){
-            if(saldos[r.salida_de]===undefined) saldos[r.salida_de]=0;
-            saldos[r.salida_de] -= amt;
-          }
-          if(r.entrada_en){
-            if(saldos[r.entrada_en]===undefined) saldos[r.entrada_en]=0;
-            saldos[r.entrada_en] += amt;
-          }
-        });
-
-        // Ordenar: activas primero, luego inactivas
-        var activas   = todasCarteras.filter(function(c){ return c.activa; }).map(function(c){ return c.nombre; });
-        var inactivas = todasCarteras.filter(function(c){ return !c.activa; }).map(function(c){ return c.nombre; });
-        // Agregar cualquier cartera histórica no registrada en la tabla
-        Object.keys(saldos).forEach(function(c){
-          if(activas.indexOf(c)<0 && inactivas.indexOf(c)<0) inactivas.push(c);
-        });
-        var orden = activas.concat(inactivas);
-
-        var total=Object.values(saldos).reduce(function(a,v){ return a+(v||0); },0);
-        var fmtS=function(n){ return '$'+Math.abs(Math.round(n)).toLocaleString('es-MX'); };
-        var selEl=document.getElementById('fin-cartera-mes-sel');
-        var labelMes=mesVal==='all'?'Acumulado total':(selEl&&selEl.options[selEl.selectedIndex]?selEl.options[selEl.selectedIndex].text:mesVal);
-
-        var html=orden.map(function(nombre){
-          var saldo=saldos[nombre]||0;
-          var col=CARTERAS_COLORS[nombre]||'var(--or)';
-          var isActiva = activas.indexOf(nombre)>=0;
-          var isPos=saldo>=0;
-          // Carteras inactivas: mostrar atenuadas con borde discontinuo
-          var borderStyle = isActiva ? '3px solid '+col : '3px dashed rgba(255,255,255,.15)';
-          var opacity = isActiva ? '1' : '0.55';
-          return '<div style="background:var(--s1);border:1px solid var(--s3);border-left:'+borderStyle+';border-radius:var(--r);padding:1rem 1.1rem;position:relative;opacity:'+opacity+';">'
-            +'<div style="font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mu);margin-bottom:.15rem;">'+nombre+'</div>'
-            +(isActiva ? '' : '<div style="font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:.3rem;">inactiva</div>')
-            +'<div style="font-family:var(--fT);font-size:1.75rem;line-height:1;color:'+(isPos?col:'#f87171')+';">'+(isPos?'+':'-')+fmtS(saldo)+'</div>'
-            +'<div style="font-size:.6rem;color:var(--mu);margin-top:.3rem;">'+labelMes+'</div>'
-            +'<div style="position:absolute;top:.5rem;right:.5rem;font-size:.54rem;font-weight:800;padding:.12rem .42rem;border-radius:2px;background:'+(isPos?col+'18':'rgba(248,113,113,.12)')+';color:'+(isPos?col:'#f87171')+';border:1px solid '+(isPos?col+'45':'rgba(248,113,113,.3)')+';">'+(isPos?'▲':'▼')+'</div>'
-            +'</div>';
-        }).join('');
-
-        html+='<div style="background:rgba(255,77,0,.07);border:1.5px solid rgba(255,77,0,.3);border-radius:var(--r);padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;grid-column:1/-1;">'
-          +'<div><div style="font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Saldo total combinado</div>'
-          +'<div style="font-size:.63rem;color:var(--mu);margin-top:.15rem;">'+labelMes+'</div></div>'
-          +'<div style="font-family:var(--fT);font-size:2.2rem;color:'+(total>=0?'var(--or)':'#f87171')+';">'+(total>=0?'+':'-')+'$'+Math.abs(Math.round(total)).toLocaleString('es-MX')+'</div></div>';
-
-        grid.innerHTML=html;
-      }).catch(function(e){
-        grid.innerHTML='<div style="padding:1.5rem;color:#f87171;grid-column:1/-1;">⚠️ Error: '+e.message+'</div>';
-      });
-    }
-
-    // ══════════ EXPORTACIÓN HORARIO WHATSAPP (PDF) ══════════
-    if(typeof html2pdf === 'undefined') {
-      var sc2=document.createElement('script');
-      sc2.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-      document.head.appendChild(sc2);
-    }
-
-    window.exportarHorarioWhatsApp = function() {
-      if(typeof html2pdf === 'undefined') {
-        alert('Cargando librería de exportación (PDF), intenta en un segundo...');
-        return;
-      }
-      // Buscar el boton sin usar event
-      var btn = document.querySelector('button[onclick="exportarHorarioWhatsApp()"]');
-      var originalText = btn ? btn.innerHTML : 'Exportar a WhatsApp';
-      if(btn) {
-        btn.innerHTML = 'Generando PDF...';
-        btn.disabled = true;
-      }
-
-      // Actualizar label de membresia y clase
-      var memLabel = schFilter === 'all' ? 'Todas las clases' : schFilter.toUpperCase();
-      if(classFilter !== 'all') memLabel += ' (' + classFilter + ')';
-      document.getElementById('exp-membership-label').textContent = 'Filtro: ' + memLabel;
-
-      // Construir layout vertical por dias
-      var filtered = CLASES.filter(function (c) { 
-        var memMatch = schFilter === 'all' ? true : c.mems[schFilter];
-        var clsMatch = classFilter === 'all' ? true : c.nm === classFilter;
-        return memMatch && clsMatch;
-      });
-      
-      var DAYS_ARR = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-      var gridHTML = '<div style="display:flex; flex-direction:column; gap:20px;">';
-      
-      var hasAnyClass = false;
-
-      for (var d = 0; d < 7; d++) {
-        var dayClasses = [];
-        filtered.forEach(function (c) {
-          (c.sessions || []).forEach(function (s) {
-            if (s.d === d) dayClasses.push({ c: c, t: s.t });
-          });
-        });
-        
-        if(dayClasses.length > 0) {
-          hasAnyClass = true;
-          dayClasses.sort(function (a, b) { return a.t.localeCompare(b.t); });
-
-          gridHTML += '<div style="page-break-inside: avoid; margin-bottom:20px;">';
-          gridHTML += '<div style="color:#FF4D00; font-weight:900; font-size:22px; letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; border-bottom:2px solid rgba(255,77,0,0.3); padding-bottom:6px; display:inline-block; padding-right:30px;">'+DAYS_ARR[d]+'</div>';
-          
-          gridHTML += '<div style="display:grid; grid-template-columns:1fr; gap:12px;">';
-          
-          dayClasses.forEach(function(item) {
-            var colorBorder = item.c.col || '#FF4D00';
-            gridHTML += '<div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.05); border-left:4px solid '+colorBorder+'; padding:16px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">' +
-              '<div style="font-size:18px; font-weight:800; color:#fff; margin-bottom:6px; line-height:1.2;">'+(item.c.nm || item.c.name || 'Clase')+'</div>' +
-              '<div style="font-size:15px; color:rgba(255,255,255,0.7); font-weight:600; display:flex; align-items:center; gap:6px;">' +
-              '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+item.t+'</div>' +
-              '</div>';
-          });
-          
-          gridHTML += '</div></div>';
-        }
-      }
-
-      if(!hasAnyClass) {
-        gridHTML += '<div style="text-align:center; padding:40px; color:rgba(255,255,255,0.4); font-size:18px;">No hay clases disponibles para este filtro.</div>';
-      }
-
-      gridHTML += '</div>';
-
-      document.getElementById('exp-grid-container').innerHTML = gridHTML;
-
-      // Renderizar y Descargar PDF
-      setTimeout(function() {
-        var target = document.getElementById('export-template');
-        var finalName = classFilter === 'all' ? memLabel : classFilter;
-
-        var opt = {
-          margin:       0,
-          filename:     'Horario_ElementalClub_' + finalName.replace(/\s+/g, '_') + '.pdf',
-          image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2, backgroundColor: '#0a0a0a', logging: false, useCORS: true },
-          jsPDF:        { unit: 'in', format: [5, 10], orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(target).save().then(function() {
-          if(btn) {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-          }
-        }).catch(function(err) {
-          console.error(err);
-          alert('Error al generar el PDF');
-          if(btn) {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-          }
-        });
-      }, 500);
-    };
     // ── CAJA CHICA ──────────────────────────────────────────────
     function cargarCajaChica() {
       if(!window.supabase) return;
@@ -5921,269 +5583,6 @@
       renderMovimientos();
     };
 
-    // ── KPIs ─────────────────────────────────────────────────
-    function poblarMeses() {
-      var sel = document.getElementById('fin-mes-sel');
-      if(!sel) return;
-      var meses = [], d = new Date();
-      for(var i=0; i<18; i++) {
-        var y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0');
-        meses.push(y+'-'+m);
-        d.setMonth(d.getMonth()-1);
-      }
-      finMes = meses[0];
-      sel.innerHTML = meses.map(function(m) {
-        var parts=m.split('-');
-        var label=new Date(parseInt(parts[0]),parseInt(parts[1])-1,1).toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-        return '<option value="'+m+'">'+label.charAt(0).toUpperCase()+label.slice(1)+'</option>';
-      }).join('');
-    }
-
-    window.finCambiarMes = function(mes) {
-      finMes = mes;
-      cargarKPIs(mes);
-      
-    };
-
-    function fmt(n) {
-      if(n===null||n===undefined) return '—';
-      return '$'+Math.round(n).toLocaleString('es-MX');
-    }
-
-    function cargarKPIs(mes) {
-      if(!window.supabase) return;
-      var mesStr = mes || finMes;
-      var start  = mesStr+'-01';
-      var parts  = mesStr.split('-');
-      var ultimo = new Date(parseInt(parts[0]),parseInt(parts[1]),0).getDate();
-      var end    = mesStr+'-'+String(ultimo).padStart(2,'0');
-      Promise.all([
-        window.supabase.from('ingresos').select('monto,categoria').gte('fecha',start).lte('fecha',end),
-        window.supabase.from('egresos').select('monto,categoria').gte('fecha',start).lte('fecha',end)
-      ]).then(function(res) {
-        var ings=res[0].data||[], egrs=res[1].data||[];
-        var totIng=ings.reduce(function(a,r){return a+parseFloat(r.monto||0);},0);
-        var totEgr=egrs.reduce(function(a,r){return a+parseFloat(r.monto||0);},0);
-        var neto=totIng-totEgr;
-        var margen=totIng>0?Math.round((neto/totIng)*100):0;
-        document.getElementById('kpi-ing').textContent    = fmt(totIng);
-        document.getElementById('kpi-ing-sub').textContent= ings.length+' movimientos';
-        document.getElementById('kpi-egr').textContent    = fmt(totEgr);
-        document.getElementById('kpi-egr-sub').textContent= egrs.length+' movimientos';
-        document.getElementById('kpi-neto').textContent   = fmt(neto);
-        document.getElementById('kpi-margen').textContent = margen+'%';
-        var deltaEl=document.getElementById('kpi-neto-delta');
-        if(neto>=0){deltaEl.textContent='▲ Positivo';deltaEl.className='kpi-delta pos';}
-        else       {deltaEl.textContent='▼ Negativo';deltaEl.className='kpi-delta neg';}
-      });
-    }
-
-    // ── SEMANAS ──────────────────────────────────────────────
-    function poblarSemanas() {
-      var sel = document.getElementById('fin-sem-sel');
-      if(!sel) return;
-      var semanas = [], d = new Date();
-      var day = d.getDay();
-      var diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      var inicioSemana = new Date(d.setDate(diff));
-      
-      for(var i=0; i<12; i++) {
-        var start = new Date(inicioSemana);
-        start.setDate(inicioSemana.getDate() - (i*7));
-        var end = new Date(start);
-        end.setDate(start.getDate() + 6);
-        
-        var startStr = start.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-        var endStr = end.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-        var label = start.toLocaleDateString('es-MX',{day:'2-digit',month:'short'}) + ' - ' + end.toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
-        
-        semanas.push({ value: startStr + '|' + endStr, label: label });
-      }
-      
-      sel.innerHTML = semanas.map(function(s) {
-        return '<option value="'+s.value+'">Semana: '+s.label+'</option>';
-      }).join('');
-      
-      finCambiarSemana(semanas[0].value);
-    }
-
-    window.finCambiarSemana = function(rango) {
-      if(!window.supabase || !rango) return;
-      var partes = rango.split('|');
-      var start = partes[0];
-      var end = partes[1];
-      
-      document.getElementById('kpi-sem-ing-sub').textContent = 'cargando...';
-      document.getElementById('kpi-sem-egr-sub').textContent = 'cargando...';
-      
-      Promise.all([
-        window.supabase.from('ingresos').select('monto, cartera').gte('fecha',start).lte('fecha',end),
-        window.supabase.from('egresos').select('monto').gte('fecha',start).lte('fecha',end)
-      ]).then(function(r) {
-        var ings = r[0].data||[], egrs = r[1].data||[];
-        var sumIng = 0, sumEgr = 0, carteras = {};
-        ings.forEach(function(x) { 
-          var amt = parseFloat(x.monto||0);
-          sumIng += amt;
-          carteras[x.cartera] = (carteras[x.cartera]||0) + amt;
-        });
-        egrs.forEach(function(x) { sumEgr += parseFloat(x.monto||0); });
-        
-        var neto = sumIng - sumEgr;
-        var mg = sumIng > 0 ? ((neto/sumIng)*100).toFixed(1)+'%' : '0%';
-        
-        document.getElementById('kpi-sem-ing').textContent = '$' + sumIng.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
-        document.getElementById('kpi-sem-egr').textContent = '$' + sumEgr.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
-        document.getElementById('kpi-sem-neto').textContent= '$' + Math.abs(neto).toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
-        document.getElementById('kpi-sem-margen').textContent = mg;
-        
-        document.getElementById('kpi-sem-ing-sub').textContent = ings.length + ' regs';
-        document.getElementById('kpi-sem-egr-sub').textContent = egrs.length + ' regs';
-        
-        var deltaEl = document.getElementById('kpi-sem-neto-delta');
-        if(neto>=0){deltaEl.textContent='▲ Positivo';deltaEl.className='kpi-delta pos';}
-        else       {deltaEl.textContent='▼ Negativo';deltaEl.className='kpi-delta neg';}
-        
-        var carContainer = document.getElementById('kpi-sem-carteras');
-        var keys = Object.keys(carteras).sort(function(a,b){return carteras[b]-carteras[a];});
-        if(keys.length === 0) {
-          carContainer.innerHTML = '<div style="font-size:.75rem;color:rgba(255,255,255,.4);">Sin ingresos en la semana</div>';
-        } else {
-          carContainer.innerHTML = keys.map(function(k) {
-            return '<div style="display:flex;align-items:center;gap:.5rem;background:var(--s2);padding:.4rem .8rem;border-radius:4px;"><span style="font-size:.65rem;color:var(--mu);text-transform:uppercase;">'+k+'</span><span style="font-weight:600;font-size:.8rem;color:var(--txt);">$' + carteras[k].toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0}) + '</span></div>';
-          }).join('');
-        }
-      });
-    };
-
-    // ── AGENTE IA ─────────────────────────────────────────────
-    var IA_SUGERENCIAS = [
-      'Cuanto ingreso en enero 2025?',
-      'Compara ingresos vs egresos del ultimo trimestre',
-      'Cual es la categoria de egreso mas alta?',
-      'Que meses han sido mas rentables?',
-      'Muestrame el flujo neto por mes en 2025',
-      'Cuanto se ha cobrado por membresias?',
-      'Que cartera recibe mas ingresos?',
-    ];
-
-    function iniciarIA() {
-      var body = document.getElementById('ia-body');
-      if(!body) return;
-      iaMessages = [{role:'assistant', content:'Hola, soy tu asistente financiero de Elemental Club. Tengo acceso a todos los movimientos historicos. En que te puedo ayudar?'}];
-      body.innerHTML =
-        '<div class="ia-suggestions" id="ia-sugs"></div>'+
-        '<div class="ia-msgs" id="ia-msgs"></div>'+
-        '<div class="ia-input-row">'+
-          '<input class="ia-input" id="ia-input" placeholder="Pregunta sobre finanzas, tendencias, comparativos..." />'+
-          '<button class="ia-send" id="ia-send" onclick="iaEnviar()">Enviar →</button>'+
-        '</div>';
-      var sugsEl = document.getElementById('ia-sugs');
-      IA_SUGERENCIAS.forEach(function(s){
-        var btn=document.createElement('button');
-        btn.className='ia-sug'; btn.textContent=s;
-        btn.onclick=function(){ document.getElementById('ia-input').value=s; iaEnviar(); };
-        sugsEl.appendChild(btn);
-      });
-      renderIAMsgs();
-      document.getElementById('ia-input').addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();iaEnviar();} });
-    }
-
-    function renderIAMsgs() {
-      var container=document.getElementById('ia-msgs'); if(!container) return;
-      container.innerHTML = iaMessages.map(function(m){
-        var isUser=m.role==='user';
-        return '<div class="ia-msg '+(isUser?'user':'bot')+'">'+
-          '<div class="ia-avatar '+(isUser?'user':'bot')+'">'+(isUser?(usuarioActual()[0]||'U'):'✦')+'</div>'+
-          '<div class="ia-bubble">'+m.content+'</div></div>';
-      }).join('');
-      container.scrollTop=container.scrollHeight;
-    }
-
-    window.iaEnviar = async function() {
-      if(iaLoading) return;
-      var input=document.getElementById('ia-input');
-      var pregunta=input.value.trim(); if(!pregunta) return;
-      input.value=''; iaLoading=true;
-      document.getElementById('ia-send').disabled=true;
-      iaMessages.push({role:'user',content:pregunta});
-      var container=document.getElementById('ia-msgs');
-      renderIAMsgs();
-      var typingEl=document.createElement('div');
-      typingEl.className='ia-msg bot'; typingEl.id='ia-typing';
-      typingEl.innerHTML='<div class="ia-avatar bot">✦</div><div class="ia-bubble"><div class="ia-typing"><span></span><span></span><span></span></div></div>';
-      container.appendChild(typingEl); container.scrollTop=container.scrollHeight;
-      try {
-        var ctx=await cargarContextoIA();
-        var systemPrompt='Eres el asistente financiero de Elemental Club, un gimnasio en Leon, Guanajuato.\nTienes acceso a todos los movimientos financieros del gym.\n\nDATOS ACTUALES (ultimos 18 meses):\n'+ctx+'\n\nINSTRUCCIONES:\n- Responde en espanol, de forma directa y concisa\n- Cuando des cifras, usa formato $X,XXX\n- Si te piden tablas o comparativos, usa HTML simple con <table>\n- Se analitico: senala tendencias, meses buenos/malos, categorias problematicas\n- No inventes datos. Si algo no esta en el contexto, dilo claramente';
-        var openaiMsgs = [{role:'system', content:systemPrompt}].concat(iaMessages.slice(-10));
-        // Usar la anon key de Supabase como token (funciona sin sesión de auth para empleados de staff)
-        var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg0MzksImV4cCI6MjA3MzAxNDQzOX0.wKhEMF4K6Zv6PuobxCwubmhNTyzk6qlmjKyGO7JqH9Y';
-        var response = await fetch(
-          'https://aveonbmcbopqqcambxoi.supabase.co/functions/v1/openai-proxy',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type':  'application/json',
-              'Authorization': 'Bearer ' + anonKey,
-            },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              max_tokens: 1500,
-              temperature: 0.3,
-              messages: openaiMsgs
-            })
-          }
-        );
-        if(!response.ok) {
-          var errData = await response.json().catch(function(){return {};});
-          throw new Error('OpenAI ' + response.status + ': ' + (errData.error&&errData.error.message ? errData.error.message : response.statusText));
-        }
-        var data = await response.json();
-        var respuesta = data.choices&&data.choices[0]&&data.choices[0].message ? data.choices[0].message.content : 'Sin respuesta.';
-        iaMessages.push({role:'assistant', content:respuesta});
-      } catch(e) {
-        iaMessages.push({role:'assistant', content:'❌ Error: ' + (e.message||'desconocido')});
-      }
-      var t=document.getElementById('ia-typing'); if(t) t.remove();
-      iaLoading=false; document.getElementById('ia-send').disabled=false;
-      renderIAMsgs();
-    };
-
-    async function cargarContextoIA() {
-      if(!window.supabase) return 'Sin datos disponibles.';
-      try {
-        var results=await Promise.all([
-          window.supabase.from('resumen_mensual').select('mes,tipo,categoria,total,num_movimientos').eq('tipo','ingreso').order('mes'),
-          window.supabase.from('resumen_mensual').select('mes,tipo,categoria,total,num_movimientos').eq('tipo','egreso').order('mes'),
-          window.supabase.from('flujo_neto_mensual').select('*').order('mes')
-        ]);
-        var ings=results[0].data||[], egrs=results[1].data||[], flujo=results[2].data||[];
-        var ctx='FLUJO MENSUAL:\n';
-        flujo.forEach(function(r){ ctx+=r.mes+': Ing $'+Math.round(r.ingresos||0).toLocaleString()+' | Egr $'+Math.round(r.egresos||0).toLocaleString()+' | Neto $'+Math.round(r.flujo_neto||0).toLocaleString()+'\n'; });
-        var catIng={};
-        ings.forEach(function(r){ catIng[r.categoria]=(catIng[r.categoria]||0)+parseFloat(r.total||0); });
-        ctx+='\nINGRESOS POR CATEGORIA:\n';
-        Object.entries(catIng).sort(function(a,b){return b[1]-a[1];}).forEach(function(e){ ctx+=e[0]+': $'+Math.round(e[1]).toLocaleString()+'\n'; });
-        var catEgr={};
-        egrs.forEach(function(r){ catEgr[r.categoria]=(catEgr[r.categoria]||0)+parseFloat(r.total||0); });
-        ctx+='\nEGRESOS POR CATEGORIA:\n';
-        Object.entries(catEgr).sort(function(a,b){return b[1]-a[1];}).forEach(function(e){ ctx+=e[0]+': $'+Math.round(e[1]).toLocaleString()+'\n'; });
-        return ctx;
-      } catch(e) { return 'Error cargando contexto: '+e.message; }
-    }
-
-    // switchTab: lógica de finanzas integrada directamente en la función original
-
-    // Load Chart.js
-    if(typeof Chart === 'undefined') {
-      var sc=document.createElement('script');
-      sc.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-      sc.onload=function(){ if(document.getElementById('tab-finanzas')&&document.getElementById('tab-finanzas').classList.contains('on')) { /* scripts cargados */ } };
-      document.head.appendChild(sc);
-    }
-
-    // SALDOS POR CARTERA
     var CARTERAS_LIST = []; // se llena dinámicamente desde la tabla carteras
 
     /* ── Carga carteras activas desde Supabase ── */
@@ -6288,6 +5687,8 @@
 
     // ── COMPARATIVA DE SALDOS ─────────────────────────────────
     // ─────────────────────────────────────────────────────────
+
+
 
   </script>
 

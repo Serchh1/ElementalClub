@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard Financiero — Elemental Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --or:#FF4D00; --or2:#CC3D00; --or-a:rgba(255,77,0,.15);
+  --bg:#090909; --s1:#0f0f0f; --s2:#161616; --s3:#202020; --s4:#2d2d2d;
+  --txt:#eeeeee; --mu:rgba(238,238,238,.38);
+  --green:#22c55e; --red:#ef4444; --blue:#60a5fa; --yellow:#fbbf24;
+  --r:5px; --fT:'Bebas Neue',sans-serif; --fB:'DM Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{height:100%;scroll-behavior:smooth}
+body{min-height:100vh;background:var(--bg);color:var(--txt);font-family:var(--fB);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button,input,select{font-family:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+
+/* ── Grain + top bar ── */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.022}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9001;
+  background:linear-gradient(90deg,transparent,var(--or),transparent);
+  background-size:300% 100%;animation:tscan 4s linear infinite}
+@keyframes tscan{0%{background-position:150% 0}100%{background-position:-150% 0}}
+
+/* ── SCREENS ── */
+.scr{display:none}
+.scr.on{display:flex;animation:fadeUp .3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes ping{0%,100%{box-shadow:0 0 0 0 rgba(255,77,0,.3)}60%{box-shadow:0 0 0 8px transparent}}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ══ LOGIN ══ */
+#scr-login{min-height:100vh;align-items:stretch}
+.la{flex:1.2;position:relative;overflow:hidden;display:none}
+@media(min-width:860px){.la{display:block}}
+.la-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a 0%,#1a0a00 50%,#0a0a0a 100%);overflow:hidden}
+.la-bg::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,77,0,.18),transparent 70%)}
+.la-chart-preview{position:absolute;bottom:3rem;left:3rem;right:3rem}
+.la-bars{display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:1rem}
+.la-bar{flex:1;border-radius:2px 2px 0 0;opacity:.6;transition:opacity .2s}
+.la-bar.a{background:rgba(255,77,0,.7)}
+.la-bar.b{background:rgba(255,77,0,.35)}
+.la-txt{position:absolute;top:3rem;left:3rem;right:3rem}
+.la-txt h2{font-family:var(--fT);font-size:clamp(2.2rem,3.2vw,3.6rem);line-height:.93;color:rgba(255,255,255,.75);margin-bottom:.85rem}
+.la-txt h2 em{font-style:normal;color:var(--or)}
+.la-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.ltag{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);padding:.22rem .65rem;font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.lf{width:100%;max-width:440px;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem;background:var(--bg);position:relative}
+@media(min-width:600px){.lf{padding:3.2rem 2.8rem}}
+.lf::before{content:'';position:absolute;left:0;top:18%;bottom:18%;width:2px;background:linear-gradient(to bottom,transparent,var(--or),transparent);opacity:.28}
+.lf-eye{display:inline-flex;align-items:center;gap:.42rem;font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:.6rem}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--or);animation:ping 1.8s ease infinite}
+.lf-h1{font-family:var(--fT);font-size:2.6rem;line-height:1;margin-bottom:.4rem}
+.lf-sub{font-size:.78rem;color:var(--mu);line-height:1.55;margin-bottom:1.5rem}
+.lerr{display:none;align-items:center;gap:.45rem;background:rgba(220,50,50,.07);border:1px solid rgba(220,50,50,.28);border-left:3px solid #dc3232;padding:.62rem .9rem;margin-bottom:.9rem;font-size:.76rem;color:#f88;border-radius:var(--r);animation:shake .3s ease}
+.lerr.on{display:flex}
+.fld{margin-bottom:.9rem}
+.fld label{display:block;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:.4rem}
+.fli{position:relative}
+.fli-ico{position:absolute;left:.82rem;top:50%;transform:translateY(-50%);font-size:.82rem;pointer-events:none;color:rgba(255,255,255,.2)}
+.fli input{width:100%;background:var(--s1);border:1.5px solid var(--s3);padding:.78rem .9rem .78rem 2.4rem;color:var(--txt);font-size:.88rem;font-weight:500;border-radius:var(--r);transition:border-color .18s,box-shadow .18s;outline:none}
+.fli input::placeholder{color:rgba(255,255,255,.13)}
+.fli input:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(255,77,0,.09)}
+.eye-tog{position:absolute;right:.82rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.2);font-size:.82rem;padding:.18rem;transition:color .15s}
+.eye-tog:hover{color:rgba(255,255,255,.5)}
+.btn-li{width:100%;background:var(--or);color:#fff;border:none;padding:.95rem;font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);position:relative;overflow:hidden;transition:background .2s,transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.45rem}
+.btn-li::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .38s}
+.btn-li:hover::after{left:100%}
+.btn-li:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,77,0,.35)}
+.btn-li:disabled{opacity:.44;cursor:not-allowed;transform:none;box-shadow:none}
+.lf-foot{margin-top:1.6rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center}
+.lf-foot p{font-size:.6rem;color:rgba(255,255,255,.13)}
+.rol-badge{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,77,0,.1);border:1px solid rgba(255,77,0,.25);color:var(--or);padding:.18rem .55rem;border-radius:2px}
+
+/* ══ DASHBOARD ══ */
+#scr-dash{flex-direction:column;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;background:rgba(9,9,9,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,77,0,.1)}
+@media(min-width:640px){.topbar{padding:0 2.2rem}}
+.t-logo{font-family:var(--fT);font-size:1.5rem;letter-spacing:.1em}
+.t-logo b{color:var(--or);font-weight:400}
+.t-logo span{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,77,0,.6);margin-left:.6rem;vertical-align:middle}
+.t-right{display:flex;align-items:center;gap:.75rem}
+.t-av{width:31px;height:31px;border-radius:50%;background:rgba(255,77,0,.12);border:1.5px solid rgba(255,77,0,.32);display:flex;align-items:center;justify-content:center;font-family:var(--fT);font-size:.9rem;color:var(--or);flex-shrink:0}
+.t-name{font-size:.73rem;font-weight:600;color:var(--mu);display:none}
+@media(min-width:500px){.t-name{display:block}}
+.btn-out{background:transparent;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.3);padding:.36rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s}
+.btn-out:hover{border-color:var(--or);color:var(--or)}
+
+/* ── NAV TABS ── */
+.dash-nav{border-bottom:1px solid var(--s3);background:var(--s1);display:flex;padding:0 1.2rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(min-width:640px){.dash-nav{padding:0 2.2rem}}
+.dtab{background:none;border:none;border-bottom:2px solid transparent;color:var(--mu);padding:.82rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .18s;margin-bottom:-1px}
+.dtab:hover{color:var(--txt)}
+.dtab.on{color:var(--or);border-bottom-color:var(--or)}
+
+/* ── BODY ── */
+.dash-body{flex:1;padding:1.6rem 1.2rem 4rem;max-width:1200px;width:100%;margin:0 auto}
+@media(min-width:640px){.dash-body{padding:2rem 2.2rem 4rem}}
+.tab-pane{display:none}
+.tab-pane.on{display:block;animation:fadeUp .28s ease both}
+
+/* ── SECTION HEADER ── */
+.seh{display:flex;align-items:center;gap:.65rem;margin-bottom:1rem}
+.seh h3{font-family:var(--fT);font-size:1.4rem;letter-spacing:.04em;white-space:nowrap}
+.seh .ln{flex:1;height:1px;background:var(--s3)}
+.seh select{background:var(--bg);border:1.5px solid var(--s3);padding:.38rem .75rem;color:var(--txt);font-size:.68rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.5rem}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.6rem}
+@media(min-width:700px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1rem 1.1rem;position:relative;overflow:hidden;transition:border-color .2s}
+.kpi:hover{border-color:rgba(255,77,0,.3)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--kc,var(--or)),transparent)}
+.kpi-lbl{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem}
+.kpi-val{font-family:var(--fT);font-size:1.85rem;line-height:1;color:var(--kc,var(--or))}
+.kpi-sub{font-size:.63rem;color:var(--mu);margin-top:.25rem}
+.kpi-delta{font-size:.68rem;font-weight:700;margin-top:.2rem}
+.kpi-delta.pos{color:var(--green)}
+.kpi-delta.neg{color:var(--red)}
+.kpi-delta.neu{color:var(--mu)}
+
+/* ── CHART BOXES ── */
+.charts-row{display:grid;grid-template-columns:1fr;gap:.75rem;margin-bottom:1.6rem}
+@media(min-width:900px){.charts-row{grid-template-columns:3fr 2fr}}
+.chart-box{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1.2rem}
+.chart-box.full{grid-column:1/-1}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.chart-hdr h4{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--or)}
+.chart-legend{display:flex;gap:.75rem;flex-wrap:wrap}
+.cl{display:flex;align-items:center;gap:.38rem;font-size:.62rem;font-weight:600;color:var(--mu)}
+.cl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chart-wrap{position:relative;height:240px}
+.chart-wrap.tall{height:280px}
+
+/* ── YTD BANNER ── */
+.ytd-banner{background:linear-gradient(135deg,rgba(255,77,0,.08),rgba(255,77,0,.03));border:1px solid rgba(255,77,0,.2);border-left:3px solid var(--or);border-radius:var(--r);padding:1.1rem 1.4rem;margin-bottom:1.6rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.ytd-left h3{font-family:var(--fT);font-size:1.3rem;letter-spacing:.04em;margin-bottom:.18rem}
+.ytd-left p{font-size:.72rem;color:var(--mu)}
+.ytd-right{display:flex;gap:1.5rem;flex-wrap:wrap}
+.ytd-stat{text-align:center}
+.ytd-stat-val{font-family:var(--fT);font-size:1.9rem;line-height:1}
+.ytd-stat-lbl{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-top:.2rem}
+
+/* ── CATEGORÍAS TABLE ── */
+.cat-table-wrap{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden;margin-bottom:1.6rem}
+.cat-table-hdr{padding:.75rem 1.1rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.cat-table-hdr h4{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--or)}
+.cat-tbl{width:100%;border-collapse:collapse;min-width:480px}
+.cat-tbl th{text-align:left;padding:.6rem .9rem;font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--or);background:var(--s2);border-bottom:1px solid var(--s3)}
+.cat-tbl td{padding:.65rem .9rem;font-size:.78rem;color:rgba(255,255,255,.75);border-bottom:1px solid var(--s3);vertical-align:middle}
+.cat-tbl tbody tr:hover{background:var(--s2)}
+.cat-tbl tbody tr:last-child td{border-bottom:none}
+.cat-bar{height:6px;border-radius:3px;background:rgba(255,77,0,.15);overflow:hidden;min-width:80px}
+.cat-bar-fill{height:100%;border-radius:3px;background:var(--or);transition:width .6s ease}
+.tbl-scroll{overflow-x:auto;max-height:400px;overflow-y:auto}
+
+/* ── UTILIDAD NETA ── */
+.util-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.6rem}
+@media(max-width:600px){.util-grid{grid-template-columns:1fr}}
+.util-box{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1.1rem 1.3rem;position:relative;overflow:hidden}
+.util-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--uc,var(--or)),transparent)}
+.util-lbl{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem}
+.util-val{font-family:var(--fT);font-size:2rem;line-height:1;color:var(--uc,var(--or));margin-bottom:.2rem}
+.util-sub{font-size:.65rem;color:var(--mu);line-height:1.5}
+
+/* ── IA ── */
+.ia-section{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden;margin-bottom:1.6rem}
+.ia-hdr{padding:.85rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.65rem}
+.ia-hdr h4{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.ia-badge{font-size:.55rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,77,0,.1);border:1px solid rgba(255,77,0,.3);color:var(--or);padding:.15rem .55rem;border-radius:2px}
+.ia-body{padding:1.1rem}
+.ia-msgs{display:flex;flex-direction:column;gap:.75rem;max-height:380px;overflow-y:auto;margin-bottom:1rem;padding-right:.2rem}
+.ia-msgs::-webkit-scrollbar{width:3px}
+.ia-msgs::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+.ia-msg{display:flex;gap:.6rem}
+.ia-msg.user{flex-direction:row-reverse}
+.ia-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800}
+.ia-avatar.bot{background:rgba(255,77,0,.15);border:1px solid rgba(255,77,0,.3);color:var(--or)}
+.ia-avatar.user{background:var(--s3);border:1px solid var(--s4);color:var(--mu)}
+.ia-bubble{max-width:82%;padding:.7rem .9rem;border-radius:var(--r);font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.82)}
+.ia-msg.bot .ia-bubble{background:var(--s2);border:1px solid var(--s3);border-top-left-radius:2px}
+.ia-msg.user .ia-bubble{background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.2);border-top-right-radius:2px}
+.ia-bubble table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.75rem}
+.ia-bubble th{background:var(--s3);padding:.35rem .6rem;text-align:left;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--or);border-bottom:1px solid var(--s4)}
+.ia-bubble td{padding:.35rem .6rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.ia-bubble tr:last-child td{border-bottom:none}
+.ia-typing{display:flex;align-items:center;gap:.3rem;padding:.5rem}
+.ia-typing span{width:6px;height:6px;border-radius:50%;background:var(--or);animation:iatype .9s ease-in-out infinite}
+.ia-typing span:nth-child(2){animation-delay:.15s}
+.ia-typing span:nth-child(3){animation-delay:.3s}
+@keyframes iatype{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.ia-input-row{display:flex;gap:.5rem}
+.ia-input{flex:1;background:var(--bg);border:1.5px solid var(--s3);padding:.7rem .9rem;color:var(--txt);font-size:.82rem;border-radius:var(--r);outline:none;font-family:var(--fB);transition:border-color .18s}
+.ia-input:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(255,77,0,.07)}
+.ia-input::placeholder{color:rgba(255,255,255,.15)}
+.ia-send{padding:.7rem 1.2rem;background:var(--or);color:#fff;border:none;cursor:pointer;font-family:var(--fB);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:var(--r);transition:all .2s;white-space:nowrap}
+.ia-send:hover{background:var(--or2);transform:translateY(-1px)}
+.ia-send:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.ia-sugs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
+.ia-sug{background:var(--bg);border:1px solid var(--s3);padding:.32rem .7rem;font-size:.63rem;font-weight:600;color:var(--mu);cursor:pointer;border-radius:2px;transition:all .18s}
+.ia-sug:hover{border-color:rgba(255,77,0,.4);color:var(--or)}
+
+/* ── LOADING SPINNER ── */
+.loading-pulse{font-size:.72rem;color:var(--mu);animation:lpulse 1.4s ease-in-out infinite}
+@keyframes lpulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:500px){.kpi-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="scr-login" class="scr on">
+  <div class="la">
+    <div class="la-bg"></div>
+    <div class="la-txt">
+      <h2>DATOS QUE<br><em>MUEVEN</em> EL GYM</h2>
+      <div class="la-tags">
+        <span class="ltag">Métricas en tiempo real</span>
+        <span class="ltag">2025 vs 2026</span>
+        <span class="ltag">Asistente IA</span>
+      </div>
+    </div>
+    <!-- Mini chart decorativo -->
+    <div class="la-chart-preview">
+      <div class="la-bars" id="la-bars"></div>
+      <div style="font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.2);display:flex;gap:.75rem">
+        <span style="display:flex;align-items:center;gap:.35rem"><span style="width:8px;height:8px;border-radius:50%;background:rgba(255,77,0,.7);display:inline-block"></span>2025</span>
+        <span style="display:flex;align-items:center;gap:.35rem"><span style="width:8px;height:8px;border-radius:50%;background:rgba(255,77,0,.35);display:inline-block"></span>2026</span>
+      </div>
+    </div>
+  </div>
+  <div class="lf">
+    <div class="lf-eye"><div class="pdot"></div> Dashboard Financiero</div>
+    <h1 class="lf-h1">ACCESO<br>SOCIOS</h1>
+    <p class="lf-sub">Solo socios y administradores tienen acceso a este panel financiero.</p>
+    <div class="lerr" id="lerr">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f88" stroke-width="2" style="flex-shrink:0"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      <span id="lerr-txt"></span>
+    </div>
+    <div class="fld">
+      <label for="l-u">Usuario</label>
+      <div class="fli">
+        <span class="fli-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <input id="l-u" type="text" placeholder="tu.usuario" autocomplete="username" required/>
+      </div>
+    </div>
+    <div class="fld">
+      <label for="l-p">Contraseña</label>
+      <div class="fli">
+        <span class="fli-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+        <input id="l-p" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+        <button type="button" class="eye-tog" id="eye-tog" onclick="toggleEye()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="btn-li" id="btn-li" onclick="doLogin()">
+      <span id="btn-li-txt">ENTRAR AL DASHBOARD</span>
+      <span>→</span>
+    </button>
+    <div class="lf-foot">
+      <p>© 2026 Elemental Club</p>
+      <span class="rol-badge">Solo Socios</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div id="scr-dash" class="scr">
+  <header class="topbar">
+    <div>
+      <div class="t-logo">ELEMENTAL <b>CLUB</b> <span>Dashboard Financiero</span></div>
+    </div>
+    <div class="t-right">
+      <a href="staff.html" target="_blank"
+        style="display:inline-flex;align-items:center;gap:.45rem;
+               background:var(--s2);border:1px solid var(--s3);
+               color:rgba(255,255,255,.55);
+               padding:.38rem 1rem;
+               font-family:var(--fB);font-size:.65rem;font-weight:700;
+               letter-spacing:.12em;text-transform:uppercase;
+               border-radius:var(--r);text-decoration:none;white-space:nowrap;
+               transition:all .2s;"
+        onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'"
+        onmouseout="this.style.borderColor='var(--s3)';this.style.color='rgba(255,255,255,.55)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Panel Staff
+      </a>
+      <div class="t-av" id="t-av">?</div>
+      <span class="t-name" id="t-name"></span>
+      <button class="btn-out" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <nav class="dash-nav">
+    <button class="dtab on" onclick="switchTab('resumen',this)">Resumen General</button>
+    <button class="dtab" onclick="switchTab('ingresos',this)">Ingresos</button>
+    <button class="dtab" onclick="switchTab('egresos',this)">Egresos</button>
+    <button class="dtab" onclick="switchTab('utilidad',this)">Utilidad</button>
+    <button class="dtab" onclick="switchTab('asistente',this)">Asistente IA</button>
+  </nav>
+
+  <div class="dash-body">
+
+    <!-- ══ TAB RESUMEN ══ -->
+    <div id="tab-resumen" class="tab-pane on">
+      <!-- YTD Banner -->
+      <div class="ytd-banner">
+        <div class="ytd-left">
+          <h3>AÑO EN CURSO vs. AÑO ANTERIOR</h3>
+          <p id="ytd-periodo">Comparando enero–<span id="ytd-mes-txt">junio</span> 2026 contra el mismo periodo de 2025</p>
+        </div>
+        <div class="ytd-right">
+          <div class="ytd-stat">
+            <div class="ytd-stat-val" id="ytd-2026" style="color:var(--or)">—</div>
+            <div class="ytd-stat-lbl">Ventas YTD 2026</div>
+          </div>
+          <div class="ytd-stat">
+            <div class="ytd-stat-val" id="ytd-2025" style="color:rgba(255,255,255,.45)">—</div>
+            <div class="ytd-stat-lbl">Ventas YTD 2025</div>
+          </div>
+          <div class="ytd-stat">
+            <div class="ytd-stat-val" id="ytd-delta" style="color:var(--green)">—</div>
+            <div class="ytd-stat-lbl">% Variación</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi" style="--kc:var(--green)">
+          <div class="kpi-lbl">Ingresos 2026 (YTD)</div>
+          <div class="kpi-val" id="kpi-ing-ytd">—</div>
+          <div class="kpi-sub" id="kpi-ing-ytd-regs">cargando...</div>
+        </div>
+        <div class="kpi" style="--kc:var(--red)">
+          <div class="kpi-lbl">Egresos 2026 (YTD)</div>
+          <div class="kpi-val" id="kpi-egr-ytd">—</div>
+          <div class="kpi-sub" id="kpi-egr-ytd-regs">cargando...</div>
+        </div>
+        <div class="kpi" style="--kc:var(--blue)">
+          <div class="kpi-lbl">Utilidad Neta 2026</div>
+          <div class="kpi-val" id="kpi-util-ytd">—</div>
+          <div class="kpi-delta" id="kpi-util-delta"></div>
+        </div>
+        <div class="kpi" style="--kc:var(--yellow)">
+          <div class="kpi-lbl">Margen Operativo</div>
+          <div class="kpi-val" id="kpi-margen-ytd">—</div>
+          <div class="kpi-sub">Ingresos − Egresos / Ingresos</div>
+        </div>
+      </div>
+
+      <!-- Chart principal: barras dobles ingresos -->
+      <div class="charts-row">
+        <div class="chart-box">
+          <div class="chart-hdr">
+            <h4>Ingresos Mensuales — 2025 vs 2026</h4>
+            <div class="chart-legend">
+              <div class="cl"><div class="cl-dot" style="background:var(--or)"></div>2026</div>
+              <div class="cl"><div class="cl-dot" style="background:rgba(255,77,0,.35)"></div>2025</div>
+            </div>
+          </div>
+          <div class="chart-wrap tall"><canvas id="chart-ing-comp"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-hdr">
+            <h4>Egresos por Categoría 2026</h4>
+          </div>
+          <div class="chart-wrap tall"><canvas id="chart-egr-dona"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Chart gastos mensuales -->
+      <div class="chart-box" style="margin-bottom:1.6rem">
+        <div class="chart-hdr">
+          <h4>Gastos Mensuales — 2025 vs 2026</h4>
+          <div class="chart-legend">
+            <div class="cl"><div class="cl-dot" style="background:var(--red)"></div>2026</div>
+            <div class="cl"><div class="cl-dot" style="background:rgba(239,68,68,.35)"></div>2025</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-egr-comp"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ══ TAB INGRESOS ══ -->
+    <div id="tab-ingresos" class="tab-pane">
+      <div class="seh">
+        <h3>ANÁLISIS DE INGRESOS</h3>
+        <div class="ln"></div>
+      </div>
+
+      <!-- KPIs ingresos -->
+      <div class="kpi-grid" style="margin-bottom:1.6rem">
+        <div class="kpi" style="--kc:var(--green)">
+          <div class="kpi-lbl">Total 2026 (YTD)</div>
+          <div class="kpi-val" id="ki-total26">—</div>
+          <div class="kpi-sub" id="ki-regs26">— registros</div>
+        </div>
+        <div class="kpi" style="--kc:rgba(255,255,255,.5)">
+          <div class="kpi-lbl">Total 2025 (año completo)</div>
+          <div class="kpi-val" id="ki-total25">—</div>
+          <div class="kpi-sub" id="ki-regs25">— registros</div>
+        </div>
+        <div class="kpi" style="--kc:var(--green)">
+          <div class="kpi-lbl">Mejor mes 2026</div>
+          <div class="kpi-val" id="ki-mejor-mes">—</div>
+          <div class="kpi-sub" id="ki-mejor-mes-lbl"></div>
+        </div>
+        <div class="kpi" style="--kc:var(--yellow)">
+          <div class="kpi-lbl">Promedio mensual 2026</div>
+          <div class="kpi-val" id="ki-prom26">—</div>
+          <div class="kpi-sub">vs meses con datos</div>
+        </div>
+      </div>
+
+      <!-- Chart ingresos acumulados YTD -->
+      <div class="chart-box" style="margin-bottom:1.6rem">
+        <div class="chart-hdr">
+          <h4>Ingresos Acumulados YTD — 2025 vs 2026</h4>
+          <div class="chart-legend">
+            <div class="cl"><div class="cl-dot" style="background:var(--or)"></div>2026</div>
+            <div class="cl"><div class="cl-dot" style="background:rgba(255,77,0,.4)"></div>2025</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-ing-ytd"></canvas></div>
+      </div>
+
+      <!-- Chart mes a mes barras -->
+      <div class="chart-box" style="margin-bottom:1.6rem">
+        <div class="chart-hdr">
+          <h4>Comparativo Mensual — Ingresos</h4>
+          <div class="chart-legend">
+            <div class="cl"><div class="cl-dot" style="background:var(--or)"></div>2026</div>
+            <div class="cl"><div class="cl-dot" style="background:rgba(255,77,0,.35)"></div>2025</div>
+          </div>
+        </div>
+        <div class="chart-wrap tall"><canvas id="chart-ing-comp2"></canvas></div>
+      </div>
+
+      <!-- Tabla mensual -->
+      <div class="cat-table-wrap">
+        <div class="cat-table-hdr">
+          <h4>Detalle Mensual</h4>
+        </div>
+        <div class="tbl-scroll">
+          <table class="cat-tbl">
+            <thead><tr>
+              <th>Mes</th>
+              <th style="text-align:right">2025</th>
+              <th style="text-align:right">2026</th>
+              <th style="text-align:right">Diferencia</th>
+              <th style="text-align:right">% Cambio</th>
+            </tr></thead>
+            <tbody id="ing-mes-tbody"><tr><td colspan="5" style="text-align:center;color:var(--mu);padding:2rem">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB EGRESOS ══ -->
+    <div id="tab-egresos" class="tab-pane">
+      <div class="seh">
+        <h3>ANÁLISIS DE EGRESOS</h3>
+        <div class="ln"></div>
+      </div>
+
+      <div class="kpi-grid" style="margin-bottom:1.6rem">
+        <div class="kpi" style="--kc:var(--red)">
+          <div class="kpi-lbl">Total gastos 2026 (YTD)</div>
+          <div class="kpi-val" id="ke-total26">—</div>
+          <div class="kpi-sub">Sin utilidades ni inversión</div>
+        </div>
+        <div class="kpi" style="--kc:rgba(255,255,255,.45)">
+          <div class="kpi-lbl">Total gastos 2025</div>
+          <div class="kpi-val" id="ke-total25">—</div>
+          <div class="kpi-sub">Año completo</div>
+        </div>
+        <div class="kpi" style="--kc:var(--yellow)">
+          <div class="kpi-lbl">Categoría líder 2026</div>
+          <div class="kpi-val" id="ke-top-cat">—</div>
+          <div class="kpi-sub" id="ke-top-cat-lbl"></div>
+        </div>
+        <div class="kpi" style="--kc:var(--red)">
+          <div class="kpi-lbl">Promedio mensual 2026</div>
+          <div class="kpi-val" id="ke-prom26">—</div>
+          <div class="kpi-sub">vs meses con datos</div>
+        </div>
+      </div>
+
+      <!-- Charts egresos -->
+      <div class="charts-row" style="margin-bottom:1.6rem">
+        <div class="chart-box">
+          <div class="chart-hdr">
+            <h4>Gastos Mensuales — 2025 vs 2026</h4>
+            <div class="chart-legend">
+              <div class="cl"><div class="cl-dot" style="background:var(--red)"></div>2026</div>
+              <div class="cl"><div class="cl-dot" style="background:rgba(239,68,68,.35)"></div>2025</div>
+            </div>
+          </div>
+          <div class="chart-wrap tall"><canvas id="chart-egr-comp2"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-hdr">
+            <h4>Distribución por Categoría 2026</h4>
+          </div>
+          <div class="chart-wrap tall"><canvas id="chart-egr-dona2"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Tabla categorías -->
+      <div class="cat-table-wrap">
+        <div class="cat-table-hdr">
+          <h4>Egresos por Categoría — 2026 YTD</h4>
+          <span style="font-size:.62rem;color:var(--mu)">Excluye utilidades, inversión y préstamos</span>
+        </div>
+        <div class="tbl-scroll">
+          <table class="cat-tbl">
+            <thead><tr>
+              <th>Categoría</th>
+              <th style="text-align:right">Total</th>
+              <th style="text-align:right">Registros</th>
+              <th>% del total</th>
+              <th>Distribución</th>
+            </tr></thead>
+            <tbody id="egr-cat-tbody"><tr><td colspan="5" style="text-align:center;color:var(--mu);padding:2rem">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB UTILIDAD ══ -->
+    <div id="tab-utilidad" class="tab-pane">
+      <div class="seh">
+        <h3>UTILIDAD Y FLUJO NETO</h3>
+        <div class="ln"></div>
+      </div>
+
+      <!-- Cajas utilidad -->
+      <div class="util-grid">
+        <div class="util-box" style="--uc:var(--green)">
+          <div class="util-lbl">Utilidad Neta Acumulada 2026 (YTD)</div>
+          <div class="util-val" id="ut-neta26">—</div>
+          <div class="util-sub">Ingresos totales − Egresos operativos<br><span style="color:rgba(255,255,255,.25)">(sin inversión ni préstamos)</span></div>
+        </div>
+        <div class="util-box" style="--uc:rgba(255,255,255,.45)">
+          <div class="util-lbl">Utilidad Neta 2025 (mismo periodo)</div>
+          <div class="util-val" id="ut-neta25">—</div>
+          <div class="util-sub">Enero–<span id="ut-mes25-txt">junio</span> 2025</div>
+        </div>
+      </div>
+
+      <!-- KPIs utilidad -->
+      <div class="kpi-grid" style="margin-bottom:1.6rem">
+        <div class="kpi" style="--kc:var(--blue)">
+          <div class="kpi-lbl">Flujo libre de caja</div>
+          <div class="kpi-val" id="ut-flujo">—</div>
+          <div class="kpi-sub">Utilidad disponible en carteras</div>
+        </div>
+        <div class="kpi" style="--kc:var(--yellow)">
+          <div class="kpi-lbl">Margen operativo 2026</div>
+          <div class="kpi-val" id="ut-margen26">—</div>
+          <div class="kpi-sub">Utilidad / Ingresos</div>
+        </div>
+        <div class="kpi" style="--kc:rgba(255,255,255,.4)">
+          <div class="kpi-lbl">Margen operativo 2025</div>
+          <div class="kpi-val" id="ut-margen25">—</div>
+          <div class="kpi-sub">Mismo periodo año anterior</div>
+        </div>
+        <div class="kpi" style="--kc:var(--green)">
+          <div class="kpi-lbl">Mejora de margen</div>
+          <div class="kpi-val" id="ut-delta-margen">—</div>
+          <div class="kpi-delta" id="ut-delta-margen-sub"></div>
+        </div>
+      </div>
+
+      <!-- Chart utilidad mensual -->
+      <div class="chart-box" style="margin-bottom:1.6rem">
+        <div class="chart-hdr">
+          <h4>Utilidad Mensual — 2025 vs 2026</h4>
+          <div class="chart-legend">
+            <div class="cl"><div class="cl-dot" style="background:var(--green)"></div>2026</div>
+            <div class="cl"><div class="cl-dot" style="background:rgba(34,197,94,.35)"></div>2025</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-util"></canvas></div>
+      </div>
+
+      <!-- Tabla utilidad por mes -->
+      <div class="cat-table-wrap">
+        <div class="cat-table-hdr">
+          <h4>Detalle Mes a Mes — Utilidad</h4>
+        </div>
+        <div class="tbl-scroll">
+          <table class="cat-tbl">
+            <thead><tr>
+              <th>Mes</th>
+              <th style="text-align:right">Ingresos 2026</th>
+              <th style="text-align:right">Egresos 2026</th>
+              <th style="text-align:right">Utilidad 2026</th>
+              <th style="text-align:right">Utilidad 2025</th>
+              <th style="text-align:right">Margen</th>
+            </tr></thead>
+            <tbody id="util-mes-tbody"><tr><td colspan="6" style="text-align:center;color:var(--mu);padding:2rem">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB ASISTENTE ══ -->
+    <div id="tab-asistente" class="tab-pane">
+      <div class="seh">
+        <h3>ASISTENTE FINANCIERO IA</h3>
+        <div class="ln"></div>
+      </div>
+
+      <div class="ia-section">
+        <div class="ia-hdr">
+          <div style="width:28px;height:28px;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem">✦</div>
+          <h4>Pregunta sobre las finanzas del gym</h4>
+          <span class="ia-badge">GPT-4o · Datos en tiempo real</span>
+        </div>
+        <div class="ia-body">
+          <div class="ia-sugs" id="ia-sugs"></div>
+          <div class="ia-msgs" id="ia-msgs"></div>
+          <div class="ia-input-row">
+            <input class="ia-input" id="ia-input" placeholder="Ej: ¿Cuánto crecimos en ventas comparado al año pasado?"/>
+            <button class="ia-send" id="ia-send" onclick="iaEnviar()">Enviar →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-body -->
+</div><!-- /scr-dash -->
+
+<script>
+'use strict';
+/* ══ SUPABASE ══ */
+var SUPA_URL = 'https://aveonbmcbopqqcambxoi.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg0MzksImV4cCI6MjA3MzAxNDQzOX0.wKhEMF4K6Zv6PuobxCwubmhNTyzk6qlmjKyGO7JqH9Y';
+window._sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+/* ══ AUTH ══ */
+document.addEventListener('DOMContentLoaded', function(){
+  buildLoginBars();
+  var saved = localStorage.getItem('ecDashUser');
+  if(saved){ try{ enterDash(JSON.parse(saved)); }catch(e){ localStorage.removeItem('ecDashUser'); } }
+  ['l-u','l-p'].forEach(function(id){
+    document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+  });
+  document.getElementById('ia-input').addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); iaEnviar(); }
+  });
+});
+
+function buildLoginBars(){
+  var data = [48,30,39,29,42,94,81,38,57,56,68,77];
+  var data26 = [68,47,57,52,54,25,0,0,0,0,0,0];
+  var max = Math.max.apply(null,data.concat(data26));
+  var container = document.getElementById('la-bars');
+  if(!container) return;
+  container.innerHTML = '';
+  for(var i=0;i<12;i++){
+    var wrap = document.createElement('div');
+    wrap.style.cssText='flex:1;display:flex;flex-direction:column;gap:3px;align-items:center';
+    var b1 = document.createElement('div');
+    b1.className='la-bar a';
+    b1.style.height=(data26[i]/max*100)+'%';
+    b1.style.width='100%';
+    var b2 = document.createElement('div');
+    b2.className='la-bar b';
+    b2.style.height=(data[i]/max*100)+'%';
+    b2.style.width='100%';
+    wrap.appendChild(b1);
+    wrap.appendChild(b2);
+    container.appendChild(wrap);
+  }
+}
+
+function doLogin(){
+  var u = document.getElementById('l-u').value.trim();
+  var p = document.getElementById('l-p').value;
+  var btn = document.getElementById('btn-li');
+  if(!u||!p){ showErr('Ingresa usuario y contraseña.'); return; }
+  btn.disabled=true;
+  document.getElementById('btn-li-txt').textContent='Verificando…';
+  window._sb.from('employees').select('*').eq('username',u).single()
+    .then(function(r){
+      if(r.error||!r.data) throw new Error('Usuario o contraseña incorrectos.');
+      var emp = r.data;
+      if(emp.password!==p&&emp.pin!==p) throw new Error('Usuario o contraseña incorrectos.');
+      var rol = (emp.rol||emp.role||'').toLowerCase();
+      if(rol!=='socio'&&rol!=='admin') throw new Error('No tienes permiso. Solo socios y administradores pueden acceder a este dashboard.');
+      var user = { id:emp.id, name:emp.name||u, username:u, rol:rol };
+      localStorage.setItem('ecDashUser', JSON.stringify(user));
+      enterDash(user);
+    })
+    .catch(function(e){ showErr(e.message); })
+    .finally(function(){ btn.disabled=false; document.getElementById('btn-li-txt').textContent='ENTRAR AL DASHBOARD'; });
+}
+
+function showErr(msg){
+  var el=document.getElementById('lerr');
+  document.getElementById('lerr-txt').textContent=msg;
+  el.classList.add('on');
+  setTimeout(function(){ el.classList.remove('on'); },5000);
+}
+
+function toggleEye(){
+  var i=document.getElementById('l-p');
+  i.type=i.type==='password'?'text':'password';
+}
+
+function enterDash(user){
+  document.getElementById('t-av').textContent=(user.name||'?')[0].toUpperCase();
+  document.getElementById('t-name').textContent=user.name||'';
+  showScr('dash');
+  loadAllData();
+}
+
+function doLogout(){
+  if(!confirm('¿Cerrar sesión?')) return;
+  localStorage.removeItem('ecDashUser');
+  showScr('login');
+}
+
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('on'); s.style.display='none'; });
+  var el=document.getElementById('scr-'+id);
+  el.style.display='flex';
+  el.classList.add('on');
+}
+
+function switchTab(id,btn){
+  document.querySelectorAll('.dtab').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-'+id).classList.add('on');
+  if(id==='asistente'&&!iaInit) iniciarIA();
+}
+
+/* ══ DATOS ══ */
+var MESES_NOM = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var MESES_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+var _ing25 = new Array(12).fill(0);
+var _ing26 = new Array(12).fill(0);
+var _egr25 = new Array(12).fill(0);
+var _egr26 = new Array(12).fill(0);
+var _catEgr26 = {};
+var _regs25=0,_regs26=0,_eregs25=0,_eregs26=0;
+
+/* Categorías excluidas de gastos operativos */
+var CAT_EXCLUIR = ['utilidades','inversion','prestamo'];
+/* Mapeo de normalización (key=lower trim) */
+var CAT_MAP = {
+  'nomina':'Nómina','marketing/ventas':'Marketing','servicios':'Servicios',
+  'consumibles':'Consumibles','mantenimiento':'Mantenimiento','renta':'Renta',
+  'general':'General','comisiones':'Comisiones'
+};
+
+function catNorm(c){
+  if(!c) return 'Otros';
+  var k = c.toLowerCase().trim();
+  return CAT_MAP[k]||c;
+}
+
+function fmt(n){ return '$'+(Math.round(n)||0).toLocaleString('es-MX'); }
+function fmtK(n){ var v=Math.round(n); return v>=1000000?'$'+(v/1000000).toFixed(1)+'M':v>=1000?'$'+(v/1000).toFixed(0)+'K':fmt(v); }
+
+function loadAllData(){
+  Promise.all([
+    /* Ingresos 2025 y 2026 */
+    window._sb.from('ingresos').select('fecha,monto').gte('fecha','2025-01-01').lte('fecha','2026-12-31').limit(10000),
+    /* Egresos 2025 y 2026 (operativos) */
+    window._sb.from('egresos').select('fecha,monto,categoria').gte('fecha','2025-01-01').lte('fecha','2026-12-31').limit(10000),
+  ]).then(function(res){
+    /* --- INGRESOS --- */
+    (res[0].data||[]).forEach(function(r){
+      var d=new Date(r.fecha+'T12:00:00');
+      var y=d.getFullYear(), m=d.getMonth();
+      var v=parseFloat(r.monto||0);
+      if(y===2025){ _ing25[m]+=v; _regs25++; }
+      else if(y===2026){ _ing26[m]+=v; _regs26++; }
+    });
+
+    /* --- EGRESOS --- */
+    (res[1].data||[]).forEach(function(r){
+      var d=new Date(r.fecha+'T12:00:00');
+      var y=d.getFullYear(), m=d.getMonth();
+      var v=parseFloat(r.monto||0);
+      var catKey=(r.categoria||'').toLowerCase().trim();
+      if(CAT_EXCLUIR.indexOf(catKey)>-1) return; /* excluir */
+      if(y===2025){ _egr25[m]+=v; _eregs25++; }
+      else if(y===2026){ _egr26[m]+=v; _eregs26++; }
+      if(y===2026){
+        var catN=catNorm(r.categoria);
+        _catEgr26[catN]=(_catEgr26[catN]||0)+v;
+      }
+    });
+
+    renderAll();
+  }).catch(function(e){ console.error('Error cargando datos:',e); });
+}
+
+function renderAll(){
+  var curMes = new Date().getMonth(); /* 0-based, junio=5 */
+  var mesLabel = MESES_FULL[curMes];
+
+  /* ── YTD sums ── */
+  var ytd26=0, ytd25=0, eytd26=0, eytd25=0;
+  for(var i=0;i<=curMes;i++){
+    ytd26+=_ing26[i]; ytd25+=_ing25[i];
+    eytd26+=_egr26[i]; eytd25+=_egr25[i];
+  }
+  var util26=ytd26-eytd26, util25=ytd25-eytd25;
+  var margen26=ytd26>0?Math.round((util26/ytd26)*100):0;
+  var margen25=ytd25>0?Math.round((util25/ytd25)*100):0;
+  var deltaPct=ytd25>0?((ytd26-ytd25)/ytd25*100):0;
+  var egrTotal25=_egr25.reduce(function(a,v){return a+v;},0);
+
+  /* ── Texto periodo ── */
+  document.querySelectorAll('#ytd-mes-txt,#ut-mes25-txt').forEach(function(el){ el.textContent=mesLabel.toLowerCase(); });
+
+  /* ── YTD Banner ── */
+  set('ytd-2026', fmt(ytd26));
+  set('ytd-2025', fmt(ytd25));
+  var dp=deltaPct.toFixed(1);
+  set('ytd-delta',(deltaPct>=0?'+':'')+dp+'%');
+  document.getElementById('ytd-delta').style.color=deltaPct>=0?'var(--green)':'var(--red)';
+
+  /* ── KPIs Resumen ── */
+  set('kpi-ing-ytd', fmtK(ytd26));
+  set('kpi-ing-ytd-regs', _regs26+' registros');
+  set('kpi-egr-ytd', fmtK(eytd26));
+  set('kpi-egr-ytd-regs', _eregs26+' egresos operativos');
+  set('kpi-util-ytd', fmtK(util26));
+  var udelta=document.getElementById('kpi-util-delta');
+  udelta.textContent=(util26>=0?'▲ Positivo':'▼ Negativo');
+  udelta.className='kpi-delta '+(util26>=0?'pos':'neg');
+  set('kpi-margen-ytd', margen26+'%');
+
+  /* ── KPIs Ingresos ── */
+  set('ki-total26', fmtK(ytd26)); set('ki-regs26',_regs26+' registros');
+  set('ki-total25', fmtK(_ing25.reduce(function(a,v){return a+v;},0)));
+  set('ki-regs25', _regs25+' registros');
+  var mejorIdx=0, mejorVal=0;
+  _ing26.forEach(function(v,i){ if(v>mejorVal&&i<=curMes){ mejorVal=v; mejorIdx=i; } });
+  set('ki-mejor-mes', fmtK(mejorVal));
+  set('ki-mejor-mes-lbl', MESES_FULL[mejorIdx]+' 2026');
+  var mesesCon26=_ing26.slice(0,curMes+1).filter(function(v){return v>0;}).length||1;
+  set('ki-prom26', fmtK(ytd26/mesesCon26));
+
+  /* ── KPIs Egresos ── */
+  set('ke-total26', fmtK(eytd26));
+  set('ke-total25', fmtK(egrTotal25));
+  var topCat='—',topVal=0;
+  Object.keys(_catEgr26).forEach(function(k){ if(_catEgr26[k]>topVal){ topVal=_catEgr26[k]; topCat=k; } });
+  set('ke-top-cat', topCat);
+  set('ke-top-cat-lbl', fmt(topVal));
+  var mesesCon26e=_egr26.slice(0,curMes+1).filter(function(v){return v>0;}).length||1;
+  set('ke-prom26', fmtK(eytd26/mesesCon26e));
+
+  /* ── KPIs Utilidad ── */
+  set('ut-neta26', fmt(util26));
+  set('ut-neta25', fmt(util25));
+  set('ut-flujo', fmt(util26));
+  set('ut-margen26', margen26+'%');
+  set('ut-margen25', margen25+'%');
+  var dm=margen26-margen25;
+  set('ut-delta-margen', (dm>=0?'+':'')+dm.toFixed(1)+'pp');
+  var dmsub=document.getElementById('ut-delta-margen-sub');
+  dmsub.textContent=(dm>=0?'▲ Mejora vs 2025':'▼ Baja vs 2025');
+  dmsub.className='kpi-delta '+(dm>=0?'pos':'neg');
+
+  /* ── Tablas ── */
+  renderIngMesTabla(curMes);
+  renderEgrCatTabla();
+  renderUtilMesTabla(curMes);
+
+  /* ── Charts ── */
+  renderCharts(curMes);
+}
+
+function set(id,val){
+  var el=document.getElementById(id);
+  if(el) el.textContent=val;
+}
+
+function renderIngMesTabla(curMes){
+  var tbody=document.getElementById('ing-mes-tbody');
+  var html='';
+  for(var i=0;i<=curMes;i++){
+    var v25=_ing25[i]||0, v26=_ing26[i]||0;
+    var diff=v26-v25, pct=v25>0?((diff/v25)*100):null;
+    var col=diff>=0?'var(--green)':'var(--red)';
+    var pctStr=pct!==null?(pct>=0?'+':'')+pct.toFixed(1)+'%':'N/A';
+    html+='<tr><td>'+MESES_FULL[i]+'</td>'
+      +'<td style="text-align:right;color:rgba(255,255,255,.55)">'+fmt(v25)+'</td>'
+      +'<td style="text-align:right;font-weight:700">'+fmt(v26)+'</td>'
+      +'<td style="text-align:right;color:'+col+';">'+(diff>=0?'+':'')+fmt(diff)+'</td>'
+      +'<td style="text-align:right;color:'+col+';font-weight:700">'+pctStr+'</td>'
+      +'</tr>';
+  }
+  tbody.innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--mu);padding:2rem">Sin datos</td></tr>';
+}
+
+function renderEgrCatTabla(){
+  var tbody=document.getElementById('egr-cat-tbody');
+  var total=Object.values(_catEgr26).reduce(function(a,v){return a+v;},0)||1;
+  var sorted=Object.keys(_catEgr26).sort(function(a,b){return _catEgr26[b]-_catEgr26[a];});
+  var html='';
+  var COLORES_CAT={'Nómina':'#f87171','Marketing':'#fb923c','Servicios':'#fbbf24','Consumibles':'#4ade80','Mantenimiento':'#60a5fa','Renta':'#c084fc','General':'#94a3b8','Comisiones':'#f472b6'};
+  sorted.forEach(function(cat,idx){
+    var v=_catEgr26[cat]||0;
+    var pct=Math.round(v/total*100);
+    var col=COLORES_CAT[cat]||'var(--or)';
+    html+='<tr><td><span style="display:inline-flex;align-items:center;gap:.45rem"><span style="width:8px;height:8px;border-radius:50%;background:'+col+';flex-shrink:0;"></span>'+cat+'</span></td>'
+      +'<td style="text-align:right;font-weight:700">'+fmt(v)+'</td>'
+      +'<td style="text-align:right;color:var(--mu)">'+Math.round(v/Object.values(_catEgr26).reduce(function(a,b){return a+b;},0)*Object.keys(_catEgr26).length/100)||'—'+'</td>'
+      +'<td style="text-align:right;color:var(--mu)">'+pct+'%</td>'
+      +'<td><div class="cat-bar"><div class="cat-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div></td>'
+      +'</tr>';
+  });
+  tbody.innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--mu);padding:2rem">Sin datos</td></tr>';
+  /* recalcular registros */
+  var regsMap={};
+  /* aproximación: no tenemos count por cat en _catEgr26 — mostramos pct */
+  var tbody2=document.getElementById('egr-cat-tbody');
+  /* rebuild con pct correcto */
+  var html2='';
+  var totalEgr=Object.values(_catEgr26).reduce(function(a,v){return a+v;},0)||1;
+  sorted.forEach(function(cat){
+    var v=_catEgr26[cat]||0;
+    var pct=(v/totalEgr*100).toFixed(1);
+    var col=COLORES_CAT[cat]||'var(--or)';
+    html2+='<tr><td><span style="display:inline-flex;align-items:center;gap:.45rem"><span style="width:8px;height:8px;border-radius:50%;background:'+col+';flex-shrink:0;"></span>'+cat+'</span></td>'
+      +'<td style="text-align:right;font-weight:700;color:var(--txt)">'+fmt(v)+'</td>'
+      +'<td style="text-align:right;color:var(--mu)">—</td>'
+      +'<td style="text-align:right;font-weight:700">'+pct+'%</td>'
+      +'<td style="min-width:100px"><div class="cat-bar"><div class="cat-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div></td>'
+      +'</tr>';
+  });
+  tbody2.innerHTML=html2;
+}
+
+function renderUtilMesTabla(curMes){
+  var tbody=document.getElementById('util-mes-tbody');
+  var html='';
+  for(var i=0;i<=curMes;i++){
+    var ing26=_ing26[i]||0, egr26=_egr26[i]||0;
+    var ing25=_ing25[i]||0, egr25=_egr25[i]||0;
+    var u26=ing26-egr26, u25=ing25-egr25;
+    var mg=ing26>0?Math.round((u26/ing26)*100):0;
+    var col26=u26>=0?'var(--green)':'var(--red)';
+    var col25=u25>=0?'rgba(34,197,94,.5)':'rgba(239,68,68,.5)';
+    html+='<tr>'
+      +'<td>'+MESES_FULL[i]+'</td>'
+      +'<td style="text-align:right;color:rgba(255,255,255,.7)">'+fmt(ing26)+'</td>'
+      +'<td style="text-align:right;color:rgba(239,68,68,.75)">'+fmt(egr26)+'</td>'
+      +'<td style="text-align:right;font-weight:700;color:'+col26+'">'+fmt(u26)+'</td>'
+      +'<td style="text-align:right;color:'+col25+'">'+fmt(u25)+'</td>'
+      +'<td style="text-align:right;font-weight:700;color:'+(mg>=0?'var(--green)':'var(--red)')+'">'+mg+'%</td>'
+      +'</tr>';
+  }
+  tbody.innerHTML=html||'<tr><td colspan="6" style="text-align:center;color:var(--mu);padding:2rem">Sin datos</td></tr>';
+}
+
+/* ══ CHARTS ══ */
+var _charts = {};
+function destroyChart(id){ if(_charts[id]){ _charts[id].destroy(); delete _charts[id]; } }
+
+var CAT_COLORS=['#f87171','#fb923c','#fbbf24','#4ade80','#60a5fa','#c084fc','#94a3b8','#f472b6','#34d399'];
+
+function renderCharts(curMes){
+  var labels12=MESES_NOM.slice();
+  var labelsPeriodo=MESES_NOM.slice(0,curMes+1);
+
+  var gridColor='rgba(255,255,255,.05)';
+  var tickColor='rgba(255,255,255,.3)';
+  var baseOpts={
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{
+      backgroundColor:'rgba(9,9,9,.95)',titleColor:'rgba(255,255,255,.9)',bodyColor:'rgba(255,255,255,.65)',
+      borderColor:'rgba(255,77,0,.3)',borderWidth:1,cornerRadius:4,padding:10
+    }},
+    scales:{
+      x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10}}},
+      y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10},callback:function(v){return '$'+(v>=1000000?(v/1000000).toFixed(1)+'M':(v/1000).toFixed(0)+'K');}}}
+    }
+  };
+
+  /* 1. Barras ingresos comparativa (resumen + ingresos tab) */
+  ['chart-ing-comp','chart-ing-comp2'].forEach(function(cid){
+    destroyChart(cid);
+    var ctx=document.getElementById(cid);
+    if(!ctx) return;
+    _charts[cid]=new Chart(ctx,{type:'bar',data:{labels:labels12,datasets:[
+      {label:'2026',data:_ing26,backgroundColor:'rgba(255,77,0,.75)',borderColor:'rgba(255,77,0,1)',borderWidth:1,borderRadius:3,borderSkipped:false},
+      {label:'2025',data:_ing25,backgroundColor:'rgba(255,77,0,.22)',borderColor:'rgba(255,77,0,.4)',borderWidth:1,borderRadius:3,borderSkipped:false},
+    ]},options:JSON.parse(JSON.stringify(baseOpts))});
+  });
+
+  /* 2. Dona egresos por categoría */
+  var catKeys=Object.keys(_catEgr26).sort(function(a,b){return _catEgr26[b]-_catEgr26[a];});
+  var catVals=catKeys.map(function(k){return _catEgr26[k];});
+  var donaOpts={responsive:true,maintainAspectRatio:false,cutout:'62%',
+    plugins:{legend:{display:true,position:'right',labels:{color:'rgba(255,255,255,.6)',font:{size:10},boxWidth:10,padding:8}},
+    tooltip:{backgroundColor:'rgba(9,9,9,.95)',titleColor:'rgba(255,255,255,.9)',bodyColor:'rgba(255,255,255,.65)',borderColor:'rgba(255,77,0,.3)',borderWidth:1,cornerRadius:4,padding:10,
+      callbacks:{label:function(ctx){var tot=ctx.dataset.data.reduce(function(a,v){return a+v;},0);var pct=(ctx.parsed/tot*100).toFixed(1);return ctx.label+': '+fmt(ctx.parsed)+' ('+pct+'%)';}}}
+    }
+  };
+  ['chart-egr-dona','chart-egr-dona2'].forEach(function(cid){
+    destroyChart(cid);
+    var ctx=document.getElementById(cid);
+    if(!ctx) return;
+    _charts[cid]=new Chart(ctx,{type:'doughnut',data:{labels:catKeys,datasets:[{data:catVals,backgroundColor:CAT_COLORS.slice(0,catKeys.length),borderColor:'rgba(9,9,9,.8)',borderWidth:2,hoverOffset:6}]},options:donaOpts});
+  });
+
+  /* 3. Barras egresos comparativa */
+  ['chart-egr-comp','chart-egr-comp2'].forEach(function(cid){
+    destroyChart(cid);
+    var ctx=document.getElementById(cid);
+    if(!ctx) return;
+    var opts=JSON.parse(JSON.stringify(baseOpts));
+    _charts[cid]=new Chart(ctx,{type:'bar',data:{labels:labels12,datasets:[
+      {label:'2026',data:_egr26,backgroundColor:'rgba(239,68,68,.75)',borderColor:'rgba(239,68,68,1)',borderWidth:1,borderRadius:3,borderSkipped:false},
+      {label:'2025',data:_egr25,backgroundColor:'rgba(239,68,68,.22)',borderColor:'rgba(239,68,68,.4)',borderWidth:1,borderRadius:3,borderSkipped:false},
+    ]},options:opts});
+  });
+
+  /* 4. Líneas YTD acumulado ingresos */
+  var acc25=[],acc26=[],s25=0,s26=0;
+  for(var i=0;i<12;i++){ s25+=_ing25[i]; s26+=_ing26[i]; acc25.push(s25); acc26.push(i<=new Date().getMonth()?s26:null); }
+  destroyChart('chart-ing-ytd');
+  var ctxYTD=document.getElementById('chart-ing-ytd');
+  if(ctxYTD){
+    var optsLine=JSON.parse(JSON.stringify(baseOpts));
+    optsLine.elements={line:{tension:.35}};
+    _charts['chart-ing-ytd']=new Chart(ctxYTD,{type:'line',data:{labels:labels12,datasets:[
+      {label:'Acum. 2026',data:acc26,borderColor:'rgba(255,77,0,1)',backgroundColor:'rgba(255,77,0,.08)',borderWidth:2.5,fill:true,pointBackgroundColor:'rgba(255,77,0,1)',pointRadius:4,pointHoverRadius:6},
+      {label:'Acum. 2025',data:acc25,borderColor:'rgba(255,77,0,.4)',backgroundColor:'transparent',borderWidth:1.5,fill:false,pointBackgroundColor:'rgba(255,77,0,.4)',pointRadius:3,borderDash:[5,4]},
+    ]},options:optsLine});
+  }
+
+  /* 5. Barras utilidad mensual */
+  var util25=_ing25.map(function(v,i){return v-_egr25[i];});
+  var util26=_ing26.map(function(v,i){return v>0||_egr26[i]>0?v-_egr26[i]:0;});
+  destroyChart('chart-util');
+  var ctxU=document.getElementById('chart-util');
+  if(ctxU){
+    var optsU=JSON.parse(JSON.stringify(baseOpts));
+    optsU.scales.y.ticks.callback=function(v){return '$'+(v>=1000000?(v/1000000).toFixed(1)+'M':(v/1000).toFixed(0)+'K');};
+    _charts['chart-util']=new Chart(ctxU,{type:'bar',data:{labels:labels12,datasets:[
+      {label:'Utilidad 2026',data:util26,backgroundColor:util26.map(function(v){return v>=0?'rgba(34,197,94,.75)':'rgba(239,68,68,.75)';}),borderColor:util26.map(function(v){return v>=0?'rgba(34,197,94,1)':'rgba(239,68,68,1)';}),borderWidth:1,borderRadius:3,borderSkipped:false},
+      {label:'Utilidad 2025',data:util25,backgroundColor:util25.map(function(v){return v>=0?'rgba(34,197,94,.25)':'rgba(239,68,68,.25)';}),borderColor:util25.map(function(v){return v>=0?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';}),borderWidth:1,borderRadius:3,borderSkipped:false},
+    ]},options:optsU});
+  }
+}
+
+/* ══ ASISTENTE IA ══ */
+var iaInit=false, iaLoading=false, iaMsgs=[];
+var IA_SUGS=['¿Cuánto crecimos en ventas vs el año pasado?','¿Cuál es nuestra categoría de gasto más alta?','¿Qué mes fue más rentable en 2025?','¿Cuál es nuestro margen operativo promedio?','Compara ingresos vs egresos del último trimestre','¿En qué meses gastamos más que lo que ingresamos?'];
+
+function iniciarIA(){
+  iaInit=true;
+  iaMsgs=[{role:'assistant',content:'Hola, soy el asistente financiero de Elemental Club. Tengo acceso a todos los datos de ingresos y egresos desde 2025. ¿En qué te puedo ayudar?'}];
+  var sugsEl=document.getElementById('ia-sugs');
+  IA_SUGS.forEach(function(s){
+    var btn=document.createElement('button');
+    btn.className='ia-sug';btn.textContent=s;
+    btn.onclick=function(){ document.getElementById('ia-input').value=s; iaEnviar(); };
+    sugsEl.appendChild(btn);
+  });
+  renderIAMsgs();
+}
+
+function renderIAMsgs(){
+  var c=document.getElementById('ia-msgs');
+  if(!c) return;
+  c.innerHTML=iaMsgs.map(function(m){
+    var isU=m.role==='user';
+    return '<div class="ia-msg '+(isU?'user':'bot')+'"><div class="ia-avatar '+(isU?'user':'bot')+'">'+(isU?'S':'✦')+'</div><div class="ia-bubble">'+m.content+'</div></div>';
+  }).join('');
+  c.scrollTop=c.scrollHeight;
+}
+
+window.iaEnviar=async function(){
+  if(iaLoading) return;
+  var input=document.getElementById('ia-input');
+  var q=input.value.trim(); if(!q) return;
+  input.value=''; iaLoading=true;
+  document.getElementById('ia-send').disabled=true;
+  iaMsgs.push({role:'user',content:q});
+  var c=document.getElementById('ia-msgs');
+  renderIAMsgs();
+  var typing=document.createElement('div');
+  typing.className='ia-msg bot'; typing.id='ia-typing';
+  typing.innerHTML='<div class="ia-avatar bot">✦</div><div class="ia-bubble"><div class="ia-typing"><span></span><span></span><span></span></div></div>';
+  c.appendChild(typing); c.scrollTop=c.scrollHeight;
+  try{
+    var ctx=buildIAContext();
+    var sys='Eres el asistente financiero de Elemental Club, un gimnasio en León, Guanajuato.\n\nDATOS FINANCIEROS (2025-2026):\n'+ctx+'\n\nREGLAS:\n- Responde en español, conciso y directo.\n- Usa formato $X,XXX para cifras.\n- Si piden tablas usa HTML simple con <table>.\n- Señala tendencias, comparativos, alertas.\n- No inventes datos fuera del contexto.';
+    var msgs=[{role:'system',content:sys}].concat(iaMsgs.slice(-12));
+    var resp=await fetch('https://aveonbmcbopqqcambxoi.supabase.co/functions/v1/openai-proxy',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY},
+      body:JSON.stringify({model:'gpt-4o-mini',max_tokens:1500,temperature:.3,messages:msgs})
+    });
+    if(!resp.ok) throw new Error('Error '+resp.status);
+    var data=await resp.json();
+    var txt=data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'Sin respuesta.';
+    iaMsgs.push({role:'assistant',content:txt});
+  }catch(e){ iaMsgs.push({role:'assistant',content:'❌ Error: '+(e.message||'desconocido')}); }
+  var t=document.getElementById('ia-typing'); if(t) t.remove();
+  iaLoading=false; document.getElementById('ia-send').disabled=false;
+  renderIAMsgs();
+};
+
+function buildIAContext(){
+  var ctx='INGRESOS MENSUALES:\n';
+  ctx+='Mes,2025,2026\n';
+  MESES_NOM.forEach(function(m,i){ ctx+=m+','+Math.round(_ing25[i])+','+Math.round(_ing26[i])+'\n'; });
+  ctx+='\nEGRESOS MENSUALES (operativos):\nMes,2025,2026\n';
+  MESES_NOM.forEach(function(m,i){ ctx+=m+','+Math.round(_egr25[i])+','+Math.round(_egr26[i])+'\n'; });
+  ctx+='\nEGRESOS 2026 POR CATEGORÍA:\n';
+  Object.keys(_catEgr26).sort(function(a,b){return _catEgr26[b]-_catEgr26[a];}).forEach(function(k){ ctx+=k+': $'+Math.round(_catEgr26[k])+'\n'; });
+  var curMes=new Date().getMonth();
+  var ytd26=0,ytd25=0,ey26=0,ey25=0;
+  for(var i=0;i<=curMes;i++){ytd26+=_ing26[i];ytd25+=_ing25[i];ey26+=_egr26[i];ey25+=_egr25[i];}
+  ctx+='\nRESUMEN YTD (enero–'+MESES_NOM[curMes]+'):\n';
+  ctx+='Ingresos 2026: $'+Math.round(ytd26)+'\nIngresos 2025: $'+Math.round(ytd25)+'\n';
+  ctx+='Egresos 2026: $'+Math.round(ey26)+'\nEgresos 2025: $'+Math.round(ey25)+'\n';
+  ctx+='Utilidad 2026: $'+Math.round(ytd26-ey26)+'\nUtilidad 2025: $'+Math.round(ytd25-ey25)+'\n';
+  var dp=ytd25>0?((ytd26-ytd25)/ytd25*100).toFixed(1):'N/A';
+  ctx+='Variación YTD ventas: '+dp+'%\n';
+  return ctx;
+}
+</script>
+</body>
+</html>
