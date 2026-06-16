@@ -3238,9 +3238,8 @@
             <table class="mov-tbl">
               <thead>
                 <tr>
-                  <th>Fecha</th><th>Tipo</th><th>Concepto</th>
-                  <th>Categoría</th><th>Cartera</th><th>Empleado</th><th style="text-align:right">Monto</th>
-                  <th></th>
+                  <th>Fecha</th><th>Tipo</th><th style="text-align:right">Monto</th><th>Concepto</th>
+                  <th>Cartera</th><th>Categoría</th><th>Empleado</th><th></th>
                 </tr>
               </thead>
               <tbody id="mov-tbody">
@@ -5503,11 +5502,11 @@
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
-          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
-          + '<td>'+(r.categoria||'—')+'</td>'
-          + '<td>'+(r.cartera||'—')+'</td>'
-          + '<td>'+(r.empleado||'—')+'</td>'
           + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
+          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
+          + '<td>'+(r.cartera||'—')+'</td>'
+          + '<td>'+(r.categoria||'—')+'</td>'
+          + '<td>'+(r.empleado||'—')+'</td>'
           + '<td>'+editBtn+ticketBtnB+'</td>'
           + '</tr>';
       }).join('');
@@ -5571,11 +5570,11 @@
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
-          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
-          + '<td>'+(r.categoria||'—')+'</td>'
-          + '<td>'+(r.cartera||'—')+'</td>'
-          + '<td>'+(r.empleado||'—')+'</td>'
           + '<td class="td-monto '+montoClass+'" style="text-align:right">'+signo+parseFloat(r.monto||0).toLocaleString('es-MX')+'</td>'
+          + '<td style="font-weight:600;color:var(--txt);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(r.concepto||'—')+'</td>'
+          + '<td>'+(r.cartera||'—')+'</td>'
+          + '<td>'+(r.categoria||'—')+'</td>'
+          + '<td>'+(r.empleado||'—')+'</td>'
           + '<td>'+editBtn+ticketBtn+'</td>'
           + '</tr>';
       }).join('');
