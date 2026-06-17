@@ -351,8 +351,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
     </div>
     <div class="la-grid">
       <div class="la-card">
-        <div class="la-card-lbl">Admin</div>
-        <div class="la-card-val">Control total</div>
+        <div class="la-card-lbl">Administrativo</div>
+        <div class="la-card-val">Finanzas</div>
       </div>
       <div class="la-card">
         <div class="la-card-lbl">Staff</div>
@@ -365,9 +365,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
     </div>
   </div>
   <div class="lf">
-    <div class="lf-eye"><div class="pdot"></div> Portal Admin</div>
+    <div class="lf-eye"><div class="pdot"></div> Portal Socios</div>
     <h1 class="lf-h1">ACCESO<br>RESTRINGIDO</h1>
-    <p class="lf-sub">Solo <b>administradores</b> y <b>socios</b> pueden gestionar usuarios.</p>
+    <p class="lf-sub">Solo <b>socios</b> pueden gestionar usuarios y roles.</p>
     <div class="lerr" id="lerr">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f88" stroke-width="2" style="flex-shrink:0"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
       <span id="lerr-txt"></span>
@@ -394,7 +394,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
     </button>
     <div class="lf-foot">
       <p>© 2026 Elemental Club</p>
-      <span class="rol-badge">Admin · Socio</span>
+      <span class="rol-badge">Solo Socios</span>
     </div>
   </div>
 </div>
@@ -438,7 +438,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 
       <!-- KPIs -->
       <div class="kpi-row" id="kpi-row">
-        <div class="kpi" style="--kc:var(--purple)"><div class="kpi-lbl">Admin</div><div class="kpi-val" id="kpi-admin">—</div></div>
+        <div class="kpi" style="--kc:var(--purple)"><div class="kpi-lbl">Administrativo</div><div class="kpi-val" id="kpi-admin">—</div></div>
         <div class="kpi" style="--kc:var(--or)">    <div class="kpi-lbl">Socios</div><div class="kpi-val" id="kpi-socio">—</div></div>
         <div class="kpi" style="--kc:var(--blue)">  <div class="kpi-lbl">Staff</div><div class="kpi-val" id="kpi-staff">—</div></div>
         <div class="kpi" style="--kc:var(--green)"> <div class="kpi-lbl">Visitantes</div><div class="kpi-val" id="kpi-visitante">—</div></div>
@@ -449,7 +449,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         <input class="search-inp" id="usr-search" placeholder="Buscar por nombre o usuario…" oninput="filterUsers()"/>
         <div class="fp-row" id="usr-filter-pills">
           <button class="fp on" onclick="setUsrFilter(this,'all')">Todos</button>
-          <button class="fp" onclick="setUsrFilter(this,'admin')">Admin</button>
+          <button class="fp" onclick="setUsrFilter(this,'admin')">Administrativo</button>
           <button class="fp" onclick="setUsrFilter(this,'socio')">Socio</button>
           <button class="fp" onclick="setUsrFilter(this,'staff')">Staff</button>
           <button class="fp" onclick="setUsrFilter(this,'visitante')">Visitante</button>
@@ -529,8 +529,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         <div class="rol-info-grid" id="rol-cards">
           <div class="rol-card" id="rc-admin" onclick="selectRol('admin')">
             <div class="rol-card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-            <div class="rol-card-name" style="color:#c084fc">Admin</div>
-            <div class="rol-card-desc">Acceso total. Puede gestionar usuarios, finanzas y configuración.</div>
+            <div class="rol-card-name" style="color:#c084fc">Administrativo</div>
+            <div class="rol-card-desc">Acceso al módulo de finanzas: KPIs, saldos y reportes. Sin gestión de usuarios.</div>
           </div>
           <div class="rol-card" id="rc-socio" onclick="selectRol('socio')">
             <div class="rol-card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -655,7 +655,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
             <label>Nuevo rol <span style="color:var(--or)">*</span></label>
             <select id="cr-rol">
               <option value="">— Selecciona —</option>
-              <option value="admin">Admin — Control total</option>
+              <option value="admin">Administrativo — Solo finanzas</option>
               <option value="socio">Socio — Dashboard + Finanzas</option>
               <option value="staff">Staff — Operaciones</option>
               <option value="visitante">Visitante — Solo lectura</option>
@@ -725,7 +725,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         <div class="ff-fld">
           <label>Rol</label>
           <select id="e-rol">
-            <option value="admin">Admin</option>
+            <option value="admin">Administrativo</option>
             <option value="socio">Socio</option>
             <option value="staff">Staff</option>
             <option value="visitante">Visitante</option>
@@ -763,9 +763,9 @@ var rpUserSel    = null;   // usuario seleccionado en reset password
 var crUserSel    = null;   // usuario seleccionado en cambiar rol
 
 /* ══ ROLES ══ */
-var ROL_LABELS = {admin:'Admin',socio:'Socio',staff:'Staff',visitante:'Visitante'};
+var ROL_LABELS = {admin:'Administrativo',socio:'Socio',staff:'Staff',visitante:'Visitante'};
 var ROL_DESCS  = {
-  admin:    'Admin — Acceso total, gestión de usuarios, finanzas, configuración.',
+  admin:    'Administrativo — Acceso al módulo de finanzas: KPIs, saldos de carteras y reportes. Sin gestión de usuarios ni configuración.',
   socio:    'Socio — Dashboard financiero, reportes, movimientos. Sin gestión de usuarios.',
   staff:    'Staff — Operaciones del día: miembros, lockers, movimientos. Sin finanzas avanzadas.',
   visitante:'Visitante — Solo lectura. Ve todo el panel pero no puede registrar ni editar.'
@@ -801,8 +801,8 @@ function doLogin(){
 
 function checkAccess(user, saveLocal){
   var rol = (user.role||user.rol||'').toLowerCase();
-  if(rol!=='admin'&&rol!=='socio'){
-    showLoginErr('Solo administradores y socios pueden acceder a esta página.');
+  if(rol!=='socio'){
+    showLoginErr('Solo socios pueden gestionar usuarios y accesos.');
     return;
   }
   if(saveLocal){
@@ -921,7 +921,7 @@ function rolBadge(rol){
   return '<span class="rb '+cls+'">'+rolIcon(rol)+'&nbsp;'+(ROL_LABELS[rol]||rol)+'</span>';
 }
 function rolIcon(r){
-  return {admin:'A',socio:'S',staff:'St',visitante:'V'}[r]||'·';
+  return {admin:'Ad',socio:'S',staff:'St',visitante:'V'}[r]||'·';
 }
 function escHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1174,7 +1174,7 @@ function cambiarRol(){
   /* Protección: no degradar al único admin */
   if(rolActual==='admin'&&nuevoRol!=='admin'){
     var admins=allUsers.filter(function(u){ return (u.rol||u.role||'').toLowerCase()==='admin'; });
-    if(admins.length<=1){ showMsg('cr-msg','No se puede cambiar el rol del único administrador del sistema.','err'); return; }
+    if(admins.length<=1){ showMsg('cr-msg','No se puede cambiar el rol del único usuario administrativo activo.','err'); return; }
   }
 
   var btn=document.getElementById('btn-cr');
@@ -1272,7 +1272,7 @@ function saveEdit(){
     var rolActual=(u.rol||u.role||'').toLowerCase();
     if(rolActual==='admin'&&rol!=='admin'){
       var admins=allUsers.filter(function(x){ return (x.rol||x.role||'').toLowerCase()==='admin'; });
-      if(admins.length<=1){ showMsg('edit-msg','No puedes quitar el rol admin al único administrador.','err'); return; }
+      if(admins.length<=1){ showMsg('edit-msg','No puedes cambiar el rol del único usuario administrativo activo.','err'); return; }
     }
   }
 
