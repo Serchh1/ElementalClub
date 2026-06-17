@@ -2060,7 +2060,25 @@
     }
 
     /* ── FINANZAS LAYOUT ── */
-    /* CSS fin-grid y kpi eliminados — movidos a finanzas-dashboard.html */
+    /* ── FINANZAS: KPI y grid ── */
+    .fin-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:.75rem; margin-bottom:1.6rem; }
+    @media(max-width:900px){ .fin-grid { grid-template-columns:1fr 1fr; } }
+    @media(max-width:500px){ .fin-grid { grid-template-columns:1fr; } }
+    .kpi {
+      background:var(--s1); border:1px solid var(--s3); border-radius:var(--r);
+      padding:1rem 1.1rem; position:relative; overflow:hidden; transition:border-color .2s;
+    }
+    .kpi:hover { border-color:rgba(255,77,0,.3); }
+    .kpi::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, var(--kpi-col,var(--or)), transparent);
+    }
+    .kpi-lbl { font-size:.58rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--mu); margin-bottom:.4rem; }
+    .kpi-val { font-family:var(--fT); font-size:1.9rem; line-height:1; color:var(--kpi-col,var(--or)); }
+    .kpi-sub { font-size:.65rem; color:var(--mu); margin-top:.3rem; }
+    .kpi-delta { font-size:.65rem; font-weight:700; margin-top:.2rem; }
+    .kpi-delta.pos { color:#22c55e; }
+    .kpi-delta.neg { color:#f87171; }
     .ff-row { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
     @media(max-width:500px){ .ff-row { grid-template-columns:1fr; } }
     .ff-fld label {
@@ -2212,6 +2230,20 @@
     }
     .ia-locked-ico { font-size:2rem; opacity:.2; }
     .ia-locked p { font-size:.75rem; color:var(--mu); max-width:260px; line-height:1.6; }
+
+    /* ── MODO VISITANTE ── */
+    #visitor-banner {
+      display:none; position:sticky; top:60px; z-index:490;
+      background:rgba(34,197,94,.07); border-bottom:1px solid rgba(34,197,94,.16);
+      padding:.46rem 1.4rem; font-size:.64rem; font-weight:700; letter-spacing:.14em;
+      text-transform:uppercase; color:rgba(34,197,94,.7);
+      align-items:center; gap:.55rem;
+    }
+    #visitor-banner .vb-dot {
+      width:7px; height:7px; border-radius:50%; background:#4ade80;
+      flex-shrink:0; animation:ping 2s ease infinite;
+    }
+    .visitor-action-blocked { pointer-events:none !important; opacity:.32 !important; cursor:not-allowed !important; }
 
     /* ── TIPO SELECTOR ── */
     .fin-tipo-row {
@@ -2542,7 +2574,7 @@
       <div id="login-form">
         <div class="fld">
           <label for="l-u">Usuario / Email</label>
-          <div class="fli"><span class="fli-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input id="l-u" type="text" placeholder="tu.usuario"
+          <div class="fli"><span class="fli-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input id="l-u" type="text" placeholder="nombre_elementalstaff"
               autocomplete="username" required /></div>
         </div>
         <div class="fld">
@@ -2574,6 +2606,20 @@
       <div class="t-right">
         <div class="t-av" id="t-av">?</div>
         <span class="t-name" id="t-name"></span>
+        <a id="link-usuarios" href="user-management.html" target="_blank"
+          style="display:none;align-items:center;gap:.4rem;
+                 background:var(--s2);border:1px solid var(--s3);
+                 color:rgba(255,255,255,.5);
+                 padding:.38rem .9rem;
+                 font-family:var(--fB);font-size:.65rem;font-weight:700;
+                 letter-spacing:.12em;text-transform:uppercase;
+                 border-radius:var(--r);text-decoration:none;white-space:nowrap;
+                 transition:all .2s;"
+          onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'"
+          onmouseout="this.style.borderColor='var(--s3)';this.style.color='rgba(255,255,255,.5)'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Usuarios
+        </a>
         <a id="link-dashboard" href="finanzas-dashboard.html" target="_blank"
           style="display:none;align-items:center;gap:.45rem;
                  background:var(--or);color:#fff;
@@ -2593,12 +2639,18 @@
         <button class="btn-out" onclick="doLogout()">Salir</button>
       </div>
     </header>
+    <!-- Banner modo visitante -->
+    <div id="visitor-banner">
+      <span class="vb-dot"></span>
+      Modo visitante — Solo lectura. No puedes registrar ni editar ningún dato.
+    </div>
     <nav class="panel-tabs">
       <button class="ptab on" onclick="switchTab('inicio',this)">Inicio</button>
       <button class="ptab" onclick="switchTab('miembros',this)">Miembros</button>
       <button class="ptab" onclick="switchTab('horarios',this)">Horarios y Clases</button>
       <button class="ptab" onclick="switchTab('accesos',this)">Accesos Portal</button>
       <button class="ptab" onclick="switchTab('movimientos',this)">Movimientos</button>
+      <button class="ptab" id="tab-btn-finanzas" style="display:none" onclick="switchTab('finanzas',this)">Finanzas</button>
       <button class="ptab" onclick="switchTab('lockers',this)">Lockers</button>
     </nav>
     <div class="pbody">
@@ -2834,7 +2886,7 @@
         <!-- VERIFICAR -->
         <div style="margin-top:1.5rem;background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);overflow:hidden">
           <div style="padding:.85rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;gap:.6rem">
-            <span style="color:var(--or);font-weight:800">✦</span>
+            <span style="color:var(--or);font-weight:800">+</span>
             <span style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase">Verificar Estado de Cuenta</span>
           </div>
           <div style="padding:1.2rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end">
@@ -2860,7 +2912,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
             </div>
             <div>
-              <div class="cc-widget-lbl">Caja Chica · Balance histórico</div>
+              <div class="cc-widget-lbl" id="cc-widget-lbl">Todas las carteras · Saldo histórico</div>
               <div class="cc-widget-val" id="cc-saldo">
                 <span class="cc-loading">Calculando…</span>
               </div>
@@ -3018,10 +3070,7 @@
 
                 <!-- Bloque de éxito + botón ticket PDF -->
             <div id="ing-ticket-whatsapp-bloque" style="display:none;background:rgba(255,77,0,0.06);border:1px dashed rgba(255,77,0,0.3);border-radius:var(--r);padding:1.2rem;margin-top:1rem;text-align:center;">
-              <div style="color:var(--or);font-size:.82rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:15px;height:15px;fill:var(--or)"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                Ingreso registrado correctamente
-              </div>
+              <div style="color:var(--or);font-size:.82rem;font-weight:700;margin-bottom:0.75rem;">Ingreso registrado</div>
               <button id="btn-ticket-whatsapp" style="background:var(--or);color:#fff;border:none;margin:0 auto;display:inline-flex;align-items:center;gap:0.6rem;padding:0.65rem 1.4rem;font-size:0.78rem;font-weight:800;border-radius:var(--r);cursor:pointer;letter-spacing:.12em;text-transform:uppercase;font-family:var(--fB);clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;" onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 Generar Ticket PDF
@@ -3251,6 +3300,52 @@
 
       </div><!-- /tab-movimientos -->
 
+      <!-- TAB FINANZAS (solo admin y visitante) -->
+      <div id="tab-finanzas" class="tab-pane">
+
+        <!-- RESUMEN MENSUAL -->
+        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN MENSUAL</h3><div class="ln"></div>
+          <select id="fin-mes-sel" onchange="finCambiarMes(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div class="fin-grid" id="fin-kpis" style="margin-bottom:2rem;">
+          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos del mes</div><div class="kpi-val" id="kpi-ing">—</div><div class="kpi-sub" id="kpi-ing-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos del mes</div><div class="kpi-val" id="kpi-egr">—</div><div class="kpi-sub" id="kpi-egr-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-neto">—</div><div class="kpi-delta" id="kpi-neto-delta"></div></div>
+          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
+        </div>
+
+        <!-- RESUMEN SEMANAL -->
+        <div class="seh" style="margin-top:.5rem"><h3>RESUMEN SEMANAL</h3><div class="ln"></div>
+          <select id="fin-sem-sel" onchange="finCambiarSemana(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div class="fin-grid" id="fin-kpis-sem" style="margin-bottom:1rem;">
+          <div class="kpi" style="--kpi-col:#4ade80"><div class="kpi-lbl">Ingresos semana</div><div class="kpi-val" id="kpi-sem-ing">—</div><div class="kpi-sub" id="kpi-sem-ing-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#f87171"><div class="kpi-lbl">Egresos semana</div><div class="kpi-val" id="kpi-sem-egr">—</div><div class="kpi-sub" id="kpi-sem-egr-sub">cargando...</div></div>
+          <div class="kpi" style="--kpi-col:#60a5fa"><div class="kpi-lbl">Flujo neto</div><div class="kpi-val" id="kpi-sem-neto">—</div><div class="kpi-delta" id="kpi-sem-neto-delta"></div></div>
+          <div class="kpi" style="--kpi-col:#fbbf24"><div class="kpi-lbl">Margen</div><div class="kpi-val" id="kpi-sem-margen">—</div><div class="kpi-sub">ingresos − egresos / ingresos</div></div>
+        </div>
+
+        <!-- DESGLOSE CARTERAS SEMANA -->
+        <div style="background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);padding:1rem;margin-bottom:2rem;">
+          <h4 style="font-size:.65rem;color:var(--mu);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em;">Ingresos por cartera (Semana)</h4>
+          <div id="kpi-sem-carteras" style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);">Cargando desglose...</div>
+          </div>
+        </div>
+
+        <!-- SALDOS POR CARTERA -->
+        <div class="seh" style="flex-wrap:wrap;row-gap:.5rem;"><h3>SALDOS POR CARTERA</h3><div class="ln"></div>
+          <select id="fin-cartera-mes-sel" onchange="cargarSaldosCartera(this.value)"
+            style="background:var(--bg);border:1.5px solid var(--s3);padding:.4rem .8rem;color:var(--txt);font-size:.72rem;border-radius:var(--r);outline:none;cursor:pointer;appearance:none;margin-left:.75rem"></select>
+        </div>
+        <div id="saldos-carteras-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin-bottom:2rem;">
+          <div style="padding:2rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Cargando saldos...</div>
+        </div>
+
+      </div><!-- /tab-finanzas -->
+
       <!-- ══════════════════════════════════════════
            TAB LOCKERS
       ══════════════════════════════════════════ -->
@@ -3260,7 +3355,7 @@
           <!-- Alerta vencimientos -->
           <div id="lk-alert-band" style="display:none;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-left:3px solid #fbbf24;padding:.75rem 1.1rem;border-radius:5px;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
             <div style="display:flex;align-items:center;gap:.7rem;">
-              <span style="color:#fbbf24;font-size:1rem;">⚠</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span id="lk-alert-txt" style="font-size:.75rem;font-weight:600;color:rgba(255,255,255,.8);"></span>
             </div>
             <button onclick="document.getElementById('lk-alert-band').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:.85rem;">✕</button>
@@ -3463,9 +3558,9 @@
               <div class="pg-grid">
                 <div class="pg on" data-pg="efectivo" onclick="selPagoBtn(this)"><span class="pg-ico">$</span><span
                     class="pg-lbl">Efectivo</span></div>
-                <div class="pg" data-pg="tarjeta" onclick="selPagoBtn(this)"><span class="pg-ico">✦</span><span
+                <div class="pg" data-pg="tarjeta" onclick="selPagoBtn(this)"><span class="pg-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><span
                     class="pg-lbl">Tarjeta</span></div>
-                <div class="pg" data-pg="transferencia" onclick="selPagoBtn(this)"><span class="pg-ico">✦</span><span
+                <div class="pg" data-pg="transferencia" onclick="selPagoBtn(this)"><span class="pg-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span
                     class="pg-lbl">Transferencia</span></div>
               </div>
             </div>
@@ -3510,13 +3605,13 @@
         <div class="mfoot">
           <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
           <span class="min-note" id="min-note">Mín. 3 fotos requeridas</span>
-          <button class="btn-save" id="btn-save" onclick="saveReg()" disabled>✓ REGISTRAR MIEMBRO</button>
+          <button class="btn-save" id="btn-save" onclick="saveReg()" disabled>REGISTRAR MIEMBRO</button>
         </div>
       </div>
 
       <!-- success -->
       <div class="msuc" id="m-suc">
-        <div class="ms-ico">✓</div>
+        <div class="ms-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
         <h2 class="ms-title">¡REGISTRADO!</h2>
         <p class="ms-sub">El miembro fue registrado exitosamente y ya puede acceder al gym.</p>
         <div class="ms-det" id="ms-det"></div>
@@ -3540,7 +3635,7 @@
           <div>
             <div class="slbl">Información de la Clase</div>
             <div class="mfld"><label>Nombre de la Clase <span class="req">*</span></label>
-              <div class="mfi"><span class="mfi-i">✦</span><input type="text" id="class-nom" placeholder="CrossFit"
+              <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span><input type="text" id="class-nom" placeholder="CrossFit"
                   required /></div>
             </div>
 
@@ -3604,7 +3699,7 @@
         </div>
         <div class="slbl" style="margin-top:1rem">Membresía</div>
         <div class="mfld"><label>Tipo de membresía</label>
-          <div class="mfi"><span class="mfi-i">✦</span>
+          <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
             <select id="ed-plan">
               <option value="subbasica">Subbásica</option>
               <option value="basica">Básica</option>
@@ -3616,7 +3711,7 @@
           </div>
         </div>
         <div class="mfld"><label>Estado</label>
-          <div class="mfi"><span class="mfi-i">✦</span>
+          <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
             <select id="ed-status">
               <option value="active">Activo</option>
               <option value="inactive">Inactivo</option>
@@ -3626,7 +3721,7 @@
           </div>
         </div>
         <div class="mfld"><label>Fecha de vencimiento</label>
-          <div class="mfi"><span class="mfi-i">✦</span><input type="date" id="ed-expires" style="padding-left:2.35rem" /></div>
+          <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span><input type="date" id="ed-expires" style="padding-left:2.35rem" /></div>
         </div>
         <div class="mfld"><label>Observaciones</label>
           <input type="text" id="ed-obs" style="padding:.73rem .85rem;width:100%;background:var(--bg);border:1.5px solid var(--s3);color:var(--txt);font-size:.85rem;border-radius:var(--r);outline:none" />
@@ -3670,12 +3765,12 @@
 
     /* ── PLAN DATA ── */
     var PLAN_TYPES = [
-      { id: 'subbasica', ico: '✦', nm: 'Subbásica' },
-      { id: 'basica',    ico: '✦', nm: 'Básica'    },
-      { id: 'training',  ico: '✦', nm: 'Training'   },
+      { id: 'subbasica', ico: '', nm: 'Subbásica' },
+      { id: 'basica',    ico: '', nm: 'Básica'    },
+      { id: 'training',  ico: '', nm: 'Training'   },
       { id: 'prime',     ico: '★', nm: 'Prime'      },
-      { id: 'vip',       ico: '♛', nm: 'VIP'        },
-      { id: 'visita',    ico: '✦', nm: 'Visita'     },
+      { id: 'vip',       ico: '', nm: 'VIP'        },
+      { id: 'visita',    ico: '', nm: 'Visita'     },
     ];
     var PRECIOS = {
       subbasica: { mensual: 1000,  trimestral: 2850,  semestral: 5400,  anual: 10200 },
@@ -3774,7 +3869,8 @@
           return {
             name: emp.name || emp.nombre || u,
             email: emp.email || u,
-            role: emp.role || emp.rol || 'staff',
+            role: emp.rol || 'staff',
+            rol:  emp.rol || 'staff',
             id: emp.id,
             empId: emp.id,
             username: u,
@@ -3814,10 +3910,18 @@
       showScr('panel');
       loadStats();
       cargarCajaChica();
-      // Mostrar link al dashboard solo a socios y admin
+      // Mostrar links según rol
       var _rol = String(user.role || user.rol || '').toLowerCase();
       var linkDash = document.getElementById('link-dashboard');
       if(linkDash) linkDash.style.display = (_rol==='socio'||_rol==='admin') ? 'inline-flex' : 'none';
+      // Link gestión de usuarios: solo admin y socio
+      var linkUsr = document.getElementById('link-usuarios');
+      if(linkUsr) linkUsr.style.display = (_rol==='admin'||_rol==='socio') ? 'inline-flex' : 'none';
+      // Tab Finanzas: solo admin y visitante
+      var finTabBtn = document.getElementById('tab-btn-finanzas');
+      if(finTabBtn) finTabBtn.style.display = (_rol==='admin'||_rol==='visitante') ? '' : 'none';
+      // Modo visitante: solo lectura
+      if(_rol === 'visitante') activarModoVisitante();
       setInterval(cargarCajaChica, 180000);
       // Cargar carteras activas desde BD
       cargarCarterasActivas().catch(function(err) {
@@ -3834,6 +3938,10 @@
       showScr('login');
       var _ld = document.getElementById('link-dashboard');
       if(_ld) _ld.style.display = 'none';
+      var _lu = document.getElementById('link-usuarios');
+      if(_lu) _lu.style.display = 'none';
+      var _vb = document.getElementById('visitor-banner');
+      if(_vb) _vb.style.display = 'none';
       document.getElementById('l-u').value = '';
       document.getElementById('l-p').value = '';
     }
@@ -3938,6 +4046,17 @@
       if (id === 'miembros' && !membersLoaded) loadMembers();
       if (id === 'movimientos') { finInit(); cargarCarterasActivas(); }
       if (id === 'lockers') { window.lkInit(); }
+      if (id === 'finanzas') {
+        poblarMeses();
+        poblarSemanas();
+        if(!finMes) finMes = new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+        cargarKPIs(finMes);
+        cargarCarterasActivas().then(function(){
+          cargarSaldosCartera();
+        }).catch(function(){
+          cargarSaldosCartera();
+        });
+      }
     }
 
     function goToHorarios() {
@@ -4357,7 +4476,7 @@
 
       var ppt = document.getElementById('pp-txt');
       if (ppt) {
-        if (n >= 3) { ppt.textContent = n >= 5 ? '✓ Excelente' : '✓ Listo'; ppt.className = 'pp-txt green'; }
+        if (n >= 3) { ppt.textContent = n >= 5 ? 'Excelente' : 'Listo'; ppt.className = 'pp-txt green'; }
         else { ppt.textContent = 'Faltan ' + (3 - n); ppt.className = 'pp-txt'; }
       }
 
@@ -4373,7 +4492,7 @@
       if (btn) btn.disabled = !ok;
       var note = document.getElementById('min-note');
       if (note) {
-        if (ok) { note.textContent = '✓ Todo listo'; note.className = 'min-note green'; }
+        if (ok) { note.textContent = 'Listo'; note.className = 'min-note green'; }
         else if (photos.length < 3) { note.textContent = 'Mín. 3 fotos requeridas'; note.className = 'min-note'; }
         else { note.textContent = 'Completa nombre y teléfono'; note.className = 'min-note'; }
       }
@@ -4407,7 +4526,7 @@
       if (!window.supabase) {
         alert('Supabase no está configurado. Verifica js/supabase-config.js');
         btn.disabled = false;
-        btn.textContent = '✓ REGISTRAR MIEMBRO';
+        btn.textContent = 'REGISTRAR MIEMBRO';
         return;
       }
 
@@ -4459,7 +4578,7 @@
         .catch(function (err) {
           alert('Error al registrar: ' + err.message);
           btn.disabled = false;
-          btn.textContent = '✓ REGISTRAR MIEMBRO';
+          btn.textContent = 'REGISTRAR MIEMBRO';
         });
     }
 
@@ -4471,7 +4590,7 @@
         '<div class="ms-row"><span class="ms-k">ID</span><span class="ms-v or">#' + client.id + '</span></div>' +
         '<div class="ms-row"><span class="ms-k">Plan</span><span class="ms-v">' + planNm + ' — $' + precio.toLocaleString() + '</span></div>' +
         '<div class="ms-row"><span class="ms-k">Válido hasta</span><span class="ms-v" style="color:#22c55e">' + expires.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }) + '</span></div>' +
-        '<div class="ms-row"><span class="ms-k">Fotos</span><span class="ms-v" style="color:#22c55e">✓ ' + photos.length + ' capturadas</span></div>';
+        '<div class="ms-row"><span class="ms-k">Fotos</span><span class="ms-v" style="color:#22c55e">' + photos.length + ' capturadas</span></div>';
       document.getElementById('m-suc').classList.add('on');
     }
   
@@ -4520,7 +4639,7 @@
             document.getElementById('ac-preview-name').textContent=r.data.first_name+' '+r.data.last_name1;
             document.getElementById('ac-preview-plan').textContent=(r.data.membership_type||'Sin plan')+' · Vence: '+exp;
             document.getElementById('ac-preview-status').innerHTML=r.data.membership_status==='active'
-              ?'<span style="color:#4ade80;font-size:.65rem;font-weight:700">✓ Membresía activa</span>'
+              ?'<span style="color:#4ade80;font-size:.65rem;font-weight:700">Membresía activa</span>'
               :'<span style="color:#f87171;font-size:.65rem;font-weight:700">✗ Membresía inactiva</span>';
             document.getElementById('ac-preview').style.display='block';
             document.getElementById('btn-ac-crear').disabled=false;
@@ -4537,7 +4656,7 @@
         return adminFetch('/auth/v1/admin/users','POST',{email:phone+'@elemental.local',password:pass,email_confirm:true})
           .then(function(d){
             if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error desconocido');
-            acMsg('ac-msg','✓ Acceso creado. Contraseña: '+pass+' (copiada al portapapeles)','ok');
+            acMsg('ac-msg','Acceso creado. Contraseña: '+pass+' (copiada al portapapeles)','ok');
             if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
             document.getElementById('ac-phone').value=''; document.getElementById('ac-pass').value='';
             document.getElementById('ac-preview').style.display='none'; acMember=null;
@@ -4561,7 +4680,7 @@
             if(!r.data){document.getElementById('rp-not-found').style.display='block';return;}
             rpMember=r.data;
             document.getElementById('rp-preview-name').textContent=r.data.first_name+' '+r.data.last_name1;
-            document.getElementById('rp-preview-status').textContent=(r.data.membership_type||'Sin plan')+' · '+(r.data.membership_status==='active'?'✓ Activo':'✗ Inactivo');
+            document.getElementById('rp-preview-status').textContent=(r.data.membership_type||'Sin plan')+' · '+(r.data.membership_status==='active'?'Activo':'Inactivo');
             document.getElementById('rp-preview').style.display='block';
             findAuthUser(p).then(function(u){
               if(!u){document.getElementById('rp-no-account').style.display='block';return;}
@@ -4580,14 +4699,14 @@
           return adminFetch('/auth/v1/admin/users','POST',{email:phone+'@elemental.local',password:pass,email_confirm:true})
             .then(function(d){
               if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error');
-              acMsg('rp-msg','✓ Cuenta creada con contraseña: '+pass+' (copiada)','ok');
+              acMsg('rp-msg','Cuenta creada con contraseña: '+pass+' (copiada)','ok');
               if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
             });
         }
         return adminFetch('/auth/v1/admin/users/'+u.id,'PUT',{password:pass})
           .then(function(d){
             if(d.error||d.msg)throw new Error(d.error||d.msg||d.message||'Error');
-            acMsg('rp-msg','✓ Contraseña actualizada: '+pass+' (copiada)','ok');
+            acMsg('rp-msg','Contraseña actualizada: '+pass+' (copiada)','ok');
             if(navigator.clipboard)navigator.clipboard.writeText(pass).catch(function(){});
             document.getElementById('rp-phone').value=''; document.getElementById('rp-pass').value='';
             document.getElementById('rp-preview').style.display='none'; rpMember=null;
@@ -4610,7 +4729,7 @@
         var exp=m.membership_expires?new Date(m.membership_expires).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'N/A';
         var isActive=m.membership_status==='active', hasAuth=!!authUser;
         var badge=hasAuth
-          ?'<span style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80;font-size:.62rem;font-weight:800;padding:.2rem .6rem">✓ Tiene acceso portal</span>'
+          ?'<span style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80;font-size:.62rem;font-weight:800;padding:.2rem .6rem">Tiene acceso portal</span>'
           :'<span style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;font-size:.62rem;font-weight:800;padding:.2rem .6rem">✗ Sin cuenta portal</span>';
         res.innerHTML='<div style="background:var(--s2);border:1px solid var(--s3);border-radius:var(--r);padding:1rem 1.2rem">'+
           '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem"><span style="font-size:.9rem;font-weight:800">'+m.first_name+' '+m.last_name1+'</span>'+badge+'</div>'+
@@ -5093,7 +5212,7 @@
         observaciones: obs || null, mes: parseInt(fecha.split('-')[1])
       }]).then(function(r){
         if(r.error) throw r.error;
-        showFinMsg('fin-form-msg','✓ Egreso registrado correctamente','ok');
+        showFinMsg('fin-form-msg','Egreso registrado correctamente','ok');
         ['egr-titulo','egr-monto','egr-obs'].forEach(function(id){ document.getElementById(id).value=''; });
         document.getElementById('egr-categoria').value = '';
         cargarMovimientos();
@@ -5124,7 +5243,7 @@
         usuario: usuarioActual() || null
       }]).then(function(r){
         if(r.error) throw r.error;
-        showFinMsg('fin-form-msg','✓ Traspaso registrado correctamente','ok');
+        showFinMsg('fin-form-msg','Traspaso registrado correctamente','ok');
         ['trp-cantidad','trp-titulo'].forEach(function(id){ document.getElementById(id).value=''; });
         document.getElementById('trp-salida').value = '';
         document.getElementById('trp-entrada').value = '';
@@ -5141,50 +5260,149 @@
       setTimeout(function(){ el.style.display='none'; }, 4000);
     }
 
+    // ── MODO VISITANTE ──────────────────────────────────────────
+    function activarModoVisitante() {
+      var banner = document.getElementById('visitor-banner');
+      if(banner) banner.style.display = 'flex';
+
+      // Deshabilitar todas las acciones de escritura
+      window.registrarIngreso              = function(){ alertVisitor(); };
+      window.registrarIngresoConMembresia  = function(){ alertVisitor(); };
+      window.registrarEgreso               = function(){ alertVisitor(); };
+      window.registrarTraspaso             = function(){ alertVisitor(); };
+      window.saveReg                       = function(){ alertVisitor(); };
+      window.saveEditMember                = function(){ alertVisitor(); };
+      window.lkRegistrar                   = function(){ alertVisitor(); };
+      window.lkAbrirConfirmacion           = function(){ alertVisitor(); };
+      window.lkEjecutarLiberar             = function(){ alertVisitor(); };
+      window.acCrear                       = function(){ alertVisitor(); };
+      window.rpReset                       = function(){ alertVisitor(); };
+      window.exportarExcel                 = function(){ alertVisitor(); };
+
+      // Bloquear botones de acción visualmente después de renderizar cada tab
+      document.addEventListener('click', function(e) {
+        var sel = [
+          '.fin-btn','.btn-save','#btn-save','#lk-btn-registrar',
+          '#btn-ac-crear','#btn-rp','[onclick^="registrar"]',
+          '[onclick^="saveReg"]','[onclick^="saveEdit"]',
+          '[onclick^="lkAbrirConfirmacion"]','[onclick^="lkEjecutarLiberar"]',
+          '[onclick^="acCrear"]','[onclick^="rpReset"]',
+          '[onclick^="exportarExcel"]'
+        ].join(',');
+        if(e.target.closest(sel)){
+          e.preventDefault(); e.stopImmediatePropagation();
+          alertVisitor();
+        }
+      }, true);
+    }
+
+    function alertVisitor() {
+      // Evitar apilar múltiples toasts
+      if(document.getElementById('visitor-toast')) return;
+      var t = document.createElement('div');
+      t.id = 'visitor-toast';
+      t.textContent = 'Modo visitante — Sin permisos para realizar esta acción';
+      t.style.cssText = 'position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%);'
+        + 'background:rgba(9,9,9,.96);border:1px solid rgba(34,197,94,.35);'
+        + 'color:#4ade80;padding:.62rem 1.4rem;font-family:var(--fB);font-size:.72rem;'
+        + 'font-weight:700;letter-spacing:.08em;z-index:9999;'
+        + 'border-radius:5px;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.55);'
+        + 'animation:fadeUp .25s ease;';
+      document.body.appendChild(t);
+      setTimeout(function(){ t.remove(); }, 2800);
+    }
+
     // ── CAJA CHICA ──────────────────────────────────────────────
     function cargarCajaChica() {
       if(!window.supabase) return;
       var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-      // Histórico acumulado (sin filtro de fecha) + desglose de hoy en paralelo
+
+      // Traer TODOS los registros históricos de las 3 tablas (sin filtro de cartera)
+      // más el desglose de hoy para Caja chica (derecha del widget)
       Promise.all([
-        window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').limit(10000),
-        window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').limit(10000),
-        window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').limit(10000),
+        window.supabase.from('ingresos').select('monto,cartera').limit(50000),
+        window.supabase.from('egresos').select('monto,cartera').limit(50000),
+        window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').limit(50000),
         window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
         window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
         window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').eq('fecha', hoy)
       ]).then(function(res) {
-        // ── Saldo histórico acumulado ──
-        var ingsAll = res[0].data || [], egrsAll = res[1].data || [], trpsAll = res[2].data || [];
-        var totalIngAll = ingsAll.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
-        var totalEgrAll = egrsAll.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
-        var trpEntraAll = trpsAll.filter(function(t){ return t.entrada_en==='Caja chica'; })
-                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
-        var trpSaleAll  = trpsAll.filter(function(t){ return t.salida_de==='Caja chica'; })
-                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
-        var saldoHistorico = totalIngAll - totalEgrAll + trpEntraAll - trpSaleAll;
+        var ingsAll  = res[0].data || [];
+        var egrsAll  = res[1].data || [];
+        var trpsAll  = res[2].data || [];
 
-        // ── Desglose de hoy (derecha del widget) ──
-        var ingsHoy = res[3].data || [], egrsHoy = res[4].data || [], trpsHoy = res[5].data || [];
+        // ── Saldo por cartera ──
+        var CARTERAS_ACTIVAS = ['Caja chica','Alfonso Mercado','alfonso mercado','Stripe','Resguardo'];
+        var saldos = {};
+        CARTERAS_ACTIVAS.forEach(function(c){ saldos[c] = 0; });
+
+        // Normalizar nombres de cartera para agrupar variantes
+        function normCartera(c){
+          if(!c) return null;
+          var l = c.toLowerCase().trim();
+          if(l === 'caja chica')    return 'Caja chica';
+          if(l === 'alfonso mercado') return 'Alfonso Mercado';
+          if(l === 'stripe')        return 'Stripe';
+          if(l === 'resguardo')     return 'Resguardo';
+          return c; // cartera desconocida — incluir igual
+        }
+
+        // Sumar ingresos por cartera
+        ingsAll.forEach(function(r){
+          var c = normCartera(r.cartera);
+          if(c){ saldos[c] = (saldos[c]||0) + parseFloat(r.monto||0); }
+        });
+        // Restar egresos por cartera
+        egrsAll.forEach(function(r){
+          var c = normCartera(r.cartera);
+          if(c){ saldos[c] = (saldos[c]||0) - parseFloat(r.monto||0); }
+        });
+        // Traspasos: restar de origen, sumar a destino
+        trpsAll.forEach(function(t){
+          var sale   = normCartera(t.salida_de);
+          var entra  = normCartera(t.entrada_en);
+          var cant   = parseFloat(t.cantidad||0);
+          if(sale)  { saldos[sale]  = (saldos[sale]  || 0) - cant; }
+          if(entra) { saldos[entra] = (saldos[entra] || 0) + cant; }
+        });
+
+        // Saldo total sumando todas las carteras conocidas
+        var saldoTotal = 0;
+        Object.values(saldos).forEach(function(v){ saldoTotal += v; });
+
+        // ── Desglose de hoy — Caja Chica (derecha) ──
+        var ingsHoy  = res[3].data || [];
+        var egrsHoy  = res[4].data || [];
+        var trpsHoy  = res[5].data || [];
         var totalIngHoy = ingsHoy.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
         var totalEgrHoy = egrsHoy.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
-        var trpEntraHoy = trpsHoy.filter(function(t){ return t.entrada_en==='Caja chica'; })
-                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
-        var trpSaleHoy  = trpsHoy.filter(function(t){ return t.salida_de==='Caja chica'; })
-                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var trpEntraHoy = trpsHoy.filter(function(t){ return normCartera(t.entrada_en)==='Caja chica'; })
+                                  .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var trpSaleHoy  = trpsHoy.filter(function(t){ return normCartera(t.salida_de)==='Caja chica'; })
+                                  .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
         var totalTrpHoy = trpEntraHoy - trpSaleHoy;
 
         var ahora = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
         var saldoEl = document.getElementById('cc-saldo');
         if(!saldoEl) return;
 
-        // Mostrar balance histórico a la izquierda
-        saldoEl.textContent = '$' + Math.round(saldoHistorico).toLocaleString('es-MX');
-        saldoEl.style.color = saldoHistorico >= 0 ? '#fbbf24' : '#f87171';
-        document.getElementById('cc-sub').textContent = 'Acumulado desde el primer registro';
+        // Mostrar saldo total de todas las carteras
+        saldoEl.textContent = '$' + Math.round(saldoTotal).toLocaleString('es-MX');
+        saldoEl.style.color = saldoTotal >= 0 ? '#fbbf24' : '#f87171';
+
+        // Subtítulo con desglose por cartera
+        var desglose = Object.keys(saldos)
+          .filter(function(c){ return saldos[c] !== 0; })
+          .map(function(c){
+            var v = Math.round(saldos[c]);
+            return c.split(' ')[0]+': '+(v>=0?'+':'')+v.toLocaleString('es-MX');
+          }).join(' · ');
+        var lbl = document.getElementById('cc-widget-lbl');
+        if(lbl) lbl.textContent = 'Todas las carteras · Saldo histórico';
+        document.getElementById('cc-sub').textContent = desglose || 'Sin movimientos';
         document.getElementById('cc-ts').textContent  = 'Actualizado a las ' + ahora;
 
-        // Desglose de HOY a la derecha (sin cambios)
+        // Desglose de HOY — Caja Chica (sin cambio, mantiene comportamiento previo)
         document.getElementById('cc-ing').textContent = '+$'+Math.round(totalIngHoy).toLocaleString('es-MX');
         document.getElementById('cc-egr').textContent = '-$'+Math.round(totalEgrHoy).toLocaleString('es-MX');
         var trpEl = document.getElementById('cc-trp');
@@ -5290,7 +5508,7 @@
 
       document.getElementById('diff-content').innerHTML = hayDiffs
         ? '<table class="diff-table"><thead><tr><th>Campo</th><th>Valor anterior</th><th>Valor nuevo</th></tr></thead><tbody>'+rows+'</tbody></table>'
-        : '<div class="diff-no-change">⚠️ Sin cambios. Modifica al menos un campo.</div>';
+        : '<div class="diff-no-change">Sin cambios. Modifica al menos un campo.</div>';
 
       document.getElementById('btn-confirm-save').disabled = !hayDiffs;
       document.getElementById('mov-confirm-overlay').classList.add('on');
@@ -5341,7 +5559,7 @@
           cargarCajaChica();
         })
         .catch(function(e) { alert('Error: ' + e.message); })
-        .finally(function() { saveBtn.disabled=false; saveBtn.textContent='✓ Confirmar cambios'; });
+        .finally(function() { saveBtn.disabled=false; saveBtn.textContent='Confirmar cambios'; });
     };
 
     // ── BUSCADOR DE MOVIMIENTOS ──────────────────────────────
@@ -5592,57 +5810,57 @@
     /* ── Carga carteras activas desde Supabase ── */
     function cargarCarterasActivas() {
       if (!window.supabase) {
-        console.warn('⚠️  Supabase no disponible');
+        console.warn('  Supabase no disponible');
         return Promise.resolve([]);
       }
       
-      console.log('🔄 Iniciando carga de carteras desde Supabase...');
+      console.log(' Iniciando carga de carteras desde Supabase...');
       
       // Primero intentar obtener TODAS las carteras para diagnosticar
       return window.supabase.from('carteras')
         .select('*')
         .then(function(r) {
-          console.log('📡 Respuesta completa de Supabase:', r);
+          console.log(' Respuesta completa de Supabase:', r);
           
           if (r.error) {
-            console.error('❌ Error obteniendo carteras:', r.error);
+            console.error(' Error obteniendo carteras:', r.error);
             return [];
           }
           
           if (!r.data || r.data.length === 0) {
-            console.warn('⚠️  No hay datos retornados. Probablemente problema de RLS o permisos');
-            console.log('📋 Intenta desactivar RLS en la tabla "carteras" en Supabase');
+            console.warn('  No hay datos retornados. Probablemente problema de RLS o permisos');
+            console.log(' Intenta desactivar RLS en la tabla "carteras" en Supabase');
             return [];
           }
           
-          console.log('✅ Total de carteras en BD:', r.data.length);
-          console.log('📊 Estructura de datos:', r.data[0]);
-          console.log('📋 Todas las carteras:', r.data);
+          console.log(' Total de carteras en BD:', r.data.length);
+          console.log(' Estructura de datos:', r.data[0]);
+          console.log(' Todas las carteras:', r.data);
           
           // Filtrar solo carteras con activa = true (boolean estricto)
           var filtered = r.data.filter(function(c) {
             return c.activa === true || c.activa === 'true' || c.activa === 1;
           });
           
-          console.log('✅ Carteras activas después de filtrar:', filtered.length);
-          console.log('📋 Carteras activas:', filtered.map(function(c){ return {nombre: c.nombre, activa: c.activa}; }));
+          console.log(' Carteras activas después de filtrar:', filtered.length);
+          console.log(' Carteras activas:', filtered.map(function(c){ return {nombre: c.nombre, activa: c.activa}; }));
           
           var names = filtered.map(function(c){ return c.nombre; }).sort();
           
           if (names.length === 0) {
-            console.warn('⚠️  No hay carteras con activa=true (0 resultados)');
-            console.log('📋 Resumen de carteras:', r.data.map(function(c) { return {nombre: c.nombre, activa: c.activa}; }));
+            console.warn('  No hay carteras con activa=true (0 resultados)');
+            console.log(' Resumen de carteras:', r.data.map(function(c) { return {nombre: c.nombre, activa: c.activa}; }));
             return [];
           }
           
           CARTERAS_LIST = names;
           poblarSelectsCarteras(names);
-          console.log('✅ Carteras activas cargadas correctamente:', names);
+          console.log(' Carteras activas cargadas correctamente:', names);
           return names;
         })
         .catch(function(err) {
-          console.error('❌ Error al cargar carteras desde Supabase:', err);
-          console.error('📋 Detalles del error:', JSON.stringify(err));
+          console.error(' Error al cargar carteras desde Supabase:', err);
+          console.error(' Detalles del error:', JSON.stringify(err));
           return [];
         });
     }
@@ -5653,11 +5871,11 @@
       'busq-cartera','edit-cartera'
     ];
     function poblarSelectsCarteras(names) {
-      console.log('📝 Llenando selects con carteras:', names);
+      console.log(' Llenando selects con carteras:', names);
       CARTERAS_SELECTS.forEach(function(id) {
         var sel = document.getElementById(id);
         if (!sel) {
-          console.warn('⚠️  Select no encontrado:', id);
+          console.warn('  Select no encontrado:', id);
           return;
         }
         var esDoble = (id === 'trp-salida' || id === 'trp-entrada');
@@ -5668,14 +5886,146 @@
         var opts = '<option value="">' + placeholder + '</option>';
         names.forEach(function(n) { opts += '<option value="' + n + '">' + n + '</option>'; });
         sel.innerHTML = opts;
-        console.log('✅ Select #' + id + ' llenado con ' + names.length + ' carteras');
+        console.log(' Select #' + id + ' llenado con ' + names.length + ' carteras');
       });
     }
     var CARTERAS_COLORS = {'Banbajio':'#60a5fa','Caja chica':'#fbbf24','Mercado libre':'#34d399','Stripe':'#a78bfa','alfonso mercado':'#fb923c','Tensa':'#f472b6','2Bajio':'#38bdf8','Resguardo':'#4ade80'};
 
+    // ══════════ FINANZAS MODULE (admin + visitante) ══════════
+    var finMes = '';
+
+    function fmt(n) {
+      if(n===null||n===undefined) return '—';
+      return '$'+Math.round(n).toLocaleString('es-MX');
+    }
+
+    // ── Poblar selector de meses ──────────────────────────────
+    function poblarMeses() {
+      var sel = document.getElementById('fin-mes-sel');
+      if(!sel) return;
+      var meses=[], d=new Date();
+      for(var i=0;i<18;i++){
+        meses.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+        d.setMonth(d.getMonth()-1);
+      }
+      var cur = new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+      sel.innerHTML=meses.map(function(m){
+        var p=m.split('-');
+        var lbl=new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+        return '<option value="'+m+'"'+(m===cur?' selected':'')+'>'+lbl.charAt(0).toUpperCase()+lbl.slice(1)+'</option>';
+      }).join('');
+      if(!finMes) finMes = cur;
+    }
+
+    window.finCambiarMes = function(mes) {
+      finMes = mes;
+      cargarKPIs(mes);
+    };
+
+    function cargarKPIs(mes) {
+      if(!window.supabase) return;
+      var mesStr = mes || finMes;
+      var start  = mesStr+'-01';
+      var parts  = mesStr.split('-');
+      var ultimo = new Date(parseInt(parts[0]),parseInt(parts[1]),0).getDate();
+      var end    = mesStr+'-'+String(ultimo).padStart(2,'0');
+      Promise.all([
+        window.supabase.from('ingresos').select('monto,categoria').gte('fecha',start).lte('fecha',end),
+        window.supabase.from('egresos').select('monto,categoria').gte('fecha',start).lte('fecha',end)
+      ]).then(function(res) {
+        var ings=res[0].data||[], egrs=res[1].data||[];
+        var totIng=ings.reduce(function(a,r){return a+parseFloat(r.monto||0);},0);
+        var totEgr=egrs.reduce(function(a,r){return a+parseFloat(r.monto||0);},0);
+        var neto=totIng-totEgr;
+        var margen=totIng>0?Math.round((neto/totIng)*100):0;
+        document.getElementById('kpi-ing').textContent    = fmt(totIng);
+        document.getElementById('kpi-ing-sub').textContent= ings.length+' movimientos';
+        document.getElementById('kpi-egr').textContent    = fmt(totEgr);
+        document.getElementById('kpi-egr-sub').textContent= egrs.length+' movimientos';
+        document.getElementById('kpi-neto').textContent   = fmt(neto);
+        document.getElementById('kpi-margen').textContent = margen+'%';
+        var deltaEl=document.getElementById('kpi-neto-delta');
+        if(neto>=0){deltaEl.textContent='▲ Positivo';deltaEl.className='kpi-delta pos';}
+        else       {deltaEl.textContent='▼ Negativo';deltaEl.className='kpi-delta neg';}
+      });
+    }
+
+    // ── Semanas ───────────────────────────────────────────────
+    function poblarSemanas() {
+      var sel = document.getElementById('fin-sem-sel');
+      if(!sel) return;
+      var semanas = [], d = new Date();
+      var day = d.getDay();
+      var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      var inicioSemana = new Date(d.setDate(diff));
+      for(var i=0;i<12;i++){
+        var start = new Date(inicioSemana);
+        start.setDate(inicioSemana.getDate() - (i*7));
+        var end = new Date(start); end.setDate(start.getDate()+6);
+        var startStr = start.toLocaleDateString('sv-SE',{timeZone:'America/Mexico_City'});
+        var endStr   = end.toLocaleDateString('sv-SE',{timeZone:'America/Mexico_City'});
+        var label = start.toLocaleDateString('es-MX',{day:'2-digit',month:'short'})+' - '+end.toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
+        semanas.push({value:startStr+'|'+endStr,label:label});
+      }
+      sel.innerHTML=semanas.map(function(s){
+        return '<option value="'+s.value+'">Semana: '+s.label+'</option>';
+      }).join('');
+      finCambiarSemana(semanas[0].value);
+    }
+
+    window.finCambiarSemana = function(rango) {
+      if(!window.supabase||!rango) return;
+      var partes=rango.split('|');
+      var start=partes[0], end=partes[1];
+      document.getElementById('kpi-sem-ing-sub').textContent='cargando...';
+      document.getElementById('kpi-sem-egr-sub').textContent='cargando...';
+      Promise.all([
+        window.supabase.from('ingresos').select('monto,cartera').gte('fecha',start).lte('fecha',end),
+        window.supabase.from('egresos').select('monto').gte('fecha',start).lte('fecha',end)
+      ]).then(function(r){
+        var ings=r[0].data||[], egrs=r[1].data||[];
+        var sumIng=0, sumEgr=0, carteras={};
+        ings.forEach(function(x){
+          var amt=parseFloat(x.monto||0);
+          sumIng+=amt;
+          if(x.cartera) carteras[x.cartera]=(carteras[x.cartera]||0)+amt;
+        });
+        egrs.forEach(function(x){ sumEgr+=parseFloat(x.monto||0); });
+        var neto=sumIng-sumEgr;
+        var mg=sumIng>0?((neto/sumIng)*100).toFixed(1)+'%':'0%';
+        document.getElementById('kpi-sem-ing').textContent='$'+sumIng.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-egr').textContent='$'+sumEgr.toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-neto').textContent='$'+Math.abs(neto).toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('kpi-sem-margen').textContent=mg;
+        document.getElementById('kpi-sem-ing-sub').textContent=ings.length+' regs';
+        document.getElementById('kpi-sem-egr-sub').textContent=egrs.length+' regs';
+        var deltaEl=document.getElementById('kpi-sem-neto-delta');
+        if(neto>=0){deltaEl.textContent='▲ Positivo';deltaEl.className='kpi-delta pos';}
+        else       {deltaEl.textContent='▼ Negativo';deltaEl.className='kpi-delta neg';}
+        var carContainer=document.getElementById('kpi-sem-carteras');
+        var keys=Object.keys(carteras).sort(function(a,b){return carteras[b]-carteras[a];});
+        if(!keys.length){
+          carContainer.innerHTML='<div style="font-size:.75rem;color:rgba(255,255,255,.4);">Sin ingresos en la semana</div>';
+        } else {
+          carContainer.innerHTML=keys.map(function(k){
+            return '<div style="display:flex;align-items:center;gap:.5rem;background:var(--s2);padding:.4rem .8rem;border-radius:4px;">'
+              +'<span style="font-size:.65rem;color:var(--mu);text-transform:uppercase;">'+k+'</span>'
+              +'<span style="font-weight:600;font-size:.8rem;color:var(--txt);">$'+carteras[k].toLocaleString('es-MX',{minimumFractionDigits:0,maximumFractionDigits:0})+'</span></div>';
+          }).join('');
+        }
+      });
+    };
+
+    // ── Saldos por cartera ────────────────────────────────────
+    var CARTERAS_COLORS_FIN = {
+      'Banbajio':'#60a5fa','Caja chica':'#fbbf24','Mercado libre':'#34d399',
+      'Stripe':'#a78bfa','alfonso mercado':'#fb923c','Alfonso Mercado':'#fb923c',
+      'Tensa':'#f472b6','2Bajio':'#38bdf8','Resguardo':'#4ade80'
+    };
+
     window.poblarMesesCartera = function() {
-      var sel = document.getElementById('fin-cartera-mes-sel');
-      if(!sel || sel.options.length > 1) return;
+      var sel=document.getElementById('fin-cartera-mes-sel');
+      if(!sel||sel.options.length>1) return;
       var meses=[], d=new Date();
       for(var i=0;i<18;i++){
         meses.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
@@ -5687,7 +6037,72 @@
           var lbl=new Date(parseInt(p[0]),parseInt(p[1])-1,1).toLocaleDateString('es-MX',{month:'long',year:'numeric'});
           return '<option value="'+m+'">'+lbl.charAt(0).toUpperCase()+lbl.slice(1)+'</option>';
         }).join('');
-    }
+    };
+
+    window.cargarSaldosCartera = function(mes) {
+      poblarMesesCartera();
+      var grid=document.getElementById('saldos-carteras-grid');
+      if(!grid||!window.supabase) return;
+      grid.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--mu);font-size:.75rem;grid-column:1/-1;">Calculando saldos...</div>';
+      var sel=document.getElementById('fin-cartera-mes-sel');
+      var mesVal=(mes!==undefined?mes:(sel?sel.value:'all'))||'all';
+      if(sel&&mes!==undefined) sel.value=mesVal;
+      var start=null, end=null;
+      if(mesVal&&mesVal!=='all'){
+        var pts=mesVal.split('-');
+        var lastDay=new Date(parseInt(pts[0]),parseInt(pts[1]),0).getDate();
+        start=mesVal+'-01'; end=mesVal+'-'+String(lastDay).padStart(2,'0');
+      }
+      var carterasQ=window.supabase.from('carteras').select('nombre,activa').order('nombre');
+      var ingQ=window.supabase.from('ingresos').select('cartera,monto').limit(50000);
+      var egrQ=window.supabase.from('egresos').select('cartera,monto').limit(50000);
+      var trpQ=window.supabase.from('traspasos').select('salida_de,entrada_en,cantidad').limit(50000);
+      if(start){ ingQ=ingQ.gte('fecha',start).lte('fecha',end); egrQ=egrQ.gte('fecha',start).lte('fecha',end); trpQ=trpQ.gte('fecha',start).lte('fecha',end); }
+      Promise.all([carterasQ,ingQ,egrQ,trpQ]).then(function(res){
+        var todasCarteras=res[0].data||[];
+        var ings=res[1].data||[], egrs=res[2].data||[], trps=res[3].data||[];
+        var saldos={};
+        todasCarteras.forEach(function(c){ saldos[c.nombre]=0; });
+        ings.forEach(function(r){ if(r.cartera){ if(saldos[r.cartera]===undefined) saldos[r.cartera]=0; saldos[r.cartera]+=parseFloat(r.monto)||0; } });
+        egrs.forEach(function(r){ if(r.cartera){ if(saldos[r.cartera]===undefined) saldos[r.cartera]=0; saldos[r.cartera]-=parseFloat(r.monto)||0; } });
+        trps.forEach(function(r){
+          var amt=parseFloat(r.cantidad)||0;
+          if(r.salida_de){ if(saldos[r.salida_de]===undefined) saldos[r.salida_de]=0; saldos[r.salida_de]-=amt; }
+          if(r.entrada_en){ if(saldos[r.entrada_en]===undefined) saldos[r.entrada_en]=0; saldos[r.entrada_en]+=amt; }
+        });
+        var activas=todasCarteras.filter(function(c){return c.activa;}).map(function(c){return c.nombre;});
+        var inactivas=todasCarteras.filter(function(c){return !c.activa;}).map(function(c){return c.nombre;});
+        Object.keys(saldos).forEach(function(c){ if(activas.indexOf(c)<0&&inactivas.indexOf(c)<0) inactivas.push(c); });
+        var orden=activas.concat(inactivas);
+        var total=Object.values(saldos).reduce(function(a,v){return a+(v||0);},0);
+        var fmtS=function(n){return '$'+Math.abs(Math.round(n)).toLocaleString('es-MX');};
+        var selEl=document.getElementById('fin-cartera-mes-sel');
+        var labelMes=mesVal==='all'?'Acumulado total':(selEl&&selEl.options[selEl.selectedIndex]?selEl.options[selEl.selectedIndex].text:mesVal);
+        var html=orden.map(function(nombre){
+          var saldo=saldos[nombre]||0;
+          var col=CARTERAS_COLORS_FIN[nombre]||'var(--or)';
+          var isActiva=activas.indexOf(nombre)>=0;
+          var isPos=saldo>=0;
+          var borderStyle=isActiva?'3px solid '+col:'3px dashed rgba(255,255,255,.15)';
+          var opacity=isActiva?'1':'0.55';
+          return '<div style="background:var(--s1);border:1px solid var(--s3);border-left:'+borderStyle+';border-radius:var(--r);padding:1rem 1.1rem;position:relative;opacity:'+opacity+';">'
+            +'<div style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;">'
+            +'<span>'+nombre+'</span>'+(isActiva?'':'<span style="font-size:.5rem;opacity:.6">INACTIVA</span>')+'</div>'
+            +'<div style="font-family:var(--fT);font-size:1.85rem;line-height:1;color:'+(isPos?col:'#f87171')+';">'+(isPos?'':'-')+fmtS(saldo)+'</div>'
+            +'<div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:.3rem;">'+labelMes+'</div>'
+            +'</div>';
+        }).join('');
+        // Tarjeta total
+        html += '<div style="background:linear-gradient(135deg,rgba(255,77,0,.08),var(--s1));border:1px solid rgba(255,77,0,.25);border-left:3px solid var(--or);border-radius:var(--r);padding:1rem 1.1rem;">'
+          +'<div style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,77,0,.7);margin-bottom:.5rem;">Total combinado</div>'
+          +'<div style="font-family:var(--fT);font-size:1.85rem;line-height:1;color:'+(total>=0?'var(--or)':'#f87171')+';">'+(total>=0?'':'-')+fmtS(total)+'</div>'
+          +'<div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:.3rem;">'+labelMes+'</div>'
+          +'</div>';
+        grid.innerHTML=html;
+      }).catch(function(e){
+        grid.innerHTML='<div style="padding:1.5rem;text-align:center;color:#f87171;font-size:.75rem;grid-column:1/-1;">Error: '+e.message+'</div>';
+      });
+    };
 
     // ── COMPARATIVA DE SALDOS ─────────────────────────────────
     // ─────────────────────────────────────────────────────────
@@ -5749,13 +6164,13 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem">
           <div class="mfld" id="edit-field-nombre-wrap">
             <label>Nombre / Cliente</label>
-            <div class="mfi"><span class="mfi-i">✦</span>
+            <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
               <input type="text" id="edit-nombre" placeholder="Nombre del cliente" />
             </div>
           </div>
           <div class="mfld" id="edit-field-titulo-wrap" style="display:none">
             <label>Concepto / Título</label>
-            <div class="mfi"><span class="mfi-i">✦</span>
+            <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
               <input type="text" id="edit-titulo" placeholder="Concepto del egreso" />
             </div>
           </div>
@@ -5781,7 +6196,7 @@
           </div>
           <div class="mfld">
             <label>Categoría</label>
-            <div class="mfi"><span class="mfi-i">✦</span>
+            <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
               <select id="edit-categoria">
                 <option value="">— Sin cambio —</option>
                 <option value="membresia">Membresía / Renovación</option>
@@ -5804,7 +6219,7 @@
           </div>
           <div class="mfld" style="grid-column:1/-1">
             <label>Observaciones (opcional)</label>
-            <div class="mfi"><span class="mfi-i">✦</span>
+            <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
               <input type="text" id="edit-desc" placeholder="Notas adicionales…" />
             </div>
           </div>
@@ -5836,7 +6251,7 @@
         <div class="mov-confirm-actions">
           <button class="btn-cancel" onclick="cerrarConfirmMov()">← Volver a editar</button>
           <button class="btn-confirm-save" id="btn-confirm-save" onclick="guardarEditMov()">
-            ✓ Confirmar cambios
+            Confirmar cambios
           </button>
         </div>
       </div>
@@ -5847,7 +6262,7 @@
   <div class="pwd-overlay" id="pwd-overlay">
     <div class="pwd-box">
       <div style="text-align:center;margin-bottom:1.6rem;">
-        <div style="width:52px;height:52px;background:rgba(255,77,0,.12);border:1.5px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .9rem;">🔑</div>
+        <div style="width:52px;height:52px;background:rgba(255,77,0,.12);border:1.5px solid rgba(255,77,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
         <h2 style="font-family:var(--fT);font-size:1.9rem;letter-spacing:.04em;line-height:1;margin-bottom:.4rem;">
           BIENVENIDO, <span style="color:var(--or)" id="pwd-welcome-name">STAFF</span>
         </h2>
@@ -6012,7 +6427,7 @@
           }).join('');
         })
         .catch(function(e) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;">⚠️ Error: ' + e.message + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;"> Error: ' + e.message + '</td></tr>';
         });
     }
   </script>
@@ -6118,7 +6533,7 @@
               +'</tr>';
           }).join('');
         }).catch(function(e){
-          tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#f87171;">⚠️ Error: '+e.message+'</td></tr>';
+          tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:#f87171;"> Error: '+e.message+'</td></tr>';
         });
     }
   </script>
@@ -6200,7 +6615,7 @@
           }).join('');
         })
         .catch(function(e) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;">⚠️ Error: ' + e.message + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;"> Error: ' + e.message + '</td></tr>';
         });
     }
   </script>
@@ -6785,7 +7200,7 @@
     /* ── Toast ── */
     function lkMostrarToast(msg){
       var t = document.createElement('div');
-      t.textContent = '✓ ' + msg;
+      t.textContent = msg;
       t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#15803d;color:#fff;padding:.55rem 1.3rem;font-family:var(--fB);font-size:.72rem;font-weight:700;letter-spacing:.08em;z-index:9999;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);white-space:nowrap;';
       document.body.appendChild(t);
       setTimeout(function(){ t.remove(); }, 3000);
@@ -7066,11 +7481,11 @@
           : 'ElementalClub_' + (modo.charAt(0).toUpperCase()+modo.slice(1)) + '_' + labelFecha;
 
         XLSX.writeFile(wb, nombreBase + '.xlsx');
-        expSetStatus('✓ Descargado: ' + nombreBase + '.xlsx  (' + totalFilas + ' registros)', '#4ade80');
+        expSetStatus('Descargado: ' + nombreBase + '.xlsx  (' + totalFilas + ' registros)', '#4ade80');
       })
       .catch(function(e) {
         console.error('[exportarExcel]', e);
-        expSetStatus('⚠️ Error: ' + e.message, '#f87171');
+        expSetStatus(' Error: ' + e.message, '#f87171');
       });
     };
   </script>
@@ -7306,13 +7721,13 @@ window.exportarExcel = function (modo) {
 
       XLSX.writeFile(wb, nombreBase + '.xlsx');
       expSetStatus(
-        '✓ ' + nombreBase + '.xlsx — ' + totalFilas + ' registros totales',
+        nombreBase + '.xlsx — ' + totalFilas + ' registros totales',
         '#4ade80'
       );
     })
     .catch(function (e) {
       console.error('[exportarExcel]', e);
-      expSetStatus('⚠️ Error: ' + e.message, '#f87171');
+      expSetStatus(' Error: ' + e.message, '#f87171');
     })
     .finally(function () {
       document.querySelectorAll('[onclick^="exportarExcel"]').forEach(function (b) {
