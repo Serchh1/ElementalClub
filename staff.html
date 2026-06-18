@@ -2911,7 +2911,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
             </div>
             <div>
-              <div class="cc-widget-lbl" id="cc-widget-lbl">Todas las carteras · Saldo histórico</div>
+              <div class="cc-widget-lbl" id="cc-widget-lbl">Caja Chica · Balance histórico</div>
               <div class="cc-widget-val" id="cc-saldo">
                 <span class="cc-loading">Calculando…</span>
               </div>
@@ -5312,69 +5312,36 @@
     function cargarCajaChica() {
       if(!window.supabase) return;
       var hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-
-      // Traer TODOS los registros históricos de las 3 tablas (sin filtro de cartera)
-      // más el desglose de hoy para Caja chica (derecha del widget)
+      // Saldo histórico acumulado solo de Caja chica + desglose de hoy
       Promise.all([
-        window.supabase.from('ingresos').select('monto,cartera').limit(50000),
-        window.supabase.from('egresos').select('monto,cartera').limit(50000),
+        window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').limit(50000),
+        window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').limit(50000),
         window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').limit(50000),
         window.supabase.from('ingresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
         window.supabase.from('egresos').select('monto').eq('cartera','Caja chica').eq('fecha', hoy),
         window.supabase.from('traspasos').select('cantidad,salida_de,entrada_en').eq('fecha', hoy)
       ]).then(function(res) {
-        var ingsAll  = res[0].data || [];
-        var egrsAll  = res[1].data || [];
-        var trpsAll  = res[2].data || [];
+        // ── Saldo histórico acumulado — solo Caja chica ──
+        var ingsAll = res[0].data || [];
+        var egrsAll = res[1].data || [];
+        var trpsAll = res[2].data || [];
+        var totalIngAll = ingsAll.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
+        var totalEgrAll = egrsAll.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
+        var trpEntraAll = trpsAll.filter(function(t){ return (t.entrada_en||'').toLowerCase()==='caja chica'; })
+                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var trpSaleAll  = trpsAll.filter(function(t){ return (t.salida_de||'').toLowerCase()==='caja chica'; })
+                                 .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
+        var saldoHistorico = totalIngAll - totalEgrAll + trpEntraAll - trpSaleAll;
 
-        // ── Saldo por cartera ──
-        var CARTERAS_ACTIVAS = ['Caja chica','Alfonso Mercado','alfonso mercado','Stripe','Resguardo'];
-        var saldos = {};
-        CARTERAS_ACTIVAS.forEach(function(c){ saldos[c] = 0; });
-
-        // Normalizar nombres de cartera para agrupar variantes
-        function normCartera(c){
-          if(!c) return null;
-          var l = c.toLowerCase().trim();
-          if(l === 'caja chica')    return 'Caja chica';
-          if(l === 'alfonso mercado') return 'Alfonso Mercado';
-          if(l === 'stripe')        return 'Stripe';
-          if(l === 'resguardo')     return 'Resguardo';
-          return c; // cartera desconocida — incluir igual
-        }
-
-        // Sumar ingresos por cartera
-        ingsAll.forEach(function(r){
-          var c = normCartera(r.cartera);
-          if(c){ saldos[c] = (saldos[c]||0) + parseFloat(r.monto||0); }
-        });
-        // Restar egresos por cartera
-        egrsAll.forEach(function(r){
-          var c = normCartera(r.cartera);
-          if(c){ saldos[c] = (saldos[c]||0) - parseFloat(r.monto||0); }
-        });
-        // Traspasos: restar de origen, sumar a destino
-        trpsAll.forEach(function(t){
-          var sale   = normCartera(t.salida_de);
-          var entra  = normCartera(t.entrada_en);
-          var cant   = parseFloat(t.cantidad||0);
-          if(sale)  { saldos[sale]  = (saldos[sale]  || 0) - cant; }
-          if(entra) { saldos[entra] = (saldos[entra] || 0) + cant; }
-        });
-
-        // Saldo total sumando todas las carteras conocidas
-        var saldoTotal = 0;
-        Object.values(saldos).forEach(function(v){ saldoTotal += v; });
-
-        // ── Desglose de hoy — Caja Chica (derecha) ──
+        // ── Desglose de hoy — Caja chica ──
         var ingsHoy  = res[3].data || [];
         var egrsHoy  = res[4].data || [];
         var trpsHoy  = res[5].data || [];
         var totalIngHoy = ingsHoy.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
         var totalEgrHoy = egrsHoy.reduce(function(a,r){ return a+parseFloat(r.monto||0); }, 0);
-        var trpEntraHoy = trpsHoy.filter(function(t){ return normCartera(t.entrada_en)==='Caja chica'; })
+        var trpEntraHoy = trpsHoy.filter(function(t){ return (t.entrada_en||'').toLowerCase()==='caja chica'; })
                                   .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
-        var trpSaleHoy  = trpsHoy.filter(function(t){ return normCartera(t.salida_de)==='Caja chica'; })
+        var trpSaleHoy  = trpsHoy.filter(function(t){ return (t.salida_de||'').toLowerCase()==='caja chica'; })
                                   .reduce(function(a,r){ return a+parseFloat(r.cantidad||0); }, 0);
         var totalTrpHoy = trpEntraHoy - trpSaleHoy;
 
@@ -5382,23 +5349,14 @@
         var saldoEl = document.getElementById('cc-saldo');
         if(!saldoEl) return;
 
-        // Mostrar saldo total de todas las carteras
-        saldoEl.textContent = '$' + Math.round(saldoTotal).toLocaleString('es-MX');
-        saldoEl.style.color = saldoTotal >= 0 ? '#fbbf24' : '#f87171';
+        saldoEl.textContent = '$' + Math.round(saldoHistorico).toLocaleString('es-MX');
+        saldoEl.style.color = saldoHistorico >= 0 ? '#fbbf24' : '#f87171';
 
-        // Subtítulo con desglose por cartera
-        var desglose = Object.keys(saldos)
-          .filter(function(c){ return saldos[c] !== 0; })
-          .map(function(c){
-            var v = Math.round(saldos[c]);
-            return c.split(' ')[0]+': '+(v>=0?'+':'')+v.toLocaleString('es-MX');
-          }).join(' · ');
         var lbl = document.getElementById('cc-widget-lbl');
-        if(lbl) lbl.textContent = 'Todas las carteras · Saldo histórico';
-        document.getElementById('cc-sub').textContent = desglose || 'Sin movimientos';
+        if(lbl) lbl.textContent = 'Caja Chica · Balance histórico';
+        document.getElementById('cc-sub').textContent = 'Acumulado desde el primer registro';
         document.getElementById('cc-ts').textContent  = 'Actualizado a las ' + ahora;
 
-        // Desglose de HOY — Caja Chica (sin cambio, mantiene comportamiento previo)
         document.getElementById('cc-ing').textContent = '+$'+Math.round(totalIngHoy).toLocaleString('es-MX');
         document.getElementById('cc-egr').textContent = '-$'+Math.round(totalEgrHoy).toLocaleString('es-MX');
         var trpEl = document.getElementById('cc-trp');
