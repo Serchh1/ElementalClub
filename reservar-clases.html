@@ -804,7 +804,11 @@ async function loginMember() {
     const phone = document.getElementById('login-phone').value.trim();
     const pass  = document.getElementById('login-password').value;
     if (!phone || !pass) { showMsg('login-msg','Completa todos los campos'); return; }
-    if (phone.length < 10) { showMsg('login-msg','Ingresa un teléfono de 10 dígitos'); return; }
+    if (!/^\d{10}$/.test(phone)) { showMsg('login-msg','Ingresa un teléfono de 10 dígitos'); return; }
+    if (!isValidMexPhone(phone)) {
+        showMsg('login-msg','Ingresa un número de teléfono realista de 10 dígitos');
+        return;
+    }
 
     const btn = document.getElementById('btn-login');
     btn.disabled = true; btn.textContent = 'Verificando...';
@@ -835,13 +839,28 @@ async function loginMember() {
 
 // ─── PHONE VALIDATION ───────────────────────────────────────────
 function isValidMexPhone(phone) {
-    if (!/^\d{10}$/.test(phone)) return false;
+    const cleaned = String(phone || '').replace(/\D/g, '');
+    if (!/^\d{10}$/.test(cleaned)) return false;
+
     // México: números móviles/fijos válidos no empiezan con 0 ni 1
-    if (/^[01]/.test(phone)) return false;
-    // Descarta secuencias inválidas obvias
-    if (/^(\d)\1{9}$/.test(phone)) return false; // 1111111111, 0000000000, etc.
-    const blacklist = ['1234567890','9876543210','0123456789','0987654321'];
-    return !blacklist.includes(phone);
+    if (/^[01]/.test(cleaned)) return false;
+
+    // Descarta números repetidos o demasiado obvios
+    const obviousPatterns = [
+        '0000000000','1111111111','2222222222','3333333333','4444444444',
+        '5555555555','6666666666','7777777777','8888888888','9999999999',
+        '1234567890','0123456789','0987654321','9876543210',
+        '1212121212','1234123412','0101010101','0909090909','4771234567',
+        '4770000000',
+        '4771111111','4772222222','4773333333','4774444444','4775555555',
+    ];
+    if (obviousPatterns.includes(cleaned)) return false;
+
+    // Descarta secuencias ascendentes/descendentes sencillas como 12345678 o 87654321
+    const sequentialRegex = /(0123|1234|2345|3456|4567|5678|6789|12345|23456|34567|45678|56789|67890|123456|234567|345678|456789|567890|1234567|2345678|3456789|4567890|12345678|23456789|34567890|123456789|234567890|1234567890|3210|4321|5432|6543|7654|8765|9876|543210|654321|765432|876543|987654|9876543|98765432|987654321|9876543210)/;
+    if (sequentialRegex.test(cleaned)) return false;
+
+    return true;
 }
 
 // ─── PANTALLA DE ÉXITO (gym libre) ──────────────────────────────
