@@ -2650,7 +2650,9 @@
       <button class="ptab" onclick="switchTab('accesos',this)">Accesos Portal</button>
       <button class="ptab" onclick="switchTab('movimientos',this)">Movimientos</button>
       <button class="ptab" id="tab-btn-finanzas" style="display:none" onclick="switchTab('finanzas',this)">Finanzas</button>
-      <button class="ptab" onclick="switchTab('lockers',this)">Lockers</button>
+      <button class="ptab" id="tab-btn-lockers" onclick="switchTab('lockers',this)">Lockers</button>
+      <button class="ptab" onclick="switchTab('reservas',this)">Reservas Clases</button>
+      <button class="ptab" onclick="switchTab('potenciales',this)">Potenciales</button>
     </nav>
     <div class="pbody">
 
@@ -2682,7 +2684,7 @@
             <div class="sc-num" id="st-exp">—</div>
             <div class="sc-lbl">Vencen 7 días <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span></div>
           </div>
-          <div class="sc" onclick="switchTab('lockers', document.querySelector('.ptab:last-child'))" style="cursor:pointer;" title="Ver lockers próximos a vencer según disponibilidad">
+          <div class="sc" onclick="switchTab('lockers', document.getElementById('tab-btn-lockers'))" style="cursor:pointer;" title="Ver lockers próximos a vencer según disponibilidad">
 
             <div class="sc-num" id="st-lockers-exp">—</div>
             <div class="sc-lbl">Lockers por vencer <span style="font-size:.55rem;color:var(--or);letter-spacing:.08em;border:1px solid rgba(255,77,0,.3);padding:.05rem .35rem;border-radius:2px;">VER</span><br><span style="font-size:.55rem;color:var(--mu);text-transform:none;letter-spacing:0;"></span></div>
@@ -3505,6 +3507,117 @@
         </div>
       </div><!-- /tab-lockers -->
 
+      <!-- ══════════════════════════════════════════
+           TAB RESERVAS DE CLASES
+      ══════════════════════════════════════════ -->
+      <div id="tab-reservas" class="tab-pane">
+        <div class="seh"><h3>RESERVAS DE CLASES</h3><div class="ln"></div></div>
+        <p style="font-size:.77rem;color:var(--mu);margin-bottom:1.25rem;line-height:1.55">
+          Consulta quién tiene lugar reservado en cada clase. Selecciona una fecha para cargar la información.
+        </p>
+
+        <!-- Selector de fecha -->
+        <div style="display:flex;gap:.75rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+          <label style="font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);">Fecha</label>
+          <input type="date" id="res-fecha" onchange="loadReservaciones()"
+            style="background:var(--s1);border:1.5px solid var(--s3);padding:.55rem .9rem;color:var(--txt);font-size:.82rem;font-weight:500;border-radius:var(--r);outline:none;cursor:pointer;transition:border-color .18s"
+            onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'">
+          <button onclick="resSetFecha(0)"
+            style="padding:.55rem 1rem;background:var(--s2);border:1.5px solid var(--or);color:var(--or);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);">
+            Hoy
+          </button>
+          <button onclick="resSetFecha(1)"
+            style="padding:.55rem 1rem;background:var(--s2);border:1.5px solid var(--s3);color:var(--mu);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);"
+            onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='var(--s3)';this.style.color='var(--mu)'">
+            Mañana
+          </button>
+          <button onclick="resSetFecha(-1)"
+            style="padding:.55rem 1rem;background:var(--s2);border:1.5px solid var(--s3);color:var(--mu);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);"
+            onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='var(--s3)';this.style.color='var(--mu)'">
+            Ayer
+          </button>
+        </div>
+
+        <!-- Stats rápidas -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-bottom:1.5rem;" id="res-stats">
+          <div style="padding:1rem;background:var(--s1);border:1px solid var(--s3);text-align:center;">
+            <div style="font-family:var(--fT);font-size:1.9rem;color:var(--or)" id="res-stat-clases">—</div>
+            <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-top:.2rem;">Clases</div>
+          </div>
+          <div style="padding:1rem;background:var(--s1);border:1px solid var(--s3);text-align:center;">
+            <div style="font-family:var(--fT);font-size:1.9rem;color:#4ade80" id="res-stat-conf">—</div>
+            <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-top:.2rem;">Reservaciones</div>
+          </div>
+          <div style="padding:1rem;background:var(--s1);border:1px solid var(--s3);text-align:center;">
+            <div style="font-family:var(--fT);font-size:1.9rem;color:#f87171" id="res-stat-cancel">—</div>
+            <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-top:.2rem;">Canceladas</div>
+          </div>
+        </div>
+
+        <!-- Lista de clases con reservaciones -->
+        <div id="res-lista">
+          <div style="padding:3rem;text-align:center;color:var(--mu);font-size:.78rem;letter-spacing:.05em;">
+            Selecciona una fecha para ver las reservaciones.
+          </div>
+        </div>
+      </div><!-- /tab-reservas -->
+
+      <!-- ══════════════════════════════════════════
+           TAB CLIENTES POTENCIALES
+      ══════════════════════════════════════════ -->
+      <div id="tab-potenciales" class="tab-pane">
+        <div class="seh"><h3>CLIENTES POTENCIALES</h3><div class="ln"></div></div>
+        <p style="font-size:.77rem;color:var(--mu);margin-bottom:1.25rem;line-height:1.55">
+          Personas que registraron una visita de prueba. Valida su asistencia o márcalos como no asistidos.
+        </p>
+
+        <!-- Card de visitas hoy -->
+        <div id="pot-hoy-card" style="background:var(--s1);border:1px solid var(--s3);border-left:3px solid var(--or);padding:1.25rem 1.5rem;margin-bottom:1.5rem;border-radius:var(--r);">
+          <div style="font-size:.72rem;color:var(--mu);">Cargando visitas de hoy...</div>
+        </div>
+
+        <!-- Búsqueda y filtros -->
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+          <div style="flex:1;min-width:220px;position:relative;">
+            <input type="text" id="pot-search" placeholder="Buscar por nombre o teléfono..." oninput="renderPotenciales()"
+              style="width:100%;background:var(--s1);border:1.5px solid var(--s3);padding:.7rem 1rem;color:var(--txt);font-size:.82rem;font-weight:500;border-radius:var(--r);outline:none;transition:border-color .18s;"
+              onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'">
+          </div>
+          <button onclick="loadPotenciales()"
+            style="padding:.6rem 1rem;background:var(--s2);border:1.5px solid var(--s3);color:var(--mu);font-family:var(--fB);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);display:flex;align-items:center;gap:.4rem;"
+            onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='var(--s3)';this.style.color='var(--mu)'">
+            ↺ Actualizar
+          </button>
+        </div>
+        <div class="filter-pills" style="margin-bottom:1rem;">
+          <button class="fp on" data-potfil="all" onclick="setPotFilter(this,'all')">Todos</button>
+          <button class="fp" data-potfil="today" onclick="setPotFilter(this,'today')">Hoy</button>
+          <button class="fp" data-potfil="pending" onclick="setPotFilter(this,'pending')">Pendientes</button>
+          <button class="fp" data-potfil="redeemed" onclick="setPotFilter(this,'redeemed')">Canjeados</button>
+          <button class="fp" data-potfil="no_show" onclick="setPotFilter(this,'no_show')">No asistió</button>
+        </div>
+        <div style="font-size:.7rem;color:var(--mu);margin-bottom:.75rem;" id="pot-count">—</div>
+
+        <div class="sch-wrap" style="margin-bottom:2rem;">
+          <table class="mem-tbl" id="pot-tbl">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Interés / Clase</th>
+                <th>Origen</th>
+                <th>Fecha visita</th>
+                <th>Estado</th>
+                <th style="min-width:170px;">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="pot-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem;">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /tab-potenciales -->
+
     </div>
   </div>
 
@@ -4046,6 +4159,8 @@
       if (id === 'miembros' && !membersLoaded) loadMembers();
       if (id === 'movimientos') { finInit(); cargarCarterasActivas(); }
       if (id === 'lockers') { window.lkInit(); }
+      if (id === 'reservas') { loadReservaciones(); }
+      if (id === 'potenciales') { loadPotenciales(); }
       if (id === 'finanzas') {
         poblarMeses();
         poblarSemanas();
@@ -7695,6 +7810,333 @@ window.exportarExcel = function (modo) {
       });
     });
 };
+</script>
+
+<!-- ══ TAB RESERVAS DE CLASES + POTENCIALES ══ -->
+<script>
+(function () {
+  'use strict';
+
+  // ── Mapeo de tipos de clase ─────────────────────────────────────
+  var RCN = {
+    'crossfit':'🔥 CrossFit','multipower':'💪 Multipower','momentum':'⚡ Momentum',
+    'combatfit':'🥊 CombatFit','hyrox-competicion':'🏆 Hyrox Competición',
+    'strong&bike':'🚴 Strong & Bike','hyrox-base':'🏃 Hyrox Base','spinning':'🚲 Spinning',
+    'gap':'🍑 GAP','yoga':'🧘 Yoga','halterofilia':'🏋️ Halterofilia',
+    'artes-marciales':'🥋 Artes Marciales','gym-general':'🏋️ Gym Libre'
+  };
+  function rcn(t) { return RCN[t] || t; }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  TAB: RESERVAS DE CLASES
+  // ═══════════════════════════════════════════════════════════════
+
+  function todayStr() {
+    return new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+  }
+
+  window.resSetFecha = function (offsetDays) {
+    var d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    var s = d.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+    document.getElementById('res-fecha').value = s;
+    loadReservaciones();
+  };
+
+  window.loadReservaciones = function () {
+    var fecha = document.getElementById('res-fecha').value;
+    if (!fecha) {
+      fecha = todayStr();
+      document.getElementById('res-fecha').value = fecha;
+    }
+
+    var lista = document.getElementById('res-lista');
+    lista.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--mu);font-size:.78rem;letter-spacing:.05em;">Cargando...</div>';
+    document.getElementById('res-stat-clases').textContent  = '—';
+    document.getElementById('res-stat-conf').textContent    = '—';
+    document.getElementById('res-stat-cancel').textContent  = '—';
+
+    if (!window.supabase) return;
+
+    window.supabase.from('classes')
+      .select('id, class_type, time, duration, instructor, capacity')
+      .eq('date', fecha)
+      .eq('status', 'scheduled')
+      .order('time')
+      .then(function (r) {
+        if (r.error) throw r.error;
+        var clases = r.data || [];
+        if (!clases.length) {
+          lista.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--mu);font-size:.78rem;">Sin clases programadas para esta fecha.</div>';
+          document.getElementById('res-stat-clases').textContent  = '0';
+          document.getElementById('res-stat-conf').textContent    = '0';
+          document.getElementById('res-stat-cancel').textContent  = '0';
+          return;
+        }
+        var ids = clases.map(function (c) { return c.id; });
+        return window.supabase.from('class_reservations')
+          .select('id, class_id, status, clients(first_name, last_name1, phone)')
+          .in('class_id', ids)
+          .then(function (rr) {
+            if (rr.error) throw rr.error;
+            renderReservaciones(clases, rr.data || []);
+          });
+      })
+      .catch(function (e) {
+        console.error('[loadReservaciones]', e);
+        lista.innerHTML = '<div style="padding:2rem;text-align:center;color:#f87171;font-size:.78rem;">Error al cargar datos: ' + (e.message || '') + '</div>';
+      });
+  };
+
+  function renderReservaciones(clases, reservaciones) {
+    // Agrupar por class_id
+    var byClass = {};
+    var totalConf = 0, totalCancel = 0;
+    reservaciones.forEach(function (r) {
+      if (!byClass[r.class_id]) byClass[r.class_id] = [];
+      byClass[r.class_id].push(r);
+    });
+
+    var html = clases.map(function (cls) {
+      var todos     = byClass[cls.id] || [];
+      var conf      = todos.filter(function (r) { return r.status === 'confirmed'; });
+      var cancel    = todos.filter(function (r) { return r.status === 'cancelled'; });
+      totalConf    += conf.length;
+      totalCancel  += cancel.length;
+      var libres    = cls.capacity - conf.length;
+      var clr       = libres === 0 ? '#f87171' : libres <= 3 ? '#fbbf24' : '#4ade80';
+
+      var miembros = conf.length === 0
+        ? '<div style="padding:.65rem 0;font-size:.72rem;color:var(--mu);">Sin reservaciones confirmadas</div>'
+        : conf.map(function (r, i) {
+            var c    = r.clients || {};
+            var nom  = ((c.first_name || '') + ' ' + (c.last_name1 || '')).trim() || '—';
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.05);">'
+              + '<div>'
+                + '<div style="font-size:.8rem;font-weight:700;">' + nom + '</div>'
+                + '<div style="font-size:.65rem;color:var(--mu);margin-top:.1rem;">' + (c.phone || '—') + '</div>'
+              + '</div>'
+              + '<span style="font-size:.6rem;font-weight:800;padding:.15rem .55rem;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80;letter-spacing:.08em;">✓ CONF</span>'
+            + '</div>';
+          }).join('');
+
+      if (cancel.length) {
+        miembros += cancel.map(function (r) {
+          var c   = r.clients || {};
+          var nom = ((c.first_name || '') + ' ' + (c.last_name1 || '')).trim() || '—';
+          return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.05);opacity:.45;">'
+            + '<div>'
+              + '<div style="font-size:.78rem;font-weight:600;text-decoration:line-through;">' + nom + '</div>'
+              + '<div style="font-size:.65rem;color:var(--mu);">' + (c.phone || '—') + '</div>'
+            + '</div>'
+            + '<span style="font-size:.6rem;font-weight:800;padding:.15rem .55rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#f87171;letter-spacing:.08em;">✗ CANCEL</span>'
+          + '</div>';
+        }).join('');
+      }
+
+      return '<div style="background:var(--s1);border:1px solid var(--s3);overflow:hidden;margin-bottom:1rem;">'
+        + '<div style="padding:.9rem 1.2rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">'
+          + '<div>'
+            + '<div style="font-size:.9rem;font-weight:800;">' + rcn(cls.class_type) + '</div>'
+            + '<div style="font-size:.68rem;color:var(--mu);margin-top:.18rem;">🕐 ' + cls.time.slice(0,5) + ' · ' + cls.duration + ' min'
+              + (cls.instructor ? ' · ' + cls.instructor : '') + '</div>'
+          + '</div>'
+          + '<div style="display:flex;align-items:center;gap:.65rem;flex-shrink:0;">'
+            + '<span style="font-size:.65rem;font-weight:800;padding:.2rem .65rem;border:1px solid;color:' + clr + ';border-color:' + clr + '40;">'
+              + conf.length + '/' + cls.capacity + ' reservados'
+            + '</span>'
+            + '<span style="font-size:.65rem;color:var(--mu);">' + libres + ' libre' + (libres !== 1 ? 's' : '') + '</span>'
+          + '</div>'
+        + '</div>'
+        + '<div style="padding:.5rem 1.2rem .75rem;">' + miembros + '</div>'
+      + '</div>';
+    }).join('');
+
+    document.getElementById('res-lista').innerHTML = html || '<div style="padding:2rem;text-align:center;color:var(--mu);">Sin datos</div>';
+    document.getElementById('res-stat-clases').textContent  = clases.length;
+    document.getElementById('res-stat-conf').textContent    = totalConf;
+    document.getElementById('res-stat-cancel').textContent  = totalCancel;
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  TAB: CLIENTES POTENCIALES
+  // ═══════════════════════════════════════════════════════════════
+
+  var potData   = [];
+  var potFiltro = 'all';
+
+  window.loadPotenciales = function () {
+    document.getElementById('pot-tbody').innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem;">Cargando...</td></tr>';
+
+    if (!window.supabase) return;
+
+    window.supabase.from('potentials')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(function (r) {
+        if (r.error) throw r.error;
+        potData = r.data || [];
+        renderPotenciales();
+        renderPotHoy();
+      })
+      .catch(function (e) {
+        console.error('[loadPotenciales]', e);
+        document.getElementById('pot-tbody').innerHTML =
+          '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#f87171;font-size:.75rem;">Error al cargar: ' + (e.message || '') + '</td></tr>';
+      });
+  };
+
+  window.setPotFilter = function (btn, filter) {
+    document.querySelectorAll('#tab-potenciales .fp').forEach(function (b) { b.classList.remove('on'); });
+    btn.classList.add('on');
+    potFiltro = filter;
+    renderPotenciales();
+  };
+
+  window.renderPotenciales = function () {
+    var hoy    = todayStr();
+    var search = ((document.getElementById('pot-search') || {}).value || '').toLowerCase().trim();
+
+    var list = potData.filter(function (p) {
+      if (potFiltro === 'today')    return p.visit_date === hoy;
+      if (potFiltro === 'pending')  return p.visit_status === 'pending';
+      if (potFiltro === 'redeemed') return p.visit_status === 'redeemed';
+      if (potFiltro === 'no_show')  return p.visit_status === 'no_show';
+      return true;
+    });
+
+    if (search) {
+      list = list.filter(function (p) {
+        return ((p.first_name || '') + ' ' + (p.last_name1 || '')).toLowerCase().includes(search)
+            || (p.phone || '').includes(search);
+      });
+    }
+
+    var countEl = document.getElementById('pot-count');
+    if (countEl) countEl.textContent = list.length + ' resultado' + (list.length !== 1 ? 's' : '');
+
+    if (!list.length) {
+      document.getElementById('pot-tbody').innerHTML =
+        '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--mu);font-size:.75rem;">Sin resultados para este filtro.</td></tr>';
+      return;
+    }
+
+    var interesMap = {
+      'gym-general':'🏋️ Gym Libre','crossfit':'🔥 CrossFit','multipower':'💪 Multipower',
+      'momentum':'⚡ Momentum','combatfit':'🥊 CombatFit','spinning':'🚲 Spinning',
+      'yoga':'🧘 Yoga','gap':'🍑 GAP','hyrox-base':'🏃 Hyrox Base',
+      'hyrox-competicion':'🏆 Hyrox Comp','halterofilia':'🏋️ Halterofilia',
+      'artes-marciales':'🥋 Artes Marciales','strong&bike':'🚴 Strong & Bike'
+    };
+
+    document.getElementById('pot-tbody').innerHTML = list.map(function (p) {
+      var nom    = ((p.first_name || '') + ' ' + (p.last_name1 || '')).trim() || '—';
+      var st     = p.visit_status || null;
+      var stLbl  = { pending:'Pendiente', redeemed:'Canjeado', no_show:'No asistió' }[st] || 'Sin estado';
+      var stClr  = st === 'redeemed' ? '#4ade80' : st === 'pending' ? '#fbbf24' : st === 'no_show' ? '#f87171' : 'var(--mu)';
+      var interes = p.visit_class
+        ? (interesMap[p.visit_class] || p.visit_class)
+        : ((p.observations || '').replace('Interés: ', '').slice(0, 28) || '—');
+
+      var acciones = '';
+      if (st === 'pending') {
+        acciones =
+          '<button onclick="validarVisitaPot(\'' + (p.phone || '') + '\')" '
+          + 'style="padding:.3rem .7rem;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:var(--fB);margin-right:.4rem;" '
+          + 'title="Marcar como visitó hoy">✓ Validar</button>'
+          + '<button onclick="marcarNoAsistio(\'' + (p.phone || '') + '\')" '
+          + 'style="padding:.3rem .7rem;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);color:#f87171;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:var(--fB);" '
+          + 'title="Marcar como no asistió">✗ No vino</button>';
+      } else {
+        acciones = '<span style="font-size:.65rem;color:var(--mu);">—</span>';
+      }
+
+      return '<tr>'
+        + '<td style="font-weight:700;">' + nom + '</td>'
+        + '<td>' + (p.phone || '—') + '</td>'
+        + '<td style="font-size:.72rem;">' + interes + '</td>'
+        + '<td style="font-size:.72rem;color:var(--mu);">' + (p.source || '—') + '</td>'
+        + '<td style="font-size:.72rem;">' + (p.visit_date || '—') + '</td>'
+        + '<td><span style="font-size:.62rem;font-weight:800;padding:.15rem .55rem;border:1px solid;color:' + stClr + ';border-color:' + stClr + '40;">' + stLbl.toUpperCase() + '</span></td>'
+        + '<td style="white-space:nowrap;">' + acciones + '</td>'
+      + '</tr>';
+    }).join('');
+  };
+
+  function renderPotHoy() {
+    var hoy     = todayStr();
+    var pending  = potData.filter(function (p) { return p.visit_date === hoy && p.visit_status === 'pending'; });
+    var redeemed = potData.filter(function (p) { return p.visit_date === hoy && p.visit_status === 'redeemed'; });
+    var noShow   = potData.filter(function (p) { return p.visit_date === hoy && p.visit_status === 'no_show'; });
+    var hoyDisp  = new Date().toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    var card = document.getElementById('pot-hoy-card');
+    card.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">'
+        + '<div>'
+          + '<div style="font-size:.55rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:.35rem;display:flex;align-items:center;gap:.35rem;">'
+            + '<span style="width:6px;height:6px;background:var(--or);border-radius:50%;display:inline-block;animation:ping 1.8s ease infinite;"></span>'
+            + 'Hoy — ' + hoyDisp
+          + '</div>'
+          + '<div style="font-size:1.55rem;font-weight:900;color:var(--txt);line-height:1;">'
+            + pending.length + ' visita' + (pending.length !== 1 ? 's' : '') + ' pendiente' + (pending.length !== 1 ? 's' : '')
+          + '</div>'
+          + '<div style="display:flex;gap:1rem;margin-top:.35rem;font-size:.7rem;color:var(--mu);">'
+            + '<span style="color:#4ade80;">✓ ' + redeemed.length + ' canjeada' + (redeemed.length !== 1 ? 's' : '') + '</span>'
+            + (noShow.length ? '<span style="color:#f87171;">✗ ' + noShow.length + ' no asistió</span>' : '')
+          + '</div>'
+        + '</div>'
+        + '<button onclick="setPotFilter(document.querySelector(\'[data-potfil=\\\'today\\\']\'),\'today\')" '
+          + 'style="padding:.55rem 1.1rem;background:var(--or);color:#fff;border:none;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:var(--fB);border-radius:var(--r);flex-shrink:0;">'
+          + 'Ver visitas de hoy'
+        + '</button>'
+      + '</div>';
+  }
+
+  window.validarVisitaPot = function (phone) {
+    if (!phone || !window.supabase) return;
+    if (!confirm('¿Confirmar que este visitante se presentó hoy?')) return;
+    window.supabase.from('potentials')
+      .update({ visit_status: 'redeemed', redeemed_at: new Date().toISOString() })
+      .eq('phone', phone)
+      .then(function (r) {
+        if (r.error) { alert('Error: ' + r.error.message); return; }
+        potData = potData.map(function (p) {
+          return p.phone === phone
+            ? Object.assign({}, p, { visit_status: 'redeemed', redeemed_at: new Date().toISOString() })
+            : p;
+        });
+        renderPotenciales();
+        renderPotHoy();
+      });
+  };
+
+  window.marcarNoAsistio = function (phone) {
+    if (!phone || !window.supabase) return;
+    if (!confirm('¿Marcar este visitante como "no asistió"?')) return;
+    window.supabase.from('potentials')
+      .update({ visit_status: 'no_show' })
+      .eq('phone', phone)
+      .then(function (r) {
+        if (r.error) { alert('Error: ' + r.error.message); return; }
+        potData = potData.map(function (p) {
+          return p.phone === phone
+            ? Object.assign({}, p, { visit_status: 'no_show' })
+            : p;
+        });
+        renderPotenciales();
+        renderPotHoy();
+      });
+  };
+
+  // Pre-llenar fecha de hoy en el selector de reservas al cargar
+  (function () {
+    var el = document.getElementById('res-fecha');
+    if (el) el.value = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+  })();
+
+})();
 </script>
 
 </body>

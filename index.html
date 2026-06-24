@@ -13,8 +13,8 @@
         rel="stylesheet" />
     <style>
         :root {
-            --orange: #FF4D00;
-            --orange-dark: #CC3D00;
+            --orange: rgb(245, 132, 10);
+            --orange-dark: rgb(210, 113, 8);
             --black: #080808;
             --zinc: #111111;
         }
@@ -66,7 +66,7 @@
             height: 72px;
             background: rgba(8, 8, 8, 0.85);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 77, 0, 0.15);
+            border-bottom: 1px solid rgba(245, 132, 10, 0.15);
             transition: all 0.3s;
         }
 
@@ -176,8 +176,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 77, 0, 0.12);
-            border: 1px solid rgba(255, 77, 0, 0.4);
+            background: rgba(245, 132, 10, 0.12);
+            border: 1px solid rgb(245, 132, 10);
             padding: 0.4rem 1rem;
             margin-bottom: 1.5rem;
             font-size: 0.7rem;
@@ -463,8 +463,8 @@
         .feat-icon {
             width: 32px;
             height: 32px;
-            background: rgba(255, 77, 0, 0.12);
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            background: rgba(245, 132, 10, 0.12);
+            border: 1px solid rgb(245, 132, 10);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -573,7 +573,7 @@
             text-transform: uppercase;
             color: var(--orange);
             text-decoration: none;
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            border: 1px solid rgba(245, 132, 10, 0.3);
             padding: 0.3rem 0.8rem;
             transition: all 0.2s;
         }
@@ -759,7 +759,7 @@
         .visita-strip-icon {
             width: 42px;
             height: 42px;
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            border: 1px solid rgba(245, 132, 10, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -912,7 +912,7 @@
         .clase-arrow {
             width: 32px;
             height: 32px;
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            border: 1px solid rgba(234, 127, 13, 0.306);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -984,7 +984,7 @@
         .install-num {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 3rem;
-            color: rgba(255, 77, 0, 0.15);
+            color: rgba(234, 127, 13, 0.139);
             line-height: 1;
             margin-bottom: -0.5rem;
         }
@@ -1019,7 +1019,7 @@
         .contact-bg-label {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 8rem;
-            color: rgba(255, 77, 0, 0.06);
+            color: rgba(245, 132, 10, 0.06);
             line-height: 1;
             margin-bottom: -2rem;
             letter-spacing: 0.05em;
@@ -1041,7 +1041,7 @@
         .contact-icon {
             width: 42px;
             height: 42px;
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            border: 1px solid rgba(245, 132, 10, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1354,7 +1354,7 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             padding: 0.3rem 0.8rem;
-            border: 1px solid rgba(255, 77, 0, 0.3);
+            border: 1px solid rgb(245, 132, 10);
             color: var(--orange);
         }
 
@@ -1448,6 +1448,27 @@
         }
 
         @media (max-width: 768px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-actions .btn-hero,
+            .hero-actions .btn-ghost {
+                width: 100%;
+                max-width: 360px;
+            }
+
+            .clase-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .install-card {
+                min-height: auto;
+            }
+
             nav {
                 padding: 0 1.5rem;
                 background: rgba(8, 8, 8, 0.98);
@@ -1601,10 +1622,10 @@
         <div class="nav-logo" aria-hidden="true"></div>
         <div class="nav-links">
             <a href="#inicio">Inicio</a>
-            <a href="#nosotros">Nosotros</a>
-            <a href="#membresias">Membresías</a>
             <a href="#clases">Clases</a>
             <a href="#instalaciones">Instalaciones</a>
+            <a href="#membresias">Membresías</a>
+            <a href="#nosotros">Nosotros</a>
             <a href="#contacto">Contacto</a>
         </div>
         <div style="display:flex;gap:0.75rem;align-items:center;">
@@ -1621,10 +1642,10 @@
     <!-- Mobile Menu -->
     <div class="mob-menu" id="mob-menu">
         <a href="#inicio" onclick="closeMob()">Inicio</a>
-        <a href="#nosotros" onclick="closeMob()">Nosotros</a>
-        <a href="#membresias" onclick="closeMob()">Membresías</a>
         <a href="#clases" onclick="closeMob()">Clases</a>
         <a href="#instalaciones" onclick="closeMob()">Instalaciones</a>
+        <a href="#membresias" onclick="closeMob()">Membresías</a>
+        <a href="#nosotros" onclick="closeMob()">Nosotros</a>
         <a href="#contacto" onclick="closeMob()">Contacto</a>
         <a href="#contacto" onclick="closeMob()" style="color:var(--orange);">Únete Ahora →</a>
     </div>
@@ -1638,7 +1659,7 @@
                 superar tus límites cada día.</p>
             <div class="hero-actions">
                 <a href="#contacto" class="btn-hero">Visítanos · Desde $1,000/mes</a>
-                <a href="#clases" class="btn-ghost">Ver clases <span>→</span></a>
+                <a href="#clases" class="btn-ghost">Agenda clase gratis</a>
             </div>
 
         </div>
@@ -1649,37 +1670,124 @@
         <div class="marquee-track" id="marqueeTrack"></div>
     </div>
 
-    <!-- ══════════ NOSOTROS ══════════ -->
-    <section id="nosotros">
-        <div class="about-section">
-            <div class="about-image-wrap reveal">
-                <img src="img/Zona aparatos.jpeg" alt="Gym interior" />
-                <div class="about-badge"></div>
+    <!-- ══════════ CLASES ══════════ -->
+    <section id="clases" class="clases-section">
+        <div class="clases-header reveal">
+            <div>
+                <div class="section-label">Clases Grupales</div>
+                <h2 class="section-title">ENTRENA<br>EN GRUPO</h2>
             </div>
-            <div class="reveal">
-                <div class="section-label">Nuestra Historia</div>
-                <h2 class="section-title">MÁS QUE<br>UN GIMNASIO</h2>
-                <p class="section-sub">Elemental Club nació con una visión clara: crear un espacio donde cada persona,
-                    sin importar su nivel, pueda alcanzar sus metas en un ambiente motivador y profesional.</p>
-                <p class="section-sub" style="margin-top:1rem;">Con casi 700 miembros activos y un equipo de coaches
-                    certificados, ofrecemos desde clases grupales especializadas hasta áreas de entrenamiento funcional
-                    de clase mundial.</p>
-                <div class="feature-list">
-                    <div class="feature-item">
-                        <div class="feat-icon">✦</div>
-                        <p>Equipamiento especializado</p>
+            <div>
+                <p
+                    style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:1.25rem;max-width:280px;line-height:1.6;">
+                    12 clases diseñadas por expertos: <strong style="color:rgba(255,255,255,0.5);">3 Premium</strong> y
+                    <strong style="color:rgba(255,255,255,0.5);">9 Estándar</strong>. Reserva tu lugar ahora.</p>
+                <div class="filters" id="filters">
+                    <button class="fpill active" data-filter="all">Todas</button>
+                    <button class="fpill" data-filter="estudio"><svg xmlns="http://www.w3.org/2000/svg" width="13"
+                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg> Estudio</button>
+                    <button class="fpill" data-filter="funcional"><svg xmlns="http://www.w3.org/2000/svg" width="13"
+                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg> Funcional</button>
+                    <button class="fpill" data-filter="competicion"><svg xmlns="http://www.w3.org/2000/svg" width="13"
+                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                            <path d="M4 22h16" />
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
+                        </svg> Competición</button>
+                    <button class="fpill" data-filter="bienestar"><svg xmlns="http://www.w3.org/2000/svg" width="13"
+                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                            <line x1="6" y1="1" x2="6" y2="4" />
+                            <line x1="10" y1="1" x2="10" y2="4" />
+                            <line x1="14" y1="1" x2="14" y2="4" />
+                        </svg> Bienestar</button>
+                </div>
+            </div>
+        </div>
+        <div class="clases-grid" id="clasesGrid"></div>
+        <div style="max-width:1400px;margin:1.5px auto 0;background:rgba(255,255,255,0.05);">
+            <div style="padding:3.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;background:#0f0f0f;"
+                class="reveal">
+                <div>
+                    <div class="section-label" style="margin-bottom:0.75rem;">Entrena ahora</div>
+                    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.03em;">¿LISTO PARA
+                        RESERVAR?</h3>
+                    <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-top:0.5rem;">Inicia sesion para
+                        reservar tu clase y no perder tu lugar.</p>
+                </div>
+                <a href="reservar-clases.html" class="btn-hero" style="white-space:nowrap;">Reservar Mi Clase →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ INSTALACIONES ══════════ -->
+    <section id="instalaciones" class="install-section">
+        <div class="install-inner">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;"
+                class="reveal">
+                <div>
+                    <div class="section-label">Espacios</div>
+                    <h2 class="section-title">NUESTRAS<br>INSTALACIONES</h2>
+                </div>
+                <p style="color:rgba(255,255,255,0.3);font-size:0.82rem;max-width:300px;line-height:1.7;">Espacios
+                    diseñados para tu comodidad y máximo rendimiento, renovados constantemente.</p>
+            </div>
+            <div class="install-grid reveal">
+                <div class="install-card">
+                    <img src="img/Zona pesas.jpeg" alt="Zona de Pesas" class="install-img" />
+                    <div class="install-body">
+                        <div class="install-num">01</div>
+                        <div class="install-name">Zona de Pesas</div>
+                        <div class="install-desc">Racks de sentadilla, barras olímpicas y bancas ajustables rodeadas de
+                            espejos. Espacio amplio para entrenamiento de fuerza a cualquier nivel.</div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feat-icon">✦</div>
-                        <p>Coaches certificados</p>
+                </div>
+                <div class="install-card">
+                    <img src="img/Zona cardio1.jpeg" alt="Ski Machines" class="install-img" />
+                    <div class="install-body">
+                        <div class="install-num">02</div>
+                        <div class="install-name">Ski Machines</div>
+                        <div class="install-desc">Batería de Ski Machines. Cardio de cuerpo
+                            completo ideal para Hyrox, CrossFit y entrenamiento funcional de alta intensidad.</div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feat-icon">✦</div>
-                        <p>12 clases grupales especializadas</p>
+                </div>
+                <div class="install-card">
+                    <img src="img/Zona amplia multisusos.jpeg" alt="Box Funcional" class="install-img" />
+                    <div class="install-body">
+                        <div class="install-num">03</div>
+                        <div class="install-name">Zona Funcional</div>
+                        <div class="install-desc">Zona semiabierta con rig de barras, cuerdas de trepa, plataformas de
+                            levantamiento y pista interior. El corazón del entrenamiento Hyrox y CrossFit.</div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feat-icon">✦</div>
-                        <p>Acceso biométrico y seguridad</p>
+                </div>
+                <div class="install-card">
+                    <img src="img/Zona cardio2.jpeg" alt="Zona de Remo" class="install-img" />
+                    <div class="install-body">
+                        <div class="install-num">04</div>
+                        <div class="install-name">Zona de Remo</div>
+                        <div class="install-desc">Rowing machines Elemental con vista al exterior. Cardio de bajo
+                            impacto y alta demanda metabólica, integradas en circuitos de clases grupales.</div>
+                    </div>
+                </div>
+                <div class="install-card">
+                    <img src="img/Zona estudio spinning.jpeg" alt="Estudio Spinning" class="install-img" />
+                    <div class="install-body">
+                        <div class="install-num">05</div>
+                        <div class="install-name">Estudio Spinning</div>
+                        <div class="install-desc">Sala inmersiva con bicicletas, iluminación de neón y sistema
+                            de audio envolvente. Ambiente de alta energía para clases de Spinning y Strong & Bike.</div>
                     </div>
                 </div>
             </div>
@@ -1831,124 +1939,37 @@
         </div>
     </section>
 
-    <!-- ══════════ CLASES ══════════ -->
-    <section id="clases" class="clases-section">
-        <div class="clases-header reveal">
-            <div>
-                <div class="section-label">Clases Grupales</div>
-                <h2 class="section-title">ENTRENA<br>EN GRUPO</h2>
+    <!-- ══════════ NOSOTROS ══════════ -->
+    <section id="nosotros">
+        <div class="about-section">
+            <div class="about-image-wrap reveal">
+                <img src="img/Zona aparatos.jpeg" alt="Gym interior" />
+                <div class="about-badge"></div>
             </div>
-            <div>
-                <p
-                    style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:1.25rem;max-width:280px;line-height:1.6;">
-                    12 clases diseñadas por expertos: <strong style="color:rgba(255,255,255,0.5);">3 Premium</strong> y
-                    <strong style="color:rgba(255,255,255,0.5);">9 Estándar</strong>. Reserva tu lugar ahora.</p>
-                <div class="filters" id="filters">
-                    <button class="fpill active" data-filter="all">Todas</button>
-                    <button class="fpill" data-filter="estudio"><svg xmlns="http://www.w3.org/2000/svg" width="13"
-                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg> Estudio</button>
-                    <button class="fpill" data-filter="funcional"><svg xmlns="http://www.w3.org/2000/svg" width="13"
-                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                        </svg> Funcional</button>
-                    <button class="fpill" data-filter="competicion"><svg xmlns="http://www.w3.org/2000/svg" width="13"
-                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                            <path d="M4 22h16" />
-                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
-                        </svg> Competición</button>
-                    <button class="fpill" data-filter="bienestar"><svg xmlns="http://www.w3.org/2000/svg" width="13"
-                            height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                            stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px">
-                            <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                            <line x1="6" y1="1" x2="6" y2="4" />
-                            <line x1="10" y1="1" x2="10" y2="4" />
-                            <line x1="14" y1="1" x2="14" y2="4" />
-                        </svg> Bienestar</button>
-                </div>
-            </div>
-        </div>
-        <div class="clases-grid" id="clasesGrid"></div>
-        <div style="max-width:1400px;margin:1.5px auto 0;background:rgba(255,255,255,0.05);">
-            <div style="padding:3.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;background:#0f0f0f;"
-                class="reveal">
-                <div>
-                    <div class="section-label" style="margin-bottom:0.75rem;">Entrena ahora</div>
-                    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.03em;">¿LISTO PARA
-                        RESERVAR?</h3>
-                    <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-top:0.5rem;">Inicia sesion para
-                        reservar tu clase y no perder tu lugar.</p>
-                </div>
-                <a href="reservar-clases.html" class="btn-hero" style="white-space:nowrap;">Reservar Mi Clase →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════ INSTALACIONES ══════════ -->
-    <section id="instalaciones" class="install-section">
-        <div class="install-inner">
-            <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;"
-                class="reveal">
-                <div>
-                    <div class="section-label">Espacios</div>
-                    <h2 class="section-title">NUESTRAS<br>INSTALACIONES</h2>
-                </div>
-                <p style="color:rgba(255,255,255,0.3);font-size:0.82rem;max-width:300px;line-height:1.7;">Espacios
-                    diseñados para tu comodidad y máximo rendimiento, renovados constantemente.</p>
-            </div>
-            <div class="install-grid reveal">
-                <div class="install-card">
-                    <img src="img/Zona pesas.jpeg" alt="Zona de Pesas" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">01</div>
-                        <div class="install-name">Zona de Pesas</div>
-                        <div class="install-desc">Racks de sentadilla, barras olímpicas y bancas ajustables rodeadas de
-                            espejos. Espacio amplio para entrenamiento de fuerza a cualquier nivel.</div>
+            <div class="reveal">
+                <div class="section-label">Nuestra Historia</div>
+                <h2 class="section-title">MÁS QUE<br>UN GIMNASIO</h2>
+                <p class="section-sub">Elemental Club nació con una visión clara: crear un espacio donde cada persona,
+                    sin importar su nivel, pueda alcanzar sus metas en un ambiente motivador y profesional.</p>
+                <p class="section-sub" style="margin-top:1rem;">Con casi 700 miembros activos y un equipo de coaches
+                    certificados, ofrecemos desde clases grupales especializadas hasta áreas de entrenamiento funcional
+                    de clase mundial.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feat-icon">✦</div>
+                        <p>Equipamiento especializado</p>
                     </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona cardio1.jpeg" alt="Ski Machines" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">02</div>
-                        <div class="install-name">Ski Machines</div>
-                        <div class="install-desc">Batería de Ski Machines. Cardio de cuerpo
-                            completo ideal para Hyrox, CrossFit y entrenamiento funcional de alta intensidad.</div>
+                    <div class="feature-item">
+                        <div class="feat-icon">✦</div>
+                        <p>Coaches certificados</p>
                     </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona amplia multisusos.jpeg" alt="Box Funcional" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">03</div>
-                        <div class="install-name">Zona Funcional</div>
-                        <div class="install-desc">Zona semiabierta con rig de barras, cuerdas de trepa, plataformas de
-                            levantamiento y pista interior. El corazón del entrenamiento Hyrox y CrossFit.</div>
+                    <div class="feature-item">
+                        <div class="feat-icon">✦</div>
+                        <p>12 clases grupales especializadas</p>
                     </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona cardio2.jpeg" alt="Zona de Remo" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">04</div>
-                        <div class="install-name">Zona de Remo</div>
-                        <div class="install-desc">Rowing machines Elemental con vista al exterior. Cardio de bajo
-                            impacto y alta demanda metabólica, integradas en circuitos de clases grupales.</div>
-                    </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona estudio spinning.jpeg" alt="Estudio Spinning" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">05</div>
-                        <div class="install-name">Estudio Spinning</div>
-                        <div class="install-desc">Sala inmersiva con bicicletas, iluminación de neón y sistema
-                            de audio envolvente. Ambiente de alta energía para clases de Spinning y Strong & Bike.</div>
+                    <div class="feature-item">
+                        <div class="feat-icon">✦</div>
+                        <p>Acceso biométrico y seguridad</p>
                     </div>
                 </div>
             </div>
@@ -1978,7 +1999,7 @@
                         </div>
                         <div>
                             <h4>Ubicación</h4>
-                            <p>P.º Magisterial 1519, Residencial Punta del Este<br>37296 León de los Aldama, Gto.</p>
+                            <a href="https://maps.app.goo.gl/9i222f5zjpLdJNF58" target="_blank" style="color:rgba(255,255,255,0.75);text-decoration:none;">P.º Magisterial 1519, Residencial Punta del Este<br>37296 León de los Aldama, Gto.</a>
                         </div>
                     </div>
                     <div class="contact-row">
@@ -2064,10 +2085,11 @@
                 <div class="footer-col">
                     <h4>Navegación</h4>
                     <ul>
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#nosotros">Nosotros</a></li>
-                        <li><a href="#membresias">Membresías</a></li>
+                                <li><a href="#inicio">Inicio</a></li>
                         <li><a href="#clases">Clases</a></li>
+                        <li><a href="#instalaciones">Instalaciones</a></li>
+                        <li><a href="#membresias">Membresías</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
                         <li><a href="#contacto">Contacto</a></li>
                     </ul>
                 </div>
@@ -2104,7 +2126,7 @@
     <script>
         // ── Nav scroll effect ──
         window.addEventListener('scroll', () => {
-            document.getElementById('navbar').style.borderBottomColor = window.scrollY > 50 ? 'rgba(255,77,0,0.3)' : 'rgba(255,77,0,0.15)';
+            document.getElementById('navbar').style.borderBottomColor = window.scrollY > 50 ? 'rgba(245,132,10,0.3)' : 'rgba(245,132,10,0.15)';
         });
 
         // ── Mobile menu ──
@@ -2253,7 +2275,7 @@
           <span class="modal-emoji" style="display:flex;align-items:center;color:var(--orange);">${CAT_SVG[c.cat]}</span>
           <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
             <div class="modal-cat" style="display:flex;align-items:center;gap:0.4rem;">${CAT_LABEL[c.cat]}</div>
-            ${c.tipo ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo === 'Premium' ? 'rgba(255,77,0,0.15)' : 'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo === 'Premium' ? 'rgba(255,77,0,0.4)' : 'rgba(255,255,255,0.12)'};color:${c.tipo === 'Premium' ? 'var(--orange)' : 'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
+            ${c.tipo ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo === 'Premium' ? 'rgba(245,132,10,0.15)' : 'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo === 'Premium' ? 'rgba(245,132,10,0.4)' : 'rgba(255,255,255,0.12)'};color:${c.tipo === 'Premium' ? 'var(--orange)' : 'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
           </div>
           <div class="modal-name">${c.nombre}</div>
           <p class="modal-desc">${c.desc}</p>

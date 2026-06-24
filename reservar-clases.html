@@ -436,6 +436,42 @@
             .modal-actions { flex-direction:column; }
             .week-bar { flex-direction:column; align-items:flex-start; }
         }
+
+        /* ── VISIT SUCCESS SCREEN ── */
+        @keyframes checkIn {
+            from { transform:scale(0.5) translateY(12px); opacity:0; }
+            to   { transform:scale(1) translateY(0); opacity:1; }
+        }
+        #visit-success-screen { min-height:calc(100vh - 72px); align-items:center; justify-content:center; padding:3rem 1.5rem; }
+        .vs-check-circle {
+            width:90px; height:90px; background:rgba(34,197,94,0.1);
+            border:2px solid rgba(34,197,94,0.35); border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 1.75rem; animation:checkIn .5s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        .vs-card {
+            background:var(--zinc2); border:1px solid var(--border);
+            padding:1.5rem; margin-bottom:1.5rem; position:relative; overflow:hidden; text-align:left;
+        }
+        .vs-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:1px;
+            background:linear-gradient(90deg,rgba(34,197,94,0.7),transparent);
+        }
+        .vs-row {
+            display:flex; align-items:center; justify-content:space-between;
+            padding-bottom:0.75rem; border-bottom:1px solid var(--border);
+        }
+        .vs-row:last-child { padding-bottom:0; border-bottom:none; }
+        .vs-lbl {
+            font-size:0.65rem; font-weight:700; letter-spacing:0.15em;
+            text-transform:uppercase; color:rgba(255,255,255,0.3);
+        }
+        .vs-val { font-size:0.85rem; font-weight:800; }
+        .vs-folio-wrap {
+            display:inline-flex; align-items:center; gap:0.6rem;
+            background:rgba(255,77,0,0.07); border:1px solid var(--border-orange);
+            padding:0.55rem 1.25rem; margin-bottom:2rem;
+        }
     </style>
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -498,7 +534,7 @@
 
         <!-- VISIT -->
         <div id="tab-visit" class="auth-card" style="display:none;">
-            <div class="visit-tag"><span class="visit-dot"></span> Visita de Cortesía</div>
+            <div class="visit-tag"><span class="visit"></span> Solo clientes primera vez</div>
             <div class="auth-msg" id="visit-msg"></div>
 
             <div class="form-row">
@@ -559,8 +595,51 @@
                 </select>
             </div>
 
-            <button class="btn-primary" onclick="registerVisit()">Registrar Visita</button>
+            <!-- Honeypot anti-bot: los humanos no lo ven ni lo llenan -->
+            <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off"
+                style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+            <button class="btn-primary" id="btn-register-visit" onclick="registerVisit()">Registrar Visita</button>
         </div>
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     VISIT SUCCESS SCREEN (Gym Libre)
+══════════════════════════════════════ -->
+<div id="visit-success-screen" style="display:none;">
+    <div style="width:100%;max-width:480px;text-align:center;">
+        <div class="vs-check-circle">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#4ade80;margin-bottom:0.75rem;">Visita Confirmada</div>
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,4.2rem);line-height:0.93;letter-spacing:0.04em;margin-bottom:1.25rem;">
+            ¡BIENVENID<span id="vs-genero-sfx">O</span>,<br><span id="vs-nombre" style="color:var(--orange)">—</span>!
+        </h1>
+        <p style="color:rgba(255,255,255,0.4);font-size:0.88rem;line-height:1.8;margin-bottom:2rem;">
+            Tu día de gym libre está registrado.<br>Preséntate en recepción mostrando tu número de teléfono.
+        </p>
+        <div class="vs-card">
+            <div class="vs-row">
+                <span class="vs-lbl">Actividad</span>
+                <span class="vs-val">🏋️ Día de Gym Libre</span>
+            </div>
+            <div class="vs-row" style="margin-top:0.75rem;">
+                <span class="vs-lbl">Fecha</span>
+                <span id="vs-fecha" class="vs-val" style="font-weight:600;color:rgba(255,255,255,0.7);">—</span>
+            </div>
+            <div class="vs-row" style="margin-top:0.75rem;">
+                <span class="vs-lbl">Teléfono</span>
+                <span id="vs-telefono" class="vs-val" style="color:var(--orange);">—</span>
+            </div>
+        </div>
+        <div class="vs-folio-wrap">
+            <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Folio:</span>
+            <span id="vs-folio" style="font-size:0.75rem;font-weight:800;letter-spacing:0.08em;color:var(--orange);">—</span>
+        </div>
+        <a href="index.html" class="btn-ghost-form" style="text-decoration:none;display:block;">← Volver al Inicio</a>
     </div>
 </div>
 
@@ -655,6 +734,9 @@
 const SUPABASE_URL     = 'https://aveonbmcbopqqcambxoi.supabase.co';
 const SUPABASE_ANON_KEY= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZW9uYm1jYm9wcXFjYW1ieG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg0MzksImV4cCI6MjA3MzAxNDQzOX0.wKhEMF4K6Zv6PuobxCwubmhNTyzk6qlmjKyGO7JqH9Y';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Marca el momento en que se cargó la página (anti-bot: envío muy rápido = bot)
+const VISIT_PAGE_LOAD = Date.now();
 
 // ─── STATE ──────────────────────────────────────────────────────
 let currentMember     = null;
@@ -751,8 +833,49 @@ async function loginMember() {
     btn.disabled=false; btn.textContent='Entrar al Portal';
 }
 
+// ─── PHONE VALIDATION ───────────────────────────────────────────
+function isValidMexPhone(phone) {
+    if (!/^\d{10}$/.test(phone)) return false;
+    // México: números móviles/fijos válidos no empiezan con 0 ni 1
+    if (/^[01]/.test(phone)) return false;
+    // Descarta secuencias inválidas obvias
+    if (/^(\d)\1{9}$/.test(phone)) return false; // 1111111111, 0000000000, etc.
+    const blacklist = ['1234567890','9876543210','0123456789','0987654321'];
+    return !blacklist.includes(phone);
+}
+
+// ─── PANTALLA DE ÉXITO (gym libre) ──────────────────────────────
+function showVisitSuccess(nombre, phone, gender) {
+    document.getElementById('auth-screen').style.display = 'none';
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('es-MX', {
+        weekday:'long', day:'numeric', month:'long', year:'numeric'
+    });
+    const folio = 'EC-' + Date.now().toString(36).toUpperCase().slice(-7);
+    const sfx   = (gender === 'femenino') ? 'A' : 'O';
+    document.getElementById('vs-genero-sfx').textContent  = sfx;
+    document.getElementById('vs-nombre').textContent      = nombre.toUpperCase();
+    document.getElementById('vs-fecha').textContent       = dateStr;
+    document.getElementById('vs-telefono').textContent    = phone;
+    document.getElementById('vs-folio').textContent       = folio;
+    document.getElementById('visit-success-screen').style.display = 'flex';
+}
+
 // ─── VISITOR REGISTRATION ───────────────────────────────────────
 async function registerVisit() {
+    // 1. Honeypot: si tiene valor, es un bot → simular éxito silenciosamente
+    const hp = document.getElementById('hp-website');
+    if (hp && hp.value.trim()) {
+        showMsg('visit-msg','¡Registro recibido! Nos pondremos en contacto.','success');
+        return;
+    }
+
+    // 2. Anti-bot: el formulario no debe enviarse en menos de 2 segundos
+    if (Date.now() - VISIT_PAGE_LOAD < 2000) {
+        showMsg('visit-msg','Por favor completa el formulario con calma e intenta de nuevo.');
+        return;
+    }
+
     const nombre   = document.getElementById('visit-nombre').value.trim();
     const apellido = document.getElementById('visit-apellido').value.trim();
     const phone    = document.getElementById('visit-phone').value.trim();
@@ -760,28 +883,121 @@ async function registerVisit() {
     const clase    = document.getElementById('visit-clase').value;
     const source   = document.getElementById('visit-source').value;
 
-    if (!nombre || !apellido || !phone) { showMsg('visit-msg','Nombre, apellido y teléfono son obligatorios.'); return; }
-    if (phone.length < 10) { showMsg('visit-msg','Ingresa un teléfono de 10 dígitos.'); return; }
-
-    // Check if already a member
-    const { data: existing } = await sb.from('clients').select('id').eq('phone', phone).maybeSingle();
-    if (existing) {
-        showMsg('visit-msg','Este número ya está registrado. Usa la pestaña Miembro.','info'); return;
+    if (!nombre || !apellido || !phone) {
+        showMsg('visit-msg','Nombre, apellido y teléfono son obligatorios.'); return;
     }
 
-    try {
-        await sb.from('potentials').upsert([{
-            phone, first_name:nombre, last_name1:apellido,
-            source: source || 'visita-web',
-            gender: gender || 'no_especificado',
-            observations: clase ? `Interés: ${clase}` : 'Visita de prueba web'
-        }], { onConflict:'phone' });
-    } catch(e) { /* silently continue even if potentials insert fails */ }
+    // 3. Validación de número mexicano
+    if (!isValidMexPhone(phone)) {
+        showMsg('visit-msg','Ingresa un número de teléfono mexicano válido de 10 dígitos (ej. 4771234567).');
+        return;
+    }
 
-    isVisitor = true;
-    currentMember = { first_name:nombre, last_name1:apellido, phone, membership_type:'Visita', membership_status:'visitor', id:null };
-    showPortal();
-    toast('¡Bienvenido! Tu visita ha sido registrada.','success');
+    // 4. Rate-limit por localStorage: misma fecha + mismo teléfono → bloquear
+    try {
+        const stored = localStorage.getItem('ec_visit_' + phone);
+        if (stored) {
+            const storedDay = new Date(parseInt(stored)).toLocaleDateString('sv-SE');
+            const todayDay  = new Date().toLocaleDateString('sv-SE');
+            if (storedDay === todayDay) {
+                showMsg('visit-msg',' Lo sentimos, ya has registrado una visita. Acercate a recepción.','success');
+                return;
+            }
+        }
+    } catch(e) {}
+
+    const btn = document.getElementById('btn-register-visit');
+    if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
+
+    try {
+        // 5. Verificar si ya es miembro
+        const { data: esMiembro } = await sb.from('clients')
+            .select('id').eq('phone', phone).maybeSingle();
+        if (esMiembro) {
+            showMsg('visit-msg','Este número ya pertenece a un miembro activo. Usa la pestaña Miembro.','info');
+            if (btn) { btn.disabled = false; btn.textContent = 'Registrar Visita'; }
+            return;
+        }
+
+        // 6. Verificar si ya está en potenciales con visita activa
+        const { data: pot } = await sb.from('potentials')
+            .select('id, visit_status, visit_date').eq('phone', phone).maybeSingle();
+
+        if (pot) {
+            const st = pot.visit_status;
+            if (st === 'redeemed') {
+                showMsg('visit-msg','Tu visita gratuita ya fue canjeada. Para seguir entrenando, pasa a recepción a adquirir una membresía.','info');
+                if (btn) { btn.disabled = false; btn.textContent = 'Registrar Visita'; }
+                return;
+            }
+            if (st === 'pending') {
+                showMsg('visit-msg','✓ Tu visita ya está registrada. Preséntate en recepción mostrando tu número de teléfono.','success');
+                // Para gym libre, también mostrar la pantalla de éxito
+                if (clase === 'gym-general' || pot.visit_class === 'gym-general') {
+                    showVisitSuccess(nombre, phone, gender);
+                }
+                if (btn) { btn.disabled = false; btn.textContent = 'Registrar Visita'; }
+                return;
+            }
+            // st === 'no_show' o sin estado → permitir re-registro
+        }
+
+        // 7. Guardar en potentials (con columnas nuevas si ya se corrió la migración)
+        const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+        let saved = false;
+
+        const { error: err1 } = await sb.from('potentials').upsert([{
+            phone,
+            first_name:   nombre,
+            last_name1:   apellido,
+            source:       source || 'visita-web',
+            gender:       gender || 'no_especificado',
+            observations: clase ? `Interés: ${clase}` : 'Visita de prueba web',
+            visit_date:   today,
+            visit_class:  clase || null,
+            visit_status: 'pending',
+        }], { onConflict: 'phone' });
+
+        if (!err1) {
+            saved = true;
+        } else {
+            // Columnas nuevas no existen aún → fallback sin ellas
+            const { error: err2 } = await sb.from('potentials').upsert([{
+                phone, first_name:nombre, last_name1:apellido,
+                source: source || 'visita-web',
+                gender: gender || 'no_especificado',
+                observations: clase ? `Interés: ${clase}` : 'Visita de prueba web',
+            }], { onConflict: 'phone' });
+            if (!err2) saved = true;
+        }
+
+        if (!saved) {
+            // Error no recuperable — aún así dejamos pasar (la visita se valida en recepción)
+            console.warn('[registerVisit] No se pudo guardar en potentials');
+        }
+
+        // 8. Guardar en localStorage
+        try { localStorage.setItem('ec_visit_' + phone, Date.now().toString()); } catch(e) {}
+
+        // 9. Redirigir: gym libre → pantalla de éxito | otro → portal visitante
+        if (clase === 'gym-general') {
+            showVisitSuccess(nombre, phone, gender);
+        } else {
+            isVisitor = true;
+            currentMember = {
+                first_name: nombre, last_name1: apellido, phone,
+                membership_type: 'Visita', membership_status: 'visitor', id: null
+            };
+            showPortal();
+            toast('¡Bienvenido! Tu visita ha sido registrada.','success');
+        }
+
+    } catch(e) {
+        console.error('[registerVisit]', e);
+        showMsg('visit-msg','Error de conexión. Intenta de nuevo.');
+    }
+
+    if (btn) { btn.disabled = false; btn.textContent = 'Registrar Visita'; }
 }
 
 // ─── FORGOT PASSWORD ────────────────────────────────────────────
