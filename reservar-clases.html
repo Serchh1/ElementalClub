@@ -10,14 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --orange: #FF4D00;
-            --orange-dark: #CC3D00;
+            --orange: rgb(245, 132, 10);
+            --orange-dark: rgb(245, 132, 10);
             --black: #080808;
             --zinc: #111111;
             --zinc2: #161616;
             --zinc3: #1f1f1f;
             --border: rgba(255,255,255,0.07);
-            --border-orange: rgba(255,77,0,0.25);
+            --border-orange: rgba(245, 132, 10,0.25);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -49,7 +49,7 @@
             height:72px;
             background:rgba(8,8,8,0.85);
             backdrop-filter:blur(20px);
-            border-bottom:1px solid rgba(255,77,0,0.15);
+            border-bottom:1px solid rgba(245, 132, 10,0.15);
             transition:border-bottom-color .3s;
         }
         .nav-logo {
@@ -145,8 +145,8 @@
             transition:border-color .2s, box-shadow .2s; border-radius:0;
         }
         .form-group input:focus, .form-group select:focus {
-            border-color:rgba(255,77,0,0.6);
-            box-shadow:0 0 0 3px rgba(255,77,0,0.08);
+            border-color:rgba(245, 132, 10,0.6);
+            box-shadow:0 0 0 3px rgba(245, 132, 10,0.08);
         }
         .form-group input::placeholder { color:rgba(255,255,255,0.15); }
         .form-group select option { background:#1f1f1f; color:#fff; }
@@ -162,7 +162,7 @@
             transition:background .2s, transform .2s, box-shadow .2s;
             margin-top:1rem;
         }
-        .btn-primary:hover { background:var(--orange-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,77,0,0.3); }
+        .btn-primary:hover { background:var(--orange-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(245, 132, 10,0.3); }
         .btn-primary:disabled { opacity:0.45; cursor:not-allowed; transform:none; box-shadow:none; }
 
         .btn-ghost-form {
@@ -180,7 +180,7 @@
         }
         .auth-msg.error { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); color:#f87171; }
         .auth-msg.success { background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); color:#4ade80; }
-        .auth-msg.info { background:rgba(255,77,0,0.08); border:1px solid rgba(255,77,0,0.25); color:#fb923c; }
+        .auth-msg.info { background:rgba(245, 132, 10,0.08); border:1px solid rgba(245, 132, 10,0.25); color:rgb(245, 132, 10); }
 
         .auth-divider {
             display:flex; align-items:center; gap:1rem;
@@ -190,7 +190,7 @@
 
         .visit-tag {
             display:inline-flex; align-items:center; gap:0.5rem;
-            background:rgba(255,77,0,0.1); border:1px solid var(--border-orange);
+            background:rgba(245, 132, 10,0.1); border:1px solid var(--border-orange);
             padding:0.4rem 0.9rem; font-size:0.68rem; font-weight:700;
             letter-spacing:0.15em; text-transform:uppercase; color:var(--orange);
             margin-bottom:1.25rem;
@@ -223,7 +223,7 @@
         }
         .mpill-active   { color:#4ade80; border-color:rgba(34,197,94,0.35); background:rgba(34,197,94,0.08); }
         .mpill-inactive { color:#f87171; border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.08); }
-        .mpill-plan     { color:var(--orange); border-color:var(--border-orange); background:rgba(255,77,0,0.08); }
+        .mpill-plan     { color:var(--orange); border-color:var(--border-orange); background:rgba(245, 132, 10,0.08); }
         .mpill-visit    { color:#fbbf24; border-color:rgba(251,191,36,0.35); background:rgba(251,191,36,0.08); }
 
         .section-label {
@@ -469,7 +469,7 @@
         .vs-val { font-size:0.85rem; font-weight:800; }
         .vs-folio-wrap {
             display:inline-flex; align-items:center; gap:0.6rem;
-            background:rgba(255,77,0,0.07); border:1px solid var(--border-orange);
+            background:rgba(245, 132, 10,0.07); border:1px solid var(--border-orange);
             padding:0.55rem 1.25rem; margin-bottom:2rem;
         }
     </style>
@@ -1324,7 +1324,7 @@ document.addEventListener('keydown', e => {
 // Nav scroll
 window.addEventListener('scroll', () => {
     document.getElementById('navbar').style.borderBottomColor =
-        window.scrollY > 50 ? 'rgba(255,77,0,0.3)' : 'rgba(255,77,0,0.15)';
+        window.scrollY > 50 ? 'rgba(245, 132, 10,0.3)' : 'rgba(245, 132, 10,0.15)';
 });
 
 // ─── INIT ───────────────────────────────────────────────────────

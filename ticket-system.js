@@ -31,15 +31,15 @@
     .tk6-modal {
       width:100%; max-width:400px; margin:auto;
       background:#080808;
-      border:1px solid rgba(255,77,0,0.2);
-      border-top:2px solid #FF4D00;
+      border:1px solid rgba(245, 132, 10,0.2);
+      border-top:2px solid rgb(245, 132, 10);
       position:relative; overflow:hidden;
       animation:tk6Up .3s cubic-bezier(.22,1,.36,1);
     }
     @keyframes tk6Up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
     .tk6-modal::before {
       content:''; position:absolute; top:0; left:0; right:0; height:1px;
-      background:linear-gradient(90deg, #FF4D00 0%, rgba(255,77,0,.15) 60%, transparent 100%);
+      background:linear-gradient(90deg, rgb(245, 132, 10) 0%, rgba(245, 132, 10,.15) 60%, transparent 100%);
     }
 
     .tk6-hdr {
@@ -68,10 +68,10 @@
       cursor:pointer; color:rgba(255,255,255,.35); font-size:.7rem;
       font-family:'Inter',sans-serif; transition:all .15s; flex-shrink:0;
     }
-    .tk6-close:hover { border-color:rgba(255,77,0,.5); color:#FF4D00; }
+    .tk6-close:hover { border-color:rgba(245, 132, 10,.5); color:rgb(245, 132, 10); }
 
     .tk6-op-band {
-      background:#FF4D00; padding:.55rem 1.5rem;
+      background:rgb(245, 132, 10); padding:.55rem 1.5rem;
       display:flex; align-items:center; justify-content:space-between;
     }
     .tk6-op-lbl {
@@ -90,10 +90,10 @@
     }
     .tk6-client-eyebrow {
       font-size:.48rem; font-weight:800; letter-spacing:.25em;
-      text-transform:uppercase; color:rgba(255,77,0,.7); margin-bottom:.3rem;
+      text-transform:uppercase; color:rgba(245, 132, 10,.7); margin-bottom:.3rem;
       display:flex; align-items:center; gap:.4rem;
     }
-    .tk6-client-eyebrow::before { content:''; width:1.2rem; height:1px; background:#FF4D00; }
+    .tk6-client-eyebrow::before { content:''; width:1.2rem; height:1px; background:rgb(245, 132, 10); }
     .tk6-client-name {
       font-family:'Bebas Neue',sans-serif;
       font-size:1.7rem; letter-spacing:.04em; color:#fff; line-height:1;
@@ -115,16 +115,16 @@
 
     .tk6-monto-block {
       margin:.6rem 0 .9rem; padding:.9rem 1rem;
-      background:rgba(255,77,0,.06); border:1px solid rgba(255,77,0,.18);
-      border-left:2px solid #FF4D00;
+      background:rgba(245, 132, 10,.06); border:1px solid rgba(245, 132, 10,.18);
+      border-left:2px solid rgb(245, 132, 10);
       display:flex; align-items:flex-end; justify-content:space-between;
     }
     .tk6-monto-lbl {
       font-size:.48rem; font-weight:800; letter-spacing:.22em;
-      text-transform:uppercase; color:rgba(255,77,0,.6); margin-bottom:.25rem;
+      text-transform:uppercase; color:rgba(245, 132, 10,.6); margin-bottom:.25rem;
     }
     .tk6-monto-val {
-      font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:#FF4D00; line-height:1;
+      font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:rgb(245, 132, 10); line-height:1;
     }
     .tk6-atendido { text-align:right; }
     .tk6-atendido-lbl {
@@ -134,13 +134,13 @@
     .tk6-atendido-val { font-size:.68rem; font-weight:600; color:rgba(255,255,255,.4); }
 
     .tk6-btn-dl {
-      width:100%; padding:.85rem; background:#FF4D00; color:#fff; border:none;
+      width:100%; padding:.85rem; background:rgb(245, 132, 10); color:#fff; border:none;
       font-family:'Inter',sans-serif; font-size:.68rem; font-weight:800;
       letter-spacing:.18em; text-transform:uppercase; cursor:pointer;
       clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);
       transition:all .22s; display:flex; align-items:center; justify-content:center; gap:.5rem;
     }
-    .tk6-btn-dl:hover { background:#CC3D00; transform:translateY(-1px); }
+    .tk6-btn-dl:hover { background:rgb(245, 132, 10); transform:translateY(-1px); }
     .tk6-btn-dl:disabled { opacity:.4; cursor:not-allowed; transform:none; clip-path:none; }
     .tk6-btn-dl.gen { background:#222; color:rgba(255,255,255,.5); clip-path:none; }
     .tk6-btn-dl.ok  { background:#15803d; clip-path:none; }
@@ -154,8 +154,8 @@
     .tk6-btn-close:hover { border-color:rgba(255,255,255,.18); color:rgba(255,255,255,.55); }
 
     .tk6-footer {
-      padding:.6rem 1.5rem; border-top:1px solid rgba(255,77,0,.1);
-      background:rgba(255,77,0,.03); font-size:.5rem; font-weight:600;
+      padding:.6rem 1.5rem; border-top:1px solid rgba(245, 132, 10,.1);
+      background:rgba(245, 132, 10,.03); font-size:.5rem; font-weight:600;
       letter-spacing:.06em; color:rgba(255,255,255,.18); text-align:center; line-height:1.7;
     }
 
@@ -172,13 +172,13 @@
     .tk6-toast.on { transform:translateX(-50%) translateY(0); }
 
     .btn-mov-ticket, .btn-ticket-sm {
-      background:transparent; border:1px solid rgba(255,77,0,.4); color:#FF4D00;
+      background:transparent; border:1px solid rgba(245, 132, 10,.4); color:rgb(245, 132, 10);
       padding:.22rem .6rem; font-size:.56rem; font-weight:800; letter-spacing:.1em;
       text-transform:uppercase; cursor:pointer; transition:all .18s;
       white-space:nowrap; font-family:'Inter',sans-serif;
     }
     .btn-mov-ticket { margin-left:.3rem; }
-    .btn-mov-ticket:hover, .btn-ticket-sm:hover { background:rgba(255,77,0,.12); border-color:#FF4D00; }
+    .btn-mov-ticket:hover, .btn-ticket-sm:hover { background:rgba(245, 132, 10,.12); border-color:rgb(245, 132, 10); }
   `;
   document.head.appendChild(style);
 

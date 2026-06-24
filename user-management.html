@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --or:#FF4D00;--or2:#CC3D00;--or-a:rgba(255,77,0,.15);
+  --or:rgb(245, 132, 10);--or2:rgb(245, 132, 10);--or-a:rgba(245, 132, 10,.15);
   --bg:#090909;--s1:#0f0f0f;--s2:#161616;--s3:#202020;--s4:#2d2d2d;
   --txt:#eeeeee;--mu:rgba(238,238,238,.38);
   --green:#22c55e;--red:#ef4444;--blue:#60a5fa;--yellow:#fbbf24;--purple:#a855f7;
@@ -36,7 +36,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes mUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-@keyframes ping{0%,100%{box-shadow:0 0 0 0 rgba(255,77,0,.3)}60%{box-shadow:0 0 0 8px transparent}}
+@keyframes ping{0%,100%{box-shadow:0 0 0 0 rgba(245, 132, 10,.3)}60%{box-shadow:0 0 0 8px transparent}}
 @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -52,7 +52,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .la-bg{position:absolute;inset:0;
   background:linear-gradient(135deg,#0a0a0a 0%,#150500 45%,#0a0a0a 100%);overflow:hidden}
 .la-bg::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(255,77,0,.14),transparent 70%)}
+  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(245, 132, 10,.14),transparent 70%)}
 .la-txt{position:absolute;top:3rem;left:3rem;right:3rem}
 .la-txt h2{font-family:var(--fT);font-size:clamp(2.2rem,3.2vw,3.8rem);line-height:.93;
   color:rgba(255,255,255,.72);margin-bottom:.9rem}
@@ -68,7 +68,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
   padding:.9rem 1rem}
 .la-card-lbl{font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
   color:rgba(255,255,255,.22);margin-bottom:.35rem}
-.la-card-val{font-family:var(--fT);font-size:1.5rem;color:rgba(255,77,0,.65)}
+.la-card-val{font-family:var(--fT);font-size:1.5rem;color:rgba(245, 132, 10,.65)}
 
 .lf{width:100%;max-width:440px;display:flex;flex-direction:column;justify-content:center;
   padding:2.5rem 2rem;background:var(--bg);position:relative}
@@ -95,7 +95,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
   padding:.78rem .9rem .78rem 2.4rem;color:var(--txt);font-size:.88rem;font-weight:500;
   border-radius:var(--r);transition:border-color .18s,box-shadow .18s;outline:none}
 .fli input::placeholder{color:rgba(255,255,255,.13)}
-.fli input:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(255,77,0,.09)}
+.fli input:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(245, 132, 10,.09)}
 .eye-tog{position:absolute;right:.82rem;top:50%;transform:translateY(-50%);background:none;
   border:none;cursor:pointer;color:rgba(255,255,255,.2);font-size:.82rem;padding:.18rem;transition:color .15s}
 .eye-tog:hover{color:rgba(255,255,255,.5)}
@@ -108,13 +108,13 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .btn-li::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .38s}
 .btn-li:hover::after{left:100%}
-.btn-li:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,77,0,.35)}
+.btn-li:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245, 132, 10,.35)}
 .btn-li:disabled{opacity:.44;cursor:not-allowed;transform:none;box-shadow:none}
 .lf-foot{margin-top:1.6rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.05);
   display:flex;justify-content:space-between;align-items:center}
 .lf-foot p{font-size:.6rem;color:rgba(255,255,255,.13)}
 .rol-badge{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  background:rgba(255,77,0,.1);border:1px solid rgba(255,77,0,.25);color:var(--or);
+  background:rgba(245, 132, 10,.1);border:1px solid rgba(245, 132, 10,.25);color:var(--or);
   padding:.18rem .55rem;border-radius:2px}
 
 /* ══ DASHBOARD ══ */
@@ -124,15 +124,15 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .topbar{position:sticky;top:0;z-index:500;height:60px;display:flex;align-items:center;
   justify-content:space-between;padding:0 1.2rem;
   background:rgba(9,9,9,.94);backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(255,77,0,.1)}
+  border-bottom:1px solid rgba(245, 132, 10,.1)}
 @media(min-width:640px){.topbar{padding:0 2.2rem}}
 .t-logo{font-family:var(--fT);font-size:1.5rem;letter-spacing:.1em}
 .t-logo b{color:var(--or);font-weight:400}
 .t-logo span{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(255,77,0,.6);margin-left:.6rem;vertical-align:middle}
+  color:rgba(245, 132, 10,.6);margin-left:.6rem;vertical-align:middle}
 .t-right{display:flex;align-items:center;gap:.75rem}
-.t-av{width:31px;height:31px;border-radius:50%;background:rgba(255,77,0,.12);
-  border:1.5px solid rgba(255,77,0,.32);display:flex;align-items:center;justify-content:center;
+.t-av{width:31px;height:31px;border-radius:50%;background:rgba(245, 132, 10,.12);
+  border:1.5px solid rgba(245, 132, 10,.32);display:flex;align-items:center;justify-content:center;
   font-family:var(--fT);font-size:.9rem;color:var(--or);flex-shrink:0}
 .t-name{font-size:.73rem;font-weight:600;color:var(--mu);display:none}
 @media(min-width:500px){.t-name{display:block}}
@@ -166,7 +166,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .rb{display:inline-flex;align-items:center;gap:.35rem;padding:.18rem .6rem;
   font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:2px}
 .rb-admin   {background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.35);color:#c084fc}
-.rb-socio   {background:rgba(255,77,0,.1);   border:1px solid rgba(255,77,0,.3);   color:var(--or)}
+.rb-socio   {background:rgba(245, 132, 10,.1);   border:1px solid rgba(245, 132, 10,.3);   color:var(--or)}
 .rb-staff   {background:rgba(96,165,250,.1); border:1px solid rgba(96,165,250,.3); color:#60a5fa}
 .rb-visitante{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25); color:#4ade80}
 
@@ -201,7 +201,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .ff-fld input,.ff-fld select{width:100%;background:var(--bg);border:1.5px solid var(--s3);
   padding:.7rem .85rem;color:var(--txt);font-family:var(--fB);font-size:.85rem;font-weight:500;
   border-radius:var(--r);outline:none;transition:border-color .18s,box-shadow .18s;appearance:none}
-.ff-fld input:focus,.ff-fld select:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(255,77,0,.08)}
+.ff-fld input:focus,.ff-fld select:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(245, 132, 10,.08)}
 .ff-fld input::placeholder{color:rgba(255,255,255,.12)}
 .ff-fld select{cursor:pointer;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23555'/%3E%3C/svg%3E");
@@ -224,7 +224,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .38s}
 .btn-primary:hover::after{left:100%}
-.btn-primary:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,77,0,.3)}
+.btn-primary:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245, 132, 10,.3)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-secondary{padding:.72rem 1.2rem;background:transparent;border:1px solid var(--s3);
   color:var(--mu);font-family:var(--fB);font-size:.72rem;font-weight:700;
@@ -256,15 +256,15 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .fp{background:var(--s1);border:1.5px solid var(--s3);padding:.3rem .72rem;
   font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   color:var(--mu);cursor:pointer;border-radius:2px;transition:all .18s}
-.fp:hover{border-color:rgba(255,77,0,.4);color:var(--txt)}
-.fp.on{background:rgba(255,77,0,.1);border-color:var(--or);color:var(--or)}
+.fp:hover{border-color:rgba(245, 132, 10,.4);color:var(--txt)}
+.fp.on{background:rgba(245, 132, 10,.1);border-color:var(--or);color:var(--or)}
 
 /* ── KPI mini ── */
 .kpi-row{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin-bottom:1.4rem}
 @media(min-width:560px){.kpi-row{grid-template-columns:repeat(4,1fr)}}
 .kpi{background:var(--s1);border:1px solid var(--s3);border-radius:var(--r);
   padding:.9rem 1rem;position:relative;overflow:hidden;transition:border-color .2s}
-.kpi:hover{border-color:rgba(255,77,0,.25)}
+.kpi:hover{border-color:rgba(245, 132, 10,.25)}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,var(--kc,var(--or)),transparent)}
 .kpi-lbl{font-size:.57rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
@@ -288,7 +288,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
   padding:.75rem .9rem;cursor:pointer;transition:all .18s;text-align:left}
 .rol-card:hover{border-color:rgba(255,255,255,.2)}
 .rol-card.sel-admin   {border-color:rgba(168,85,247,.6);background:rgba(168,85,247,.07)}
-.rol-card.sel-socio   {border-color:rgba(255,77,0,.6);  background:rgba(255,77,0,.07)}
+.rol-card.sel-socio   {border-color:rgba(245, 132, 10,.6);  background:rgba(245, 132, 10,.07)}
 .rol-card.sel-staff   {border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.07)}
 .rol-card.sel-visitante{border-color:rgba(34,197,94,.6);background:rgba(34,197,94,.07)}
 .rol-card-ico{font-size:1.2rem;margin-bottom:.35rem}
@@ -321,8 +321,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
   border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
 
 /* ── Avatar placeholder ── */
-.av-big{width:46px;height:46px;border-radius:50%;background:rgba(255,77,0,.12);
-  border:1.5px solid rgba(255,77,0,.3);display:flex;align-items:center;justify-content:center;
+.av-big{width:46px;height:46px;border-radius:50%;background:rgba(245, 132, 10,.12);
+  border:1.5px solid rgba(245, 132, 10,.3);display:flex;align-items:center;justify-content:center;
   font-family:var(--fT);font-size:1.2rem;color:var(--or);flex-shrink:0}
 
 /* ── Empty state ── */
@@ -549,7 +549,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
           </div>
         </div>
 
-        <div style="background:rgba(255,77,0,.05);border:1px solid rgba(255,77,0,.15);border-radius:var(--r);padding:.7rem 1rem;margin-bottom:1rem;font-size:.72rem;color:var(--mu);line-height:1.55" id="rol-desc-selected">
+        <div style="background:rgba(245, 132, 10,.05);border:1px solid rgba(245, 132, 10,.15);border-radius:var(--r);padding:.7rem 1rem;margin-bottom:1rem;font-size:.72rem;color:var(--mu);line-height:1.55" id="rol-desc-selected">
           <b style="color:var(--or)">Selecciona un rol</b> para continuar.
         </div>
 
@@ -611,7 +611,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         </div>
 
         <!-- Preview usuario seleccionado -->
-        <div id="rp-preview" style="display:none;background:rgba(255,77,0,.06);border:1px solid rgba(255,77,0,.2);border-left:3px solid var(--or);padding:.75rem 1rem;border-radius:var(--r);margin-bottom:1rem;display:flex;align-items:center;gap:.85rem;flex-wrap:wrap">
+        <div id="rp-preview" style="display:none;background:rgba(245, 132, 10,.06);border:1px solid rgba(245, 132, 10,.2);border-left:3px solid var(--or);padding:.75rem 1rem;border-radius:var(--r);margin-bottom:1rem;display:flex;align-items:center;gap:.85rem;flex-wrap:wrap">
           <div class="av-big" id="rp-av">?</div>
           <div>
             <div style="font-size:.88rem;font-weight:700;color:#fff" id="rp-prev-name">—</div>
@@ -905,7 +905,7 @@ function renderUsersTable(lista){
     var fecha=u.created_at?new Date(u.created_at).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'—';
     var esYo=currentUser&&String(u.id)===String(currentUser.id);
     return '<tr>'
-      +'<td><span class="td-name">'+escHtml(u.name||'—')+'</span>'+(esYo?'<span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.25);color:var(--or);padding:.1rem .4rem;border-radius:2px;margin-left:.45rem">TÚ</span>':' ')+'</td>'
+      +'<td><span class="td-name">'+escHtml(u.name||'—')+'</span>'+(esYo?'<span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(245, 132, 10,.12);border:1px solid rgba(245, 132, 10,.25);color:var(--or);padding:.1rem .4rem;border-radius:2px;margin-left:.45rem">TÚ</span>':' ')+'</td>'
       +'<td class="td-user">'+escHtml(u.username||'—')+'</td>'
       +'<td>'+badge+'</td>'
       +'<td><span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+(u.must_change_password?'#fbbf24':'rgba(34,197,94,.7)')+'">'+((u.must_change_password)?'Cambio pendiente':'Activo')+'</span></td>'
@@ -1057,8 +1057,8 @@ function rpBuscar(q){
     lista.innerHTML=matches.map(function(u){
       var rol=(u.rol||u.role||'').toLowerCase();
       var mEsc=JSON.stringify(u).replace(/'/g,'&#39;');
-      return '<div onclick=\'rpSeleccionar('+mEsc+')\' style="padding:.6rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:.65rem" onmouseover="this.style.background=\'rgba(255,77,0,.07)\'" onmouseout="this.style.background=\'\'">'
-        +'<div style="width:28px;height:28px;border-radius:50%;background:rgba(255,77,0,.12);border:1px solid rgba(255,77,0,.25);display:flex;align-items:center;justify-content:center;font-family:var(--fT);font-size:.85rem;color:var(--or);flex-shrink:0">'+(u.name||'?')[0].toUpperCase()+'</div>'
+      return '<div onclick=\'rpSeleccionar('+mEsc+')\' style="padding:.6rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:.65rem" onmouseover="this.style.background=\'rgba(245, 132, 10,.07)\'" onmouseout="this.style.background=\'\'">'
+        +'<div style="width:28px;height:28px;border-radius:50%;background:rgba(245, 132, 10,.12);border:1px solid rgba(245, 132, 10,.25);display:flex;align-items:center;justify-content:center;font-family:var(--fT);font-size:.85rem;color:var(--or);flex-shrink:0">'+(u.name||'?')[0].toUpperCase()+'</div>'
         +'<div><div style="font-size:.82rem;font-weight:700;color:#fff">'+escHtml(u.name||'—')+'</div>'
         +'<div style="font-size:.62rem;color:var(--mu);margin-top:.08rem">@'+escHtml(u.username||'—')+' · '+rolBadge(rol)+'</div></div>'
         +'</div>';
@@ -1210,7 +1210,7 @@ function renderRolesTable(){
       return '<option value="'+r+'">→ '+ROL_LABELS[r]+'</option>';
     }).join('');
     return '<tr>'
-      +'<td class="td-name">'+escHtml(u.name||'—')+(esYo?'<span style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,77,0,.1);border:1px solid rgba(255,77,0,.2);color:var(--or);padding:.08rem .38rem;border-radius:2px;margin-left:.35rem">TÚ</span>':'')+'</td>'
+      +'<td class="td-name">'+escHtml(u.name||'—')+(esYo?'<span style="font-size:.52rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(245, 132, 10,.1);border:1px solid rgba(245, 132, 10,.2);color:var(--or);padding:.08rem .38rem;border-radius:2px;margin-left:.35rem">TÚ</span>':'')+'</td>'
       +'<td class="td-user">@'+escHtml(u.username||'—')+'</td>'
       +'<td>'+rolBadge(rol)+'</td>'
       +'<td>'+(disAdmin?'<span style="font-size:.62rem;color:rgba(255,255,255,.2);font-style:italic">Sin cambio disponible</span>':
