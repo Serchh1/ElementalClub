@@ -256,6 +256,29 @@
             color: var(--orange);
         }
 
+        .btn-hero-secondary {
+            background: linear-gradient(135deg, rgba(245, 132, 10, 0.22), rgba(245, 132, 10, 0.08));
+            color: #fff;
+            border: 1px solid rgba(245, 132, 10, 0.6);
+            padding: 1rem 2.2rem;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            transition: all 0.25s;
+            display: inline-block;
+            box-shadow: 0 0 0 1px rgba(245, 132, 10, 0.1), 0 20px 45px rgba(245, 132, 10, 0.18);
+        }
+
+        .btn-hero-secondary:hover {
+            background: var(--orange);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(245, 132, 10, 0.3);
+        }
+
         .btn-ghost {
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.8rem;
@@ -1659,7 +1682,7 @@
                 superar tus límites cada día.</p>
             <div class="hero-actions">
                 <a href="#contacto" class="btn-hero">Visítanos · Desde $1,000/mes</a>
-                <a href="#clases" class="btn-ghost">Agenda clase gratis</a>
+                <a href="reservar-clases.html?tab=visit" class="btn-hero-secondary">Agenda clase gratis →</a>
             </div>
 
         </div>
