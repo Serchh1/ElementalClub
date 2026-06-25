@@ -126,10 +126,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
   background:rgba(9,9,9,.94);backdrop-filter:blur(18px);
   border-bottom:1px solid rgba(245, 132, 10,.1)}
 @media(min-width:640px){.topbar{padding:0 2.2rem}}
-.t-logo{font-family:var(--fT);font-size:1.5rem;letter-spacing:.1em}
-.t-logo b{color:var(--or);font-weight:400}
-.t-logo span{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(245, 132, 10,.6);margin-left:.6rem;vertical-align:middle}
+.t-logo{display:flex;align-items:center;justify-content:center;min-width:0;flex-shrink:0;padding:.15rem 0}
+.t-logo img{height:320px;width:auto;max-width:570px;display:block;object-fit:contain}
 .t-right{display:flex;align-items:center;gap:.75rem}
 .t-av{width:31px;height:31px;border-radius:50%;background:rgba(245, 132, 10,.12);
   border:1.5px solid rgba(245, 132, 10,.32);display:flex;align-items:center;justify-content:center;
@@ -403,7 +401,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 <div id="scr-dash" class="scr">
   <header class="topbar">
     <div>
-      <div class="t-logo">ELEMENTAL <b>CLUB</b> <span>Usuarios</span></div>
+      <a class="brand-link t-logo" href="index.html" aria-label="Elemental Club">
+        <img src="img/Elemental-Logotipo-.png" alt="Elemental Club" />
+      </a>
     </div>
     <div class="t-right">
       <a href="staff.html"

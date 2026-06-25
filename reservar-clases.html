@@ -52,11 +52,15 @@
             border-bottom:1px solid rgba(245, 132, 10,0.15);
             transition:border-bottom-color .3s;
         }
-        .nav-logo {
-            font-family:'Bebas Neue',sans-serif;
-            font-size:1.8rem; letter-spacing:0.1em; color:#fff; text-decoration:none;
+        .brand-link {
+            display:inline-flex; align-items:center; justify-content:center; text-decoration:none; flex-shrink:0; padding:.15rem 0;
         }
-        .nav-logo span { color:var(--orange); }
+        .nav-logo {
+            display:flex; align-items:center; justify-content:center;
+        }
+        .nav-logo img {
+            height:320px; width:auto; max-width:570px; display:block; object-fit:contain;
+        }
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
         .nav-back {
             color:rgba(255,255,255,0.45); font-size:0.75rem; font-weight:700;
@@ -481,7 +485,9 @@
 
 <!-- ══ NAV ══ -->
 <nav id="navbar">
-    <div class="nav-logo" aria-hidden="true"></div>
+    <a class="brand-link nav-logo" href="index.html" aria-label="Elemental Club">
+        <img src="img/Elemental-Logotipo-.png" alt="Elemental Club" />
+    </a>
     <div class="nav-right">
         <a href="index.html" class="nav-back">← Inicio</a>
         <div id="nav-session">
