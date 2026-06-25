@@ -523,15 +523,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.2rem;
+      padding: 0 1rem;
       background: rgba(9, 9, 9, .94);
       backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(245, 132, 10, .1)
+      border-bottom: 1px solid rgba(245, 132, 10, .1);
+      gap: .75rem;
+      overflow: hidden
     }
 
     @media(min-width:640px) {
       .topbar {
-        padding: 0 2.2rem
+        padding: 0 1.35rem
       }
     }
 
@@ -541,15 +543,21 @@
       justify-content: center;
       min-width: 0;
       flex-shrink: 0;
-      padding: 0.15rem 0
+      padding: 0
     }
 
     .t-logo img {
-      height: 320px;
+      height: clamp(34px, 4.2vw, 54px);
       width: auto;
-      max-width: 570px;
+      max-width: clamp(120px, 22vw, 210px);
       display: block;
       object-fit: contain
+    }
+
+    @media(min-width:640px) {
+      .t-logo img {
+        max-width: clamp(140px, 18vw, 220px)
+      }
     }
 
     .t-right {
