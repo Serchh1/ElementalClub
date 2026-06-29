@@ -499,10 +499,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
               oninput="this.value=this.value.toLowerCase().replace(/\s+/g,'')"/>
           </div>
           <div class="ff-fld">
-            <label>Username <span style="color:var(--or)">*</span></label>
+            <label>Username <span style="font-size:.5rem;color:var(--mu)">(autogenerado)</span></label>
             <input type="text" id="c-user" placeholder="nombre_elementalstaff" value="nombre_elementalstaff"
-              style="color:rgba(255,255,255,.4)"
-              oninput="this.value=this.value.toLowerCase().replace(/\s/g,'');this.style.color='var(--txt)';checkCrearForm()"/>
+              readonly style="color:rgba(255,255,255,.4);cursor:not-allowed"/>
           </div>
           <div class="ff-fld">
             <label>Email <span style="font-size:.5rem;color:var(--mu)">(opcional)</span></label>
@@ -575,7 +574,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         </div>
         <div class="tbl-scroll">
           <table class="usr-tbl">
-            <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Contraseña inicial</th><th>Hora</th></tr></thead>
+            <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Contraseña inicial</th><th>Hora</th><th></th></tr></thead>
             <tbody id="creados-tbody"></tbody>
           </table>
         </div>
@@ -910,7 +909,10 @@ function renderUsersTable(lista){
       +'<td>'+badge+'</td>'
       +'<td><span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+(u.must_change_password?'#fbbf24':'rgba(34,197,94,.7)')+'">'+((u.must_change_password)?'Cambio pendiente':'Activo')+'</span></td>'
       +'<td style="color:var(--mu);font-size:.72rem">'+fecha+'</td>'
-      +'<td><button onclick="openEdit(\''+u.id+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Editar</button></td>'
+      +'<td style="display:flex;gap:.4rem">'
+      +'<button onclick="openEdit(\''+u.id+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Editar</button>'
+      +'<button onclick="shareCredentials(\''+escHtml(u.name||'')+'\',\''+escHtml(u.username||'')+'\',\''+escHtml(u.password||'')+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button>'
+      +'</td>'
       +'</tr>';
   }).join('');
 }
@@ -1004,17 +1006,16 @@ function crearUsuario(){
       return window._sb.from('employees').insert([{
         name:                nombre,
         last_name:           ape,
-        username:            user,
         password:            pass,
         rol:                 rolSel,
-        must_change_password: must,
-        created_at:          new Date().toISOString()
+        must_change_password: must
       }]).select().single();
     })
     .then(function(res){
       if(res.error) throw res.error;
-      showMsg('crear-msg','Usuario "'+user+'" creado con rol '+ROL_LABELS[rolSel]+'.','ok');
-      creadosHoy.push({nombre:nombre+' '+ape,user:user,rol:rolSel,pass:pass,hora:new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})});
+      var realUser = res.data.username || user;
+      showMsg('crear-msg','Usuario "'+realUser+'" creado con rol '+ROL_LABELS[rolSel]+'.','ok');
+      creadosHoy.push({nombre:nombre+' '+ape,user:realUser,rol:rolSel,pass:pass,hora:new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})});
       renderCreadosHoy();
       allUsers.push(res.data);
       updateKPIs();
@@ -1034,6 +1035,7 @@ function renderCreadosHoy(){
       +'<td>'+rolBadge(c.rol)+'</td>'
       +'<td><span style="font-family:\'DM Sans\',monospace;font-size:.75rem;background:var(--s2);border:1px solid var(--s3);padding:.18rem .6rem;border-radius:3px;color:#fbbf24;letter-spacing:.04em">'+escHtml(c.pass)+'</span></td>'
       +'<td style="color:var(--mu);font-size:.72rem">'+c.hora+'</td>'
+      +'<td><button onclick="shareCredentials(\''+escHtml(c.nombre)+'\',\''+escHtml(c.user)+'\',\''+escHtml(c.pass)+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button></td>'
       +'</tr>';
   }).join('');
 }
@@ -1285,6 +1287,30 @@ function saveEdit(){
     })
     .catch(function(e){ showMsg('edit-msg','Error: '+e.message,'err'); })
     .finally(function(){ btn.disabled=false; btn.textContent='Guardar cambios'; });
+}
+
+/* ══ COMPARTIR ACCESO ══ */
+var STAFF_PORTAL_URL = 'https://elemental-club.com/staff.html';
+function shareCredentials(nombre, username, password){
+  if(!username||!password){ alert('No hay credenciales disponibles para compartir.'); return; }
+  var texto = 'Hola '+(nombre||'')+', estos son tus accesos al panel de staff de Elemental Club:\n\n'
+    + 'Usuario: '+username+'\n'
+    + 'Contraseña: '+password+'\n'
+    + 'Link: '+STAFF_PORTAL_URL;
+
+  if(navigator.share){
+    navigator.share({title:'Accesos Elemental Club', text:texto}).catch(function(){});
+    return;
+  }
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(texto).then(function(){
+      alert('Credenciales copiadas al portapapeles. Pégalas donde quieras enviarlas.');
+    }).catch(function(){
+      window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+    });
+    return;
+  }
+  window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
 }
 
 /* ══ UTILIDADES ══ */
