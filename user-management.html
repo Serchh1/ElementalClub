@@ -1298,18 +1298,6 @@ function shareCredentials(nombre, username, password){
     + 'Contraseña: '+password+'\n'
     + 'Link: '+STAFF_PORTAL_URL;
 
-  if(navigator.share){
-    navigator.share({title:'Accesos Elemental Club', text:texto}).catch(function(){});
-    return;
-  }
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(texto).then(function(){
-      alert('Credenciales copiadas al portapapeles. Pégalas donde quieras enviarlas.');
-    }).catch(function(){
-      window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
-    });
-    return;
-  }
   window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
 }
 
