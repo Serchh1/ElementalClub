@@ -991,7 +991,7 @@ function crearUsuario(){
   var ape    = document.getElementById('c-ape').value.trim();
   var user   = document.getElementById('c-user').value.trim();
   var pass   = document.getElementById('c-pass').value.trim();
-  var must   = document.getElementById('c-must').checked;
+  var must   = document.getElementById('c-must-change').checked;
 
   if(!nombre||!ape||!user||!pass||!rolSel){ showMsg('crear-msg','Completa todos los campos obligatorios.','err'); return; }
   if(pass.length<6){ showMsg('crear-msg','La contraseña debe tener al menos 6 caracteres.','err'); return; }
