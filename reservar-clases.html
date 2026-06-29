@@ -46,20 +46,22 @@
             position:fixed; top:0; left:0; right:0; z-index:1000;
             padding:0 2rem;
             display:flex; align-items:center; justify-content:space-between;
-            height:72px;
+            min-height:72px;
+            height:auto;
             background:rgba(8,8,8,0.85);
             backdrop-filter:blur(20px);
             border-bottom:1px solid rgba(245, 132, 10,0.15);
             transition:border-bottom-color .3s;
+            overflow:hidden;
         }
         .brand-link {
-            display:inline-flex; align-items:center; justify-content:center; text-decoration:none; flex-shrink:0; padding:.15rem 0;
+            display:inline-flex; align-items:center; justify-content:center; text-decoration:none; flex-shrink:0; padding:.15rem 0; position:relative; z-index:1;
         }
         .nav-logo {
             display:flex; align-items:center; justify-content:center;
         }
         .nav-logo img {
-            height:320px; width:auto; max-width:570px; display:block; object-fit:contain;
+            height:44px; width:auto; max-width:220px; display:block; object-fit:contain;
         }
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
         .nav-back {

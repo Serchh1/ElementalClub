@@ -121,13 +121,13 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 #scr-dash{flex-direction:column;min-height:100vh}
 
 /* ── Topbar ── */
-.topbar{position:sticky;top:0;z-index:500;height:60px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 1.2rem;
+.topbar{position:sticky;top:0;z-index:500;min-height:60px;height:auto;display:flex;align-items:center;
+  justify-content:space-between;padding:.7rem 1.2rem;
   background:rgba(9,9,9,.94);backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(245, 132, 10,.1)}
-@media(min-width:640px){.topbar{padding:0 2.2rem}}
-.t-logo{display:flex;align-items:center;justify-content:center;min-width:0;flex-shrink:0;padding:.15rem 0}
-.t-logo img{height:320px;width:auto;max-width:570px;display:block;object-fit:contain}
+  border-bottom:1px solid rgba(245, 132, 10,.1);overflow:hidden}
+@media(min-width:640px){.topbar{padding:.7rem 2.2rem}}
+.t-logo{display:flex;align-items:center;justify-content:center;min-width:0;flex-shrink:0;padding:.15rem 0;position:relative;z-index:1}
+.t-logo img{height:44px;width:auto;max-width:220px;display:block;object-fit:contain}
 .t-right{display:flex;align-items:center;gap:.75rem}
 .t-av{width:31px;height:31px;border-radius:50%;background:rgba(245, 132, 10,.12);
   border:1.5px solid rgba(245, 132, 10,.32);display:flex;align-items:center;justify-content:center;

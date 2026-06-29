@@ -278,6 +278,12 @@
     if(!iso) return '—';
     return new Date(iso+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
   }
+  function _tipoPago(cartera) {
+    var c = (cartera||'').toLowerCase();
+    if (c === 'caja chica') return 'Efectivo';
+    if (c === 'alfonso mercado' || c === 'stripe') return 'Pago con tarjeta';
+    return cartera || '—';
+  }
   function _mkRow(k,v,cls) {
     return '<div class="tk6-row"><span class="tk6-row-k">'+k+'</span><span class="tk6-row-v'+(cls?' '+cls:'')+'">'+v+'</span></div>';
   }
@@ -299,6 +305,7 @@
     } else { atWrap.style.display = 'none'; }
 
     var rows = '';
+    rows += _mkRow('Tipo de pago', _tipoPago(datos.cartera));
     rows += _mkRow('Fecha', _fechaCorta(datos.fecha));
     if (datos.meses) rows += _mkRow('Duración', datos.meses+(parseInt(datos.meses)===1?' mes':' meses'));
     if (datos.expiracion) rows += _mkRow('Vence', datos.expiracion, 'green');
@@ -460,6 +467,7 @@
     /* Filas de datos */
     var filas = [];
     filas.push(['MEMBRESIA / PLAN', (d.plan || d.categoria || '—').toUpperCase(), null]);
+    filas.push(['TIPO DE PAGO', _tipoPago(d.cartera).toUpperCase(), null]);
     if (d.meses) filas.push(['TIPO / DURACION', d.meses + (parseInt(d.meses)===1?' mes':' meses'), null]);
     filas.push(['FECHA DE INICIO', _fechaCorta(d.fecha), null]);
     if (d.expiracion) filas.push(['FECHA DE VENCIMIENTO', d.expiracion, GRN]);
@@ -617,7 +625,7 @@
     var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
     if (mov) {
       window.abrirTicket({
-        nombre: mov.concepto, plan: mov.categoria, categoria: mov.categoria,
+        nombre: mov.concepto, plan: mov.descripcion || mov.categoria, categoria: mov.categoria,
         monto: mov.monto, fecha: mov.fecha, cartera: mov.cartera,
         meses: null, expiracion: null,
         operationId: mov.operation_id || window.generarOperationId(mov.fecha),

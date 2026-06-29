@@ -5693,7 +5693,7 @@
 
       // Construir queries con filtros en Supabase cuando sea posible
       var ingQ = window.supabase.from('ingresos')
-        .select('id,nombre,monto,fecha,categoria,cartera,usuario,created_at')
+        .select('id,nombre,monto,fecha,categoria,cartera,usuario,created_at,operation_id,descripcion')
         .gte('fecha', start).lte('fecha', end)
         .order('fecha', {ascending:false})
         .limit(1000);
@@ -5728,7 +5728,7 @@
       ];
 
       Promise.all(promises).then(function(res) {
-        var ings = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
+        var ings = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id, descripcion:r.descripcion}; });
         var egrs = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
         var trps = (res[2].data||[]).map(function(r){ return {tipo:'traspaso', concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
         var todos = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
@@ -5821,11 +5821,11 @@
       var hoy = new Date(); hoy.setDate(hoy.getDate()-60);
       var desde = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       Promise.all([
-        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario,operation_id').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
+        window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario,operation_id,descripcion').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
         window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
         window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
-        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id}; });
+        var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id, descripcion:r.descripcion}; });
         var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
         var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:r.usuario||'—'}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });

@@ -1692,8 +1692,7 @@
         <div class="hero-bg"></div>
         <div class="hero-content">
             <h1 class="hero-title">TRANSFORMA<br>TU <em>CUERPO</em><br>Y MENTE</h1>
-            <p class="hero-sub">Equipamiento especializado, coaches certificados y una comunidad que te empuja a
-                superar tus límites cada día.</p>
+            <p class="hero-sub">La mejor comunidad y las mejores actividades, en un espacio increíble que te empujan a superar tus límites cada día.</p>
             <div class="hero-actions">
                 <a href="#contacto" class="btn-hero">Visítanos · Desde $1,000/mes</a>
                 <a href="reservar-clases.html?tab=visit" class="btn-hero-secondary">Agenda clase gratis →</a>
@@ -1717,8 +1716,7 @@
             <div>
                 <p
                     style="color:rgba(255,255,255,0.35);font-size:0.82rem;margin-bottom:1.25rem;max-width:280px;line-height:1.6;">
-                    12 clases diseñadas por expertos: <strong style="color:rgba(255,255,255,0.5);">3 Premium</strong> y
-                    <strong style="color:rgba(255,255,255,0.5);">9 Estándar</strong>. Reserva tu lugar ahora.</p>
+                    Más de <strong style="color:rgba(255,255,255,0.5);">140 clases semanales</strong> dónde encontrarás tu tiempo, tu espacio y tu ritmo.</p>
                 <div class="filters" id="filters">
                     <button class="fpill active" data-filter="all">Todas</button>
                     <button class="fpill" data-filter="estudio"><svg xmlns="http://www.w3.org/2000/svg" width="13"
@@ -1891,8 +1889,8 @@
                         <li>Acceso total de horario</li>
                         <li>Spinning, Strong &amp; Bike, Yoga</li>
                         <li>Hyrox Base, Hyrox Competición</li>
-                        <li>GAP, CombatFit, Halterofilia</li>
-                        <li>Artes Marciales</li>
+                        <li>GAP, CombatFit</li>
+                        
                     </ul>
                     <a href="https://buy.stripe.com/4gMfZjfEs1LDfnS1qd63K0r" target="_blank"
                         class="plan-btn">Seleccionar</a>
@@ -2180,7 +2178,7 @@
         });
 
         // ── Marquee content ──
-        const MARQUEE_ITEMS = ['CrossFit', 'Hyrox', 'Spinning', 'Yoga', 'Momentum', 'CombatFit', 'GAP', 'Halterofilia', 'Strong & Bike', 'Artes Marciales', 'Multipower', 'Hyrox Base'];
+        const MARQUEE_ITEMS = ['CrossFit', 'Hyrox', 'Spinning', 'Yoga', 'Momentum', 'CombatFit', 'GAP', 'Strong & Bike', 'Multipower', 'Hyrox Base'];
         const track = document.getElementById('marqueeTrack');
         const html = MARQUEE_ITEMS.map(i => `<span class="marquee-item">${i}</span><span class="marquee-item marquee-sep">·</span>`).join('');
         track.innerHTML = html + html; // duplicate for seamless loop
@@ -2190,32 +2188,32 @@
             // ── PREMIUM ──
             {
                 key: 'crossfit', nombre: 'CrossFit', emoji: '🔥', cat: 'competicion',
-                h: 'L-V 5, 6, 8 AM · L, MI, V 7 AM · L-V 7 PM · S 8 AM', dur: '50 min', cupo: 28,
+                h: 'L-V 5, 6, 7, 8 AM · L-V 7 PM', dur: '50 min', cupo: 20,
                 desc: 'Movimientos funcionales de alta intensidad: levantamiento olímpico, kettlebells, gimásia, remo y metabólicos. Adaptado a cada atleta. Espacio amplio con equipamiento profesional.',
                 mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
             },
             {
                 key: 'multipower', nombre: 'Multipower', emoji: '💪', cat: 'funcional',
-                h: 'L-V 6, 7, 8 AM · L-V 6, 7 PM · S 7, 8 AM', dur: '50 min', cupo: 28,
+                h: 'L-V 6, 7, 8 AM · L-V 6 PM · S 8 AM', dur: '50 min', cupo: 24,
                 desc: 'La clase más completa del estudio. Combina fuerza, resistencia y cardio con equipos multifuncionales, barras, discos y máquinas de cardio (remo, ski, bici). Rutinas semanales variables.',
                 mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
             },
             {
                 key: 'momentum', nombre: 'Momentum', emoji: '⚡', cat: 'funcional',
-                h: 'L-V 6, 7, 8, 9 AM · L-V 6, 7, 8 PM · S 8 AM', dur: '50 min', cupo: 18,
+                h: 'L-V 6, 7, 8, 9 AM · L-V 6, 7, 8 PM · S 9 AM', dur: '50 min', cupo: 24,
                 desc: 'Hipertrofia y fuerza guiada por coaches con utilización de máquinas multifuncionales para un entrenamiento completo. Los mejores resultados en una comunidad que te motiva.',
                 mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
             },
             // ── ESTÁNDAR ──
             {
                 key: 'combatfit', nombre: 'CombatFit', emoji: '🥊', cat: 'estudio',
-                h: 'L-V 7:00 AM', dur: '50 min', cupo: 24,
+                h: 'L-V 7 AM · L-J 8 PM · S 8 AM', dur: '50 min', cupo: 22,
                 desc: 'Combina técnica de artes marciales mixtas (MMA) con entrenamiento funcional. Mejora coordinación, fuerza, velocidad y agilidad. Apto para principiantes.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
             {
                 key: 'hyrox-comp', nombre: 'Hyrox Competición', emoji: '🏆', cat: 'competicion',
-                h: 'L-V 8:00 PM · MA, J 7:00 AM · D 8:00 AM', dur: '50 min', cupo: 30,
+                h: 'L-V 8 PM · MA, J 7 AM · D 8 AM', dur: '50 min', cupo: 30,
                 desc: 'Entrenamiento avanzado que replica la experiencia real de competencia Hyrox: carrera indoor, trineos, ski, remo, cargas y muros. Coaching técnico en cada estación.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
@@ -2227,40 +2225,29 @@
             },
             {
                 key: 'hyrox-base', nombre: 'Hyrox Base', emoji: '🏃', cat: 'competicion',
-                h: 'L-V 6:00 PM · MA y JU 7:00 AM', dur: '50 min', cupo: 30,
+                h: 'L-V 6 PM · MA y JU 7 AM', dur: '50 min', cupo: 30,
                 desc: 'Base de fuerza y resistencia aeróbica orientada a quien quiere prepararse para competir en Hyrox. Técnica, acondicionamiento y progresión guiada.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
             {
                 key: 'spinning', nombre: 'Spinning', emoji: '🚲', cat: 'estudio',
-                h: 'L-V 7:00 PM · L 8:00 PM · MA 8:00 PM', dur: '50 min', cupo: 12,
+                h: 'L-V 7 PM · L 8 PM · MA 8 PM', dur: '50 min', cupo: 12,
                 desc: 'Ciclismo indoor de alta intensidad. Sesiones en bici estacionaria con variaciones de ritmo, resistencia e intervalos. Quema calórica elevada.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
             {
                 key: 'gap', nombre: 'GAP', emoji: '🏅', cat: 'funcional',
-                h: 'L-V 7:00 PM', dur: '50 min', cupo: 28,
+                h: 'L-V 7 PM', dur: '50 min', cupo: 28,
                 desc: 'Glúteos, Abdomen y Piernas. Clase de tonificación y fuerza con énfasis en tren inferior y core. Alta demanda muscular, baja carga articular. Para todos los niveles.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
             {
                 key: 'yoga', nombre: 'Yoga', emoji: '🧘', cat: 'bienestar',
-                h: 'L, MI y V 9:10 AM · J 8:00 PM · S 10:00 AM', dur: '50 min', cupo: 25,
+                h: 'L, MI y V 9 AM · J 8 PM · S 10 AM', dur: '50 min', cupo: 20,
                 desc: 'Clase de flexibilidad, equilibrio y bienestar mental. Combina posturas, respiración y relajación. Apta para todos los niveles. Perfecta para recuperación activa.',
                 mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
             },
-            {
-                key: 'halterofilia', nombre: 'Halterofilia', emoji: '🏋️', cat: 'funcional',
-                h: 'S 7:00 AM', dur: '50 min', cupo: 20,
-                desc: 'Levantamiento olímpico: arrancada y cargada. Mejora fuerza, potencia y técnica de movimiento. Guiada por coaches especializados en levantamiento olímpico.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
-            },
-            {
-                key: 'artes-marciales', nombre: 'Artes Marciales', emoji: '🥋', cat: 'bienestar',
-                h: 'MA, J 8:00 PM · S 9:00 AM', dur: '50 min', cupo: 20,
-                desc: 'Técnica marcial enfocada en disciplina, coordinación y autodefensa en un ambiente grupal motivador con coaches de experiencia.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
-            },
+
         ];
         const SVG_CLOCK = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
         const CAT_SVG = {
