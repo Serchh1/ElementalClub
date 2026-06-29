@@ -988,7 +988,6 @@ function crearUsuario(){
   var nombre = document.getElementById('c-name').value.trim();
   var ape    = document.getElementById('c-ape').value.trim();
   var user   = document.getElementById('c-user').value.trim();
-  var email  = document.getElementById('c-email').value.trim()||null;
   var pass   = document.getElementById('c-pass').value.trim();
   var must   = document.getElementById('c-must').checked;
 
@@ -1006,10 +1005,8 @@ function crearUsuario(){
         name:                nombre,
         last_name:           ape,
         username:            user,
-        email:               email,
         password:            pass,
         rol:                 rolSel,
-        role:                rolSel,
         must_change_password: must,
         created_at:          new Date().toISOString()
       }]).select().single();
@@ -1179,7 +1176,7 @@ function cambiarRol(){
 
   var btn=document.getElementById('btn-cr');
   btn.disabled=true; btn.innerHTML='<span class="spin-ico"></span> Actualizando…';
-  window._sb.from('employees').update({rol:nuevoRol,role:nuevoRol}).eq('id',String(crUserSel.id))
+  window._sb.from('employees').update({rol:nuevoRol}).eq('id',String(crUserSel.id))
     .then(function(r){
       if(r.error) throw r.error;
       showMsg('cr-msg','Rol de "'+escHtml(crUserSel.name)+'" cambiado a '+ROL_LABELS[nuevoRol]+'.','ok');
@@ -1229,7 +1226,7 @@ function cambioRapidoRol(id,sel){
   var u=allUsers.find(function(x){ return String(x.id)===String(id); });
   if(!u) return;
   if(!confirm('¿Cambiar el rol de "'+u.name+'" a '+ROL_LABELS[nuevoRol]+'?')){ sel.value=''; return; }
-  window._sb.from('employees').update({rol:nuevoRol,role:nuevoRol}).eq('id',String(id))
+  window._sb.from('employees').update({rol:nuevoRol}).eq('id',String(id))
     .then(function(r){
       if(r.error) throw r.error;
       var idx=allUsers.findIndex(function(x){ return String(x.id)===String(id); });
@@ -1261,7 +1258,6 @@ function closeEdit(){
 function saveEdit(){
   if(!editingId) return;
   var nombre=document.getElementById('e-name').value.trim();
-  var email =document.getElementById('e-email').value.trim()||null;
   var rol   =document.getElementById('e-rol').value;
   var must  =document.getElementById('e-must').checked;
   if(!nombre){ showMsg('edit-msg','El nombre es obligatorio.','err'); return; }
@@ -1278,12 +1274,12 @@ function saveEdit(){
 
   var btn=document.getElementById('btn-edit-save');
   btn.disabled=true; btn.innerHTML='<span class="spin-ico"></span> Guardando…';
-  window._sb.from('employees').update({name:nombre,email:email,rol:rol,role:rol,must_change_password:must})
+  window._sb.from('employees').update({name:nombre,rol:rol,must_change_password:must})
     .eq('id',String(editingId))
     .then(function(r){
       if(r.error) throw r.error;
       var idx=allUsers.findIndex(function(x){ return String(x.id)===String(editingId); });
-      if(idx>-1){ Object.assign(allUsers[idx],{name:nombre,email:email,rol:rol,role:rol,must_change_password:must}); }
+      if(idx>-1){ Object.assign(allUsers[idx],{name:nombre,rol:rol,role:rol,must_change_password:must}); }
       filterUsers(); updateKPIs(); renderRolesTable();
       closeEdit();
     })
