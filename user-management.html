@@ -911,7 +911,7 @@ function renderUsersTable(lista){
       +'<td style="color:var(--mu);font-size:.72rem">'+fecha+'</td>'
       +'<td style="display:flex;gap:.4rem">'
       +'<button onclick="openEdit(\''+u.id+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Editar</button>'
-      +'<button onclick="shareCredentials(\''+escHtml(u.name||'')+'\',\''+escHtml(u.username||'')+'\',\''+escHtml(u.password||'')+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button>'
+      +'<button onclick="shareCredentials(\''+escHtml(u.name||'')+'\',\''+escHtml(u.username||'')+'\',\''+escHtml(u.password||'')+'\','+(u.must_change_password?'true':'false')+')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button>'
       +'</td>'
       +'</tr>';
   }).join('');
@@ -1015,7 +1015,7 @@ function crearUsuario(){
       if(res.error) throw res.error;
       var realUser = res.data.username || user;
       showMsg('crear-msg','Usuario "'+realUser+'" creado con rol '+ROL_LABELS[rolSel]+'.','ok');
-      creadosHoy.push({nombre:nombre+' '+ape,user:realUser,rol:rolSel,pass:pass,hora:new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})});
+      creadosHoy.push({nombre:nombre+' '+ape,user:realUser,rol:rolSel,pass:pass,must:must,hora:new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})});
       renderCreadosHoy();
       allUsers.push(res.data);
       updateKPIs();
@@ -1035,7 +1035,7 @@ function renderCreadosHoy(){
       +'<td>'+rolBadge(c.rol)+'</td>'
       +'<td><span style="font-family:\'DM Sans\',monospace;font-size:.75rem;background:var(--s2);border:1px solid var(--s3);padding:.18rem .6rem;border-radius:3px;color:#fbbf24;letter-spacing:.04em">'+escHtml(c.pass)+'</span></td>'
       +'<td style="color:var(--mu);font-size:.72rem">'+c.hora+'</td>'
-      +'<td><button onclick="shareCredentials(\''+escHtml(c.nombre)+'\',\''+escHtml(c.user)+'\',\''+escHtml(c.pass)+'\')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button></td>'
+      +'<td><button onclick="shareCredentials(\''+escHtml(c.nombre)+'\',\''+escHtml(c.user)+'\',\''+escHtml(c.pass)+'\','+(c.must?'true':'false')+')" style="background:var(--s2);border:1px solid var(--s3);color:var(--mu);padding:.3rem .7rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--r);transition:all .18s" onmouseover="this.style.borderColor=\'var(--or)\';this.style.color=\'var(--or)\'" onmouseout="this.style.borderColor=\'var(--s3)\';this.style.color=\'var(--mu)\'">Compartir</button></td>'
       +'</tr>';
   }).join('');
 }
@@ -1291,11 +1291,14 @@ function saveEdit(){
 
 /* ══ COMPARTIR ACCESO ══ */
 var STAFF_PORTAL_URL = 'https://elemental-club.com/staff.html';
-function shareCredentials(nombre, username, password){
-  if(!username||!password){ alert('No hay credenciales disponibles para compartir.'); return; }
+function shareCredentials(nombre, username, password, mustChange){
+  if(!username){ alert('No hay credenciales disponibles para compartir.'); return; }
+  var lineaPass = mustChange
+    ? 'Contraseña: '+(password||'—')
+    : 'Contraseña: ya configuraste tu contraseña personalizada (pídela a un socio si la olvidaste).';
   var texto = 'Hola '+(nombre||'')+', estos son tus accesos al panel de staff de Elemental Club:\n\n'
     + 'Usuario: '+username+'\n'
-    + 'Contraseña: '+password+'\n'
+    + lineaPass+'\n'
     + 'Link: '+STAFF_PORTAL_URL;
 
   window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
