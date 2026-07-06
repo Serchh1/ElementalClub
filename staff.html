@@ -4881,10 +4881,26 @@
     function loadMembers() {
       if (!window.supabase) return;
       document.getElementById('mem-count').textContent = 'Cargando miembros...';
-      supabase.from('clients').select('*').order('first_name')
-        .then(function(r) {
-          if (r.error) throw r.error;
-          allMembers = r.data || [];
+      var PAGE = 1000;
+      var todos = [];
+      var offset = 0;
+      function fetchPage() {
+        return supabase.from('clients').select('*').order('first_name')
+          .range(offset, offset + PAGE - 1)
+          .then(function(r) {
+            if (r.error) throw r.error;
+            var pagina = r.data || [];
+            todos = todos.concat(pagina);
+            if (pagina.length === PAGE) {
+              offset += PAGE;
+              return fetchPage();
+            }
+            return todos;
+          });
+      }
+      fetchPage()
+        .then(function(rows) {
+          allMembers = rows;
           membersLoaded = true;
           filterMembers();
         })
@@ -4893,15 +4909,20 @@
         });
     }
 
+    function normalizarTexto(s) {
+      return (s || '').toString().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
     function filterMembers() {
-      var q = (document.getElementById('mem-search').value || '').trim().toLowerCase();
+      var q = normalizarTexto((document.getElementById('mem-search').value || '').trim());
       var filtered = allMembers.filter(function(m) {
         var matchStatus = memFilterStatus === 'all'
           || (memFilterStatus === 'active' && m.membership_status === 'active')
           || (memFilterStatus === 'inactive' && m.membership_status !== 'active');
         if (!matchStatus) return false;
         if (!q) return true;
-        var fullName = ((m.first_name || '') + ' ' + (m.last_name1 || '')).toLowerCase();
+        var fullName = normalizarTexto((m.first_name || '') + ' ' + (m.last_name1 || '') + ' ' + (m.last_name2 || ''));
         return fullName.indexOf(q) > -1 || (m.phone || '').indexOf(q) > -1;
       });
       renderMembers(filtered);
@@ -4930,7 +4951,7 @@
         var expires = m.membership_expires ? new Date(m.membership_expires).toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' }) : '—';
         var plan = PLAN_LBL[m.membership_type] || m.membership_type || '—';
         return '<tr>' +
-          '<td class="td-name">' + (m.first_name || '') + ' ' + (m.last_name1 || '') + '</td>' +
+          '<td class="td-name">' + (m.first_name || '') + ' ' + (m.last_name1 || '') + (m.last_name2 ? ' ' + m.last_name2 : '') + '</td>' +
           '<td class="td-phone">' + (m.phone || '—') + '</td>' +
           '<td>' + plan + '</td>' +
           '<td><span class="st-badge ' + stClass + '">' + (STATUS_LBL[st] || st) + '</span></td>' +
