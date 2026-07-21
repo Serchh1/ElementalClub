@@ -2410,6 +2410,17 @@
   font-family: var(--fB);
 }
 .btn-mov-edit:hover { background: rgba(251,191,36,.12); border-color: #fbbf24; }
+.btn-mov-delete {
+  background: transparent;
+  border: 1px solid rgba(248,113,113,.35);
+  color: #f87171;
+  padding: .25rem .5rem;
+  font-size: .68rem; font-weight: 800;
+  cursor: pointer; border-radius: 3px;
+  transition: all .18s; white-space: nowrap;
+  font-family: var(--fB); margin-left: .3rem;
+}
+.btn-mov-delete:hover { background: rgba(248,113,113,.12); border-color: #f87171; }
 .btn-mov-expired {
   font-size: .58rem; color: rgba(255,255,255,.18);
   letter-spacing: .06em; font-family: var(--fB); font-style: italic;
@@ -5034,6 +5045,7 @@
       catch(e) { return {}; }
     }
     function usuarioActual() { return getUser().name || ''; }
+    function esRolSocio() { return String(getUser().role || getUser().rol || '').toLowerCase() === 'socio'; }
 
     // ── INIT — se llama en cada tab-switch a Movimientos ────────
     function finInit() {
@@ -5539,7 +5551,8 @@
     }
 
     window.abrirEditMov = function(id, tipo) {
-      var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
+      var mov = movData.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; })
+             || _resultadosBusqueda.find(function(r){ return String(r.id)===String(id) && r.tipo===tipo; });
       if(!mov) { alert('No se encontró el movimiento.'); return; }
       if(!mov.created_at) { alert('Este movimiento no tiene marca de tiempo.'); return; }
       var minLeft = getEditTimeLeft(mov.created_at);
@@ -5550,15 +5563,25 @@
       document.getElementById('edit-mov-tipo').value = tipo;
       document.getElementById('edit-monto').value    = mov.monto || '';
       document.getElementById('edit-fecha').value    = mov.fecha || '';
-      document.getElementById('edit-cartera').value  = mov.cartera || '';
       document.getElementById('edit-categoria').value= mov.categoria || '';
       document.getElementById('edit-desc').value     = '';
 
       var esIng = tipo==='ingreso';
+      var esTrp = tipo==='traspaso';
       document.getElementById('edit-field-nombre-wrap').style.display = esIng ? '' : 'none';
       document.getElementById('edit-field-titulo-wrap').style.display = esIng ? 'none' : '';
       if(esIng) document.getElementById('edit-nombre').value = mov.concepto || '';
       else      document.getElementById('edit-titulo').value = mov.concepto || '';
+
+      document.getElementById('edit-field-cartera-origen-wrap').style.display = esTrp ? '' : 'none';
+      document.getElementById('edit-field-categoria-wrap').style.display = esTrp ? 'none' : '';
+      document.getElementById('edit-cartera-lbl').textContent = esTrp ? 'Entra en' : 'Cartera';
+      if(esTrp) {
+        document.getElementById('edit-cartera-origen').value = mov.salida_de || '';
+        document.getElementById('edit-cartera').value = mov.entrada_en || '';
+      } else {
+        document.getElementById('edit-cartera').value = mov.cartera || '';
+      }
 
       var countEl = document.getElementById('edit-timer-count');
       if(countEl) {
@@ -5582,23 +5605,33 @@
       if(!editMovOriginal) return;
       var tipo  = document.getElementById('edit-mov-tipo').value;
       var esIng = tipo==='ingreso';
+      var esTrp = tipo==='traspaso';
       var nuevoConcepto = esIng ? document.getElementById('edit-nombre').value.trim()
                                 : document.getElementById('edit-titulo').value.trim();
       var nuevoMonto    = document.getElementById('edit-monto').value.trim();
       var nuevaFecha    = document.getElementById('edit-fecha').value;
       var nuevaCartera  = document.getElementById('edit-cartera').value;
+      var nuevaCarteraOrigen = document.getElementById('edit-cartera-origen').value;
       var nuevaCateg    = document.getElementById('edit-categoria').value;
       var nuevaDesc     = document.getElementById('edit-desc').value.trim();
 
       if(!nuevoMonto || !nuevaFecha) { alert('Monto y fecha son obligatorios.'); return; }
+      if(esTrp && nuevaCarteraOrigen && nuevaCartera && nuevaCarteraOrigen === nuevaCartera) {
+        alert('Origen y destino no pueden ser iguales.'); return;
+      }
 
       var campos = [
         { lbl:'Concepto',  viejo: editMovOriginal.concepto||'—', nuevo: nuevoConcepto||editMovOriginal.concepto||'—' },
         { lbl:'Monto',     viejo: '$'+parseFloat(editMovOriginal.monto||0).toLocaleString('es-MX'), nuevo: '$'+parseFloat(nuevoMonto).toLocaleString('es-MX') },
         { lbl:'Fecha',     viejo: editMovOriginal.fecha||'—', nuevo: nuevaFecha },
-        { lbl:'Cartera',   viejo: editMovOriginal.cartera||'—', nuevo: nuevaCartera||editMovOriginal.cartera||'—' },
-        { lbl:'Categoría', viejo: editMovOriginal.categoria||'—', nuevo: nuevaCateg||editMovOriginal.categoria||'—' },
       ];
+      if(esTrp) {
+        campos.push({ lbl:'Sale de', viejo: editMovOriginal.salida_de||'—', nuevo: nuevaCarteraOrigen||editMovOriginal.salida_de||'—' });
+        campos.push({ lbl:'Entra en', viejo: editMovOriginal.entrada_en||'—', nuevo: nuevaCartera||editMovOriginal.entrada_en||'—' });
+      } else {
+        campos.push({ lbl:'Cartera',   viejo: editMovOriginal.cartera||'—', nuevo: nuevaCartera||editMovOriginal.cartera||'—' });
+        campos.push({ lbl:'Categoría', viejo: editMovOriginal.categoria||'—', nuevo: nuevaCateg||editMovOriginal.categoria||'—' });
+      }
       if(nuevaDesc) campos.push({ lbl:'Observaciones', viejo:'—', nuevo: nuevaDesc });
 
       var hayDiffs = false;
@@ -5632,20 +5665,31 @@
       saveBtn.disabled=true; saveBtn.textContent='Guardando…';
 
       var esIng = tipo==='ingreso';
+      var esTrp = tipo==='traspaso';
       var nuevoConcepto = esIng ? document.getElementById('edit-nombre').value.trim()
                                 : document.getElementById('edit-titulo').value.trim();
       var nuevoMonto   = parseFloat(document.getElementById('edit-monto').value);
       var nuevaFecha   = document.getElementById('edit-fecha').value;
       var nuevaCartera = document.getElementById('edit-cartera').value;
+      var nuevaCarteraOrigen = document.getElementById('edit-cartera-origen').value;
       var nuevaCateg   = document.getElementById('edit-categoria').value;
       var nuevaDesc    = document.getElementById('edit-desc').value.trim();
 
-      var tabla   = esIng ? 'ingresos' : 'egresos';
-      var updates = { monto: nuevoMonto, fecha: nuevaFecha };
-      if(nuevaCartera) updates.cartera   = nuevaCartera;
-      if(nuevaCateg)   updates.categoria = nuevaCateg;
-      if(esIng)  { if(nuevoConcepto) updates.nombre = nuevoConcepto; if(nuevaDesc) updates.descripcion = nuevaDesc; }
-      else        { if(nuevoConcepto) updates.titulo = nuevoConcepto; if(nuevaDesc) updates.observaciones = nuevaDesc; }
+      var tabla, updates;
+      if(esTrp) {
+        tabla   = 'traspasos';
+        updates = { cantidad: nuevoMonto, fecha: nuevaFecha };
+        if(nuevaCartera)       updates.entrada_en = nuevaCartera;
+        if(nuevaCarteraOrigen) updates.salida_de   = nuevaCarteraOrigen;
+        if(nuevoConcepto)      updates.titulo      = nuevoConcepto;
+      } else {
+        tabla   = esIng ? 'ingresos' : 'egresos';
+        updates = { monto: nuevoMonto, fecha: nuevaFecha };
+        if(nuevaCartera) updates.cartera   = nuevaCartera;
+        if(nuevaCateg)   updates.categoria = nuevaCateg;
+        if(esIng)  { if(nuevoConcepto) updates.nombre = nuevoConcepto; if(nuevaDesc) updates.descripcion = nuevaDesc; }
+        else        { if(nuevoConcepto) updates.titulo = nuevoConcepto; if(nuevaDesc) updates.observaciones = nuevaDesc; }
+      }
 
       // IDs in the DB may be UUIDs — don't coerce to int which yields NaN
       window.supabase.from(tabla).update(updates).eq('id', id)
@@ -5656,16 +5700,40 @@
             movData[idx].monto     = nuevoMonto;
             movData[idx].fecha     = nuevaFecha;
             movData[idx].concepto  = nuevoConcepto || movData[idx].concepto;
-            movData[idx].cartera   = nuevaCartera  || movData[idx].cartera;
-            movData[idx].categoria = nuevaCateg    || movData[idx].categoria;
+            if(esTrp) {
+              movData[idx].salida_de  = nuevaCarteraOrigen || movData[idx].salida_de;
+              movData[idx].entrada_en = nuevaCartera       || movData[idx].entrada_en;
+              movData[idx].cartera    = movData[idx].entrada_en;
+            } else {
+              movData[idx].cartera   = nuevaCartera  || movData[idx].cartera;
+              movData[idx].categoria = nuevaCateg    || movData[idx].categoria;
+            }
           }
           cerrarConfirmMov();
           cerrarEditMov();
-          renderMovimientos();
+          if(_modoBusqueda) buscarMovimientos(); else renderMovimientos();
           cargarCajaChica();
         })
         .catch(function(e) { alert('Error: ' + e.message); })
         .finally(function() { saveBtn.disabled=false; saveBtn.textContent='Confirmar cambios'; });
+    };
+
+    // ── ELIMINAR MOVIMIENTO (solo socios) ────────────────────
+    window.eliminarMov = function(id, tipo) {
+      if(!esRolSocio()) { alert('Solo un socio puede borrar movimientos.'); return; }
+      if(!confirm('¿Eliminar este ' + tipo + ' de forma permanente? Esta acción no se puede deshacer.')) return;
+
+      var tabla = tipo==='ingreso' ? 'ingresos' : (tipo==='traspaso' ? 'traspasos' : 'egresos');
+      window.supabase.from(tabla).delete().eq('id', id)
+        .then(function(r) {
+          if(r.error) throw r.error;
+          movData = movData.filter(function(m){ return !(String(m.id)===String(id) && m.tipo===tipo); });
+          _resultadosBusqueda = _resultadosBusqueda.filter(function(m){ return !(String(m.id)===String(id) && m.tipo===tipo); });
+          if(_modoBusqueda) mostrarResultadosBusqueda(_resultadosBusqueda);
+          else renderMovimientos();
+          cargarCajaChica();
+        })
+        .catch(function(e) { alert('Error al eliminar: ' + e.message); });
     };
 
     // ── BUSCADOR DE MOVIMIENTOS ──────────────────────────────
@@ -5726,7 +5794,7 @@
         .limit(1000);
 
       var trpQ = window.supabase.from('traspasos')
-        .select('id,titulo,cantidad,fecha,salida_de,entrada_en')
+        .select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario,created_at')
         .gte('fecha', start).lte('fecha', end)
         .order('fecha', {ascending:false})
         .limit(500);
@@ -5751,7 +5819,7 @@
       Promise.all(promises).then(function(res) {
         var ings = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id, descripcion:r.descripcion}; });
         var egrs = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
-        var trps = (res[2].data||[]).map(function(r){ return {tipo:'traspaso', concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:'—'}; });
+        var trps = (res[2].data||[]).map(function(r){ return {tipo:'traspaso', id:r.id, concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, salida_de:r.salida_de, entrada_en:r.entrada_en, empleado:r.usuario||'—', created_at:r.created_at}; });
         var todos = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
         // Filtro de texto en cliente (no se puede hacer en Supabase fácilmente)
         if(texto) {
@@ -5808,7 +5876,7 @@
         var montoClass = isIng ? 'td-ing' : (isTrp ? 'td-trp' : 'td-egr');
         var signo = isIng ? '+$' : (isTrp ? '$' : '-$');
         var editBtn = '';
-        if(!isTrp && r.created_at) {
+        if(r.created_at) {
           var minLeft = getEditTimeLeft(r.created_at);
           if(minLeft > 0) {
             editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
@@ -5823,6 +5891,11 @@
             + 'Ticket'
             + '</button>';
         }
+
+        var deleteBtnB = '';
+        if (esRolSocio() && r.id) {
+          deleteBtnB = '<button class="btn-mov-delete" onclick="eliminarMov(\'' + r.id + '\',\'' + r.tipo + '\')" title="Eliminar movimiento">🗑</button>';
+        }
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
@@ -5831,7 +5904,7 @@
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.categoria||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
-          + '<td>'+editBtn+ticketBtnB+'</td>'
+          + '<td>'+editBtn+ticketBtnB+deleteBtnB+'</td>'
           + '</tr>';
       }).join('');
     }
@@ -5844,11 +5917,11 @@
       Promise.all([
         window.supabase.from('ingresos').select('id,nombre,monto,fecha,categoria,cartera,created_at,usuario,operation_id,descripcion').gte('fecha',desde).order('fecha',{ascending:false}).limit(60),
         window.supabase.from('egresos').select('id,titulo,monto,fecha,categoria,cartera,created_at,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(40),
-        window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
+        window.supabase.from('traspasos').select('id,titulo,cantidad,fecha,salida_de,entrada_en,usuario,created_at').gte('fecha',desde).order('fecha',{ascending:false}).limit(20)
       ]).then(function(res) {
         var ings  = (res[0].data||[]).map(function(r){ return {tipo:'ingreso', id:r.id, concepto:r.nombre, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at, operation_id:r.operation_id, descripcion:r.descripcion}; });
         var egrs  = (res[1].data||[]).map(function(r){ return {tipo:'egreso',  id:r.id, concepto:r.titulo, monto:r.monto, fecha:r.fecha, categoria:r.categoria, cartera:r.cartera, empleado:r.usuario, created_at:r.created_at}; });
-        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso',concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, empleado:r.usuario||'—'}; });
+        var trps  = (res[2].data||[]).map(function(r){ return {tipo:'traspaso', id:r.id, concepto:r.titulo||(r.salida_de+'→'+r.entrada_en), monto:r.cantidad, fecha:r.fecha, categoria:'Traspaso', cartera:r.entrada_en, salida_de:r.salida_de, entrada_en:r.entrada_en, empleado:r.usuario||'—', created_at:r.created_at}; });
         movData = ings.concat(egrs).concat(trps).sort(function(a,b){ return b.fecha.localeCompare(a.fecha); });
         renderMovimientos();
       });
@@ -5870,7 +5943,7 @@
         var signo = isIng ? '+$' : (isTrp ? '$' : '-$');
 
         var editBtn = '';
-        if (!isTrp && r.created_at) {
+        if (r.created_at) {
           var creado = new Date(r.created_at).getTime();
           var minLeft = getEditTimeLeft(r.created_at);
           if (minLeft > 0) {
@@ -5891,6 +5964,11 @@
             + '</button>';
         }
 
+        var deleteBtn = '';
+        if (esRolSocio() && r.id) {
+          deleteBtn = '<button class="btn-mov-delete" onclick="eliminarMov(\'' + r.id + '\',\'' + r.tipo + '\')" title="Eliminar movimiento">🗑</button>';
+        }
+
         return '<tr>'
           + '<td style="white-space:nowrap">'+fecha+'</td>'
           + '<td><span class="mov-badge '+badgeClass+'">'+r.tipo+'</span></td>'
@@ -5899,7 +5977,7 @@
           + '<td>'+(r.cartera||'—')+'</td>'
           + '<td>'+(r.categoria||'—')+'</td>'
           + '<td>'+(r.empleado||'—')+'</td>'
-          + '<td>'+editBtn+ticketBtn+'</td>'
+          + '<td>'+editBtn+ticketBtn+deleteBtn+'</td>'
           + '</tr>';
       }).join('');
     }
@@ -5974,7 +6052,7 @@
     /* ── Rellena todos los <select> de carteras con las activas ── */
     var CARTERAS_SELECTS = [
       'ing-cartera','egr-cartera','trp-salida','trp-entrada',
-      'busq-cartera','edit-cartera'
+      'busq-cartera','edit-cartera','edit-cartera-origen'
     ];
     function poblarSelectsCarteras(names) {
       console.log(' Llenando selects con carteras:', names);
@@ -5984,9 +6062,9 @@
           console.warn('  Select no encontrado:', id);
           return;
         }
-        var esDoble = (id === 'trp-salida' || id === 'trp-entrada');
+        var esDoble = (id === 'trp-salida' || id === 'trp-entrada' || id === 'edit-cartera-origen');
         var placeholder = esDoble
-          ? (id==='trp-salida' ? '— Origen —' : '— Destino —')
+          ? (id==='trp-salida' || id==='edit-cartera-origen' ? '— Origen —' : '— Destino —')
           : (id==='busq-cartera' ? 'Todas' : id==='edit-cartera' ? '— Selecciona —' : '— Selecciona —');
         // Opción vacía inicial
         var opts = '<option value="">' + placeholder + '</option>';
@@ -6298,15 +6376,23 @@
               <input type="date" id="edit-fecha" style="padding-left:2.35rem" />
             </div>
           </div>
+          <div class="mfld" id="edit-field-cartera-origen-wrap" style="display:none">
+            <label>Sale de</label>
+            <div class="mfi"><span class="mfi-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10"></rect><rect x="10" y="10" width="4" height="10"></rect><rect x="16" y="10" width="4" height="10"></rect><polygon points="12 2 2 8 22 8"></polygon><line x1="2" y1="22" x2="22" y2="22"></line></svg></span>
+              <select id="edit-cartera-origen">
+                <option value="">— Origen —</option>
+              </select>
+            </div>
+          </div>
           <div class="mfld">
-            <label>Cartera</label>
+            <label id="edit-cartera-lbl">Cartera</label>
             <div class="mfi"><span class="mfi-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10"></rect><rect x="10" y="10" width="4" height="10"></rect><rect x="16" y="10" width="4" height="10"></rect><polygon points="12 2 2 8 22 8"></polygon><line x1="2" y1="22" x2="22" y2="22"></line></svg></span>
               <select id="edit-cartera">
                 <option value="">— Selecciona —</option>
               </select>
             </div>
           </div>
-          <div class="mfld">
+          <div class="mfld" id="edit-field-categoria-wrap">
             <label>Categoría</label>
             <div class="mfi"><span class="mfi-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="var(--or)"><circle cx="3.5" cy="3.5" r="3.5"/></svg></span>
               <select id="edit-categoria">
@@ -6358,7 +6444,7 @@
         <div class="mov-confirm-note">
           <b style="color:var(--or)">Revisa antes de confirmar.</b>
           Este movimiento quedará actualizado en el sistema permanentemente.
-          Solo se puede editar dentro de la primera hora tras registrarlo.
+          Solo se puede editar dentro de las primeras 24 horas tras registrarlo.
         </div>
         <div class="mov-confirm-actions">
           <button class="btn-cancel" onclick="cerrarConfirmMov()">← Volver a editar</button>
