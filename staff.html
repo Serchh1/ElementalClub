@@ -6992,16 +6992,33 @@
         .eq('status','ocupado')
         .order('genero').order('numero')
         .then(function(r){
-          lkLockers = r.data || [];
+          if(r.error){
+            console.error('Error al cargar lockers (posible RLS):', r.error);
+            lkLockers = [];
+            renderGrids();
+            lkMostrarErrorCarga(r.error.message);
+            return;
+          }
+          lkLockers = (r.data || []).map(function(l){ l.numero = parseInt(l.numero, 10); return l; });
           renderGrids();
         });
+    }
+
+    function lkMostrarErrorCarga(msg){
+      var band = document.getElementById('lk-alert-band');
+      if(!band) return;
+      band.style.display = 'flex';
+      band.style.background = 'rgba(239,68,68,.08)';
+      band.style.borderColor = 'rgba(239,68,68,.3)';
+      var txt = document.getElementById('lk-alert-txt');
+      if(txt) txt.textContent = 'No se pudieron cargar los lockers (permiso de lectura denegado): ' + msg;
     }
 
     /* ── Renderizar grids de lockers ── */
     function renderGrids() {
       ['hombre','mujer'].forEach(function(g){
         var max = MAX[g];
-        var ocupados = lkLockers.filter(function(l){ return l.genero === g; });
+        var ocupados = lkLockers.filter(function(l){ return String(l.genero||'').trim().toLowerCase() === g; });
         var ocupNums = ocupados.map(function(l){ return l.numero; });
         var gridId   = g === 'hombre' ? 'lk-grid-h' : 'lk-grid-m';
         var badgeId  = g === 'hombre' ? 'lk-badge-h' : 'lk-badge-m';
@@ -7063,7 +7080,7 @@
 
     function lkRenderNumeros(g){
       var max = MAX[g];
-      var ocupNums = lkLockers.filter(function(l){ return l.genero===g && l.status==='ocupado'; }).map(function(l){ return l.numero; });
+      var ocupNums = lkLockers.filter(function(l){ return String(l.genero||'').trim().toLowerCase()===g; }).map(function(l){ return l.numero; });
       var html = '';
       for(var n = 1; n <= max; n++){
         var ocup = ocupNums.indexOf(n) > -1;
