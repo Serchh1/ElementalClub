@@ -591,6 +591,32 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
         </div>
       </div>
 
+      <!-- Chart ingresos vs egresos mensual (año en curso) -->
+      <div class="chart-box" style="margin-bottom:1.6rem">
+        <div class="chart-hdr">
+          <h4>Ingresos vs Egresos por Mes — 2026 (lo que va del año)</h4>
+          <div class="chart-legend">
+            <div class="cl"><div class="cl-dot" style="background:var(--green)"></div>Ingresos</div>
+            <div class="cl"><div class="cl-dot" style="background:var(--red)"></div>Egresos</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-ing-egr-ytd"></canvas></div>
+        <div class="util-grid" style="margin-top:1rem">
+          <div class="util-box" style="--uc:var(--green)">
+            <div class="util-lbl">Total Ingresos 2026 (lo que va)</div>
+            <div class="util-val" id="ie-total-ing">—</div>
+          </div>
+          <div class="util-box" style="--uc:var(--red)">
+            <div class="util-lbl">Total Egresos 2026 (lo que va)</div>
+            <div class="util-val" id="ie-total-egr">—</div>
+          </div>
+          <div class="util-box" style="--uc:var(--blue)">
+            <div class="util-lbl">Diferencia (Ingresos − Egresos)</div>
+            <div class="util-val" id="ie-total-neto">—</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Chart utilidad mensual -->
       <div class="chart-box" style="margin-bottom:1.6rem">
         <div class="chart-hdr">
@@ -1070,7 +1096,29 @@ function renderCharts(curMes){
     ]},options:optsLine});
   }
 
-  /* 5. Barras utilidad mensual */
+  /* 5. Barras ingresos vs egresos — año en curso (lo que va) */
+  var labelsYtd=MESES_NOM.slice(0,curMes+1);
+  var ingYtd=_ing26.slice(0,curMes+1);
+  var egrYtd=_egr26.slice(0,curMes+1);
+  destroyChart('chart-ing-egr-ytd');
+  var ctxIE=document.getElementById('chart-ing-egr-ytd');
+  if(ctxIE){
+    var optsIE=JSON.parse(JSON.stringify(baseOpts));
+    optsIE.plugins.legend.display=false;
+    optsIE.scales.y.ticks.callback=function(v){return '$'+(v>=1000000?(v/1000000).toFixed(1)+'M':(v/1000).toFixed(0)+'K');};
+    _charts['chart-ing-egr-ytd']=new Chart(ctxIE,{type:'bar',data:{labels:labelsYtd,datasets:[
+      {label:'Ingresos',data:ingYtd,backgroundColor:'rgba(34,197,94,.75)',borderColor:'rgba(34,197,94,1)',borderWidth:1,borderRadius:3,borderSkipped:false},
+      {label:'Egresos',data:egrYtd,backgroundColor:'rgba(239,68,68,.75)',borderColor:'rgba(239,68,68,1)',borderWidth:1,borderRadius:3,borderSkipped:false},
+    ]},options:optsIE});
+  }
+  var ieTotIng=ingYtd.reduce(function(a,v){return a+v;},0);
+  var ieTotEgr=egrYtd.reduce(function(a,v){return a+v;},0);
+  set('ie-total-ing', fmt(ieTotIng));
+  set('ie-total-egr', fmt(ieTotEgr));
+  var ieNeto=document.getElementById('ie-total-neto');
+  if(ieNeto){ ieNeto.textContent=fmt(ieTotIng-ieTotEgr); ieNeto.parentElement.style.setProperty('--uc', (ieTotIng-ieTotEgr)>=0?'var(--green)':'var(--red)'); }
+
+  /* 6. Barras utilidad mensual */
   var util25=_ing25.map(function(v,i){return v-_egr25[i];});
   var util26=_ing26.map(function(v,i){return v>0||_egr26[i]>0?v-_egr26[i]:0;});
   destroyChart('chart-util');

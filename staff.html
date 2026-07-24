@@ -5536,11 +5536,13 @@
     var EDIT_WINDOW_MINUTES = 24 * 60;
 
     function getEditTimeLeft(createdAt) {
+      if(esRolSocio()) return Infinity;
       if(!createdAt) return -1;
       return EDIT_WINDOW_MINUTES - (Date.now() - new Date(createdAt).getTime()) / 60000;
     }
 
     function formatEditBadgeLabel(minutesLeft) {
+      if(minutesLeft === Infinity) return 'Sin límite';
       if(minutesLeft <= 0) return 'Sin edición';
       var hours = Math.floor(minutesLeft / 60);
       var mins = Math.round(minutesLeft % 60);
@@ -5583,11 +5585,17 @@
         document.getElementById('edit-cartera').value = mov.cartera || '';
       }
 
-      var countEl = document.getElementById('edit-timer-count');
-      if(countEl) {
-        var ml = getEditTimeLeft(mov.created_at);
-        countEl.textContent = ml > 0 ? formatEditBadgeLabel(ml) : 'Sin edición';
-        countEl.style.color = ml < 60 ? '#f87171' : '#fbbf24';
+      var timerRow = document.querySelector('.mov-edit-timer');
+      if(esRolSocio()) {
+        if(timerRow) timerRow.style.display = 'none';
+      } else {
+        if(timerRow) timerRow.style.display = '';
+        var countEl = document.getElementById('edit-timer-count');
+        if(countEl) {
+          var ml = getEditTimeLeft(mov.created_at);
+          countEl.textContent = ml > 0 ? formatEditBadgeLabel(ml) : 'Sin edición';
+          countEl.style.color = ml < 60 ? '#f87171' : '#fbbf24';
+        }
       }
 
       document.getElementById('mov-edit-overlay').classList.add('on');
@@ -5879,8 +5887,9 @@
         if(r.created_at) {
           var minLeft = getEditTimeLeft(r.created_at);
           if(minLeft > 0) {
+            var badgeHtml = esRolSocio() ? '' : '<span class="mov-timer-badge">' + formatEditBadgeLabel(minLeft) + '</span>';
             editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
-              + 'Editar <span class="mov-timer-badge">' + formatEditBadgeLabel(minLeft) + '</span></button>';
+              + 'Editar ' + badgeHtml + '</button>';
           }
         }
 
@@ -5947,9 +5956,9 @@
           var creado = new Date(r.created_at).getTime();
           var minLeft = getEditTimeLeft(r.created_at);
           if (minLeft > 0) {
-            var minsStr = formatEditBadgeLabel(minLeft);
+            var badgeHtml = esRolSocio() ? '' : '<span class="mov-timer-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;margin-top:-1px"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' + formatEditBadgeLabel(minLeft) + '</span>';
             editBtn = '<button class="btn-mov-edit" onclick="abrirEditMov(\'' + r.id + '\',\'' + r.tipo + '\')">'
-              + 'Editar <span class="mov-timer-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;margin-top:-1px"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' + minsStr + '</span>'
+              + 'Editar ' + badgeHtml
               + '</button>';
           } else {
             editBtn = '<span class="btn-mov-expired">Sin edición</span>';
@@ -7530,7 +7539,7 @@
 
     // ── Utilidades ────────────────────────────────────────────────
     function expSetStatus(msg, color) {
-      var bar = document.getElementById('exp-status');
+      var bar = document. getElementById('exp-status');
       var dot = document.getElementById('exp-status-dot');
       var txt = document.getElementById('exp-status-txt');
       if (!bar) return;
