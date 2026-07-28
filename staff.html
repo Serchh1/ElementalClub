@@ -4042,43 +4042,6 @@
       setTimeout(function () { el.classList.remove('on'); }, 4500);
     }
 
-    /* ── INACTIVITY AUTO-LOGOUT (2 hours) ── */
-    var _inactivityTimer = null;
-    var INACTIVITY_MS = 2 * 60 * 60 * 1000; // 2 horas
-
-    function resetInactivityTimer() {
-      if (_inactivityTimer) clearTimeout(_inactivityTimer);
-      _inactivityTimer = setTimeout(function () {
-        localStorage.removeItem('ecUser');
-        localStorage.removeItem('currentUser');
-        if (window.supabase) supabase.auth.signOut();
-        showScr('login');
-        var _ld = document.getElementById('link-dashboard');
-        if (_ld) _ld.style.display = 'none';
-        var _lu = document.getElementById('link-usuarios');
-        if (_lu) _lu.style.display = 'none';
-        var _vb = document.getElementById('visitor-banner');
-        if (_vb) _vb.style.display = 'none';
-        document.getElementById('l-u').value = '';
-        document.getElementById('l-p').value = '';
-        alert('Sesión cerrada por inactividad (2 horas).');
-      }, INACTIVITY_MS);
-    }
-
-    function startInactivityWatcher() {
-      ['mousemove', 'keydown', 'click', 'touchstart'].forEach(function (ev) {
-        document.addEventListener(ev, resetInactivityTimer, { passive: true });
-      });
-      resetInactivityTimer();
-    }
-
-    function stopInactivityWatcher() {
-      if (_inactivityTimer) { clearTimeout(_inactivityTimer); _inactivityTimer = null; }
-      ['mousemove', 'keydown', 'click', 'touchstart'].forEach(function (ev) {
-        document.removeEventListener(ev, resetInactivityTimer);
-      });
-    }
-
     function enterPanel(user) {
       document.getElementById('w-name').textContent = (user.name || '').split(' ')[0].toUpperCase();
       document.getElementById('t-av').textContent = (user.name || '?')[0].toUpperCase();
@@ -4086,7 +4049,6 @@
       showScr('panel');
       loadStats();
       cargarCajaChica();
-      startInactivityWatcher();
       // Mostrar links según rol
       var _rol = String(user.role || user.rol || '').toLowerCase();
       // Dashboard Financiero: socio, admin (contador)
@@ -4110,7 +4072,6 @@
 
     function doLogout() {
       if (!confirm('¿Cerrar sesión?')) return;
-      stopInactivityWatcher();
       localStorage.removeItem('ecUser');
       localStorage.removeItem('currentUser');
       if (window.supabase) supabase.auth.signOut();
@@ -8326,6 +8287,12 @@ window.exportarExcel = function (modo) {
 
 })();
 </script>
+
+  <!-- ══════════ WIDGET KOMMO (formulario) ══════════ -->
+  <script>
+    !function(a,m,o,c,r,m){a[o+c]=a[o+c]||{setMeta:function(p){this.params=(this.params||[]).concat([p])}},a[o+r]=a[o+r]||function(f){a[o+r].f=(a[o+r].f||[]).concat([f])},a[o+r]({id:"1721268",hash:"cd202093c01bc7ab31a829fd2b86ed35",locale:"es"}),a[o+m]=a[o+m]||function(f,k){a[o+m].f=(a[o+m].f||[]).concat([[f,k]])}}(window,0,"amo_forms_","params","load","loaded");
+  </script>
+  <script id="amoforms_script_1721268" async="async" charset="utf-8" src="https://forms.kommo.com/forms/assets/js/amoforms.js?1785273573"></script>
 
 </body>
 
