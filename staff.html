@@ -7232,7 +7232,7 @@
       btn.disabled=true; btn.style.opacity='.5'; btn.style.clipPath='none';
       btn.textContent='Registrando...';
 
-      var hoy  = new Date().toISOString().split('T')[0];
+      var hoy  = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       var fin  = new Date();
       fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
       var finISO = fin.toISOString().split('T')[0];
@@ -7402,8 +7402,8 @@
     function verificarVencimientos(){
       var hoy  = new Date();
       var lim  = new Date(); lim.setDate(lim.getDate()+14);
-      var hoyISO = hoy.toISOString().split('T')[0];
-      var limISO = lim.toISOString().split('T')[0];
+      var hoyISO = hoy.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var limISO = lim.toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
       window.supabase.from('lockers')
         .select('id,numero,genero,client_nombre,fecha_fin')
         .eq('status','ocupado')
