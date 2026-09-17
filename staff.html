@@ -3549,6 +3549,9 @@
                     <span style="font-family:var(--fT);font-size:1rem;letter-spacing:.06em;">LOCKERS HOMBRES</span>
                     <span id="lk-badge-h" style="font-size:.58rem;font-weight:800;letter-spacing:.1em;background:rgba(245, 132, 10,.15);color:var(--or);padding:.1rem .5rem;border-radius:99px;">0/10</span>
                   </div>
+                  <button onclick="lkAbrirConfig('hombre')" title="Ajustar cantidad de lockers"
+                    style="background:none;border:1px solid var(--s4);color:var(--mu);width:26px;height:26px;cursor:pointer;font-size:.8rem;border-radius:var(--r);flex-shrink:0;"
+                    onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='var(--s4)';this.style.color='var(--mu)'">⚙</button>
                 </div>
                 <div id="lk-grid-h" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;padding:.85rem;"></div>
               </div>
@@ -3561,6 +3564,9 @@
                     <span style="font-family:var(--fT);font-size:1rem;letter-spacing:.06em;">LOCKERS MUJERES</span>
                     <span id="lk-badge-m" style="font-size:.58rem;font-weight:800;letter-spacing:.1em;background:rgba(245, 132, 10,.15);color:var(--or);padding:.1rem .5rem;border-radius:99px;">0/15</span>
                   </div>
+                  <button onclick="lkAbrirConfig('mujer')" title="Ajustar cantidad de lockers"
+                    style="background:none;border:1px solid var(--s4);color:var(--mu);width:26px;height:26px;cursor:pointer;font-size:.8rem;border-radius:var(--r);flex-shrink:0;"
+                    onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='var(--s4)';this.style.color='var(--mu)'">⚙</button>
                 </div>
                 <div id="lk-grid-m" style="display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;padding:.85rem;"></div>
               </div>
@@ -7009,6 +7015,57 @@
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════
+       MODAL AJUSTAR CANTIDAD DE LOCKERS
+  ══════════════════════════════════════════ -->
+  <div id="lk-config-bd" style="display:none;position:fixed;inset:0;z-index:1065;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)lkCerrarConfig()">
+    <div style="background:var(--s1);border:1px solid var(--s3);border-top:2px solid var(--or);width:100%;max-width:380px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--or),transparent);"></div>
+      <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--s3);display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:.52rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:.2rem;">Configuración</div>
+          <div style="font-family:var(--fT);font-size:1.3rem;letter-spacing:.05em;" id="lk-cfg-titulo">AJUSTAR <b style="color:var(--or)">LOCKERS</b></div>
+        </div>
+        <button onclick="lkCerrarConfig()" style="background:none;border:1px solid var(--s4);color:var(--mu);width:28px;height:28px;cursor:pointer;font-size:.7rem;">✕</button>
+      </div>
+
+      <!-- Paso 1: nueva cantidad -->
+      <div id="lk-cfg-paso1" style="padding:1.25rem 1.5rem;">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.55);margin-bottom:1rem;line-height:1.55;" id="lk-cfg-info">—</div>
+        <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Nueva cantidad total</div>
+        <input id="lk-cfg-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Ej. 12"
+          oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)"
+          style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .9rem;color:#fff;font-family:var(--fB);font-size:1rem;font-weight:700;outline:none;border-radius:var(--r);margin-bottom:.9rem;"
+          onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'" />
+        <div id="lk-cfg-err" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:.55rem .85rem;font-size:.72rem;font-weight:600;margin-bottom:.9rem;border-radius:var(--r);"></div>
+        <button id="lk-cfg-btn-continuar" onclick="lkConfigContinuar()"
+          style="width:100%;padding:.85rem;background:var(--or);color:#fff;border:none;font-family:var(--fB);font-size:.72rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);transition:all .2s;"
+          onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">
+          Continuar
+        </button>
+      </div>
+
+      <!-- Paso 2: confirmación -->
+      <div id="lk-cfg-paso2" style="display:none;padding:1.25rem 1.5rem;">
+        <div id="lk-cfg-resumen" style="display:flex;flex-direction:column;gap:0;margin-bottom:1rem;"></div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.55);margin-bottom:1.1rem;line-height:1.55;">
+          Esto actualiza la configuración en la base de datos y aplica para todo el personal de inmediato. ¿Confirmas el cambio?
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;">
+          <button onclick="lkConfigVolver()"
+            style="padding:.8rem;background:transparent;border:1px solid var(--s4);color:var(--mu);font-family:var(--fB);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">
+            Volver
+          </button>
+          <button id="lk-cfg-btn-confirmar" onclick="lkConfigGuardar()"
+            style="padding:.8rem;background:var(--or);color:#fff;border:none;font-family:var(--fB);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;"
+            onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">
+            Confirmar y guardar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
   /* ══════════════════════════════════════════════════════
      LOCKERS — lógica completa
@@ -7020,10 +7077,12 @@
     var lkClienteSel  = null;   // objeto cliente
     var lkLockers     = [];     // cache de lockers activos
     var lkDetId       = null;   // id del locker en detalle
+    var lkCfgGenero   = null;   // género que se está configurando ('hombre' | 'mujer')
+    var lkCfgNuevoMax = null;   // nueva cantidad pendiente de confirmar
 
     var PRECIOS = { semestral: 600, anual: 1000 };
     var MESES   = { semestral: 6,   anual: 12   };
-    var MAX     = { hombre: 10, mujer: 15 };
+    var MAX     = { hombre: 10, mujer: 15 };   // valores por defecto; se sobrescriben con locker_config
 
     /* Poblar selector de día (1-31) una sola vez */
     (function lkPoblarDia(){
@@ -7061,10 +7120,30 @@
 
     /* ── Cargar lockers al abrir la pestaña ── */
     window.lkInit = function() {
+      cargarConfigLockers();
       cargarLockers();
       verificarVencimientos();
       if(!document.getElementById('lk-fi-anio').value) lkSetFechaInicioHoy();
     };
+
+    /* ── Cargar cantidad configurada de lockers (hombre/mujer) desde Supabase ── */
+    function cargarConfigLockers() {
+      window.supabase.from('locker_config')
+        .select('genero,max_lockers')
+        .then(function(r){
+          if(r.error || !r.data || !r.data.length){
+            if(r.error) console.warn('No se pudo cargar locker_config (usando valores por defecto):', r.error.message);
+            renderGrids();
+            return;
+          }
+          r.data.forEach(function(row){
+            var g = String(row.genero||'').trim().toLowerCase();
+            var n = parseInt(row.max_lockers, 10);
+            if((g === 'hombre' || g === 'mujer') && n > 0) MAX[g] = n;
+          });
+          renderGrids();
+        });
+    }
 
     window.lkTogglePago = function(){
       var checked = document.getElementById('lk-pago-check').checked;
@@ -7526,6 +7605,98 @@
       setTimeout(function(){ t.remove(); }, 3000);
     }
 
+    /* ── Ajustar cantidad de lockers (por género) ── */
+    window.lkAbrirConfig = function(g){
+      lkCfgGenero = g;
+      lkCfgNuevoMax = null;
+      var ocupados = lkLockers.filter(function(l){ return String(l.genero||'').trim().toLowerCase() === g; }).length;
+      document.getElementById('lk-cfg-titulo').innerHTML = 'AJUSTAR LOCKERS <b style="color:var(--or)">' + (g==='hombre'?'HOMBRES':'MUJERES') + '</b>';
+      document.getElementById('lk-cfg-info').innerHTML =
+        'Actualmente hay <strong style="color:#fff;">' + MAX[g] + '</strong> lockers configurados para esta área, con <strong style="color:#fff;">' + ocupados + '</strong> ocupados.';
+      document.getElementById('lk-cfg-input').value = MAX[g];
+      document.getElementById('lk-cfg-err').style.display = 'none';
+      document.getElementById('lk-cfg-paso1').style.display = 'block';
+      document.getElementById('lk-cfg-paso2').style.display = 'none';
+      document.getElementById('lk-config-bd').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.lkCerrarConfig = function(){
+      document.getElementById('lk-config-bd').style.display = 'none';
+      document.body.style.overflow = '';
+      lkCfgGenero = null;
+      lkCfgNuevoMax = null;
+    };
+
+    function lkCfgError(msg){
+      var el = document.getElementById('lk-cfg-err');
+      el.textContent = msg; el.style.display = 'block';
+    }
+
+    window.lkConfigContinuar = function(){
+      var err = document.getElementById('lk-cfg-err');
+      err.style.display = 'none';
+      var val = document.getElementById('lk-cfg-input').value.trim();
+      if(!val) return lkCfgError('Escribe la nueva cantidad de lockers.');
+      var n = parseInt(val, 10);
+      if(!n || n < 1) return lkCfgError('La cantidad debe ser un número mayor a 0.');
+      var ocupados = lkLockers.filter(function(l){ return String(l.genero||'').trim().toLowerCase() === lkCfgGenero; }).length;
+      if(n < ocupados) return lkCfgError('No puedes bajar a ' + n + ': hay ' + ocupados + ' lockers ocupados en esta área. Libera lockers primero.');
+
+      lkCfgNuevoMax = n;
+      var actual = MAX[lkCfgGenero];
+      var diff = n - actual;
+      var diffTxt = diff === 0 ? 'Sin cambio' : (diff > 0 ? '+' + diff + ' lockers' : diff + ' lockers');
+      var diffColor = diff === 0 ? 'rgba(255,255,255,.6)' : (diff > 0 ? '#4ade80' : '#fbbf24');
+
+      function fila(lbl, val2, color) {
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--s3);">'
+          + '<span style="font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">'+lbl+'</span>'
+          + '<span style="font-size:.82rem;font-weight:700;color:'+(color||'#fff')+';">'+val2+'</span>'
+          + '</div>';
+      }
+
+      document.getElementById('lk-cfg-resumen').innerHTML =
+        fila('Área', g_es(lkCfgGenero))
+        + fila('Cantidad actual', actual)
+        + fila('Cantidad nueva', n, '#4ade80')
+        + fila('Diferencia', diffTxt, diffColor)
+        + fila('Ocupados ahora', ocupados, 'rgba(255,255,255,.6)');
+
+      document.getElementById('lk-cfg-paso1').style.display = 'none';
+      document.getElementById('lk-cfg-paso2').style.display = 'block';
+    };
+
+    function g_es(g){ return g === 'hombre' ? '♂ Hombres' : '♀ Mujeres'; }
+
+    window.lkConfigVolver = function(){
+      document.getElementById('lk-cfg-paso1').style.display = 'block';
+      document.getElementById('lk-cfg-paso2').style.display = 'none';
+    };
+
+    window.lkConfigGuardar = function(){
+      if(!lkCfgGenero || !lkCfgNuevoMax) return;
+      var btn = document.getElementById('lk-cfg-btn-confirmar');
+      btn.disabled = true; btn.textContent = 'Guardando...'; btn.style.opacity = '.6';
+      var usuario = window._empleadoActual || 'staff';
+
+      window.supabase.from('locker_config')
+        .upsert({ genero: lkCfgGenero, max_lockers: lkCfgNuevoMax, updated_by: usuario, updated_at: new Date().toISOString() }, { onConflict: 'genero' })
+        .then(function(r){
+          btn.disabled = false; btn.textContent = 'Confirmar y guardar'; btn.style.opacity = '1';
+          if(r.error) throw r.error;
+          MAX[lkCfgGenero] = lkCfgNuevoMax;
+          renderGrids();
+          lkCerrarConfig();
+          lkMostrarToast('Cantidad de lockers actualizada correctamente');
+        })
+        .catch(function(e){
+          btn.disabled = false; btn.textContent = 'Confirmar y guardar'; btn.style.opacity = '1';
+          document.getElementById('lk-cfg-paso1').style.display = 'block';
+          document.getElementById('lk-cfg-paso2').style.display = 'none';
+          lkCfgError('Error al guardar: ' + (e.message || e));
+        });
+    };
 
     /* ── Modal de confirmación de datos ── */
     window.lkAbrirConfirmacion = function(){
