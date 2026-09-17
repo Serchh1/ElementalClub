@@ -3471,6 +3471,31 @@
                 </div>
               </div>
 
+              <!-- Fecha de inicio -->
+              <div style="margin-bottom:1rem;">
+                <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Fecha de inicio</div>
+                <div style="display:grid;grid-template-columns:.8fr 1.4fr 1fr;gap:.5rem;">
+                  <select id="lk-fi-dia" onchange="lkActualizarFecha()"
+                    style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .5rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);cursor:pointer;appearance:none;-webkit-appearance:none;"
+                    onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'">
+                    <option value="">Día</option>
+                  </select>
+                  <select id="lk-fi-mes" onchange="lkActualizarFecha()"
+                    style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .5rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);cursor:pointer;appearance:none;-webkit-appearance:none;"
+                    onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'">
+                    <option value="">Mes</option>
+                    <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+                    <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+                    <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option>
+                    <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+                  </select>
+                  <input id="lk-fi-anio" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="Año"
+                    oninput="this.value=this.value.replace(/\D/g,'').slice(0,4);lkActualizarFecha();"
+                    style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .6rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);"
+                    onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--s3)'" />
+                </div>
+              </div>
+
               <!-- Fecha calculada -->
               <div id="lk-fecha-preview" style="display:none;background:var(--s2);border:1px solid var(--s3);padding:.65rem 1rem;margin-bottom:1.25rem;border-radius:var(--r);">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -3479,9 +3504,17 @@
                 </div>
               </div>
 
+              <!-- Pago -->
+              <div style="margin-bottom:1rem;background:var(--s2);border:1px solid var(--s3);padding:.75rem 1rem;border-radius:var(--r);">
+                <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;">
+                  <input id="lk-pago-check" type="checkbox" onchange="lkTogglePago()" style="width:16px;height:16px;accent-color:var(--or);cursor:pointer;flex-shrink:0;" />
+                  <span style="font-size:.72rem;font-weight:700;color:#fff;">Se realizó el pago</span>
+                </label>
+                <div style="font-size:.62rem;color:var(--mu);margin-top:.35rem;">Desmárcalo si solo estás registrando los datos del locker sin cobrar (ej. captura de información existente).</div>
+              </div>
 
               <!-- Cartera -->
-              <div style="margin-bottom:1rem;">
+              <div id="lk-cartera-wrap" style="margin-bottom:1rem;display:none;">
                 <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem;">Forma de pago</div>
                 <select id="lk-cartera"
                   style="width:100%;background:var(--bg);border:1.5px solid var(--s3);padding:.72rem .9rem;color:#fff;font-family:var(--fB);font-size:.82rem;font-weight:500;outline:none;transition:border-color .18s;border-radius:var(--r);cursor:pointer;appearance:none;-webkit-appearance:none;"
@@ -6992,10 +7025,51 @@
     var MESES   = { semestral: 6,   anual: 12   };
     var MAX     = { hombre: 10, mujer: 15 };
 
+    /* Poblar selector de día (1-31) una sola vez */
+    (function lkPoblarDia(){
+      var sel = document.getElementById('lk-fi-dia');
+      if(!sel || sel.options.length > 1) return;
+      for(var d = 1; d <= 31; d++){
+        var opt = document.createElement('option');
+        opt.value = (d < 10 ? '0' : '') + d;
+        opt.textContent = d;
+        sel.appendChild(opt);
+      }
+    })();
+
+    /* ── Fecha de inicio (día/mes/año independientes, sin input nativo) ── */
+    function lkFechaInicioISO(){
+      var d = document.getElementById('lk-fi-dia').value;
+      var m = document.getElementById('lk-fi-mes').value;
+      var y = document.getElementById('lk-fi-anio').value;
+      if(!d || !m || y.length !== 4) return null;
+      return y + '-' + m + '-' + d;
+    }
+
+    function lkFechaInicioSel(){
+      var iso = lkFechaInicioISO();
+      return iso ? new Date(iso+'T12:00:00') : null;
+    }
+
+    function lkSetFechaInicioHoy(){
+      var hoyISO = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var partes = hoyISO.split('-');
+      document.getElementById('lk-fi-anio').value = partes[0];
+      document.getElementById('lk-fi-mes').value  = partes[1];
+      document.getElementById('lk-fi-dia').value  = partes[2];
+    }
+
     /* ── Cargar lockers al abrir la pestaña ── */
     window.lkInit = function() {
       cargarLockers();
       verificarVencimientos();
+      if(!document.getElementById('lk-fi-anio').value) lkSetFechaInicioHoy();
+    };
+
+    window.lkTogglePago = function(){
+      var checked = document.getElementById('lk-pago-check').checked;
+      document.getElementById('lk-cartera-wrap').style.display = checked ? 'block' : 'none';
+      if(!checked) document.getElementById('lk-cartera').value = '';
     };
 
     function cargarLockers() {
@@ -7146,8 +7220,9 @@
 
     function lkActualizarFecha(){
       if(!lkDuracionSel) return;
-      var hoy  = new Date();
-      var fin  = new Date(hoy);
+      var ini = lkFechaInicioSel();
+      if(!ini){ document.getElementById('lk-fecha-preview').style.display = 'none'; return; }
+      var fin = new Date(ini);
       fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
       var finStr = fin.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
       document.getElementById('lk-fecha-fin-txt').textContent = finStr;
@@ -7228,40 +7303,27 @@
       if(!lkNumeroSel)   return lkError('Selecciona el número de locker.');
       if(!lkClienteSel)  return lkError('Busca y selecciona un cliente.');
       if(!lkDuracionSel) return lkError('Selecciona la duración.');
+      var fechaInicioVal = lkFechaInicioISO();
+      if(!fechaInicioVal) return lkError('Selecciona la fecha de inicio completa (día, mes y año).');
+      var lkPago = document.getElementById('lk-pago-check').checked;
       var lkCartera = document.getElementById('lk-cartera').value;
-      if(!lkCartera) return lkError('Selecciona la forma de pago.');
+      if(lkPago && !lkCartera) return lkError('Selecciona la forma de pago.');
 
       var btn = document.getElementById('lk-btn-registrar');
       btn.disabled=true; btn.style.opacity='.5'; btn.style.clipPath='none';
       btn.textContent='Registrando...';
 
-      var hoy  = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
-      var fin  = new Date();
+      var hoyReal = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+      var fin  = new Date(fechaInicioVal+'T12:00:00');
       fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
       var finISO = fin.toISOString().split('T')[0];
 
       var monto  = PRECIOS[lkDuracionSel];
       var nombre = (lkClienteSel.first_name||'') + ' ' + (lkClienteSel.last_name1||'') + (lkClienteSel.last_name2?' '+lkClienteSel.last_name2:'');
-      var opId   = window.generarOperationId ? window.generarOperationId(hoy) : ('EC-'+hoy.replace(/-/g,'')+'-LK');
+      var opId   = window.generarOperationId ? window.generarOperationId(hoyReal) : ('EC-'+hoyReal.replace(/-/g,'')+'-LK');
       var usuario = window._empleadoActual || 'staff';
 
-      /* 1. Insertar en ingresos */
-      window.supabase.from('ingresos').insert({
-        client_id:    lkClienteSel.id,
-        nombre:       nombre.trim(),
-        monto:        monto,
-        fecha:        hoy,
-        categoria:    'Locker',
-        categoria_raw:'Locker',
-        descripcion:  'Locker ' + (lkGeneroSel==='hombre'?'Hombres':'Mujeres') + ' #' + lkNumeroSel + ' — ' + lkDuracionSel,
-        meses:        MESES[lkDuracionSel],
-        operation_id: opId,
-        usuario:      usuario,
-        cartera:      lkCartera,
-      }).select('id').single()
-      .then(function(ri){
-        if(ri.error) throw ri.error;
-        /* 2. Insertar en lockers */
+      function insertarLocker(ingresoId){
         return window.supabase.from('lockers').insert({
           numero:        lkNumeroSel,
           genero:        lkGeneroSel,
@@ -7271,19 +7333,46 @@
           client_phone:  lkClienteSel.phone || null,
           duracion:      lkDuracionSel,
           monto:         monto,
-          fecha_inicio:  hoy,
+          fecha_inicio:  fechaInicioVal,
           fecha_fin:     finISO,
           registrado_por:usuario,
-          ingreso_id:    ri.data.id,
+          ingreso_id:    ingresoId,
         });
-      })
+      }
+
+      var flujo;
+      if(lkPago){
+        /* Con pago: 1. Insertar en ingresos, 2. Insertar en lockers ligado al ingreso */
+        flujo = window.supabase.from('ingresos').insert({
+          client_id:    lkClienteSel.id,
+          nombre:       nombre.trim(),
+          monto:        monto,
+          fecha:        hoyReal,
+          categoria:    'Locker',
+          categoria_raw:'Locker',
+          descripcion:  'Locker ' + (lkGeneroSel==='hombre'?'Hombres':'Mujeres') + ' #' + lkNumeroSel + ' — ' + lkDuracionSel,
+          meses:        MESES[lkDuracionSel],
+          operation_id: opId,
+          usuario:      usuario,
+          cartera:      lkCartera,
+        }).select('id').single()
+        .then(function(ri){
+          if(ri.error) throw ri.error;
+          return insertarLocker(ri.data.id);
+        });
+      } else {
+        /* Sin pago: solo se registran los datos del locker, no afecta el balance del día */
+        flujo = insertarLocker(null);
+      }
+
+      flujo
       .then(function(rl){
         if(rl.error) throw rl.error;
         btn.disabled=false; btn.style.opacity='1'; btn.style.clipPath='';
         btn.textContent='Registrar Locker';
         lkResetForm();
         cargarLockers();
-        lkMostrarToast('Locker registrado correctamente');
+        lkMostrarToast(lkPago ? 'Locker registrado correctamente' : 'Datos del locker guardados (sin afectar el balance)');
       })
       .catch(function(e){
         btn.disabled=false; btn.style.opacity='1'; btn.style.clipPath='';
@@ -7317,8 +7406,11 @@
       document.getElementById('lk-cliente-sel').style.display='none';
       document.getElementById('lk-buscar-input').value='';
       document.getElementById('lk-fecha-preview').style.display='none';
+      lkSetFechaInicioHoy();
       document.getElementById('lk-form-err').style.display='none';
       document.getElementById('lk-cartera').value='';
+      document.getElementById('lk-pago-check').checked=false;
+      document.getElementById('lk-cartera-wrap').style.display='none';
     }
 
     /* ── Detalle + liberación ── */
@@ -7340,6 +7432,7 @@
         +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Teléfono</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+(lk.client_phone||'—')+'</span></div>'
         +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Duración</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+(lk.duracion||'—')+'</span></div>'
         +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Inicio</span><span style="font-size:.82rem;color:rgba(255,255,255,.7);">'+iniStr+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Pago</span><span style="font-size:.82rem;font-weight:700;color:'+(lk.ingreso_id?'#4ade80':'#fbbf24')+';">'+(lk.ingreso_id?'Registrado (afectó balance)':'Sin pago (solo datos)')+'</span></div>'
         +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--s3);"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Vence</span><span style="font-size:.82rem;font-weight:700;color:rgba(255,255,255,.8);">'+finStr+'</span></div>'
         +'<div style="display:flex;justify-content:space-between;padding:.55rem 0;"><span style="font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Días restantes</span><span style="font-size:.82rem;font-weight:700;">'+diffTxt+'</span></div>'
         +'</div>';
@@ -7442,13 +7535,16 @@
       if(!lkNumeroSel)   return lkError('Selecciona el número de locker.');
       if(!lkClienteSel)  return lkError('Busca y selecciona un cliente.');
       if(!lkDuracionSel) return lkError('Selecciona la duración.');
+      var fechaInicioVal = lkFechaInicioISO();
+      if(!fechaInicioVal) return lkError('Selecciona la fecha de inicio completa (día, mes y año).');
+      var lkPago = document.getElementById('lk-pago-check').checked;
       var cartera = document.getElementById('lk-cartera').value;
-      if(!cartera) return lkError('Selecciona la forma de pago.');
+      if(lkPago && !cartera) return lkError('Selecciona la forma de pago.');
 
       var nombre = (lkClienteSel.first_name||'') + ' ' + (lkClienteSel.last_name1||'') + (lkClienteSel.last_name2?' '+lkClienteSel.last_name2:'');
-      var fin = new Date(); fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
+      var fin = new Date(fechaInicioVal+'T12:00:00'); fin.setMonth(fin.getMonth() + MESES[lkDuracionSel]);
       var finStr = fin.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
-      var hoyStr = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+      var inicioStr = new Date(fechaInicioVal+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
 
       function fila(lbl, val, color) {
         return '<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--s3);">'
@@ -7464,11 +7560,12 @@
         + fila('Teléfono',  lkClienteSel.phone || '—', 'rgba(255,255,255,.6)')
         + fila('Plan',      lkClienteSel.membership_type || '—', 'rgba(255,255,255,.6)')
         + fila('Duración',  lkDuracionSel === 'semestral' ? 'Semestral (6 meses)' : 'Anual (12 meses)')
-        + fila('Inicio',    hoyStr, 'rgba(255,255,255,.7)')
+        + fila('Inicio',    inicioStr, 'rgba(255,255,255,.7)')
         + fila('Vence',     finStr, '#4ade80')
-        + fila('Cartera',   cartera, 'rgba(255,255,255,.7)')
+        + fila('Pago',      lkPago ? 'Sí (afecta balance)' : 'No (solo captura de datos)', lkPago ? '#4ade80' : '#fbbf24')
+        + (lkPago ? fila('Cartera', cartera, 'rgba(255,255,255,.7)') : '')
         + '<div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;">'
-          + '<span style="font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">Total</span>'
+          + '<span style="font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);">'+(lkPago?'Total':'Valor referencia')+'</span>'
           + '<span style="font-family:var(--fT);font-size:1.6rem;letter-spacing:.04em;color:var(--or);">$'+PRECIOS[lkDuracionSel].toLocaleString('es-MX')+'.00</span>'
         + '</div>';
 
