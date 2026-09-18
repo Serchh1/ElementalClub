@@ -134,23 +134,6 @@
             background: var(--orange-dark);
         }
 
-        .nav-emp {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            transition: all 0.2s;
-        }
-
-        .nav-emp:hover {
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
         /* ── HERO ── */
         .hero {
             position: relative;
@@ -308,40 +291,6 @@
             color: #fff;
         }
 
-        .hero-stats {
-            position: absolute;
-            right: 6vw;
-            bottom: 8vh;
-            z-index: 2;
-            display: flex;
-            gap: 3rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
-            color: #fff;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.35);
-            margin-top: 0.25rem;
-        }
-
-        .stat-divider {
-            width: 1px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
         /* ── MARQUEE ── */
         .marquee-wrap {
             background: var(--orange);
@@ -458,28 +407,6 @@
             background: var(--orange);
             z-index: -1;
             opacity: 0.15;
-        }
-
-        .about-badge {
-            position: absolute;
-            bottom: -1.5rem;
-            right: -1.5rem;
-            background: var(--orange);
-            padding: 1.5rem;
-            font-family: 'Bebas Neue', sans-serif;
-            text-align: center;
-        }
-
-        .about-badge .big {
-            font-size: 2.5rem;
-            line-height: 1;
-            color: #fff;
-        }
-
-        .about-badge .sm {
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            color: rgba(255, 255, 255, 0.8);
         }
 
         .feature-list {
@@ -1037,6 +964,73 @@
             line-height: 1.6;
         }
 
+        /* ── INSTAGRAM STRIP ── */
+        .ig-strip {
+            margin-top: 1.5px;
+            background: #0c0c0c;
+            padding: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            transition: background 0.2s;
+        }
+
+        .ig-strip:hover {
+            background: #141414;
+        }
+
+        .ig-strip-left {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .ig-strip-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .ig-strip-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.7rem;
+            letter-spacing: 0.04em;
+        }
+
+        .ig-strip-sub {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 0.15rem;
+        }
+
+        .btn-ig {
+            background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+            color: #fff;
+            padding: 1rem 2.2rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            transition: all 0.25s;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .btn-ig:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+        }
+
         /* ── CONTACTO ── */
         .contact-section {
             padding: 10rem 6vw;
@@ -1098,73 +1092,6 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.75);
             line-height: 1.6;
-        }
-
-        /* form */
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .form-group {
-            background: #0f0f0f;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            padding: 1.25rem 1.5rem;
-            resize: none;
-        }
-
-        .form-group input::placeholder,
-        .form-group select::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.25);
-        }
-
-        .form-group select {
-            appearance: none;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .form-group select option {
-            background: #0f0f0f;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 1.25rem;
-            background: var(--orange);
-            color: #fff;
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
-            transition: background 0.25s;
-        }
-
-        .form-submit:hover {
-            background: var(--orange-dark);
         }
 
         /* ── FOOTER ── */
@@ -1474,12 +1401,6 @@
             .footer-top {
                 grid-template-columns: 1fr 1fr;
             }
-
-            .hero-stats {
-                position: static;
-                margin-top: 3rem;
-                justify-content: flex-start;
-            }
         }
 
         @media (max-width: 768px) {
@@ -1510,8 +1431,7 @@
             }
 
             .nav-links,
-            .nav-cta,
-            .nav-emp {
+            .nav-cta {
                 display: none;
             }
 
@@ -1567,20 +1487,6 @@
                 gap: 2.5rem;
             }
 
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .stat-divider {
-                width: 80px;
-                height: 1px;
-            }
-
             .contact-bg-label {
                 font-size: 4rem;
             }
@@ -1614,22 +1520,6 @@
 
             .plan-price {
                 font-size: 3rem;
-            }
-
-            .mini-plans {
-                grid-template-columns: 1fr;
-            }
-
-            .mini-plan {
-                padding: 1rem;
-            }
-
-            .mini-plan-name {
-                font-size: 1.2rem;
-            }
-
-            .mini-plan-price .p {
-                font-size: 1.5rem;
             }
 
             .clases-grid {
@@ -1666,7 +1556,6 @@
             <a href="#contacto">Contacto</a>
         </div>
         <div style="display:flex;gap:0.75rem;align-items:center;">
-            <a href="staff.html" class="nav-emp">Empleados</a>
             <a href="#contacto" class="nav-cta">Únete → </a>
             <button class="hamburger" id="hamburger" aria-label="Menu">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1826,6 +1715,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="ig-strip reveal">
+                <div class="ig-strip-left">
+                    <div class="ig-strip-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="ig-strip-name">Visítanos en Instagram</div>
+                        <div class="ig-strip-sub">Instalaciones, clases y horarios en fotos y videos · @club_elemental</div>
+                    </div>
+                </div>
+                <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer"
+                    class="btn-ig">Ver Instagram →</a>
+            </div>
         </div>
     </section>
 
@@ -1855,7 +1763,7 @@
                         <div class="entry-plan-price">$1,000 <span
                                 style="font-family:'Inter',sans-serif;font-size:0.9rem;opacity:0.5;">/mes</span></div>
                         <div class="entry-plan-alts">Trim $2,850 · Sem $5,400 (3 MSI)<br>Anual $10,200 (12 MSI)</div>
-                        <a href="https://buy.stripe.com/dRm9AV1NC0HzejO0m963K0i" target="_blank"
+                        <a href="https://buy.stripe.com/dRm9AV1NC0HzejO0m963K0i" target="_blank" rel="noopener noreferrer"
                             class="entry-plan-link">Seleccionar →</a>
                     </div>
                 </div>
@@ -1869,7 +1777,7 @@
                         <div class="entry-plan-price">$1,200 <span
                                 style="font-family:'Inter',sans-serif;font-size:0.9rem;opacity:0.5;">/mes</span></div>
                         <div class="entry-plan-alts">Trim $3,420 · Sem $6,480 (3 MSI)<br>Anual $12,240 (12 MSI)</div>
-                        <a href="https://buy.stripe.com/bJe6oJeAoeyp6Rm2uh63K0m" target="_blank"
+                        <a href="https://buy.stripe.com/bJe6oJeAoeyp6Rm2uh63K0m" target="_blank" rel="noopener noreferrer"
                             class="entry-plan-link">Seleccionar →</a>
                     </div>
                 </div>
@@ -1892,7 +1800,7 @@
                         <li>GAP, CombatFit</li>
                         
                     </ul>
-                    <a href="https://buy.stripe.com/4gMfZjfEs1LDfnS1qd63K0r" target="_blank"
+                    <a href="https://buy.stripe.com/4gMfZjfEs1LDfnS1qd63K0r" target="_blank" rel="noopener noreferrer"
                         class="plan-btn">Seleccionar</a>
                 </div>
 
@@ -1911,7 +1819,7 @@
                         <li>Multipower ilimitado, ó</li>
                         <li>Momentum ilimitado</li>
                     </ul>
-                    <a href="https://buy.stripe.com/28EbJ38c0ai98Zu8SF63K0v" target="_blank"
+                    <a href="https://buy.stripe.com/28EbJ38c0ai98Zu8SF63K0v" target="_blank" rel="noopener noreferrer"
                         class="plan-btn">Seleccionar</a>
                 </div>
 
@@ -1928,7 +1836,7 @@
                         <li>CrossFit + Multipower + Momentum</li>
                         <li>Locker fijo + $1,000 en puntos*</li>
                     </ul>
-                    <a href="https://buy.stripe.com/6oU8wR77W8a18Zu8SF63K0z" target="_blank"
+                    <a href="https://buy.stripe.com/6oU8wR77W8a18Zu8SF63K0z" target="_blank" rel="noopener noreferrer"
                         class="plan-btn">Seleccionar</a>
                 </div>
             </div>
@@ -1979,7 +1887,6 @@
         <div class="about-section">
             <div class="about-image-wrap reveal">
                 <img src="img/Zona aparatos.jpeg" alt="Gym interior" />
-                <div class="about-badge"></div>
             </div>
             <div class="reveal">
                 <div class="section-label">Nuestra Historia</div>
@@ -2034,11 +1941,11 @@
                         </div>
                         <div>
                             <h4>Ubicación</h4>
-                            <a href="https://maps.app.goo.gl/9i222f5zjpLdJNF58" target="_blank" style="color:rgba(255,255,255,0.75);text-decoration:none;">P.º Magisterial 1519, Residencial Punta del Este<br>37296 León de los Aldama, Gto.</a>
+                            <a href="https://maps.app.goo.gl/9i222f5zjpLdJNF58" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.75);text-decoration:none;">P.º Magisterial 1519, Residencial Punta del Este<br>37296 León de los Aldama, Gto.</a>
                         </div>
                     </div>
                     <div class="contact-row">
-                        <a href="https://wa.me/524779248796" target="_blank" class="contact-icon"
+                        <a href="https://wa.me/524779248796" target="_blank" rel="noopener noreferrer" class="contact-icon"
                             style="text-decoration:none;background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.35);color:#25d366;transition:all 0.2s;"
                             onmouseover="this.style.background='rgba(37,211,102,0.2)'"
                             onmouseout="this.style.background='rgba(37,211,102,0.1)'">
@@ -2050,7 +1957,7 @@
                         </a>
                         <div>
                             <h4>WhatsApp</h4>
-                            <p><a href="https://wa.me/524779248796" target="_blank"
+                            <p><a href="https://wa.me/524779248796" target="_blank" rel="noopener noreferrer"
                                     style="color:rgba(255,255,255,0.75);text-decoration:none;">477 924 8796</a></p>
                         </div>
                     </div>
@@ -2112,9 +2019,7 @@
                     <p>Transformando vidas con entrenamiento inteligente y una comunidad que impulsa a superar límites
                         cada día.</p>
                     <div class="socials" style="margin-top:1.5rem;">
-                        <a href="#" class="social-btn">f</a>
-                        <a href="#" class="social-btn">ig</a>
-                        <a href="#" class="social-btn">tw</a>
+                        <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">ig</a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -2132,16 +2037,15 @@
                     <h4>Servicios</h4>
                     <ul>
                         <li><a href="reservar-clases.html">Reservar Clase</a></li>
-                        <li><a href="staff.html">Portal Empleados</a></li>
                         <li><a href="#contacto">Entrenamiento Personal</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Contacto</h4>
                     <ul>
-                        <li><a href="https://wa.me/524779248796" target="_blank">WhatsApp: 477 924 8796</a></li>
+                        <li><a href="https://wa.me/524779248796" target="_blank" rel="noopener noreferrer">WhatsApp: 477 924 8796</a></li>
                         <li><a href="mailto:recepcionelemental@hotmail.com">recepcionelemental@<br>hotmail.com</a></li>
-                        <li><a href="https://maps.app.goo.gl/n2hRvpgJArASY1Cn7" target="_blank">P.º Magisterial 1519,<br>León, Gto.</a></li>
+                        <li><a href="https://maps.app.goo.gl/n2hRvpgJArASY1Cn7" target="_blank" rel="noopener noreferrer">P.º Magisterial 1519,<br>León, Gto.</a></li>
                     </ul>
                 </div>
             </div>
@@ -2441,7 +2345,7 @@
     </style>
 
     <div class="wa-float">
-        <a href="https://wa.me/524779248796" target="_blank" class="wa-btn" aria-label="Contáctanos por WhatsApp">
+        <a href="https://wa.me/524779248796" target="_blank" rel="noopener noreferrer" class="wa-btn" aria-label="Contáctanos por WhatsApp">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#fff">
                 <path
                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
