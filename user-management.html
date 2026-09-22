@@ -332,6 +332,21 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;z-index:9
 .loading-pulse{font-size:.72rem;color:var(--mu);animation:lp 1.4s ease-in-out infinite}
 @keyframes lp{0%,100%{opacity:.3}50%{opacity:1}}
 </style>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="manifest" href="staff-manifest.json" />
+<link rel="apple-touch-icon" href="img/pwa/apple-touch-icon.png" />
+<meta name="theme-color" content="#090909" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EC Staff" />
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('staff-sw.js').catch(() => {});
+  });
+}
+</script>
 </head>
 <body>
 

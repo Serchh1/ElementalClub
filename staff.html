@@ -2568,8 +2568,20 @@
     .mfld input.invalid { border-color: rgba(248,113,113,.5) !important; }
   </style>
   <link rel="shortcut icon" href="favicon.ico" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="manifest" href="site.webmanifest" />
+  <link rel="manifest" href="staff-manifest.json" />
+  <link rel="apple-touch-icon" href="img/pwa/apple-touch-icon.png" />
+  <meta name="theme-color" content="#090909" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="EC Staff" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('staff-sw.js').catch(() => {});
+      });
+    }
+  </script>
 </head>
 
 <body>
