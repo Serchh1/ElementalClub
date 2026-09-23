@@ -458,42 +458,41 @@
         .plans-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5px;
-            background: rgba(255, 255, 255, 0.06);
+            gap: 1.5rem;
         }
 
         .entry-plans {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5px;
-            background: rgba(255, 255, 255, 0.06);
-            margin-bottom: 1.5px;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .entry-plan {
             background: var(--zinc);
-            padding: 2rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 2rem 2.25rem;
             display: grid;
             grid-template-columns: 1fr auto;
             align-items: center;
             gap: 1rem;
-            transition: background 0.2s;
+            transition: border-color 0.25s ease, transform 0.25s ease;
         }
 
         .entry-plan:hover {
-            background: #161616;
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .entry-plan-badge {
-            font-size: 0.58rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            padding: 0.25rem 0.6rem;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.3);
             display: inline-block;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
         }
 
         .entry-plan-name {
@@ -528,103 +527,82 @@
 
         .entry-plan-link {
             display: inline-block;
-            margin-top: 0.6rem;
+            margin-top: 0.7rem;
             font-size: 0.68rem;
-            font-weight: 800;
-            letter-spacing: 0.15em;
+            font-weight: 700;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--orange);
+            color: rgba(255, 255, 255, 0.55);
             text-decoration: none;
-            border: 1px solid rgba(245, 132, 10, 0.3);
-            padding: 0.3rem 0.8rem;
-            transition: all 0.2s;
+            transition: color 0.2s;
         }
 
         .entry-plan-link:hover {
-            background: var(--orange);
-            color: #fff;
+            color: var(--orange);
         }
 
         .plan-card {
             background: var(--zinc);
-            padding: 3rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 2.75rem 2.25rem;
             position: relative;
             overflow: hidden;
-            transition: background 0.3s;
+            transition: border-color 0.3s ease, transform 0.3s ease;
         }
 
         .plan-card:hover {
-            background: #161616;
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
         }
 
         .plan-card.featured {
-            background: var(--orange);
+            border-color: rgba(245, 132, 10, 0.5);
         }
 
         .plan-card.featured:hover {
-            background: #e84500;
-        }
-
-        .plan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .plan-card.featured .plan-line {
-            background: rgba(255, 255, 255, 0.3);
+            border-color: var(--orange);
         }
 
         .plan-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.4rem;
         }
 
         .plan-desc {
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
             line-height: 1.5;
-        }
-
-        .plan-card.featured .plan-desc {
-            color: rgba(255, 255, 255, 0.75);
+            min-height: 2.4em;
         }
 
         .plan-price {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 4rem;
+            font-size: 3.4rem;
             line-height: 1;
             color: #fff;
         }
 
         .plan-price span {
             font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .plan-alts {
             font-size: 0.68rem;
             color: rgba(255, 255, 255, 0.35);
-            margin: 0.5rem 0 2rem;
+            margin: 0.5rem 0 1.75rem;
             line-height: 1.6;
-        }
-
-        .plan-card.featured .plan-alts {
-            color: rgba(255, 255, 255, 0.6);
         }
 
         .plan-features {
             list-style: none;
-            margin-bottom: 2.5rem;
-            space-y: 0.75rem;
+            margin-bottom: 2rem;
         }
 
         .plan-features li {
@@ -632,14 +610,13 @@
             align-items: flex-start;
             gap: 0.6rem;
             font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.65);
+            padding: 0.55rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .plan-card.featured .plan-features li {
-            color: rgba(255, 255, 255, 0.9);
-            border-bottom-color: rgba(255, 255, 255, 0.15);
+        .plan-features li:last-child {
+            border-bottom: none;
         }
 
         .plan-features li::before {
@@ -649,67 +626,65 @@
             flex-shrink: 0;
         }
 
-        .plan-card.featured .plan-features li::before {
-            color: #fff;
-        }
-
         .plan-btn {
             display: block;
             text-align: center;
-            padding: 1rem;
-            font-weight: 800;
+            padding: 0.95rem;
+            font-weight: 700;
             font-size: 0.75rem;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.7);
-            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.75);
             transition: all 0.25s;
         }
 
         .plan-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--orange);
+            border-color: var(--orange);
             color: #fff;
         }
 
         .plan-card.featured .plan-btn {
-            background: #fff;
+            border-color: var(--orange);
             color: var(--orange);
-            border-color: transparent;
         }
 
         .plan-card.featured .plan-btn:hover {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--orange);
+            color: #fff;
         }
 
         .plan-popular {
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: rgba(255, 255, 255, 0.2);
+            top: 1.75rem;
+            right: 1.75rem;
+            color: var(--orange);
             font-size: 0.6rem;
-            font-weight: 900;
-            letter-spacing: 0.2em;
+            font-weight: 700;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            padding: 0.3rem 0.75rem;
         }
 
         /* visita strip */
         .visita-strip {
             background: var(--zinc);
-            margin-top: 1.5px;
-            padding: 1.5rem 2.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 1.5rem 2.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
-            transition: background 0.2s;
+            transition: border-color 0.25s ease;
         }
 
         .visita-strip:hover {
-            background: #161616;
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .visita-strip-left {
@@ -721,6 +696,7 @@
         .visita-strip-icon {
             width: 42px;
             height: 42px;
+            border-radius: 50%;
             border: 1px solid rgba(245, 132, 10, 0.3);
             display: flex;
             align-items: center;
@@ -798,77 +774,201 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5px;
-            background: rgba(255, 255, 255, 0.05);
+            gap: 2rem;
         }
 
         .clase-card {
-            background: #0f0f0f;
-            padding: 2.25rem 2rem;
+            background: #0c0c0c;
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            transition: background 0.25s;
+            display: flex;
+            flex-direction: column;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            opacity: 0;
+            transform: translateY(24px);
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, opacity 0.5s ease, border-color 0.35s ease;
+            will-change: transform;
         }
 
-        .clase-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: transparent;
-            transition: background 0.25s;
+        .clase-card.card-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .clase-card:hover,
+        .clase-card:active {
+            box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
+            border-color: rgba(245, 132, 10, 0.35);
         }
 
         .clase-card:hover {
-            background: #141414;
-        }
-
-        .clase-card:hover::before {
-            background: var(--orange);
+            transform: translateY(-6px);
         }
 
         .clase-emoji {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .clase-cat {
-            font-size: 0.6rem;
-            font-weight: 800;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--orange);
-            margin-bottom: 0.5rem;
+            display: none;
         }
 
         .clase-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             letter-spacing: 0.04em;
-            margin-bottom: 0.75rem;
+            line-height: 1;
         }
 
-        .clase-desc {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.45);
-            line-height: 1.65;
-            margin-bottom: 1.5rem;
+        /* ── Tipo badge (Premium / Estándar) ── */
+        .clase-tipo-tag {
+            position: absolute;
+            top: 0.9rem;
+            left: 0.9rem;
+            z-index: 4;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+            background: rgba(10, 10, 10, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .clase-tipo-tag.premium {
+            background: linear-gradient(120deg, #f5840a, #ffb347);
+            border-color: transparent;
+            color: #1a0e00;
+            box-shadow: 0 4px 16px rgba(245, 132, 10, 0.45);
+        }
+
+        .clase-tipo-tag svg {
+            width: 10px;
+            height: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ── Media carousel ── */
+        .clase-media {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            background: #050505;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        .clase-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.7s ease;
+            pointer-events: none;
+        }
+
+        .clase-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .clase-slide img,
+        .clase-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .clase-slide.icon-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 40%, rgba(245, 132, 10, 0.18), #0a0a0a 70%);
+        }
+
+        .clase-slide.icon-slide svg {
+            width: 30%;
+            height: 30%;
+            color: rgba(245, 132, 10, 0.5);
+        }
+
+        .clase-card:hover .clase-media img {
+            transform: scale(1.045);
+        }
+
+        .clase-media img,
+        .clase-media video {
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .clase-dots {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0.75rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.35rem;
+            z-index: 3;
+        }
+
+        .clase-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            transition: background 0.25s, transform 0.25s;
+            cursor: pointer;
+        }
+
+        .clase-dot.active {
+            background: var(--orange);
+            transform: scale(1.2);
+        }
+
+        .clase-bottom {
+            padding: 1.1rem 1.5rem 1.35rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .clase-meta {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-width: 0;
         }
 
         .clase-time {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.4);
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .clase-time-label {
+            color: var(--orange);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.62rem;
         }
 
         .clase-arrow {
@@ -881,6 +981,7 @@
             color: var(--orange);
             font-size: 0.9rem;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
 
         .clase-card:hover .clase-arrow {
@@ -965,70 +1066,160 @@
         }
 
         /* ── INSTAGRAM STRIP ── */
-        .ig-strip {
-            margin-top: 1.5px;
-            background: #0c0c0c;
-            padding: 2.5rem;
-            display: flex;
-            justify-content: space-between;
+        .ig-section {
+            position: relative;
+            margin-top: 1.5rem;
+            background: radial-gradient(circle at 15% 20%, rgba(245, 132, 10, 0.09), transparent 45%), #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .ig-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            transition: background 0.2s;
+            padding: 3.5rem;
         }
 
-        .ig-strip:hover {
-            background: #141414;
-        }
-
-        .ig-strip-left {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-        }
-
-        .ig-strip-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+        .ig-eyebrow {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: #fff;
+            gap: 0.6rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1rem;
         }
 
-        .ig-strip-name {
+        .ig-eyebrow svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .ig-content h3 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.7rem;
-            letter-spacing: 0.04em;
+            font-size: 2.6rem;
+            letter-spacing: 0.03em;
+            line-height: 1.05;
+            margin-bottom: 0.9rem;
         }
 
-        .ig-strip-sub {
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 0.15rem;
+        .ig-content p {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.7;
+            max-width: 380px;
+            margin-bottom: 1.75rem;
+        }
+
+        .ig-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ig-handle {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .btn-ig {
-            background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+            background: var(--orange);
             color: #fff;
-            padding: 1rem 2.2rem;
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 0.15em;
+            padding: 0.95rem 2rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.13em;
             text-transform: uppercase;
             text-decoration: none;
-            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            border-radius: 999px;
             transition: all 0.25s;
             display: inline-block;
             white-space: nowrap;
         }
 
         .btn-ig:hover {
-            filter: brightness(1.15);
+            filter: brightness(1.12);
             transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(245, 132, 10, 0.35);
+        }
+
+        .ig-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+
+        .ig-gallery.ig-gallery-4 {
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 380px;
+            margin-left: auto;
+        }
+
+        .ig-gallery a {
+            position: relative;
+            display: block;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #050505;
+        }
+
+        .ig-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.82) saturate(1.05);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
+        }
+
+        .ig-gallery a:hover img {
+            transform: scale(1.08);
+            filter: brightness(1);
+        }
+
+        .ig-gallery a::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .ig-gallery a:hover::after {
+            opacity: 1;
+        }
+
+        .ig-gallery a .ig-gallery-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .ig-gallery a:hover .ig-gallery-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .ig-gallery a .ig-gallery-icon svg {
+            width: 22px;
+            height: 22px;
         }
 
         /* ── CONTACTO ── */
@@ -1223,6 +1414,18 @@
         .modal-top {
             height: 3px;
             background: var(--orange);
+        }
+
+        .modal-media {
+            position: relative;
+        }
+
+        .modal-media .clase-media {
+            aspect-ratio: 16 / 10;
+        }
+
+        .modal-close {
+            z-index: 5;
         }
 
         .modal-body {
@@ -1460,6 +1663,20 @@
                 padding: 5rem 1.5rem;
             }
 
+            .ig-inner {
+                grid-template-columns: 1fr;
+                padding: 2.25rem 1.5rem;
+                gap: 1.75rem;
+            }
+
+            .ig-content p {
+                max-width: none;
+            }
+
+            .ig-content h3 {
+                font-size: 2.1rem;
+            }
+
             .plans-grid,
             .entry-plans,
             .install-grid {
@@ -1526,12 +1743,23 @@
                 grid-template-columns: 1fr;
             }
 
-            .clase-card {
-                padding: 1.5rem 1rem;
+            .clase-bottom {
+                padding: 0.9rem 1.25rem 1.1rem;
             }
 
             .clase-name {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Respect reduced-motion preference (also covers iOS Low Power Mode users who enable it) */
+        @media (prefers-reduced-motion: reduce) {
+
+            .clase-card,
+            .clase-slide,
+            .clase-media img,
+            .clase-media video {
+                transition: none !important;
             }
         }
     </style>
@@ -1584,7 +1812,7 @@
             <p class="hero-sub">La mejor comunidad y las mejores actividades, en un espacio increíble que te empujan a superar tus límites cada día.</p>
             <div class="hero-actions">
                 <a href="#contacto" class="btn-hero">Visítanos · Desde $1,000/mes</a>
-                <a href="reservar-clases.html?tab=visit" class="btn-hero-secondary">Agenda clase gratis →</a>
+                <a href="https://rewards.trainingym.com/t/m/xlk1ZP/Elemental_Club_9856" target="_blank" rel="noopener noreferrer" class="btn-hero-secondary">Agenda clase gratis →</a>
             </div>
 
         </div>
@@ -1651,7 +1879,7 @@
                     <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-top:0.5rem;">Inicia sesion para
                         reservar tu clase y no perder tu lugar.</p>
                 </div>
-                <a href="reservar-clases.html" class="btn-hero" style="white-space:nowrap;">Reservar Mi Clase →</a>
+                <a href="https://rewards.trainingym.com/t/m/xlk1ZP/Elemental_Club_9856" target="_blank" rel="noopener noreferrer" class="btn-hero" style="white-space:nowrap;">Reservar Mi Clase →</a>
             </div>
         </div>
     </section>
@@ -1716,23 +1944,46 @@
                 </div>
             </div>
 
-            <div class="ig-strip reveal">
-                <div class="ig-strip-left">
-                    <div class="ig-strip-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                        </svg>
+            <div class="ig-section reveal">
+                <div class="ig-inner">
+                    <div class="ig-content">
+                        <div class="ig-eyebrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                            Síguenos
+                        </div>
+                        <h3>LA COMUNIDAD<br>ELEMENTAL EN VIVO</h3>
+                        <p>Instalaciones, clases y resultados reales de nuestros miembros, día a día. Únete a la
+                            conversación.</p>
+                        <div class="ig-actions">
+                            <a href="https://www.instagram.com/club_elemental/" target="_blank"
+                                rel="noopener noreferrer" class="btn-ig">Ver Instagram →</a>
+                            <span class="ig-handle">@club_elemental</span>
+                        </div>
                     </div>
-                    <div>
-                        <div class="ig-strip-name">Visítanos en Instagram</div>
-                        <div class="ig-strip-sub">Instalaciones, clases y horarios en fotos y videos · @club_elemental</div>
+                    <div class="ig-gallery ig-gallery-4">
+                        <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer" aria-label="Ver en Instagram">
+                            <img src="img/instagram_1.png" alt="Último post de Instagram 1" loading="lazy" />
+                            <span class="ig-gallery-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+                        </a>
+                        <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer" aria-label="Ver en Instagram">
+                            <img src="img/instagram_2.png" alt="Último post de Instagram 2" loading="lazy" />
+                            <span class="ig-gallery-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+                        </a>
+                        <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer" aria-label="Ver en Instagram">
+                            <img src="img/instagram_4.png" alt="Último post de Instagram 4" loading="lazy" />
+                            <span class="ig-gallery-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+                        </a>
+                        <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer" aria-label="Ver en Instagram">
+                            <img src="img/instagram_3.png" alt="Último post de Instagram 3" loading="lazy" />
+                            <span class="ig-gallery-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+                        </a>
                     </div>
                 </div>
-                <a href="https://www.instagram.com/club_elemental/" target="_blank" rel="noopener noreferrer"
-                    class="btn-ig">Ver Instagram →</a>
             </div>
         </div>
     </section>
@@ -1787,7 +2038,6 @@
             <div class="plans-grid reveal">
                 <!-- Training -->
                 <div class="plan-card">
-                    <div class="plan-line"></div>
                     <div class="plan-name">Training</div>
                     <div class="plan-desc">Acceso completo + todas las clases grupales estándar</div>
                     <div class="plan-price">$1,400 <span>/mes</span></div>
@@ -1806,8 +2056,7 @@
 
                 <!-- Prime -->
                 <div class="plan-card featured">
-                    <div class="plan-line"></div>
-                    <div class="plan-popular">★ MÁS POPULAR</div>
+                    <div class="plan-popular">Más popular</div>
                     <div class="plan-name">Prime</div>
                     <div class="plan-desc">Todo Training + elige 1 clase Premium exclusiva</div>
                     <div class="plan-price">$1,600 <span>/mes</span></div>
@@ -1825,7 +2074,6 @@
 
                 <!-- VIP -->
                 <div class="plan-card">
-                    <div class="plan-line"></div>
                     <div class="plan-name">VIP</div>
                     <div class="plan-desc">Acceso ilimitado a TODAS las clases, Premium y estándar</div>
                     <div class="plan-price">$1,800 <span>/mes</span></div>
@@ -1861,7 +2109,7 @@
                 </div>
             </div>
 
-            <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:flex-start;gap:1rem;"
+            <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;align-items:flex-start;gap:1rem;"
                 class="reveal">
                 <span style="flex-shrink:0;color:rgba(255,255,255,0.4);">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -2004,7 +2252,7 @@
                             style="color:#fff;">completamente gratis</strong>. Elige la clase que más te interese y vive
                         la experiencia Elemental.
                     </p>
-                    <a href="reservar-clases.html?tab=visit" class="btn-hero"
+                    <a href="https://rewards.trainingym.com/t/m/xlk1ZP/Elemental_Club_9856" target="_blank" rel="noopener noreferrer" class="btn-hero"
                         style="display:inline-block;text-align:center;text-decoration:none;">Registrar Mi Visita →</a>
                 </div>
             </div>
@@ -2094,62 +2342,72 @@
                 key: 'crossfit', nombre: 'CrossFit', emoji: '🔥', cat: 'competicion',
                 h: 'L-V 5, 6, 7, 8 AM · L-V 7 PM', dur: '50 min', cupo: 20,
                 desc: 'Movimientos funcionales de alta intensidad: levantamiento olímpico, kettlebells, gimásia, remo y metabólicos. Adaptado a cada atleta. Espacio amplio con equipamiento profesional.',
-                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
+                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium',
+                media: ['img/Crossfit descripcion.jpg']
             },
             {
                 key: 'multipower', nombre: 'Multipower', emoji: '💪', cat: 'funcional',
                 h: 'L-V 6, 7, 8 AM · L-V 6 PM · S 8 AM', dur: '50 min', cupo: 24,
                 desc: 'La clase más completa del estudio. Combina fuerza, resistencia y cardio con equipos multifuncionales, barras, discos y máquinas de cardio (remo, ski, bici). Rutinas semanales variables.',
-                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
+                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium',
+                media: ['img/Multipower descripcion.jpg']
             },
             {
                 key: 'momentum', nombre: 'Momentum', emoji: '⚡', cat: 'funcional',
                 h: 'L-V 6, 7, 8, 9 AM · L-V 6, 7, 8 PM · S 9 AM', dur: '50 min', cupo: 24,
                 desc: 'Hipertrofia y fuerza guiada por coaches con utilización de máquinas multifuncionales para un entrenamiento completo. Los mejores resultados en una comunidad que te motiva.',
-                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium'
+                mem: ['Prime (1 a elegir)', 'VIP'], tipo: 'Premium',
+                media: ['img/momentum descripcion.jpg']
             },
             // ── ESTÁNDAR ──
             {
                 key: 'combatfit', nombre: 'CombatFit', emoji: '🥊', cat: 'estudio',
                 h: 'L-V 7 AM · L-J 8 PM · S 8 AM', dur: '50 min', cupo: 22,
                 desc: 'Combina técnica de artes marciales mixtas (MMA) con entrenamiento funcional. Mejora coordinación, fuerza, velocidad y agilidad. Apto para principiantes.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/combat fit descripcion.jpg']
             },
             {
                 key: 'hyrox-comp', nombre: 'Hyrox Competición', emoji: '🏆', cat: 'competicion',
                 h: 'L-V 8 PM · MA, J 7 AM · D 8 AM', dur: '50 min', cupo: 30,
                 desc: 'Entrenamiento avanzado que replica la experiencia real de competencia Hyrox: carrera indoor, trineos, ski, remo, cargas y muros. Coaching técnico en cada estación.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/hyrox descripcion.jpg']
             },
             {
                 key: 'strong-bike', nombre: 'Strong & Bike', emoji: '🚴‍♂️', cat: 'estudio',
                 h: 'L-D 8:10 AM', dur: '50 min', cupo: 22,
                 desc: 'Combina entrenamiento funcional full body con spinning en estudio semi-oscuro. Alterna bloques de fuerza con intervalos en bici para quemar calorías y mejorar el cardio.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/spinning descripcion.jpg']
             },
             {
                 key: 'hyrox-base', nombre: 'Hyrox Base', emoji: '🏃', cat: 'competicion',
                 h: 'L-V 6 PM · MA y JU 7 AM', dur: '50 min', cupo: 30,
                 desc: 'Base de fuerza y resistencia aeróbica orientada a quien quiere prepararse para competir en Hyrox. Técnica, acondicionamiento y progresión guiada.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/hyrox descripcion.jpg']
             },
             {
                 key: 'spinning', nombre: 'Spinning', emoji: '🚲', cat: 'estudio',
                 h: 'L-V 7 PM · L 8 PM · MA 8 PM', dur: '50 min', cupo: 12,
                 desc: 'Ciclismo indoor de alta intensidad. Sesiones en bici estacionaria con variaciones de ritmo, resistencia e intervalos. Quema calórica elevada.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/spinning descripcion.jpg']
             },
             {
                 key: 'gap', nombre: 'GAP', emoji: '🏅', cat: 'funcional',
                 h: 'L-V 7 PM', dur: '50 min', cupo: 28,
                 desc: 'Glúteos, Abdomen y Piernas. Clase de tonificación y fuerza con énfasis en tren inferior y core. Alta demanda muscular, baja carga articular. Para todos los niveles.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/GAP plus descripcion.jpg']
             },
             {
                 key: 'yoga', nombre: 'Yoga', emoji: '🧘', cat: 'bienestar',
                 h: 'L, MI y V 9 AM · J 8 PM · S 10 AM', dur: '50 min', cupo: 20,
                 desc: 'Clase de flexibilidad, equilibrio y bienestar mental. Combina posturas, respiración y relajación. Apta para todos los niveles. Perfecta para recuperación activa.',
-                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar'
+                mem: ['Training', 'Prime', 'VIP'], tipo: 'Estándar',
+                media: ['img/yoga descripcion.jpg']
             },
 
         ];
@@ -2164,21 +2422,147 @@
 
         let activeFilter = 'all';
 
+        // Encode spaces/special chars in filenames without breaking normal paths
+        function mediaUrl(src) { return src.split('/').map(encodeURIComponent).join('/'); }
+        function isVideo(src) { return /\.(mp4|webm|mov|m4v)$/i.test(src); }
+
+        function renderSlide(src, key, cat) {
+            if (isVideo(src)) {
+                return `<video class="clase-slide" src="${mediaUrl(src)}" muted autoplay loop playsinline webkit-playsinline="true" preload="metadata" disablepictureinpicture disableremoteplayback></video>`;
+            }
+            return `<div class="clase-slide" style="background-image:none;"><img src="${mediaUrl(src)}" alt="${key}" loading="lazy" decoding="async"></div>`;
+        }
+
+        const SVG_STAR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.26L21.5 9l-5 4.87L17.8 21 12 17.4 6.2 21l1.3-7.13-5-4.87 6.6-.74z"/></svg>`;
+
+        function renderTipoTag(c) {
+            if (!c.tipo) return '';
+            const isPremium = c.tipo === 'Premium';
+            return `<span class="clase-tipo-tag${isPremium ? ' premium' : ''}">${c.tipo}</span>`;
+        }
+
+        function renderMedia(c) {
+            const slides = (c.media && c.media.length) ? c.media : null;
+            if (!slides) {
+                return `<div class="clase-media">${renderTipoTag(c)}<div class="clase-slide active icon-slide">${CAT_SVG[c.cat]}</div></div>`;
+            }
+            const slidesHtml = slides.map(s => renderSlide(s, c.key, c.cat)).join('');
+            const dotsHtml = slides.length > 1
+                ? `<div class="clase-dots">${slides.map((_, i) => `<span class="clase-dot" data-i="${i}"></span>`).join('')}</div>`
+                : '';
+            return `<div class="clase-media" data-key="${c.key}">${renderTipoTag(c)}${slidesHtml}${dotsHtml}</div>`;
+        }
+
         function renderClases() {
             const grid = document.getElementById('clasesGrid');
             const list = activeFilter === 'all' ? CLASES : CLASES.filter(c => c.cat === activeFilter);
             grid.innerHTML = list.map(c => `
-      <div class="clase-card" onclick="openModal('${c.key}')">
-        <span class="clase-emoji" style="display:flex;align-items:center;color:var(--orange);margin-bottom:1rem;">${CAT_SVG[c.cat]}</span>
-        <div class="clase-cat">${CAT_LABEL[c.cat]}</div>
-        <div class="clase-name">${c.nombre}</div>
-        <div class="clase-desc">${c.desc.slice(0, 100)}…</div>
-        <div class="clase-meta">
-          <div class="clase-time">${SVG_CLOCK} ${c.h}</div>
+      <div class="clase-card" data-key="${c.key}" onclick="openModal('${c.key}')">
+        ${renderMedia(c)}
+        <div class="clase-bottom">
+          <div class="clase-meta">
+            <div class="clase-name">${c.nombre}</div>
+            <div class="clase-time">${SVG_CLOCK} <span class="clase-time-label">Disponible:</span> ${c.h}</div>
+          </div>
           <div class="clase-arrow">→</div>
         </div>
       </div>
     `).join('');
+            initCarousels();
+            observeCards();
+        }
+
+        // ── Carousel: autoplay, dots, swipe (iOS-safe) ──
+        const carouselTimers = new WeakMap();
+
+        function goToSlide(mediaEl, index) {
+            const slides = mediaEl.querySelectorAll('.clase-slide');
+            const dots = mediaEl.querySelectorAll('.clase-dot');
+            if (!slides.length) return;
+            const i = ((index % slides.length) + slides.length) % slides.length;
+            slides.forEach((s, idx) => {
+                const active = idx === i;
+                s.classList.toggle('active', active);
+                if (s.tagName === 'VIDEO') {
+                    if (active) { s.currentTime = 0; s.muted = true; s.play().catch(() => { }); }
+                    else { s.pause(); }
+                }
+            });
+            dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+            mediaEl.dataset.active = i;
+        }
+
+        function scheduleNext(mediaEl) {
+            clearTimeout(carouselTimers.get(mediaEl));
+            const slides = mediaEl.querySelectorAll('.clase-slide');
+            if (slides.length < 2) return;
+            const current = slides[Number(mediaEl.dataset.active || 0)];
+            const delay = current && current.tagName === 'VIDEO' ? 8000 : 4000;
+            const t = setTimeout(() => {
+                goToSlide(mediaEl, Number(mediaEl.dataset.active || 0) + 1);
+                scheduleNext(mediaEl);
+            }, delay);
+            carouselTimers.set(mediaEl, t);
+        }
+
+        function initCarousels() {
+            document.querySelectorAll('.clase-media[data-key]').forEach(mediaEl => {
+                const slides = mediaEl.querySelectorAll('.clase-slide');
+                if (!slides.length) return;
+                mediaEl.dataset.active = 0;
+                goToSlide(mediaEl, 0);
+
+                mediaEl.querySelectorAll('.clase-dot').forEach(dot => {
+                    dot.addEventListener('click', e => {
+                        e.stopPropagation();
+                        goToSlide(mediaEl, Number(dot.dataset.i));
+                        scheduleNext(mediaEl);
+                    });
+                });
+
+                // Touch swipe (no interference with scroll-snap needed since it's vertical page scroll)
+                let touchX = null;
+                mediaEl.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+                mediaEl.addEventListener('touchend', e => {
+                    if (touchX === null) return;
+                    const dx = e.changedTouches[0].clientX - touchX;
+                    if (Math.abs(dx) > 40) {
+                        goToSlide(mediaEl, Number(mediaEl.dataset.active || 0) + (dx < 0 ? 1 : -1));
+                        scheduleNext(mediaEl);
+                    }
+                    touchX = null;
+                }, { passive: true });
+
+                if (slides.length > 1) scheduleNext(mediaEl);
+            });
+        }
+
+        // Pause/resume based on viewport visibility (saves battery, satisfies iOS autoplay gating)
+        const mediaIO = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const mediaEl = entry.target;
+                const active = mediaEl.querySelector('.clase-slide.active');
+                if (entry.isIntersecting) {
+                    if (active && active.tagName === 'VIDEO') active.play().catch(() => { });
+                    scheduleNext(mediaEl);
+                } else {
+                    clearTimeout(carouselTimers.get(mediaEl));
+                    mediaEl.querySelectorAll('video').forEach(v => v.pause());
+                }
+            });
+        }, { threshold: 0.35 });
+
+        function observeCards() {
+            document.querySelectorAll('.clase-media[data-key]').forEach(el => mediaIO.observe(el));
+            const cardIO = new IntersectionObserver(entries => {
+                entries.forEach((entry, idx) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('card-visible'), idx * 60);
+                        cardIO.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.clase-card').forEach(el => cardIO.observe(el));
         }
 
         document.getElementById('filters').addEventListener('click', e => {
@@ -2196,10 +2580,10 @@
         document.getElementById('modalesContainer').innerHTML = CLASES.map(c => `
     <div id="modal-${c.key}" class="modal" onclick="if(event.target===this)closeModal('${c.key}')">
       <div class="modal-box">
-        <div class="modal-top"></div>
+        ${c.media && c.media.length ? `<div class="modal-media">${renderMedia(c)}</div>` : '<div class="modal-top"></div>'}
         <button class="modal-close" onclick="closeModal('${c.key}')">✕</button>
         <div class="modal-body">
-          <span class="modal-emoji" style="display:flex;align-items:center;color:var(--orange);">${CAT_SVG[c.cat]}</span>
+          ${c.media && c.media.length ? '' : `<span class="modal-emoji" style="display:flex;align-items:center;color:var(--orange);">${CAT_SVG[c.cat]}</span>`}
           <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
             <div class="modal-cat" style="display:flex;align-items:center;gap:0.4rem;">${CAT_LABEL[c.cat]}</div>
             ${c.tipo ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo === 'Premium' ? 'rgba(245,132,10,0.15)' : 'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo === 'Premium' ? 'rgba(245,132,10,0.4)' : 'rgba(255,255,255,0.12)'};color:${c.tipo === 'Premium' ? 'var(--orange)' : 'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
@@ -2218,6 +2602,8 @@
       </div>
     </div>
   `).join('');
+        initCarousels();
+        document.querySelectorAll('.modal-media .clase-media[data-key]').forEach(el => mediaIO.observe(el));
         function openModal(key) { document.getElementById('modal-' + key).classList.add('open'); document.body.style.overflow = 'hidden'; }
         function closeModal(key) { document.getElementById('modal-' + key).classList.remove('open'); document.body.style.overflow = ''; }
 
