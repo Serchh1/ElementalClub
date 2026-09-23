@@ -882,7 +882,7 @@
         .clase-slide video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             object-position: center;
             display: block;
             -webkit-user-select: none;
@@ -1392,7 +1392,7 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            z-index: 2000;
+            z-index: 9500;
             align-items: center;
             justify-content: center;
             padding: 1rem;
@@ -2586,7 +2586,7 @@
           ${c.media && c.media.length ? '' : `<span class="modal-emoji" style="display:flex;align-items:center;color:var(--orange);">${CAT_SVG[c.cat]}</span>`}
           <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
             <div class="modal-cat" style="display:flex;align-items:center;gap:0.4rem;">${CAT_LABEL[c.cat]}</div>
-            ${c.tipo ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo === 'Premium' ? 'rgba(245,132,10,0.15)' : 'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo === 'Premium' ? 'rgba(245,132,10,0.4)' : 'rgba(255,255,255,0.12)'};color:${c.tipo === 'Premium' ? 'var(--orange)' : 'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
+            ${(c.tipo && !(c.media && c.media.length)) ? `<span style="font-size:0.6rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;background:${c.tipo === 'Premium' ? 'rgba(245,132,10,0.15)' : 'rgba(255,255,255,0.07)'};border:1px solid ${c.tipo === 'Premium' ? 'rgba(245,132,10,0.4)' : 'rgba(255,255,255,0.12)'};color:${c.tipo === 'Premium' ? 'var(--orange)' : 'rgba(255,255,255,0.4)'}">${c.tipo}</span>` : ''}
           </div>
           <div class="modal-name">${c.nombre}</div>
           <p class="modal-desc">${c.desc}</p>
