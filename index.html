@@ -146,10 +146,19 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image: url('img/Zona multipower.jpeg');
-            background-size: cover;
-            background-position: center 30%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-bg video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
             filter: brightness(0.35) contrast(1.1);
+            pointer-events: none;
         }
 
         .hero-bg::after {
@@ -1001,68 +1010,99 @@
             margin: 0 auto;
         }
 
-        .install-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 1.5px;
-            background: rgba(255, 255, 255, 0.05);
-            margin-top: 4rem;
+        /* ── GALERÍA DE INSTALACIONES (carrusel) ── */
+        .gallery-carousel {
+            max-width: 900px;
+            margin: 4rem auto 0;
         }
 
-        .install-card {
-            background: #0c0c0c;
-            overflow: hidden;
+        .gallery-main {
             position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+            aspect-ratio: 3 / 4;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #050505;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
 
-        /* Bento Grid Layout */
-        .install-card:nth-child(1),
-        .install-card:nth-child(2) {
-            grid-column: span 3;
-        }
-
-        .install-card:nth-child(3),
-        .install-card:nth-child(4),
-        .install-card:nth-child(5) {
-            grid-column: span 2;
-        }
-
-        .install-img {
+        .gallery-track {
+            display: flex;
             width: 100%;
-            height: 380px;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
+        }
+
+        .gallery-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            filter: brightness(0.65) contrast(1.1);
-            transition: filter 0.5s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: block;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: none;
         }
 
-        .install-card:hover .install-img {
-            filter: brightness(0.95) contrast(1.15);
-            transform: scale(1.05);
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.2s, border-color 0.2s;
         }
 
-        .install-body {
-            padding: 1.75rem;
+        .gallery-arrow svg {
+            width: 18px;
+            height: 18px;
         }
 
-        .install-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            color: rgba(234, 127, 13, 0.139);
-            line-height: 1;
-            margin-bottom: -0.5rem;
+        .gallery-prev {
+            left: 0.75rem;
         }
 
-        .install-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 0.04em;
-            margin-bottom: 0.5rem;
+        .gallery-next {
+            right: 0.75rem;
         }
 
-        .install-desc {
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.6;
+        .gallery-arrow:hover {
+            background: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .gallery-counter {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.9rem;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            z-index: 2;
         }
 
         /* ── INSTAGRAM STRIP ── */
@@ -1593,12 +1633,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .install-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .install-card:nth-child(n) {
-                grid-column: span 1;
+            .gallery-main {
+                max-width: 360px;
             }
 
             .footer-top {
@@ -1622,10 +1658,6 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
-            }
-
-            .install-card {
-                min-height: auto;
             }
 
             nav {
@@ -1678,13 +1710,12 @@
             }
 
             .plans-grid,
-            .entry-plans,
-            .install-grid {
+            .entry-plans {
                 grid-template-columns: 1fr;
             }
 
-            .install-card:nth-child(n) {
-                grid-column: span 1;
+            .gallery-main {
+                max-width: 300px;
             }
 
             .mem-header {
@@ -1806,7 +1837,14 @@
 
     <!-- ══════════ HERO ══════════ -->
     <section id="inicio" class="hero">
-        <div class="hero-bg"></div>
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline webkit-playsinline="true" preload="auto"
+                disablepictureinpicture disableremoteplayback
+                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                oncontextmenu="return false" tabindex="-1" aria-hidden="true" id="heroVideo">
+                <source src="img/fondo.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="hero-content">
             <h1 class="hero-title">TRANSFORMA<br>TU <em>CUERPO</em><br>Y MENTE</h1>
             <p class="hero-sub">La mejor comunidad y las mejores actividades, en un espacio increíble que te empujan a superar tus límites cada día.</p>
@@ -1896,51 +1934,16 @@
                 <p style="color:rgba(255,255,255,0.3);font-size:0.82rem;max-width:300px;line-height:1.7;">Espacios
                     diseñados para tu comodidad y máximo rendimiento, renovados constantemente.</p>
             </div>
-            <div class="install-grid reveal">
-                <div class="install-card">
-                    <img src="img/Zona pesas.jpeg" alt="Zona de Pesas" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">01</div>
-                        <div class="install-name">Zona de Pesas</div>
-                        <div class="install-desc">Racks de sentadilla, barras olímpicas y bancas ajustables rodeadas de
-                            espejos. Espacio amplio para entrenamiento de fuerza a cualquier nivel.</div>
-                    </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona cardio1.jpeg" alt="Ski Machines" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">02</div>
-                        <div class="install-name">Ski Machines</div>
-                        <div class="install-desc">Batería de Ski Machines. Cardio de cuerpo
-                            completo ideal para Hyrox, CrossFit y entrenamiento funcional de alta intensidad.</div>
-                    </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona amplia multisusos.jpeg" alt="Box Funcional" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">03</div>
-                        <div class="install-name">Zona Funcional</div>
-                        <div class="install-desc">Zona semiabierta con rig de barras, cuerdas de trepa, plataformas de
-                            levantamiento y pista interior. El corazón del entrenamiento Hyrox y CrossFit.</div>
-                    </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona cardio2.jpeg" alt="Zona de Remo" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">04</div>
-                        <div class="install-name">Zona de Remo</div>
-                        <div class="install-desc">Rowing machines Elemental con vista al exterior. Cardio de bajo
-                            impacto y alta demanda metabólica, integradas en circuitos de clases grupales.</div>
-                    </div>
-                </div>
-                <div class="install-card">
-                    <img src="img/Zona estudio spinning.jpeg" alt="Estudio Spinning" class="install-img" />
-                    <div class="install-body">
-                        <div class="install-num">05</div>
-                        <div class="install-name">Estudio Spinning</div>
-                        <div class="install-desc">Sala inmersiva con bicicletas, iluminación de neón y sistema
-                            de audio envolvente. Ambiente de alta energía para clases de Spinning y Strong & Bike.</div>
-                    </div>
+            <div class="gallery-carousel reveal" id="installGallery">
+                <div class="gallery-main">
+                    <button class="gallery-arrow gallery-prev" aria-label="Foto anterior">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+                    </button>
+                    <div class="gallery-track" id="galleryTrack"></div>
+                    <button class="gallery-arrow gallery-next" aria-label="Foto siguiente">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                    </button>
+                    <div class="gallery-counter"><span id="galleryCurrent">1</span> / <span id="galleryTotal">1</span></div>
                 </div>
             </div>
 
@@ -2310,6 +2313,16 @@
     <div id="modalesContainer"></div>
 
     <script>
+        // ── Hero video: forzar reproducción continua, sin pausa posible ──
+        (function () {
+            const v = document.getElementById('heroVideo');
+            if (!v) return;
+            const forcePlay = () => v.play().catch(() => { });
+            v.addEventListener('pause', forcePlay);
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) forcePlay(); });
+            forcePlay();
+        })();
+
         // ── Nav scroll effect ──
         window.addEventListener('scroll', () => {
             document.getElementById('navbar').style.borderBottomColor = window.scrollY > 50 ? 'rgba(245,132,10,0.3)' : 'rgba(245,132,10,0.15)';
@@ -2334,6 +2347,72 @@
         const track = document.getElementById('marqueeTrack');
         const html = MARQUEE_ITEMS.map(i => `<span class="marquee-item">${i}</span><span class="marquee-item marquee-sep">·</span>`).join('');
         track.innerHTML = html + html; // duplicate for seamless loop
+
+        // ── Galería de Instalaciones (carrusel) ──
+        (function initInstallGallery() {
+            const PHOTOS = [
+                'PXL_20260914_200033002.jpg.jpeg',
+                'PXL_20260914_200114181.jpg.jpeg',
+                'PXL_20260914_200725049.jpg.jpeg',
+                'PXL_20260914_200837192.jpg.jpeg',
+                'PXL_20260914_200936964.jpg.jpeg',
+                'PXL_20260914_201206315.jpg.jpeg',
+                'PXL_20260914_201311744.jpg.jpeg',
+                'PXL_20260914_201337994.jpg.jpeg',
+                'PXL_20260914_201425550.jpg.jpeg',
+                'PXL_20260914_201530451.jpg.jpeg',
+                'PXL_20260914_201606975.jpg.jpeg',
+                'PXL_20260914_201807849.jpg.jpeg',
+                'PXL_20260914_201937476.jpg.jpeg'
+            ];
+            const root = document.getElementById('installGallery');
+            if (!root) return;
+            const track = root.querySelector('#galleryTrack');
+            const currentEl = root.querySelector('#galleryCurrent');
+            const totalEl = root.querySelector('#galleryTotal');
+            const mainEl = root.querySelector('.gallery-main');
+
+            track.innerHTML = PHOTOS.map((p, i) => `<div class="gallery-slide"><img src="img/${p}" alt="Instalaciones Elemental Club ${i + 1}" loading="${i === 0 ? 'eager' : 'lazy'}" /></div>`).join('');
+            totalEl.textContent = PHOTOS.length;
+
+            let index = 0;
+            let timer = null;
+
+            function render() {
+                track.style.transform = `translateX(-${index * 100}%)`;
+                currentEl.textContent = index + 1;
+            }
+
+            function goTo(i) {
+                index = ((i % PHOTOS.length) + PHOTOS.length) % PHOTOS.length;
+                render();
+            }
+
+            function scheduleAutoplay() {
+                clearTimeout(timer);
+                timer = setTimeout(() => { goTo(index + 1); scheduleAutoplay(); }, 4000);
+            }
+
+            root.querySelector('.gallery-prev').addEventListener('click', () => { goTo(index - 1); scheduleAutoplay(); });
+            root.querySelector('.gallery-next').addEventListener('click', () => { goTo(index + 1); scheduleAutoplay(); });
+
+            let touchX = null;
+            mainEl.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+            mainEl.addEventListener('touchend', e => {
+                if (touchX === null) return;
+                const dx = e.changedTouches[0].clientX - touchX;
+                if (Math.abs(dx) > 40) { goTo(index + (dx < 0 ? 1 : -1)); scheduleAutoplay(); }
+                touchX = null;
+            }, { passive: true });
+
+            const galleryIO = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) scheduleAutoplay();
+                    else clearTimeout(timer);
+                });
+            }, { threshold: 0.3 });
+            galleryIO.observe(root);
+        })();
 
         // ── Clases data ──
         const CLASES = [
